@@ -1,0 +1,14 @@
+{
+  "name": "ourchive",
+  "version": "0.0.1",
+  "description": "A modern, extensible multi-media archive.",
+  "main": "index.js",
+  "repository": "https://github.com/c-e-p/ourchive.git",
+  "author": "elena & kate",
+  "license": "MIT",
+  "private": false,
+  "dependencies": {
+    "react": "^15.6.1",
+    "react-dom": "^15.6.1"
+  }
+}
