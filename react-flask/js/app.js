@@ -1,4 +1,5 @@
 import Hello from './Hello';
+import Work from './Work';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {
@@ -7,7 +8,13 @@ import {
   Link
 } from 'react-router-dom';
 
-const Work = ({ match }) => (
+
+
+const WorkCollection = ({ match }) => (
+  <Work />
+)
+
+const SingleWork = ({ match }) => (
   <div>
     <h3>{match.params.workId}</h3>
   </div>
@@ -25,12 +32,14 @@ const BasicExample = () => (
       <ul>
         <li><Link to="/">Home</Link></li>
         <li><Link to="/works">Works</Link></li>
+        <li><Link to="/works/13">Works</Link></li>
       </ul>
 
       <hr/>
 
       <Route exact path="/" component={Home}/>
-      <Route path="/works" component={Work}/>
+      <Route path="/works" component={WorkCollection}/>
+      <Route path="/works/:workId" component={SingleWork}/>
     </div>
   </Router>
 )

@@ -61,6 +61,10 @@
 
 	var _Hello2 = _interopRequireDefault(_Hello);
 
+	var _Work = __webpack_require__(346);
+
+	var _Work2 = _interopRequireDefault(_Work);
+
 	var _react = __webpack_require__(3);
 
 	var _react2 = _interopRequireDefault(_react);
@@ -73,8 +77,13 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var Work = function Work(_ref) {
+	var WorkCollection = function WorkCollection(_ref) {
 	  var match = _ref.match;
+	  return _react2.default.createElement(_Work2.default, null);
+	};
+
+	var SingleWork = function SingleWork(_ref2) {
+	  var match = _ref2.match;
 	  return _react2.default.createElement(
 	    'div',
 	    null,
@@ -125,11 +134,21 @@
 	            { to: '/works' },
 	            'Works'
 	          )
+	        ),
+	        _react2.default.createElement(
+	          'li',
+	          null,
+	          _react2.default.createElement(
+	            _reactRouterDom.Link,
+	            { to: '/works/13' },
+	            'Works'
+	          )
 	        )
 	      ),
 	      _react2.default.createElement('hr', null),
 	      _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/', component: Home }),
-	      _react2.default.createElement(_reactRouterDom.Route, { path: '/works', component: Work })
+	      _react2.default.createElement(_reactRouterDom.Route, { path: '/works', component: WorkCollection }),
+	      _react2.default.createElement(_reactRouterDom.Route, { path: '/works/:workId', component: SingleWork })
 	    )
 	  );
 	};
@@ -26207,6 +26226,74 @@
 	    return targetComponent;
 	};
 
+
+/***/ }),
+/* 346 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(3);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var json = {
+	  "employees": [{
+	    "key": "1",
+	    "name": "barb",
+	    "url": "butts",
+	    "title": "bleh bleh bleh",
+	    "main": "index.js",
+	    "scripts": {
+	      "test": "echo \"Error: no test specified\" && exit 1",
+	      "build": "webpack",
+	      "start": "python app.py"
+	    } }, {
+	    "key": "2",
+	    "name": "bob",
+	    "url": "1.1.0",
+	    "title": "sequel to my garbage",
+	    "main": "index.js",
+	    "scripts": {
+	      "test": "echo \"Error: no test specified\" && exit 1",
+	      "build": "webpack",
+	      "start": "python app.py"
+	    } }]
+	};
+
+	var Work = _react2.default.createClass({
+	  displayName: "Work",
+
+
+	  componentDidMount: function componentDidMount() {
+	    //do something here
+	  },
+	  render: function render() {
+	    return _react2.default.createElement(
+	      "div",
+	      { className: "list" },
+	      json.employees.map(function (work) {
+	        return _react2.default.createElement(
+	          "div",
+	          { className: "list-row", key: work.key },
+	          _react2.default.createElement(
+	            "a",
+	            { href: work.url },
+	            work.title
+	          )
+	        );
+	      })
+	    );
+	  }
+	});
+
+	exports.default = Work;
 
 /***/ })
 /******/ ]);
