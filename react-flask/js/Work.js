@@ -1,4 +1,7 @@
 import React from 'react';
+import {
+  Link
+} from 'react-router-dom';
 
 var json = {
 	"employees": 
@@ -36,7 +39,7 @@ var Work = React.createClass({
     return (
       <div className="list">
     	{json.employees.map(work => <div className="list-row" key={work.key}>
-      	<a href={work.url}>{work.title}</a>
+      	<Link to={"/work/"+work.url}>{work.title}</Link>
     	</div>)}
   	  </div>
     );

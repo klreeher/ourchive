@@ -1,5 +1,7 @@
 import Hello from './Hello';
+import Nav from './Nav';
 import Work from './Work';
+import SingleWork from './SingleWork';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {
@@ -14,12 +16,6 @@ const WorkCollection = ({ match }) => (
   <Work />
 )
 
-const SingleWork = ({ match }) => (
-  <div>
-    <h3>{match.params.workId}</h3>
-  </div>
-)
-
 const Home = () => (
   <div>
     <h2>Home</h2>
@@ -29,17 +25,13 @@ const Home = () => (
 const BasicExample = () => (
   <Router>
     <div>
-      <ul>
-        <li><Link to="/">Home</Link></li>
-        <li><Link to="/works">Works</Link></li>
-        <li><Link to="/works/13">Works</Link></li>
-      </ul>
+      <Nav/>
 
       <hr/>
 
       <Route exact path="/" component={Home}/>
       <Route path="/works" component={WorkCollection}/>
-      <Route path="/works/:workId" component={SingleWork}/>
+      <Route path="/work/:workId" component={SingleWork}/>
     </div>
   </Router>
 )
