@@ -1,5 +1,5 @@
 import Hello from './Hello';
-import Nav from './Nav';
+import NavbarInternal from './NavbarInternal';
 import Work from './Work';
 import SingleWork from './SingleWork';
 import React from 'react';
@@ -25,7 +25,7 @@ const Home = () => (
 const BasicExample = () => (
   <Router>
     <div>
-      <Nav/>
+      <NavbarInternal/>
 
       <hr/>
 
