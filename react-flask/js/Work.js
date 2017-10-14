@@ -39,7 +39,7 @@ var Work = React.createClass({
     return (
       <div className="list">
     	{json.employees.map(work => <div className="list-row" key={work.key}>
-      	<Link to={"/work/"+work.url}>{work.title}</Link>
+      	<Link to={"/work/"+work.key}>{work.title}</Link>
     	</div>)}
   	  </div>
     );
