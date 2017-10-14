@@ -10,7 +10,7 @@ export default class SingleWork extends React.Component {
 
   getWork(workId)
   {
-  axios.get('/work/'+workId)
+  axios.get('/api/work/'+workId)
       .then(function (response) {
         this.setState({work: response.data[0]["name"]});
         

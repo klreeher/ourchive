@@ -6,7 +6,7 @@ app = Flask(__name__)
 def hello_world():
   return render_template('index.html')
 
-@app.route('/work/<int:workId>')
+@app.route('/api/work/<int:workId>')
 def get_work(workId):
   work = json.dumps(
     [

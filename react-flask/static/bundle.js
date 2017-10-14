@@ -46501,7 +46501,10 @@
 	    "url": "butts",
 	    "title": "bleh bleh bleh",
 	    "main": "index.js",
-	    "scripts": {
+	    "is_complete": "yes",
+	    "word_count": "100",
+	    "work_summary": "another terrible fic",
+	    "chapters": {
 	      "test": "echo \"Error: no test specified\" && exit 1",
 	      "build": "webpack",
 	      "start": "python app.py"
@@ -46511,7 +46514,10 @@
 	    "url": "1.1.0",
 	    "title": "sequel to my garbage",
 	    "main": "index.js",
-	    "scripts": {
+	    "is_complete": "yes",
+	    "word_count": "100",
+	    "work_summary": "another terrible fic",
+	    "chapters": {
 	      "test": "echo \"Error: no test specified\" && exit 1",
 	      "build": "webpack",
 	      "start": "python app.py"
@@ -46532,11 +46538,72 @@
 	      json.employees.map(function (work) {
 	        return _react2.default.createElement(
 	          'div',
-	          { className: 'list-row', key: work.key },
+	          { className: 'list-row panel panel-default', key: work.key },
 	          _react2.default.createElement(
-	            _reactRouterDom.Link,
-	            { to: "/work/" + work.key },
-	            work.title
+	            'div',
+	            { className: 'panel-body' },
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'col-md-12' },
+	              _react2.default.createElement(
+	                'h3',
+	                null,
+	                _react2.default.createElement(
+	                  _reactRouterDom.Link,
+	                  { to: "/work/" + work.key },
+	                  work.title
+	                ),
+	                ' by ',
+	                work.name
+	              )
+	            ),
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'row' },
+	              _react2.default.createElement(
+	                'div',
+	                { className: 'col-md-8 col-md-offset-1' },
+	                _react2.default.createElement(
+	                  'h5',
+	                  null,
+	                  work.work_summary
+	                )
+	              )
+	            ),
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'row' },
+	              _react2.default.createElement(
+	                'div',
+	                { className: 'col-md-2' },
+	                _react2.default.createElement(
+	                  'h5',
+	                  null,
+	                  'Chapters: ',
+	                  Object.keys(work.chapters).length
+	                )
+	              ),
+	              _react2.default.createElement(
+	                'div',
+	                { className: 'col-md-2' },
+	                _react2.default.createElement(
+	                  'h5',
+	                  null,
+	                  'Complete? ',
+	                  work.is_complete
+	                )
+	              ),
+	              _react2.default.createElement(
+	                'div',
+	                { className: 'col-md-2' },
+	                _react2.default.createElement(
+	                  'h5',
+	                  null,
+	                  'Word Count: ',
+	                  work.word_count
+	                )
+	              )
+	            )
 	          )
 	        );
 	      })
@@ -46585,7 +46652,7 @@
 	  }, {
 	    key: 'getWork',
 	    value: function getWork(workId) {
-	      _axios2.default.get('/work/' + workId).then(function (response) {
+	      _axios2.default.get('/api/work/' + workId).then(function (response) {
 	        this.setState({ work: response.data[0]["name"] });
 	      }.bind(this)).catch(function (error) {
 	        console.log(error);
