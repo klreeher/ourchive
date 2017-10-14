@@ -2,6 +2,7 @@ import Hello from './Hello';
 import NavbarInternal from './NavbarInternal';
 import Work from './Work';
 import SingleWork from './SingleWork';
+import WorkStub from './WorkStub';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {

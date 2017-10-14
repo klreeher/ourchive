@@ -73,6 +73,10 @@
 
 	var _SingleWork2 = _interopRequireDefault(_SingleWork);
 
+	var _WorkStub = __webpack_require__(516);
+
+	var _WorkStub2 = _interopRequireDefault(_WorkStub);
+
 	var _react = __webpack_require__(3);
 
 	var _react2 = _interopRequireDefault(_react);
@@ -46492,6 +46496,10 @@
 
 	var _reactRouterDom = __webpack_require__(43);
 
+	var _WorkStub = __webpack_require__(516);
+
+	var _WorkStub2 = _interopRequireDefault(_WorkStub);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var json = {
@@ -46539,72 +46547,7 @@
 	        return _react2.default.createElement(
 	          'div',
 	          { className: 'list-row panel panel-default', key: work.key },
-	          _react2.default.createElement(
-	            'div',
-	            { className: 'panel-body' },
-	            _react2.default.createElement(
-	              'div',
-	              { className: 'col-md-12' },
-	              _react2.default.createElement(
-	                'h3',
-	                null,
-	                _react2.default.createElement(
-	                  _reactRouterDom.Link,
-	                  { to: "/work/" + work.key },
-	                  work.title
-	                ),
-	                ' by ',
-	                work.name
-	              )
-	            ),
-	            _react2.default.createElement(
-	              'div',
-	              { className: 'row' },
-	              _react2.default.createElement(
-	                'div',
-	                { className: 'col-md-8 col-md-offset-1' },
-	                _react2.default.createElement(
-	                  'h5',
-	                  null,
-	                  work.work_summary
-	                )
-	              )
-	            ),
-	            _react2.default.createElement(
-	              'div',
-	              { className: 'row' },
-	              _react2.default.createElement(
-	                'div',
-	                { className: 'col-md-2' },
-	                _react2.default.createElement(
-	                  'h5',
-	                  null,
-	                  'Chapters: ',
-	                  Object.keys(work.chapters).length
-	                )
-	              ),
-	              _react2.default.createElement(
-	                'div',
-	                { className: 'col-md-2' },
-	                _react2.default.createElement(
-	                  'h5',
-	                  null,
-	                  'Complete? ',
-	                  work.is_complete
-	                )
-	              ),
-	              _react2.default.createElement(
-	                'div',
-	                { className: 'col-md-2' },
-	                _react2.default.createElement(
-	                  'h5',
-	                  null,
-	                  'Word Count: ',
-	                  work.word_count
-	                )
-	              )
-	            )
-	          )
+	          _react2.default.createElement(_WorkStub2.default, { work: work })
 	        );
 	      })
 	    );
@@ -48233,6 +48176,103 @@
 	  };
 	};
 
+
+/***/ }),
+/* 516 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(3);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRouterDom = __webpack_require__(43);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var WorkStub = _react2.default.createClass({
+	  displayName: 'WorkStub',
+
+
+	  componentDidMount: function componentDidMount() {
+	    //stuff
+	  },
+	  render: function render() {
+	    return _react2.default.createElement(
+	      'div',
+	      { className: 'panel-body' },
+	      _react2.default.createElement(
+	        'div',
+	        { className: 'col-md-12' },
+	        _react2.default.createElement(
+	          'h3',
+	          null,
+	          _react2.default.createElement(
+	            _reactRouterDom.Link,
+	            { to: "/work/" + this.props.work.key },
+	            this.props.work.title
+	          ),
+	          ' by ',
+	          this.props.work.name
+	        )
+	      ),
+	      _react2.default.createElement(
+	        'div',
+	        { className: 'row' },
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'col-md-8 col-md-offset-1' },
+	          _react2.default.createElement(
+	            'h5',
+	            null,
+	            this.props.work.work_summary
+	          )
+	        )
+	      ),
+	      _react2.default.createElement(
+	        'div',
+	        { className: 'row' },
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'col-md-2' },
+	          _react2.default.createElement(
+	            'h5',
+	            null,
+	            'Chapters: ',
+	            Object.keys(this.props.work.chapters).length
+	          )
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'col-md-2' },
+	          _react2.default.createElement(
+	            'h5',
+	            null,
+	            'Complete? ',
+	            this.props.work.is_complete
+	          )
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'col-md-2' },
+	          _react2.default.createElement(
+	            'h5',
+	            null,
+	            'Word Count: ',
+	            this.props.work.word_count
+	          )
+	        )
+	      )
+	    );
+	  }
+	});
+
+	exports.default = WorkStub;
 
 /***/ })
 /******/ ]);
