@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import TagItem from './TagItem';
 
 export default class SingleWork extends React.Component {
 
@@ -38,6 +39,9 @@ export default class SingleWork extends React.Component {
       <div>
         <h3>{this.state.workId}</h3>
         <p>{this.state.work}</p>
+        <div>
+          <TagItem/>
+        </div>
       </div>
     );
   }
