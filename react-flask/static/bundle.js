@@ -77,7 +77,7 @@
 
 	var _WorkStub2 = _interopRequireDefault(_WorkStub);
 
-	var _TagItem = __webpack_require__(517);
+	var _TagItem = __webpack_require__(491);
 
 	var _TagItem2 = _interopRequireDefault(_TagItem);
 
@@ -46673,11 +46673,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _axios = __webpack_require__(491);
+	var _axios = __webpack_require__(492);
 
 	var _axios2 = _interopRequireDefault(_axios);
 
-	var _TagItem = __webpack_require__(517);
+	var _TagItem = __webpack_require__(491);
 
 	var _TagItem2 = _interopRequireDefault(_TagItem);
 
@@ -46701,7 +46701,7 @@
 	    key: 'getWork',
 	    value: function getWork(workId) {
 	      _axios2.default.get('/api/work/' + workId).then(function (response) {
-	        this.setState({ work: response.data[0]["name"] });
+	        this.setState({ work: response.data[0] });
 	      }.bind(this)).catch(function (error) {
 	        console.log(error);
 	      });
@@ -46713,7 +46713,18 @@
 
 	    var _this = _possibleConstructorReturn(this, (SingleWork.__proto__ || Object.getPrototypeOf(SingleWork)).call(this, props));
 
-	    _this.state = { workId: props.match.params.workId, work: '' };
+	    var empty = {
+	      "key": "1",
+	      "name": "barb",
+	      "url": "butts",
+	      "title": "bleh bleh bleh",
+	      "main": "index.js",
+	      "is_complete": "yes",
+	      "word_count": "100",
+	      "work_summary": "another terrible fic",
+	      "chapters": {},
+	      "tags": [{ "id": "empty" }] };
+	    _this.state = { workId: props.match.params.workId, work: empty };
 	    return _this;
 	  }
 
@@ -46740,14 +46751,105 @@
 	          this.state.workId
 	        ),
 	        _react2.default.createElement(
-	          'p',
-	          null,
-	          this.state.work
-	        ),
-	        _react2.default.createElement(
 	          'div',
-	          null,
-	          _react2.default.createElement(_TagItem2.default, null)
+	          { className: 'panel panel-default' },
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'panel-body' },
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'row' },
+	              _react2.default.createElement(
+	                'div',
+	                { className: 'col-md-12' },
+	                _react2.default.createElement(
+	                  'h1',
+	                  null,
+	                  this.state.work.title
+	                )
+	              )
+	            ),
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'row' },
+	              _react2.default.createElement(
+	                'div',
+	                { className: 'col-md-12' },
+	                _react2.default.createElement(
+	                  'h2',
+	                  null,
+	                  this.state.work.name
+	                )
+	              )
+	            ),
+	            _react2.default.createElement('hr', null),
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'row' },
+	              _react2.default.createElement(
+	                'div',
+	                { className: 'col-md-12' },
+	                _react2.default.createElement(
+	                  'h4',
+	                  null,
+	                  this.state.work.work_summary
+	                )
+	              )
+	            ),
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'row' },
+	              _react2.default.createElement(
+	                'div',
+	                { className: 'col-md-2 col-md-offset-6' },
+	                _react2.default.createElement(
+	                  'h5',
+	                  null,
+	                  'Chapters: ',
+	                  Object.keys(this.state.work.chapters).length
+	                )
+	              ),
+	              _react2.default.createElement(
+	                'div',
+	                { className: 'col-md-2' },
+	                _react2.default.createElement(
+	                  'h5',
+	                  null,
+	                  'Complete? ',
+	                  this.state.work.is_complete
+	                )
+	              ),
+	              _react2.default.createElement(
+	                'div',
+	                { className: 'col-md-2' },
+	                _react2.default.createElement(
+	                  'h5',
+	                  null,
+	                  'Word Count: ',
+	                  this.state.work.word_count
+	                )
+	              )
+	            )
+	          ),
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'panel-footer' },
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'row' },
+	              _react2.default.createElement(
+	                'div',
+	                { className: 'col-md-12' },
+	                this.state.work.tags.map(function (tag) {
+	                  return _react2.default.createElement(
+	                    'div',
+	                    { key: tag.id },
+	                    _react2.default.createElement(_TagItem2.default, { tag: tag })
+	                  );
+	                })
+	              )
+	            )
+	          )
 	        )
 	      );
 	    }
@@ -46762,18 +46864,99 @@
 /* 491 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(492);
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(3);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRouterDom = __webpack_require__(43);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var SingleWork = function (_React$Component) {
+	  _inherits(SingleWork, _React$Component);
+
+	  function SingleWork(props) {
+	    _classCallCheck(this, SingleWork);
+
+	    var _this = _possibleConstructorReturn(this, (SingleWork.__proto__ || Object.getPrototypeOf(SingleWork)).call(this, props));
+
+	    _this.state = { tag: props.tag };
+	    return _this;
+	  }
+
+	  _createClass(SingleWork, [{
+	    key: 'componentWillMount',
+	    value: function componentWillMount() {
+	      //do things
+	    }
+	  }, {
+	    key: 'componentWillUpdate',
+	    value: function componentWillUpdate(nextProps, nextState) {}
+	  }, {
+	    key: 'removeTag',
+	    value: function removeTag(event) {
+	      var target = event.target.parentElement.parentElement;
+	      target.remove();
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        'div',
+	        null,
+	        _react2.default.createElement(
+	          'li',
+	          { className: 'tag_li', id: this.state.tag.id },
+	          this.state.tag.text,
+	          _react2.default.createElement(
+	            'a',
+	            { className: 'close_icon_link', onClick: this.removeTag },
+	            _react2.default.createElement(
+	              'span',
+	              { className: 'close_icon' },
+	              'x'
+	            )
+	          )
+	        )
+	      );
+	    }
+	  }]);
+
+	  return SingleWork;
+	}(_react2.default.Component);
+
+	exports.default = SingleWork;
 
 /***/ }),
 /* 492 */
 /***/ (function(module, exports, __webpack_require__) {
 
+	module.exports = __webpack_require__(493);
+
+/***/ }),
+/* 493 */
+/***/ (function(module, exports, __webpack_require__) {
+
 	'use strict';
 
-	var utils = __webpack_require__(493);
-	var bind = __webpack_require__(494);
-	var Axios = __webpack_require__(496);
-	var defaults = __webpack_require__(497);
+	var utils = __webpack_require__(494);
+	var bind = __webpack_require__(495);
+	var Axios = __webpack_require__(497);
+	var defaults = __webpack_require__(498);
 
 	/**
 	 * Create an instance of Axios
@@ -46806,15 +46989,15 @@
 	};
 
 	// Expose Cancel & CancelToken
-	axios.Cancel = __webpack_require__(514);
-	axios.CancelToken = __webpack_require__(515);
-	axios.isCancel = __webpack_require__(511);
+	axios.Cancel = __webpack_require__(515);
+	axios.CancelToken = __webpack_require__(516);
+	axios.isCancel = __webpack_require__(512);
 
 	// Expose all/spread
 	axios.all = function all(promises) {
 	  return Promise.all(promises);
 	};
-	axios.spread = __webpack_require__(516);
+	axios.spread = __webpack_require__(517);
 
 	module.exports = axios;
 
@@ -46823,13 +47006,13 @@
 
 
 /***/ }),
-/* 493 */
+/* 494 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var bind = __webpack_require__(494);
-	var isBuffer = __webpack_require__(495);
+	var bind = __webpack_require__(495);
+	var isBuffer = __webpack_require__(496);
 
 	/*global toString:true*/
 
@@ -47132,7 +47315,7 @@
 
 
 /***/ }),
-/* 494 */
+/* 495 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -47149,7 +47332,7 @@
 
 
 /***/ }),
-/* 495 */
+/* 496 */
 /***/ (function(module, exports) {
 
 	/*!
@@ -47176,17 +47359,17 @@
 
 
 /***/ }),
-/* 496 */
+/* 497 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var defaults = __webpack_require__(497);
-	var utils = __webpack_require__(493);
-	var InterceptorManager = __webpack_require__(508);
-	var dispatchRequest = __webpack_require__(509);
-	var isAbsoluteURL = __webpack_require__(512);
-	var combineURLs = __webpack_require__(513);
+	var defaults = __webpack_require__(498);
+	var utils = __webpack_require__(494);
+	var InterceptorManager = __webpack_require__(509);
+	var dispatchRequest = __webpack_require__(510);
+	var isAbsoluteURL = __webpack_require__(513);
+	var combineURLs = __webpack_require__(514);
 
 	/**
 	 * Create a new instance of Axios
@@ -47268,13 +47451,13 @@
 
 
 /***/ }),
-/* 497 */
+/* 498 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
 
-	var utils = __webpack_require__(493);
-	var normalizeHeaderName = __webpack_require__(498);
+	var utils = __webpack_require__(494);
+	var normalizeHeaderName = __webpack_require__(499);
 
 	var DEFAULT_CONTENT_TYPE = {
 	  'Content-Type': 'application/x-www-form-urlencoded'
@@ -47290,10 +47473,10 @@
 	  var adapter;
 	  if (typeof XMLHttpRequest !== 'undefined') {
 	    // For browsers use XHR adapter
-	    adapter = __webpack_require__(499);
+	    adapter = __webpack_require__(500);
 	  } else if (typeof process !== 'undefined') {
 	    // For node use HTTP adapter
-	    adapter = __webpack_require__(499);
+	    adapter = __webpack_require__(500);
 	  }
 	  return adapter;
 	}
@@ -47367,12 +47550,12 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
 
 /***/ }),
-/* 498 */
+/* 499 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(493);
+	var utils = __webpack_require__(494);
 
 	module.exports = function normalizeHeaderName(headers, normalizedName) {
 	  utils.forEach(headers, function processHeader(value, name) {
@@ -47385,18 +47568,18 @@
 
 
 /***/ }),
-/* 499 */
+/* 500 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
 
-	var utils = __webpack_require__(493);
-	var settle = __webpack_require__(500);
-	var buildURL = __webpack_require__(503);
-	var parseHeaders = __webpack_require__(504);
-	var isURLSameOrigin = __webpack_require__(505);
-	var createError = __webpack_require__(501);
-	var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(506);
+	var utils = __webpack_require__(494);
+	var settle = __webpack_require__(501);
+	var buildURL = __webpack_require__(504);
+	var parseHeaders = __webpack_require__(505);
+	var isURLSameOrigin = __webpack_require__(506);
+	var createError = __webpack_require__(502);
+	var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(507);
 
 	module.exports = function xhrAdapter(config) {
 	  return new Promise(function dispatchXhrRequest(resolve, reject) {
@@ -47493,7 +47676,7 @@
 	    // This is only done if running in a standard browser environment.
 	    // Specifically not if we're in a web worker, or react-native.
 	    if (utils.isStandardBrowserEnv()) {
-	      var cookies = __webpack_require__(507);
+	      var cookies = __webpack_require__(508);
 
 	      // Add xsrf header
 	      var xsrfValue = (config.withCredentials || isURLSameOrigin(config.url)) && config.xsrfCookieName ?
@@ -47572,12 +47755,12 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
 
 /***/ }),
-/* 500 */
+/* 501 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var createError = __webpack_require__(501);
+	var createError = __webpack_require__(502);
 
 	/**
 	 * Resolve or reject a Promise based on response status.
@@ -47604,12 +47787,12 @@
 
 
 /***/ }),
-/* 501 */
+/* 502 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var enhanceError = __webpack_require__(502);
+	var enhanceError = __webpack_require__(503);
 
 	/**
 	 * Create an Error with the specified message, config, error code, request and response.
@@ -47628,7 +47811,7 @@
 
 
 /***/ }),
-/* 502 */
+/* 503 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -47655,12 +47838,12 @@
 
 
 /***/ }),
-/* 503 */
+/* 504 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(493);
+	var utils = __webpack_require__(494);
 
 	function encode(val) {
 	  return encodeURIComponent(val).
@@ -47729,12 +47912,12 @@
 
 
 /***/ }),
-/* 504 */
+/* 505 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(493);
+	var utils = __webpack_require__(494);
 
 	/**
 	 * Parse headers into an object
@@ -47772,12 +47955,12 @@
 
 
 /***/ }),
-/* 505 */
+/* 506 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(493);
+	var utils = __webpack_require__(494);
 
 	module.exports = (
 	  utils.isStandardBrowserEnv() ?
@@ -47846,7 +48029,7 @@
 
 
 /***/ }),
-/* 506 */
+/* 507 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -47888,12 +48071,12 @@
 
 
 /***/ }),
-/* 507 */
+/* 508 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(493);
+	var utils = __webpack_require__(494);
 
 	module.exports = (
 	  utils.isStandardBrowserEnv() ?
@@ -47947,12 +48130,12 @@
 
 
 /***/ }),
-/* 508 */
+/* 509 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(493);
+	var utils = __webpack_require__(494);
 
 	function InterceptorManager() {
 	  this.handlers = [];
@@ -48005,15 +48188,15 @@
 
 
 /***/ }),
-/* 509 */
+/* 510 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(493);
-	var transformData = __webpack_require__(510);
-	var isCancel = __webpack_require__(511);
-	var defaults = __webpack_require__(497);
+	var utils = __webpack_require__(494);
+	var transformData = __webpack_require__(511);
+	var isCancel = __webpack_require__(512);
+	var defaults = __webpack_require__(498);
 
 	/**
 	 * Throws a `Cancel` if cancellation has been requested.
@@ -48090,12 +48273,12 @@
 
 
 /***/ }),
-/* 510 */
+/* 511 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(493);
+	var utils = __webpack_require__(494);
 
 	/**
 	 * Transform the data for a request or a response
@@ -48116,7 +48299,7 @@
 
 
 /***/ }),
-/* 511 */
+/* 512 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -48127,7 +48310,7 @@
 
 
 /***/ }),
-/* 512 */
+/* 513 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -48147,7 +48330,7 @@
 
 
 /***/ }),
-/* 513 */
+/* 514 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -48167,7 +48350,7 @@
 
 
 /***/ }),
-/* 514 */
+/* 515 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -48192,12 +48375,12 @@
 
 
 /***/ }),
-/* 515 */
+/* 516 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var Cancel = __webpack_require__(514);
+	var Cancel = __webpack_require__(515);
 
 	/**
 	 * A `CancelToken` is an object that can be used to request cancellation of an operation.
@@ -48255,7 +48438,7 @@
 
 
 /***/ }),
-/* 516 */
+/* 517 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -48286,92 +48469,6 @@
 	  };
 	};
 
-
-/***/ }),
-/* 517 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(3);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactRouterDom = __webpack_require__(43);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var SingleWork = function (_React$Component) {
-	  _inherits(SingleWork, _React$Component);
-
-	  function SingleWork(props) {
-	    _classCallCheck(this, SingleWork);
-
-	    var _this = _possibleConstructorReturn(this, (SingleWork.__proto__ || Object.getPrototypeOf(SingleWork)).call(this, props));
-
-	    var tagJ = {
-	      "id": "1",
-	      "text": "my otp"
-	    };
-	    _this.state = { tag: tagJ };
-	    console.log(_this.state.tag);
-	    return _this;
-	  }
-
-	  _createClass(SingleWork, [{
-	    key: 'componentWillMount',
-	    value: function componentWillMount() {
-	      //do things
-	    }
-	  }, {
-	    key: 'componentWillUpdate',
-	    value: function componentWillUpdate(nextProps, nextState) {}
-	  }, {
-	    key: 'removeTag',
-	    value: function removeTag(event) {
-	      var target = event.target.parentElement.parentElement;
-	      target.remove();
-	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      return _react2.default.createElement(
-	        'div',
-	        null,
-	        _react2.default.createElement(
-	          'li',
-	          { className: 'tag_li', id: this.state.tag.id },
-	          this.state.tag.text,
-	          _react2.default.createElement(
-	            'a',
-	            { className: 'close_icon_link', onClick: this.removeTag },
-	            _react2.default.createElement(
-	              'span',
-	              { className: 'close_icon' },
-	              'x'
-	            )
-	          )
-	        )
-	      );
-	    }
-	  }]);
-
-	  return SingleWork;
-	}(_react2.default.Component);
-
-	exports.default = SingleWork;
 
 /***/ })
 /******/ ]);

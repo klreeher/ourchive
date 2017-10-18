@@ -8,13 +8,7 @@ export default class SingleWork extends React.Component {
 
   constructor(props) {
     super(props);
-    var tagJ = 
-	{
-	"id": "1",
-  "text": "my otp"
-  }
-    this.state = {tag: tagJ};
-    console.log(this.state.tag);
+    this.state = {tag: props.tag};
   }
   componentWillMount() { 
     //do things

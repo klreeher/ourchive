@@ -16,11 +16,24 @@ def get_work(workId):
   "url": "butts",
   "title": "bleh bleh bleh",
   "main": "index.js",
-  "scripts": {
+  "is_complete": "true",
+  "word_count": "4000",
+  "work_summary": "some stuff happens",
+  "chapters": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack",
     "start": "python app.py"
-  }}])
+  },
+  "tags": [
+    {
+      	"id": "1",
+  		"text": "buffy summers"
+    },
+    {
+    	"id": "2",
+      	"text": "faith lehane"
+    }
+  ]}])
   return work
 
 @app.route('/<path:path>')
