@@ -28,6 +28,9 @@ var NavbarInternal = React.createClass({
     <IndexLinkContainer to="/works">
       <NavItem>Works</NavItem>
     </IndexLinkContainer>
+    <IndexLinkContainer to="/create/work">
+      <NavItem>New Work</NavItem>
+    </IndexLinkContainer>
     <IndexLinkContainer to="/bookmarks">
       <NavItem>Bookmarks</NavItem>
     </IndexLinkContainer>

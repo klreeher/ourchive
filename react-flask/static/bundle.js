@@ -81,6 +81,10 @@
 
 	var _TagItem2 = _interopRequireDefault(_TagItem);
 
+	var _NewWork = __webpack_require__(545);
+
+	var _NewWork2 = _interopRequireDefault(_NewWork);
+
 	var _react = __webpack_require__(3);
 
 	var _react2 = _interopRequireDefault(_react);
@@ -121,7 +125,8 @@
 	      _react2.default.createElement('hr', null),
 	      _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/', component: Home }),
 	      _react2.default.createElement(_reactRouterDom.Route, { path: '/works', component: WorkCollection }),
-	      _react2.default.createElement(_reactRouterDom.Route, { path: '/work/:workId', component: _SingleWork2.default })
+	      _react2.default.createElement(_reactRouterDom.Route, { path: '/work/:workId', component: _SingleWork2.default }),
+	      _react2.default.createElement(_reactRouterDom.Route, { path: '/create/work', component: _NewWork2.default })
 	    )
 	  );
 	};
@@ -5025,6 +5030,15 @@
 	            _reactBootstrap.NavItem,
 	            null,
 	            'Works'
+	          )
+	        ),
+	        _react2.default.createElement(
+	          _reactRouterBootstrap.IndexLinkContainer,
+	          { to: '/create/work' },
+	          _react2.default.createElement(
+	            _reactBootstrap.NavItem,
+	            null,
+	            'New Work'
 	          )
 	        ),
 	        _react2.default.createElement(
@@ -51877,6 +51891,327 @@
 	}(_react2.default.Component);
 
 	exports.default = TagItem;
+
+/***/ }),
+/* 545 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(3);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _axios = __webpack_require__(491);
+
+	var _axios2 = _interopRequireDefault(_axios);
+
+	var _Chapter = __webpack_require__(517);
+
+	var _Chapter2 = _interopRequireDefault(_Chapter);
+
+	var _TagList = __webpack_require__(543);
+
+	var _TagList2 = _interopRequireDefault(_TagList);
+
+	var _ChapterForm = __webpack_require__(546);
+
+	var _ChapterForm2 = _interopRequireDefault(_ChapterForm);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var NewWork = function (_React$Component) {
+	  _inherits(NewWork, _React$Component);
+
+	  _createClass(NewWork, [{
+	    key: 'updateTitle',
+	    value: function updateTitle(evt) {
+	      this.setState({
+	        title: evt.target.value
+	      });
+	    }
+	  }, {
+	    key: 'updateWorkSummary',
+	    value: function updateWorkSummary(evt) {
+	      this.setState({
+	        work_summary: evt.target.value
+	      });
+	    }
+	  }, {
+	    key: 'updateCheckbox',
+	    value: function updateCheckbox(evt) {
+	      this.setState({
+	        is_complete: evt.target.value
+	      });
+	    }
+	  }, {
+	    key: 'updateWorkNotes',
+	    value: function updateWorkNotes(evt) {
+	      this.setState({
+	        work_notes: evt.target.value
+	      });
+	    }
+	  }, {
+	    key: 'addChapter',
+	    value: function addChapter() {
+	      var newChapter = { chapter_title: '', chapter_summary: '', chapter_notes: '', chapter_image: '',
+	        chapter_audio: '', chapter_text: '', chapter_key: 1 };
+	      this.state.chapters.push(newChapter);
+	    }
+	  }, {
+	    key: 'appendChapter',
+	    value: function appendChapter(evt) {
+	      var key = this.state.chapters.length + 1;
+	      var newChapter = { chapter_title: '', chapter_summary: '', chapter_notes: '', chapter_image: '',
+	        chapter_audio: '', chapter_text: '', chapter_key: key };
+	      var original = this.state.chapters;
+	      original.push(newChapter);
+	      this.setState({
+	        chapters: original
+	      });
+	    }
+	  }, {
+	    key: 'saveWork',
+	    value: function saveWork() {
+	      _axios2.default.post('/api/work/new').then(function (response) {
+	        this.setState({ work: response.data[0] });
+	      }.bind(this)).catch(function (error) {
+	        console.log(error);
+	      });
+	    }
+	  }, {
+	    key: 'getTagCategories',
+	    value: function getTagCategories() {
+	      _axios2.default.get('/api/tag/categories').then(function (response) {
+	        this.setState({ work: response.data[0] });
+	      }.bind(this)).catch(function (error) {
+	        console.log(error);
+	      });
+	    }
+	  }]);
+
+	  function NewWork(props) {
+	    _classCallCheck(this, NewWork);
+
+	    var _this = _possibleConstructorReturn(this, (NewWork.__proto__ || Object.getPrototypeOf(NewWork)).call(this, props));
+
+	    _this.state = { title: '', work_summary: '', is_complete: false, work_notes: '',
+	      work_tags: [], chapters: [] };
+	    _this.addChapter();
+	    return _this;
+	  }
+
+	  _createClass(NewWork, [{
+	    key: 'componentWillMount',
+	    value: function componentWillMount() {
+	      //todo call get categories
+	    }
+	  }, {
+	    key: 'componentWillUpdate',
+	    value: function componentWillUpdate(nextProps, nextState) {}
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var _this2 = this;
+
+	      return _react2.default.createElement(
+	        'div',
+	        null,
+	        _react2.default.createElement(
+	          'form',
+	          null,
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'form-group' },
+	            _react2.default.createElement(
+	              'label',
+	              { 'for': 'work_title' },
+	              'Title'
+	            ),
+	            _react2.default.createElement('input', { id: 'work_title', className: 'form-control', value: this.state.title, onChange: function onChange(evt) {
+	                return _this2.updateTitle(evt);
+	              } })
+	          ),
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'form-group' },
+	            _react2.default.createElement(
+	              'label',
+	              { 'for': 'work_author' },
+	              'Author'
+	            ),
+	            _react2.default.createElement('input', { id: 'work_author', className: 'form-control', value: 'dummyAuthor' })
+	          ),
+	          _react2.default.createElement('hr', null),
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'form-group' },
+	            _react2.default.createElement(
+	              'label',
+	              { 'for': 'work_summary' },
+	              'Summary'
+	            ),
+	            _react2.default.createElement('textarea', { id: 'work_summary', className: 'form-control', rows: '3', value: this.state.work_summary, onChange: function onChange(evt) {
+	                return _this2.updateWorkSummary(evt);
+	              } })
+	          ),
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'form-group' },
+	            _react2.default.createElement('input', { type: 'checkbox', id: 'complete', onChange: function onChange(evt) {
+	                return _this2.updateCheckbox(evt);
+	              } }),
+	            _react2.default.createElement(
+	              'label',
+	              { htmlFor: 'complete' },
+	              'Work is complete?'
+	            )
+	          ),
+	          _react2.default.createElement('hr', null),
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'form-group' },
+	            _react2.default.createElement(
+	              'label',
+	              { 'for': 'work_notes' },
+	              'Notes'
+	            ),
+	            _react2.default.createElement('input', { id: 'work_notes', className: 'form-control', value: this.state.work_notes, onChange: function onChange(evt) {
+	                return _this2.updateWorkNotes(evt);
+	              } })
+	          ),
+	          this.state.work_tags.map(function (tag) {
+	            return _react2.default.createElement(
+	              'div',
+	              { className: 'row' },
+	              _react2.default.createElement(
+	                'div',
+	                { className: 'col-md-12' },
+	                _react2.default.createElement(
+	                  'ul',
+	                  { className: 'list-inline' },
+	                  _react2.default.createElement(_TagList2.default, { tag_category: Object.keys(tag), tags: Object.values(tag) })
+	                )
+	              )
+	            );
+	          }),
+	          this.state.chapters.map(function (chapter) {
+	            return _react2.default.createElement(_ChapterForm2.default, { key: chapter.chapter_key, chapter_number: chapter.chapter_key });
+	          }),
+	          _react2.default.createElement(
+	            'button',
+	            { type: 'submit', className: 'btn btn-default' },
+	            'Submit'
+	          )
+	        ),
+	        _react2.default.createElement(
+	          'button',
+	          { onClick: function onClick(evt) {
+	              return _this2.appendChapter(evt);
+	            } },
+	          'Add Chapter'
+	        )
+	      );
+	    }
+	  }]);
+
+	  return NewWork;
+	}(_react2.default.Component);
+
+	exports.default = NewWork;
+
+/***/ }),
+/* 546 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(3);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRouterDom = __webpack_require__(43);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Chapter = function (_React$Component) {
+	  _inherits(Chapter, _React$Component);
+
+	  function Chapter(props) {
+	    _classCallCheck(this, Chapter);
+
+	    var _this = _possibleConstructorReturn(this, (Chapter.__proto__ || Object.getPrototypeOf(Chapter)).call(this, props));
+
+	    _this.state = { chapter_number: props.chapter_number };
+	    return _this;
+	  }
+
+	  _createClass(Chapter, [{
+	    key: 'componentWillMount',
+	    value: function componentWillMount() {
+	      //do things
+	    }
+	  }, {
+	    key: 'componentWillUpdate',
+	    value: function componentWillUpdate(nextProps, nextState) {}
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        'div',
+	        { id: this.state.chapter_number },
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'form-group' },
+	          _react2.default.createElement(
+	            'label',
+	            { 'for': 'chapter_title' },
+	            'Chapter Title'
+	          ),
+	          _react2.default.createElement('input', { id: 'chapter_title', className: 'form-control' })
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'form-group' },
+	          _react2.default.createElement(
+	            'label',
+	            { 'for': 'chapter_summary' },
+	            'Chapter Summary'
+	          ),
+	          _react2.default.createElement('textarea', { id: 'chapter_summary', className: 'form-control', rows: '3' })
+	        )
+	      );
+	    }
+	  }]);
+
+	  return Chapter;
+	}(_react2.default.Component);
+
+	exports.default = Chapter;
 
 /***/ })
 /******/ ]);
