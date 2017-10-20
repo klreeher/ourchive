@@ -1,0 +1,441 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Ourchive",
+    "version": "1.0",
+    "contact": {
+      "name": "Ourchive",
+      "url": "http://ourchive.io",
+      "email": "ourchive@reeher-palmer.com"
+    }
+  },
+  "host": "api.ourchive.io",
+  "basePath": "/v1",
+  "schemes": [
+    "https"
+  ],
+  "consumes": [
+    "application/json",
+    "text/plain; charset=utf-8"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "security": [
+    {
+      "oauth2": []
+    }
+  ],
+  "securityDefinitions": {
+    "oauth2": {
+      "type": "oauth2",
+      "tokenUrl": "https://auth.ourchive.io/oauth/token",
+      "flow": "password",
+      "scopes": {}
+    }
+  },
+  "definitions": {
+    "Creator": {
+      "type": "object",
+      "properties": {
+        "ID": {
+          "type": "string"
+        },
+        "Username": {
+          "type": "string"
+        },
+        "Password": {
+          "type": "string"
+        },
+        "FirstName": {
+          "type": "string"
+        },
+        "LastName": {
+          "type": "string"
+        },
+        "Email": {
+          "type": "string"
+        },
+        "TermsAccepted": {
+          "type": "string"
+        },
+        "Active": {
+          "type": "boolean"
+        }
+      }
+    },
+    "Work": {
+      "type": "object",
+      "properties": {
+        "ID": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "Creators": {
+          "type": "object",
+          "items": {
+            "$ref": "#/definitions/Creator"
+          }
+        },
+        "Length": {
+          "type": "number"
+        },
+        "Complete": {
+          "type": "boolean"
+        }
+      }
+    },
+    "TokenPasswordReset": {
+      "type": "object",
+      "properties": {
+        "NewPassword": {
+          "type": "string"
+        }
+      }
+    },
+    "PasswordResetRequest": {
+      "type": "object",
+      "properties": {
+        "ClientID": {
+          "type": "string"
+        },
+        "Email": {
+          "type": "string"
+        },
+        "Username": {
+          "type": "string"
+        },
+        "URL": {
+          "type": "string"
+        }
+      }
+    },
+    "PasswordReset": {
+      "type": "object",
+      "properties": {
+        "ClientID": {
+          "type": "string"
+        },
+        "Username": {
+          "type": "string"
+        },
+        "Password": {
+          "type": "string"
+        }
+      }
+    },
+    "AccessToken": {
+      "type": "object",
+      "properties": {
+        "access_token": {
+          "type": "string"
+        },
+        "expires_in": {
+          "type": "integer"
+        },
+        "token_type": {
+          "type": "string"
+        },
+        "refresh_token": {
+          "type": "string"
+        }
+      }
+    },
+    "Meta": {
+      "type": "object",
+      "properties": {
+        "Page": {
+          "type": "integer"
+        },
+        "PageSize": {
+          "type": "integer"
+        },
+        "TotalCount": {
+          "type": "integer"
+        },
+        "TotalPages": {
+          "type": "integer"
+        },
+        "ItemRange": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          }
+        }
+      }
+    },
+    "ListUser": {
+      "type": "object",
+      "properties": {
+        "Items": {
+          "type": "array",
+          "Items": {
+            "Creator": {
+              "$ref": "#/definitions/Creator"
+            }
+          },
+          "Meta": {
+            "$ref": "#/definitions/Meta"
+          }
+        }
+      }
+    },
+    "ListWork": {
+      "type": "object",
+      "properties": {
+        "Items": {
+          "type": "array",
+          "items": {
+            "Work": {
+              "$ref": "#/definitions/Work"
+            }
+          },
+          "Meta": {
+            "$ref": "#/definitions/Meta"
+          }
+        }
+      }
+    },
+    "paths": {
+      "/Works": {
+        "get": {
+          "responses": {
+            "200": {
+              "description": "",
+              "schema": {
+                "$ref": "#/definitions/ListWork"
+              }
+            }
+          },
+          "operationId": "List",
+          "tags": [
+            "Work"
+          ],
+          "parameters": [
+            {
+              "name": "creator",
+              "in": "query",
+              "description": "creator of the work.",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "name": "search",
+              "in": "query",
+              "description": "Search of the Work.",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "name": "searchOn",
+              "in": "query",
+              "description": "Search on of the Work.",
+              "required": false,
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "sortBy",
+              "in": "query",
+              "description": "Sort by of the Work.",
+              "required": false,
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "page",
+              "in": "query",
+              "description": "Page of the Work.",
+              "required": false,
+              "type": "integer"
+            },
+            {
+              "name": "pageSize",
+              "in": "query",
+              "description": "Page size of the Work.",
+              "required": false,
+              "type": "integer"
+            },
+            {
+              "name": "filters",
+              "in": "query",
+              "description": "Filters of the Work.",
+              "required": false,
+              "type": "object"
+            }
+          ],
+          "security": [
+            {
+              "oauth2": []
+            }
+          ]
+        },
+        "post": {
+          "responses": {
+            "201": {
+              "description": "",
+              "schema": {
+                "$ref": "#/definitions/Work"
+              }
+            }
+          },
+          "operationId": "Create",
+          "tags": [
+            "Work"
+          ],
+          "parameters": [
+            {
+              "name": "Work",
+              "in": "body",
+              "required": true,
+              "description": "",
+              "schema": {
+                "$ref": "#/definitions/Work"
+              }
+            }
+          ],
+          "security": [
+            {
+              "oauth2": []
+            }
+          ]
+        }
+      },
+      "/Works/{WorkID}": {
+        "get": {
+          "responses": {
+            "200": {
+              "description": "",
+              "schema": {
+                "$ref": "#/definitions/Work"
+              }
+            }
+          },
+          "operationId": "Get",
+          "tags": [
+            "Work"
+          ],
+          "parameters": [
+            {
+              "name": "WorkID",
+              "in": "path",
+              "description": "ID of the Work.",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "security": [
+            {
+              "oauth2": []
+            }
+          ]
+        },
+        "put": {
+          "responses": {
+            "200": {
+              "description": "",
+              "schema": {
+                "$ref": "#/definitions/Work"
+              }
+            }
+          },
+          "operationId": "Update",
+          "tags": [
+            "Work"
+          ],
+          "parameters": [
+            {
+              "name": "WorkID",
+              "in": "path",
+              "description": "ID of the Work.",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "Work",
+              "in": "body",
+              "required": true,
+              "description": "",
+              "schema": {
+                "$ref": "#/definitions/Work"
+              }
+            }
+          ],
+          "security": [
+            {
+              "oauth2": []
+            }
+          ]
+        },
+        "patch": {
+          "responses": {
+            "200": {
+              "description": "",
+              "schema": {
+                "$ref": "#/definitions/Work"
+              }
+            }
+          },
+          "operationId": "Patch",
+          "tags": [
+            "Work"
+          ],
+          "parameters": [
+            {
+              "name": "WorkID",
+              "in": "path",
+              "description": "ID of the Work.",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "Work",
+              "in": "body",
+              "required": true,
+              "description": "",
+              "schema": {
+                "$ref": "#/definitions/Work"
+              }
+            }
+          ],
+          "security": [
+            {
+              "oauth2": []
+            }
+          ]
+        },
+        "delete": {
+          "responses": {
+            "204": {
+              "description": ""
+            }
+          },
+          "operationId": "Delete",
+          "tags": [
+            "Work"
+          ],
+          "parameters": [
+            {
+              "name": "WorkID",
+              "in": "path",
+              "description": "ID of the Work.",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "security": [
+            {
+              "oauth2": []
+            }
+          ]
+        }
+      }
+    }
+  }
+}
