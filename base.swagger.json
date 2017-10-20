@@ -171,14 +171,12 @@
       "properties": {
         "Items": {
           "type": "array",
-          "Items": {
-            "Creator": {
-              "$ref": "#/definitions/Creator"
-            }
-          },
-          "Meta": {
-            "$ref": "#/definitions/Meta"
+          "items": {
+            "$ref": "#/definitions/Creator"
           }
+        },
+        "Meta": {
+          "$ref": "#/definitions/Meta"
         }
       }
     },
@@ -188,253 +186,251 @@
         "Items": {
           "type": "array",
           "items": {
-            "Work": {
-              "$ref": "#/definitions/Work"
-            }
-          },
-          "Meta": {
-            "$ref": "#/definitions/Meta"
+            "$ref": "#/definitions/Work"
           }
+        },
+        "Meta": {
+          "$ref": "#/definitions/Meta"
         }
       }
-    },
-    "paths": {
-      "/Works": {
-        "get": {
-          "responses": {
-            "200": {
-              "description": "",
-              "schema": {
-                "$ref": "#/definitions/ListWork"
-              }
+    }
+  },
+  "paths": {
+    "/Works": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/ListWork"
             }
-          },
-          "operationId": "List",
-          "tags": [
-            "Work"
-          ],
-          "parameters": [
-            {
-              "name": "creator",
-              "in": "query",
-              "description": "creator of the work.",
-              "required": false,
-              "type": "string"
-            },
-            {
-              "name": "search",
-              "in": "query",
-              "description": "Search of the Work.",
-              "required": false,
-              "type": "string"
-            },
-            {
-              "name": "searchOn",
-              "in": "query",
-              "description": "Search on of the Work.",
-              "required": false,
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            },
-            {
-              "name": "sortBy",
-              "in": "query",
-              "description": "Sort by of the Work.",
-              "required": false,
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            },
-            {
-              "name": "page",
-              "in": "query",
-              "description": "Page of the Work.",
-              "required": false,
-              "type": "integer"
-            },
-            {
-              "name": "pageSize",
-              "in": "query",
-              "description": "Page size of the Work.",
-              "required": false,
-              "type": "integer"
-            },
-            {
-              "name": "filters",
-              "in": "query",
-              "description": "Filters of the Work.",
-              "required": false,
-              "type": "object"
-            }
-          ],
-          "security": [
-            {
-              "oauth2": []
-            }
-          ]
+          }
         },
-        "post": {
-          "responses": {
-            "201": {
-              "description": "",
-              "schema": {
-                "$ref": "#/definitions/Work"
-              }
+        "operationId": "List",
+        "tags": [
+          "Work"
+        ],
+        "parameters": [
+          {
+            "name": "creator",
+            "in": "query",
+            "description": "creator of the work.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "description": "Search of the Work.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "searchOn",
+            "in": "query",
+            "description": "Search on of the Work.",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
             }
           },
-          "operationId": "Create",
-          "tags": [
-            "Work"
-          ],
-          "parameters": [
-            {
-              "name": "Work",
-              "in": "body",
-              "required": true,
-              "description": "",
-              "schema": {
-                "$ref": "#/definitions/Work"
-              }
+          {
+            "name": "sortBy",
+            "in": "query",
+            "description": "Sort by of the Work.",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
             }
-          ],
-          "security": [
-            {
-              "oauth2": []
-            }
-          ]
-        }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page of the Work.",
+            "required": false,
+            "type": "integer"
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "Page size of the Work.",
+            "required": false,
+            "type": "integer"
+          },
+          {
+            "name": "filters",
+            "in": "query",
+            "description": "Filters of the Work.",
+            "required": false,
+            "type": "object"
+          }
+        ],
+        "security": [
+          {
+            "oauth2": []
+          }
+        ]
       },
-      "/Works/{WorkID}": {
-        "get": {
-          "responses": {
-            "200": {
-              "description": "",
-              "schema": {
-                "$ref": "#/definitions/Work"
-              }
+      "post": {
+        "responses": {
+          "201": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/Work"
             }
-          },
-          "operationId": "Get",
-          "tags": [
-            "Work"
-          ],
-          "parameters": [
-            {
-              "name": "WorkID",
-              "in": "path",
-              "description": "ID of the Work.",
-              "required": true,
-              "type": "string"
-            }
-          ],
-          "security": [
-            {
-              "oauth2": []
-            }
-          ]
+          }
         },
-        "put": {
-          "responses": {
-            "200": {
-              "description": "",
-              "schema": {
-                "$ref": "#/definitions/Work"
-              }
+        "operationId": "Create",
+        "tags": [
+          "Work"
+        ],
+        "parameters": [
+          {
+            "name": "Work",
+            "in": "body",
+            "required": true,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/Work"
             }
-          },
-          "operationId": "Update",
-          "tags": [
-            "Work"
-          ],
-          "parameters": [
-            {
-              "name": "WorkID",
-              "in": "path",
-              "description": "ID of the Work.",
-              "required": true,
-              "type": "string"
-            },
-            {
-              "name": "Work",
-              "in": "body",
-              "required": true,
-              "description": "",
-              "schema": {
-                "$ref": "#/definitions/Work"
-              }
+          }
+        ],
+        "security": [
+          {
+            "oauth2": []
+          }
+        ]
+      }
+    },
+    "/Works/{WorkID}": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/Work"
             }
-          ],
-          "security": [
-            {
-              "oauth2": []
-            }
-          ]
+          }
         },
-        "patch": {
-          "responses": {
-            "200": {
-              "description": "",
-              "schema": {
-                "$ref": "#/definitions/Work"
-              }
+        "operationId": "Get",
+        "tags": [
+          "Work"
+        ],
+        "parameters": [
+          {
+            "name": "WorkID",
+            "in": "path",
+            "description": "ID of the Work.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "security": [
+          {
+            "oauth2": []
+          }
+        ]
+      },
+      "put": {
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/Work"
             }
-          },
-          "operationId": "Patch",
-          "tags": [
-            "Work"
-          ],
-          "parameters": [
-            {
-              "name": "WorkID",
-              "in": "path",
-              "description": "ID of the Work.",
-              "required": true,
-              "type": "string"
-            },
-            {
-              "name": "Work",
-              "in": "body",
-              "required": true,
-              "description": "",
-              "schema": {
-                "$ref": "#/definitions/Work"
-              }
-            }
-          ],
-          "security": [
-            {
-              "oauth2": []
-            }
-          ]
+          }
         },
-        "delete": {
-          "responses": {
-            "204": {
-              "description": ""
-            }
+        "operationId": "Update",
+        "tags": [
+          "Work"
+        ],
+        "parameters": [
+          {
+            "name": "WorkID",
+            "in": "path",
+            "description": "ID of the Work.",
+            "required": true,
+            "type": "string"
           },
-          "operationId": "Delete",
-          "tags": [
-            "Work"
-          ],
-          "parameters": [
-            {
-              "name": "WorkID",
-              "in": "path",
-              "description": "ID of the Work.",
-              "required": true,
-              "type": "string"
+          {
+            "name": "Work",
+            "in": "body",
+            "required": true,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/Work"
             }
-          ],
-          "security": [
-            {
-              "oauth2": []
+          }
+        ],
+        "security": [
+          {
+            "oauth2": []
+          }
+        ]
+      },
+      "patch": {
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/Work"
             }
-          ]
-        }
+          }
+        },
+        "operationId": "Patch",
+        "tags": [
+          "Work"
+        ],
+        "parameters": [
+          {
+            "name": "WorkID",
+            "in": "path",
+            "description": "ID of the Work.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "Work",
+            "in": "body",
+            "required": true,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/Work"
+            }
+          }
+        ],
+        "security": [
+          {
+            "oauth2": []
+          }
+        ]
+      },
+      "delete": {
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "operationId": "Delete",
+        "tags": [
+          "Work"
+        ],
+        "parameters": [
+          {
+            "name": "WorkID",
+            "in": "path",
+            "description": "ID of the Work.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "security": [
+          {
+            "oauth2": []
+          }
+        ]
       }
     }
   }
