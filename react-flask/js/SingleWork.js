@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
-import TagItem from './TagItem';
+import Chapter from './Chapter';
+import TagList from './TagList';
 
 export default class SingleWork extends React.Component {
 
@@ -13,7 +14,8 @@ export default class SingleWork extends React.Component {
   {
   axios.get('/api/work/'+workId)
       .then(function (response) {
-        this.setState({work: response.data[0]});     
+        this.setState({work: response.data[0]});  
+
       }.bind(this))
       .catch(function (error) {
         console.log(error);
@@ -30,8 +32,24 @@ export default class SingleWork extends React.Component {
   "is_complete": "yes",
   "word_count": "100",
   "work_summary": "another terrible fic",
-  "chapters": {},
-  "tags": [{"id": "empty"}]};
+  "chapters": [{
+    "id": "1",
+    "title": "bob goes to school",
+    "chapter_summary": "stuff happens",
+    "text": "weh weh weh weh",
+    "audio_url": "url",
+    "image_url": "url"
+  },
+    {"id": "2",
+    "title": "bob fails at school",
+    "chapter_summary": "stuff happens",
+    "text": "bob sux",
+    "audio_url": "url",
+    "image_url": "url"}],
+  "chapter_count": "5",
+  "tags": [{
+    "fandom": ["hobbits", "star trek"]},
+    {"primary pairing": ["trip tucker / thorin"]}]};
     this.state = {workId: props.match.params.workId, work: empty};
   }
   componentWillMount() { 
@@ -47,7 +65,6 @@ export default class SingleWork extends React.Component {
   render() {
     return (
       <div>
-        <h3>{this.state.workId}</h3>
         <div className="panel panel-default">
         <div className="panel-body">
   <div className="row">
@@ -65,18 +82,23 @@ export default class SingleWork extends React.Component {
     <div className="col-md-2"><h5>Complete? {this.state.work.is_complete}</h5></div>
     <div className="col-md-2"><h5>Word Count: {this.state.work.word_count}</h5></div>
   </div>
-  </div>
-  <div className="panel-footer">
   <div className="row">
     <div className="col-md-12">
-      {this.state.work.tags.map(tag => 
-          <div key={tag.id}>
-            <TagItem tag={tag}/>
+      {this.state.work.chapters.map(chapter => 
+          <div key={chapter.id}>
+            <Chapter chapter={chapter}/>
           </div>
         )}
     </div>
-  </div> 
   </div>
+  </div>
+  <div className="row">
+      {this.state.work.tags.map(tag => 
+            <div className="list-row panel panel-default">
+              <TagList tag_category={tag.key} tags={Object.values(tag)}/>
+            </div>
+      )}
+  </div> 
   </div>
       </div>
     );

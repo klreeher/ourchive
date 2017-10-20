@@ -19,21 +19,21 @@ def get_work(workId):
   "is_complete": "true",
   "word_count": "4000",
   "work_summary": "some stuff happens",
-  "chapters": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack",
-    "start": "python app.py"
+  "chapters": [{
+    "id": "1",
+    "title": "bob goes to school",
+    "text": "weh weh weh weh",
+    "audio_url": "url",
+    "image_url": "url"
   },
-  "tags": [
-    {
-      	"id": "1",
-  		"text": "buffy summers"
-    },
-    {
-    	"id": "2",
-      	"text": "faith lehane"
-    }
-  ]}])
+    {"id": "2",
+    "title": "bob fails at school",
+    "text": "bob sux",
+    "audio_url": "url",
+    "image_url": "url"}],
+  "tags": [{
+    "fandom": ["buffy", "xena"]},
+    {"primary pairing": ["buffy/faith"]}]}])
   return work
 
 @app.route('/<path:path>')
