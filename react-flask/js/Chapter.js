@@ -2,6 +2,8 @@ import React from 'react';
 import {
   Link
 } from 'react-router-dom';
+import Image from 'react-image';
+import ReactPlayer from 'react-player';
 
 export default class Chapter extends React.Component {
 
@@ -16,7 +18,9 @@ export default class Chapter extends React.Component {
   componentWillUpdate(nextProps, nextState)
   {
   }
-  
+  componentWillReceiveProps(nextProps) {
+    this.setState({ chapter: nextProps.chapter });  
+  }
   render() {
     return (
       <div>
@@ -32,6 +36,18 @@ export default class Chapter extends React.Component {
     <div className="row">
       <div className="col-md-12">
         {this.state.chapter.text}
+      </div>
+    </div>
+    <br/>
+    <br/>
+    <div className="row">
+      <div className="col-md-12">
+        <audio ref="audio_tag" src={this.state.chapter.audio_url} controls/>
+      </div>
+    </div>
+    <div className="row">
+      <div className="col-md-12">
+        <Image file={this.state.chapter.image_url} alt='{this.state.chapter.chapter_summary}'/>
       </div>
     </div>
 </div>

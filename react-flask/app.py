@@ -1,10 +1,14 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, send_file, send_from_directory
 import json
 app = Flask(__name__)
 
 @app.route('/')
 def hello_world():
   return render_template('index.html')
+
+@app.route('/audio/<string:audio_file>')
+def audio(audio_file):
+  return send_from_directory(filename=audio_file, directory='audio')
 
 @app.route('/api/work/<int:workId>')
 def get_work(workId):
@@ -23,12 +27,12 @@ def get_work(workId):
     "id": "1",
     "title": "bob goes to school",
     "text": "weh weh weh weh",
-    "audio_url": "url",
+    "audio_url": "../audio/01 Family Problems.mp3",
     "image_url": "url"
   },
     {"id": "2",
     "title": "bob fails at school",
-    "text": "bob sux",
+    "text": "bloop",
     "audio_url": "url",
     "image_url": "url"}],
   "tags": [{
