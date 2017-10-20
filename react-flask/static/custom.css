@@ -41,6 +41,16 @@
     margin: 2px 5px 2px 0;
 }
 
+.tag_category {
+
+    background: none;
+
+    font-weight: bold;
+    display: block;
+    float: left;
+    margin: 2px 5px 2px 0;
+}
+
 .new_li {
 
     font-weight: normal;

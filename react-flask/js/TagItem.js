@@ -24,9 +24,7 @@ export default class TagItem extends React.Component {
   
   render() {
     return (
-      <div>
         <li className="tag_li" id={this.state.tag}>{this.state.tag}<a className="close_icon_link" onClick={this.removeTag}><span className="close_icon">x</span></a></li>
-      </div>
     );
   }
 }

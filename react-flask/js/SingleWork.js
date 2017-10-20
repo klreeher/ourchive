@@ -91,14 +91,20 @@ export default class SingleWork extends React.Component {
         )}
     </div>
   </div>
-  </div>
-  <div className="row">
+  
+  <hr/>
+  
       {this.state.work.tags.map(tag => 
-            <div className="list-row panel panel-default">
-              <TagList tag_category={tag.key} tags={Object.values(tag)}/>
-            </div>
+        <div className="row">
+        <div className="col-md-12">
+            <ul className="list-inline">
+              <TagList tag_category={Object.keys(tag)} tags={Object.values(tag)}/>
+            </ul>
+        </div> 
+        </div>
       )}
-  </div> 
+  
+  </div>
   </div>
       </div>
     );

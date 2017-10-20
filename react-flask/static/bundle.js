@@ -46849,16 +46849,21 @@
 	                  );
 	                })
 	              )
-	            )
-	          ),
-	          _react2.default.createElement(
-	            'div',
-	            { className: 'row' },
+	            ),
+	            _react2.default.createElement('hr', null),
 	            this.state.work.tags.map(function (tag) {
 	              return _react2.default.createElement(
 	                'div',
-	                { className: 'list-row panel panel-default' },
-	                _react2.default.createElement(_TagList2.default, { tag_category: tag.key, tags: Object.values(tag) })
+	                { className: 'row' },
+	                _react2.default.createElement(
+	                  'div',
+	                  { className: 'col-md-12' },
+	                  _react2.default.createElement(
+	                    'ul',
+	                    { className: 'list-inline' },
+	                    _react2.default.createElement(_TagList2.default, { tag_category: Object.keys(tag), tags: Object.values(tag) })
+	                  )
+	                )
 	              );
 	            })
 	          )
@@ -48558,26 +48563,15 @@
 	      return _react2.default.createElement(
 	        'div',
 	        null,
+	        _react2.default.createElement('hr', null),
 	        _react2.default.createElement(
 	          'div',
-	          { className: 'col-md-2' },
+	          { className: 'col-md-3 tag_category' },
 	          this.state.tag_category
 	        ),
-	        _react2.default.createElement(
-	          'div',
-	          { className: 'col-md-10' },
-	          _react2.default.createElement(
-	            'ul',
-	            null,
-	            this.state.tags.map(function (tag) {
-	              return _react2.default.createElement(
-	                'div',
-	                { key: tag },
-	                _react2.default.createElement(_TagItem2.default, { tag: tag })
-	              );
-	            })
-	          )
-	        )
+	        this.state.tags.map(function (tag) {
+	          return _react2.default.createElement(_TagItem2.default, { tag: tag });
+	        })
 	      );
 	    }
 	  }]);
@@ -48643,20 +48637,16 @@
 	    key: 'render',
 	    value: function render() {
 	      return _react2.default.createElement(
-	        'div',
-	        null,
+	        'li',
+	        { className: 'tag_li', id: this.state.tag },
+	        this.state.tag,
 	        _react2.default.createElement(
-	          'li',
-	          { className: 'tag_li', id: this.state.tag },
-	          this.state.tag,
+	          'a',
+	          { className: 'close_icon_link', onClick: this.removeTag },
 	          _react2.default.createElement(
-	            'a',
-	            { className: 'close_icon_link', onClick: this.removeTag },
-	            _react2.default.createElement(
-	              'span',
-	              { className: 'close_icon' },
-	              'x'
-	            )
+	            'span',
+	            { className: 'close_icon' },
+	            'x'
 	          )
 	        )
 	      );

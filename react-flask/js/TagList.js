@@ -21,14 +21,12 @@ export default class TagList extends React.Component {
   render() {
     return (
       <div>
-        <div className="col-md-2">{this.state.tag_category}</div>
-        <div className="col-md-10"><ul>
+      <hr/>
+      <div className="col-md-3 tag_category">{this.state.tag_category}</div>
           {this.state.tags.map(tag => 
-            <div key={tag}>
               <TagItem tag={tag}/>
-            </div>
           )}
-        </ul></div></div>
+      </div>
     );
   }
 }
