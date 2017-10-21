@@ -51987,10 +51987,9 @@
 	      var target = e.target;
 	      // Get the selected file from the input element
 	      var file = e.target.files[0];
-	      console.log(file);
 	      // Create a new tus upload
 	      var upload = new tus.Upload(file, {
-	        endpoint: "http://127.0.0.1:9292/audio/",
+	        endpoint: "http://127.0.0.1:9292/",
 	        chunkSize: 5 * 1024 * 1024,
 	        retryDelays: [0, 1000, 3000, 5000],
 	        onError: function onError(error) {
@@ -52001,7 +52000,33 @@
 	          console.log(bytesUploaded, bytesTotal, percentage + "%");
 	        },
 	        onSuccess: function onSuccess() {
-	          console.log("done");
+	          console.log("Download %s from %s", upload.file.name, upload.url);
+	        }
+	      });
+	      // Start the upload
+	      upload.start();
+	    }
+	  }, {
+	    key: 'uploadImage',
+	    value: function uploadImage(e) {
+	      e.preventDefault();
+	      var target = e.target;
+	      // Get the selected file from the input element
+	      var file = e.target.files[0];
+	      // Create a new tus upload
+	      var upload = new tus.Upload(file, {
+	        endpoint: "http://127.0.0.1:9292/",
+	        chunkSize: 5 * 1024 * 1024,
+	        retryDelays: [0, 1000, 3000, 5000],
+	        onError: function onError(error) {
+	          console.log("Failed because: " + error);
+	        },
+	        onProgress: function onProgress(bytesUploaded, bytesTotal) {
+	          var percentage = (bytesUploaded / bytesTotal * 100).toFixed(2);
+	          console.log(bytesUploaded, bytesTotal, percentage + "%");
+	        },
+	        onSuccess: function onSuccess() {
+	          console.log("Download %s from %s", upload.file.name, upload.url);
 	        }
 	      });
 	      // Start the upload
@@ -52057,6 +52082,7 @@
 	    _this.addChapter();
 	    _this.handler = _this.handler.bind(_this);
 	    _this.uploadAudio = _this.uploadAudio.bind(_this);
+	    _this.uploadImage = _this.uploadImage.bind(_this);
 	    return _this;
 	  }
 
@@ -52161,7 +52187,8 @@
 	                );
 	              }),
 	              this.state.chapters.map(function (chapter) {
-	                return _react2.default.createElement(_ChapterForm2.default, { key: chapter.chapter_key, chapter_number: chapter.chapter_key, handler: _this2.handler, handlerAudio: _this2.uploadAudio });
+	                return _react2.default.createElement(_ChapterForm2.default, { key: chapter.chapter_key, chapter_number: chapter.chapter_key, handler: _this2.handler, handlerAudio: _this2.uploadAudio,
+	                  handlerImage: _this2.uploadImage });
 	              }),
 	              _react2.default.createElement(
 	                'div',
@@ -52291,7 +52318,7 @@
 	            { htmlFor: 'chapter_image' },
 	            'Chapter Image'
 	          ),
-	          _react2.default.createElement('input', (_React$createElement = { className: 'input-file', type: 'file', id: 'chapter_image' }, _defineProperty(_React$createElement, 'className', 'form-control'), _defineProperty(_React$createElement, 'name', 'chapter_image'), _defineProperty(_React$createElement, 'onChange', this.props.handler), _React$createElement))
+	          _react2.default.createElement('input', (_React$createElement = { className: 'input-file', type: 'file', id: 'chapter_image' }, _defineProperty(_React$createElement, 'className', 'form-control'), _defineProperty(_React$createElement, 'name', 'chapter_image'), _defineProperty(_React$createElement, 'onChange', this.props.handlerImage), _React$createElement))
 	        ),
 	        _react2.default.createElement(
 	          'div',

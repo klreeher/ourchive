@@ -33,7 +33,7 @@ export default class Chapter extends React.Component {
               </div>
               <div className="form-group">
                 <label htmlFor="chapter_image">Chapter Image</label>
-                <input className='input-file' type='file' id="chapter_image" className="form-control" name="chapter_image" onChange={this.props.handler}></input>
+                <input className='input-file' type='file' id="chapter_image" className="form-control" name="chapter_image" onChange={this.props.handlerImage}></input>
               </div>
               <div className="form-group">
                 <label htmlFor="chapter_audio">Chapter Audio</label>

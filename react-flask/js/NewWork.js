@@ -47,10 +47,9 @@ export default class NewWork extends React.Component {
     var target = e.target
     // Get the selected file from the input element
     var file = e.target.files[0]
-    console.log(file)
     // Create a new tus upload
     var upload = new tus.Upload(file, {
-        endpoint: "http://127.0.0.1:9292/audio/",
+        endpoint: "http://127.0.0.1:9292/",
         chunkSize: 5*1024*1024,
         retryDelays: [0, 1000, 3000, 5000],
         onError: function(error) {
@@ -61,7 +60,33 @@ export default class NewWork extends React.Component {
             console.log(bytesUploaded, bytesTotal, percentage + "%")
         },
         onSuccess: function() {
-            console.log("done")
+            console.log("Download %s from %s", upload.file.name, upload.url)
+
+        }
+    })
+    // Start the upload
+    upload.start()
+  }
+  uploadImage(e)
+  {
+    e.preventDefault()
+    var target = e.target
+    // Get the selected file from the input element
+    var file = e.target.files[0]
+    // Create a new tus upload
+    var upload = new tus.Upload(file, {
+        endpoint: "http://127.0.0.1:9292/",
+        chunkSize: 5*1024*1024,
+        retryDelays: [0, 1000, 3000, 5000],
+        onError: function(error) {
+            console.log("Failed because: " + error)
+        },
+        onProgress: function(bytesUploaded, bytesTotal) {
+            var percentage = (bytesUploaded / bytesTotal * 100).toFixed(2)
+            console.log(bytesUploaded, bytesTotal, percentage + "%")
+        },
+        onSuccess: function() {
+            console.log("Download %s from %s", upload.file.name, upload.url)
 
         }
     })
@@ -116,6 +141,7 @@ export default class NewWork extends React.Component {
     this.addChapter();
     this.handler = this.handler.bind(this);
     this.uploadAudio = this.uploadAudio.bind(this);
+    this.uploadImage = this.uploadImage.bind(this);
   }
   componentWillMount() { 
     //todo call get categories
@@ -165,7 +191,8 @@ export default class NewWork extends React.Component {
           )}
           
           {this.state.chapters.map(chapter => (
-                        <ChapterForm key={chapter.chapter_key} chapter_number={chapter.chapter_key} handler={this.handler} handlerAudio={this.uploadAudio}/>
+                        <ChapterForm key={chapter.chapter_key} chapter_number={chapter.chapter_key} handler={this.handler} handlerAudio={this.uploadAudio}
+                        handlerImage={this.uploadImage}/>
                     ))}
         <div className="form-group">
           <button className="btn btn-link" onClick={evt => this.appendChapter(evt)}>Add Chapter</button>
