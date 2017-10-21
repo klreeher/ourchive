@@ -35,7 +35,7 @@
     }
   },
   "definitions": {
-    "Creator": {
+    "User": {
       "type": "object",
       "properties": {
         "ID": {
@@ -73,10 +73,10 @@
         "title": {
           "type": "string"
         },
-        "Creators": {
+        "Users": {
           "type": "object",
           "items": {
-            "$ref": "#/definitions/Creator"
+            "$ref": "#/definitions/User"
           }
         },
         "Length": {
@@ -172,7 +172,7 @@
         "Items": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/Creator"
+            "$ref": "#/definitions/User"
           }
         },
         "Meta": {
@@ -212,9 +212,9 @@
         ],
         "parameters": [
           {
-            "name": "creator",
+            "name": "user",
             "in": "query",
-            "description": "creator of the work.",
+            "description": "user of the work.",
             "required": false,
             "type": "string"
           },
@@ -262,9 +262,9 @@
           {
             "name": "filters",
             "in": "query",
-            "description": "Filters of the Work.",
+            "description": "Filters of the work.",
             "required": false,
-            "type": "object"
+            "type": "string"
           }
         ],
         "security": [
