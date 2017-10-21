@@ -1,6 +1,9 @@
 from flask import Flask, render_template, send_file, send_from_directory
 import json
+from flask_cors import CORS
+
 app = Flask(__name__)
+CORS(app, supports_credentials=True)
 
 @app.route('/')
 def hello_world():

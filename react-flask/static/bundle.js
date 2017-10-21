@@ -51936,6 +51936,12 @@
 	  _inherits(NewWork, _React$Component);
 
 	  _createClass(NewWork, [{
+	    key: 'addWork',
+	    value: function addWork(evt) {
+	      evt.preventDefault();
+	      console.log(this.state);
+	    }
+	  }, {
 	    key: 'updateTitle',
 	    value: function updateTitle(evt) {
 	      this.setState({
@@ -51964,6 +51970,44 @@
 	      });
 	    }
 	  }, {
+	    key: 'handler',
+	    value: function handler(e) {
+	      e.preventDefault();
+	      var original = this.state.chapters;
+	      original[e.target.parentElement.parentElement.id - 1][e.target.name] = e.target.value;
+	      this.setState({
+	        chapters: original
+	      });
+	      console.log(this.state.chapters);
+	    }
+	  }, {
+	    key: 'uploadAudio',
+	    value: function uploadAudio(e) {
+	      e.preventDefault();
+	      var target = e.target;
+	      // Get the selected file from the input element
+	      var file = e.target.files[0];
+	      console.log(file);
+	      // Create a new tus upload
+	      var upload = new tus.Upload(file, {
+	        endpoint: "http://127.0.0.1:9292/audio/",
+	        chunkSize: 5 * 1024 * 1024,
+	        retryDelays: [0, 1000, 3000, 5000],
+	        onError: function onError(error) {
+	          console.log("Failed because: " + error);
+	        },
+	        onProgress: function onProgress(bytesUploaded, bytesTotal) {
+	          var percentage = (bytesUploaded / bytesTotal * 100).toFixed(2);
+	          console.log(bytesUploaded, bytesTotal, percentage + "%");
+	        },
+	        onSuccess: function onSuccess() {
+	          console.log("done");
+	        }
+	      });
+	      // Start the upload
+	      upload.start();
+	    }
+	  }, {
 	    key: 'addChapter',
 	    value: function addChapter() {
 	      var newChapter = { chapter_title: '', chapter_summary: '', chapter_notes: '', chapter_image: '',
@@ -51973,6 +52017,7 @@
 	  }, {
 	    key: 'appendChapter',
 	    value: function appendChapter(evt) {
+	      evt.preventDefault();
 	      var key = this.state.chapters.length + 1;
 	      var newChapter = { chapter_title: '', chapter_summary: '', chapter_notes: '', chapter_image: '',
 	        chapter_audio: '', chapter_text: '', chapter_key: key };
@@ -52010,6 +52055,8 @@
 	    _this.state = { title: '', work_summary: '', is_complete: false, work_notes: '',
 	      work_tags: [], chapters: [] };
 	    _this.addChapter();
+	    _this.handler = _this.handler.bind(_this);
+	    _this.uploadAudio = _this.uploadAudio.bind(_this);
 	    return _this;
 	  }
 
@@ -52030,98 +52077,116 @@
 	        'div',
 	        null,
 	        _react2.default.createElement(
-	          'form',
-	          null,
+	          'div',
+	          { className: 'panel panel-default' },
 	          _react2.default.createElement(
 	            'div',
-	            { className: 'form-group' },
+	            { className: 'panel-body' },
 	            _react2.default.createElement(
-	              'label',
-	              { 'for': 'work_title' },
-	              'Title'
-	            ),
-	            _react2.default.createElement('input', { id: 'work_title', className: 'form-control', value: this.state.title, onChange: function onChange(evt) {
-	                return _this2.updateTitle(evt);
-	              } })
-	          ),
-	          _react2.default.createElement(
-	            'div',
-	            { className: 'form-group' },
-	            _react2.default.createElement(
-	              'label',
-	              { 'for': 'work_author' },
-	              'Author'
-	            ),
-	            _react2.default.createElement('input', { id: 'work_author', className: 'form-control', value: 'dummyAuthor' })
-	          ),
-	          _react2.default.createElement('hr', null),
-	          _react2.default.createElement(
-	            'div',
-	            { className: 'form-group' },
-	            _react2.default.createElement(
-	              'label',
-	              { 'for': 'work_summary' },
-	              'Summary'
-	            ),
-	            _react2.default.createElement('textarea', { id: 'work_summary', className: 'form-control', rows: '3', value: this.state.work_summary, onChange: function onChange(evt) {
-	                return _this2.updateWorkSummary(evt);
-	              } })
-	          ),
-	          _react2.default.createElement(
-	            'div',
-	            { className: 'form-group' },
-	            _react2.default.createElement('input', { type: 'checkbox', id: 'complete', onChange: function onChange(evt) {
-	                return _this2.updateCheckbox(evt);
-	              } }),
-	            _react2.default.createElement(
-	              'label',
-	              { htmlFor: 'complete' },
-	              'Work is complete?'
-	            )
-	          ),
-	          _react2.default.createElement('hr', null),
-	          _react2.default.createElement(
-	            'div',
-	            { className: 'form-group' },
-	            _react2.default.createElement(
-	              'label',
-	              { 'for': 'work_notes' },
-	              'Notes'
-	            ),
-	            _react2.default.createElement('input', { id: 'work_notes', className: 'form-control', value: this.state.work_notes, onChange: function onChange(evt) {
-	                return _this2.updateWorkNotes(evt);
-	              } })
-	          ),
-	          this.state.work_tags.map(function (tag) {
-	            return _react2.default.createElement(
-	              'div',
-	              { className: 'row' },
+	              'form',
+	              null,
 	              _react2.default.createElement(
 	                'div',
-	                { className: 'col-md-12' },
+	                { className: 'form-group' },
 	                _react2.default.createElement(
-	                  'ul',
-	                  { className: 'list-inline' },
-	                  _react2.default.createElement(_TagList2.default, { tag_category: Object.keys(tag), tags: Object.values(tag) })
+	                  'label',
+	                  { htmlFor: 'work_title' },
+	                  'Title'
+	                ),
+	                _react2.default.createElement('input', { id: 'work_title', className: 'form-control', value: this.state.title, onChange: function onChange(evt) {
+	                    return _this2.updateTitle(evt);
+	                  } })
+	              ),
+	              _react2.default.createElement(
+	                'div',
+	                { className: 'form-group' },
+	                _react2.default.createElement(
+	                  'label',
+	                  { htmlFor: 'work_author' },
+	                  'Author'
+	                ),
+	                _react2.default.createElement('input', { id: 'work_author', className: 'form-control', value: 'dummyAuthor' })
+	              ),
+	              _react2.default.createElement('hr', null),
+	              _react2.default.createElement(
+	                'div',
+	                { className: 'form-group' },
+	                _react2.default.createElement(
+	                  'label',
+	                  { htmlFor: 'work_summary' },
+	                  'Summary'
+	                ),
+	                _react2.default.createElement('textarea', { id: 'work_summary', className: 'form-control', rows: '3', value: this.state.work_summary, onChange: function onChange(evt) {
+	                    return _this2.updateWorkSummary(evt);
+	                  } })
+	              ),
+	              _react2.default.createElement(
+	                'div',
+	                { className: 'checkbox' },
+	                _react2.default.createElement(
+	                  'label',
+	                  null,
+	                  _react2.default.createElement('input', { type: 'checkbox', id: 'complete', onChange: function onChange(evt) {
+	                      return _this2.updateCheckbox(evt);
+	                    } }),
+	                  'Work is complete?'
+	                )
+	              ),
+	              _react2.default.createElement('hr', null),
+	              _react2.default.createElement(
+	                'div',
+	                { className: 'form-group' },
+	                _react2.default.createElement(
+	                  'label',
+	                  { htmlFor: 'work_notes' },
+	                  'Notes'
+	                ),
+	                _react2.default.createElement('input', { id: 'work_notes', className: 'form-control', value: this.state.work_notes, onChange: function onChange(evt) {
+	                    return _this2.updateWorkNotes(evt);
+	                  } })
+	              ),
+	              this.state.work_tags.map(function (tag) {
+	                return _react2.default.createElement(
+	                  'div',
+	                  { className: 'row' },
+	                  _react2.default.createElement(
+	                    'div',
+	                    { className: 'col-md-12' },
+	                    _react2.default.createElement(
+	                      'ul',
+	                      { className: 'list-inline' },
+	                      _react2.default.createElement(_TagList2.default, { tag_category: Object.keys(tag), tags: Object.values(tag) })
+	                    )
+	                  )
+	                );
+	              }),
+	              this.state.chapters.map(function (chapter) {
+	                return _react2.default.createElement(_ChapterForm2.default, { key: chapter.chapter_key, chapter_number: chapter.chapter_key, handler: _this2.handler, handlerAudio: _this2.uploadAudio });
+	              }),
+	              _react2.default.createElement(
+	                'div',
+	                { className: 'form-group' },
+	                _react2.default.createElement(
+	                  'button',
+	                  { className: 'btn btn-link', onClick: function onClick(evt) {
+	                      return _this2.appendChapter(evt);
+	                    } },
+	                  'Add Chapter'
+	                )
+	              ),
+	              _react2.default.createElement(
+	                'div',
+	                { className: 'form-group' },
+	                _react2.default.createElement(
+	                  'button',
+	                  { type: 'submit', onClick: function onClick(evt) {
+	                      return _this2.addWork(evt);
+	                    }, className: 'btn btn-default' },
+	                  'Submit'
 	                )
 	              )
-	            );
-	          }),
-	          this.state.chapters.map(function (chapter) {
-	            return _react2.default.createElement(_ChapterForm2.default, { key: chapter.chapter_key, chapter_number: chapter.chapter_key });
-	          }),
-	          _react2.default.createElement(
-	            'button',
-	            { type: 'submit', className: 'btn btn-default' },
-	            'Submit'
+	            )
 	          )
-	        ),
-	        _react2.default.createElement(
-	          'button',
-	          { onClick: function onClick(evt) {
-	              return _this2.appendChapter(evt);
-	            } },
-	          'Add Chapter'
 	        )
 	      );
 	    }
@@ -52152,6 +52217,8 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -52181,6 +52248,8 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
+	      var _React$createElement, _React$createElement2;
+
 	      return _react2.default.createElement(
 	        'div',
 	        { id: this.state.chapter_number },
@@ -52189,20 +52258,60 @@
 	          { className: 'form-group' },
 	          _react2.default.createElement(
 	            'label',
-	            { 'for': 'chapter_title' },
+	            { htmlFor: "chapter_title_" + this.state.chapter_number },
 	            'Chapter Title'
 	          ),
-	          _react2.default.createElement('input', { id: 'chapter_title', className: 'form-control' })
+	          _react2.default.createElement('input', { id: "chapter_title_" + this.state.chapter_number, name: 'chapter_title', onChange: this.props.handler, className: 'form-control' })
 	        ),
 	        _react2.default.createElement(
 	          'div',
 	          { className: 'form-group' },
 	          _react2.default.createElement(
 	            'label',
-	            { 'for': 'chapter_summary' },
+	            { htmlFor: 'chapter_summary' },
 	            'Chapter Summary'
 	          ),
-	          _react2.default.createElement('textarea', { id: 'chapter_summary', className: 'form-control', rows: '3' })
+	          _react2.default.createElement('textarea', { id: 'chapter_summary', className: 'form-control', name: 'chapter_summary', onChange: this.props.handler, rows: '3' })
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'form-group' },
+	          _react2.default.createElement(
+	            'label',
+	            { htmlFor: 'chapter_notes' },
+	            'Chapter Notes'
+	          ),
+	          _react2.default.createElement('textarea', { id: 'chapter_notes', className: 'form-control', name: 'chapter_notes', onChange: this.props.handler, rows: '3' })
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'form-group' },
+	          _react2.default.createElement(
+	            'label',
+	            { htmlFor: 'chapter_image' },
+	            'Chapter Image'
+	          ),
+	          _react2.default.createElement('input', (_React$createElement = { className: 'input-file', type: 'file', id: 'chapter_image' }, _defineProperty(_React$createElement, 'className', 'form-control'), _defineProperty(_React$createElement, 'name', 'chapter_image'), _defineProperty(_React$createElement, 'onChange', this.props.handler), _React$createElement))
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'form-group' },
+	          _react2.default.createElement(
+	            'label',
+	            { htmlFor: 'chapter_audio' },
+	            'Chapter Audio'
+	          ),
+	          _react2.default.createElement('input', (_React$createElement2 = { className: 'input-file', type: 'file', id: 'chapter_audio' }, _defineProperty(_React$createElement2, 'className', 'form-control'), _defineProperty(_React$createElement2, 'name', 'chapter_audio'), _defineProperty(_React$createElement2, 'onChange', this.props.handlerAudio), _React$createElement2))
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'form-group' },
+	          _react2.default.createElement(
+	            'label',
+	            { htmlFor: 'chapter_text' },
+	            'Chapter Text'
+	          ),
+	          _react2.default.createElement('textarea', { id: 'chapter_text', className: 'form-control', name: 'chapter_text', onChange: this.props.handler, rows: '10' })
 	        )
 	      );
 	    }
