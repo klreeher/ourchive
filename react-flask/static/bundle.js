@@ -51989,7 +51989,7 @@
 	      var file = e.target.files[0];
 	      // Create a new tus upload
 	      var upload = new tus.Upload(file, {
-	        endpoint: "http://127.0.0.1:9292/",
+	        endpoint: "http://127.0.0.1:9292/audio/",
 	        chunkSize: 5 * 1024 * 1024,
 	        retryDelays: [0, 1000, 3000, 5000],
 	        onError: function onError(error) {
@@ -52015,7 +52015,7 @@
 	      var file = e.target.files[0];
 	      // Create a new tus upload
 	      var upload = new tus.Upload(file, {
-	        endpoint: "http://127.0.0.1:9292/",
+	        endpoint: "http://127.0.0.1:9292/audio/",
 	        chunkSize: 5 * 1024 * 1024,
 	        retryDelays: [0, 1000, 3000, 5000],
 	        onError: function onError(error) {
