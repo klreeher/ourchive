@@ -73,7 +73,7 @@
         "title": {
           "type": "string"
         },
-        "Users": {
+        "Creators": {
           "type": "object",
           "items": {
             "$ref": "#/definitions/User"
@@ -84,6 +84,9 @@
         },
         "Complete": {
           "type": "boolean"
+        },
+        "Type":{
+          "type": "string"
         }
       }
     },
@@ -193,7 +196,68 @@
           "$ref": "#/definitions/Meta"
         }
       }
+    },
+    "ListTags": {
+      "type": "object",
+      "properties": {
+        "Items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Tag"
+          }
+        },
+        "Meta": {
+          "$ref": "#/definitions/Meta"
+        }
+      }
+    },
+    "ListTagAssignments": {
+      "type": "object",
+      "properties": {
+        "Items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TagAssignment"
+          }
+        },
+        "Meta": {
+          "$ref": "#/definitions/Meta"
+        }
+      }
+    },
+      "TagAssignment": {
+      "type": "object",
+      "properties": {
+        "TagID": {
+          "type": "string"
+        },
+        "WorkID": {
+          "type": "string"
+        },
+        "IsPrimary": {
+          "type": "boolean"
+        },
+        "Category": {
+          "type": "string"
+        }
+      }
+    },
+    "Tag":
+    {
+      "type": "object",
+      "properties": {
+        "ID": {
+          "type": "string"
+        },
+        "Value": {
+          "type": "string"
+        },
+        "Category": {
+          "type": "string"
+        }
+      }
     }
+
   },
   "paths": {
     "/Works": {
@@ -206,7 +270,7 @@
             }
           }
         },
-        "operationId": "List",
+        "operationId": "ListWorks",
         "tags": [
           "Work"
         ],
@@ -300,6 +364,186 @@
         "security": [
           {
             "oauth2": []
+          }
+        ]
+      }
+    },
+    "/works/{workID}/tags/assignments": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/ListTagAssignments"
+            }
+          }
+        },
+        "operationId": "ListAssignments",
+        "tags": [
+          "Tags"
+        ],
+        "parameters": [
+          {
+            "name": "workID",
+            "in": "path",
+            "description": "ID of the work.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "tagID",
+            "in": "query",
+            "description": "ID of the tag.",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "security": [
+          {
+            "oauth2": [
+            ]
+          }
+        ]
+      },
+      "post": {
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "operationId": "SaveTagAssignment",
+        "tags": [
+          "Tags"
+        ],
+        "parameters": [
+          {
+            "name": "workID",
+            "in": "path",
+            "description": "ID of the buyer.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "TagAssignment",
+            "in": "body",
+            "required": true,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/TagAssignment"
+            }
+          }
+        ],
+        "security": [
+          {
+            "oauth2": [
+            ]
+          }
+        ]
+      }
+    },
+    "/works/{workID}/tags/{tagID}/assignments": {
+      "delete": {
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "operationId": "DeleteTagAssignment",
+        "tags": [
+          "Tags"
+        ],
+        "parameters": [
+          {
+            "name": "workID",
+            "in": "path",
+            "description": "ID of the work.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "tagID",
+            "in": "path",
+            "description": "ID of the tag.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "security": [
+          {
+            "oauth2": [
+            ]
+          }
+        ]
+      }
+    },
+    "/tags": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/ListTags"
+            }
+          }
+        },
+        "operationId": "ListTags",
+        "tags": [
+          "Tags"
+        ],
+        "parameters": [
+          {
+            "name": "search",
+            "in": "query",
+            "description": "Search of the tag.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "searchOn",
+            "in": "query",
+            "description": "Search on of the tag.",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sortBy",
+            "in": "query",
+            "description": "Sort by of the tag.",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page of the tag.",
+            "required": false,
+            "type": "integer"
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "Page size of the tag.",
+            "required": false,
+            "type": "integer"
+          },
+          {
+            "name": "filters",
+            "in": "query",
+            "description": "Filters of the tag.",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "security": [
+          {
+            "oauth2": [
+            ]
           }
         ]
       }
