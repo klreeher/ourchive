@@ -6,6 +6,7 @@ ourchive is a configurable, multi-media archive app. It grew out of a need for a
 
 - [contributor guidelines](#contributor-guidelines)
     - [ways to contribute](#ways-to-contribute)
+- [code of conduct](#code-of-conduct)
 - [development process overview](#development-process-overview)
     - [how to make a pr](#how-to-make-a-pr)
     - [code style guide](#code-style-guide)
@@ -31,6 +32,11 @@ ourchive is a configurable, multi-media archive app. It grew out of a need for a
 - Tell others about these projects.
 
 (ganked with love from [azure](https://azure.github.io/guidelines/))
+
+<a name="code-of-conduct"></a>
+## code of conduct
+
+please see [the code of conduct and diversity statement](codeofconduct.md)
 
 <a name="development-process-overview"></a>
 ## development process overview
