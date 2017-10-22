@@ -1,3 +1,4 @@
+react-flask/audio/*
 venv/*
 tus-server/data/*
 .DS_Store
