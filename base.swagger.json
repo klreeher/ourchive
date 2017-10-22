@@ -85,8 +85,11 @@
         "Complete": {
           "type": "boolean"
         },
-        "Type":{
+        "Type": {
           "type": "string"
+        },
+        "Published": {
+          "type": "boolean"
         }
       }
     },
@@ -211,6 +214,48 @@
         }
       }
     },
+    "ListCreators": {
+      "type": "object",
+      "properties": {
+        "Items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/User"
+          }
+        },
+        "Meta": {
+          "$ref": "#/definitions/Meta"
+        }
+      }
+    },
+    "ListCreatorAssignments": {
+      "type": "object",
+      "properties": {
+        "Items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CreatorAssignment"
+          }
+        },
+        "Meta": {
+          "$ref": "#/definitions/Meta"
+        }
+      }
+    },
+    "CreatorAssignment": {
+      "type": "object",
+      "properties": {
+        "CreatorID": {
+          "type": "string"
+        },
+        "WorkID": {
+          "type": "string"
+        },
+        "IsPrimary": {
+          "type": "boolean"
+        }
+      }
+    },
     "ListTagAssignments": {
       "type": "object",
       "properties": {
@@ -225,7 +270,7 @@
         }
       }
     },
-      "TagAssignment": {
+    "TagAssignment": {
       "type": "object",
       "properties": {
         "TagID": {
@@ -242,8 +287,7 @@
         }
       }
     },
-    "Tag":
-    {
+    "Tag": {
       "type": "object",
       "properties": {
         "ID": {
@@ -257,7 +301,6 @@
         }
       }
     }
-
   },
   "paths": {
     "/Works": {
@@ -400,8 +443,7 @@
         ],
         "security": [
           {
-            "oauth2": [
-            ]
+            "oauth2": []
           }
         ]
       },
@@ -435,8 +477,7 @@
         ],
         "security": [
           {
-            "oauth2": [
-            ]
+            "oauth2": []
           }
         ]
       }
@@ -470,8 +511,7 @@
         ],
         "security": [
           {
-            "oauth2": [
-            ]
+            "oauth2": []
           }
         ]
       }
@@ -482,26 +522,26 @@
           "200": {
             "description": "",
             "schema": {
-              "$ref": "#/definitions/ListTags"
+              "$ref": "#/definitions/ListCreators"
             }
           }
         },
-        "operationId": "ListTags",
+        "operationId": "ListCreators",
         "tags": [
-          "Tags"
+          "Creators"
         ],
         "parameters": [
           {
             "name": "search",
             "in": "query",
-            "description": "Search of the tag.",
+            "description": "Search of the creators.",
             "required": false,
             "type": "string"
           },
           {
             "name": "searchOn",
             "in": "query",
-            "description": "Search on of the tag.",
+            "description": "Search on of the creators.",
             "required": false,
             "type": "array",
             "items": {
@@ -511,7 +551,7 @@
           {
             "name": "sortBy",
             "in": "query",
-            "description": "Sort by of the tag.",
+            "description": "Sort by of the creators.",
             "required": false,
             "type": "array",
             "items": {
@@ -521,29 +561,133 @@
           {
             "name": "page",
             "in": "query",
-            "description": "Page of the tag.",
+            "description": "Page of the creators.",
             "required": false,
             "type": "integer"
           },
           {
             "name": "pageSize",
             "in": "query",
-            "description": "Page size of the tag.",
+            "description": "Page size of the creators.",
             "required": false,
             "type": "integer"
           },
           {
             "name": "filters",
             "in": "query",
-            "description": "Filters of the tag.",
+            "description": "Filters of the creators.",
             "required": false,
             "type": "string"
           }
         ],
         "security": [
           {
-            "oauth2": [
-            ]
+            "oauth2": []
+          }
+        ]
+      }
+    },
+    "/works/{workID}/creators/assignments": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/ListCreatorAssignments"
+            }
+          }
+        },
+        "operationId": "ListCreatorAssignments",
+        "tags": [
+          "Works"
+        ],
+        "parameters": [
+          {
+            "name": "workID",
+            "in": "path",
+            "description": "ID of the work.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "userID",
+            "in": "query",
+            "description": "ID of the creator-user.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "security": [
+          {
+            "oauth2": []
+          }
+        ]
+      },
+      "post": {
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "operationId": "SaveCreatorAssignment",
+        "tags": [
+          "Works"
+        ],
+        "parameters": [
+          {
+            "name": "workID",
+            "in": "path",
+            "description": "ID of the work.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "CreatorAssignment",
+            "in": "body",
+            "required": true,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/CreatorAssignment"
+            }
+          }
+        ],
+        "security": [
+          {
+            "oauth2": []
+          }
+        ]
+      }
+    },
+    "/works/{workID}/creators/{creatorID}": {
+      "delete": {
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "operationId": "DeleteCreatorAssignment",
+        "tags": [
+          "Works"
+        ],
+        "parameters": [
+          {
+            "name": "workID",
+            "in": "path",
+            "description": "ID of the work.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "creatorID",
+            "in": "path",
+            "description": "ID of the creator.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "security": [
+          {
+            "oauth2": []
           }
         ]
       }
@@ -597,15 +741,6 @@
             "description": "ID of the Work.",
             "required": true,
             "type": "string"
-          },
-          {
-            "name": "Work",
-            "in": "body",
-            "required": true,
-            "description": "",
-            "schema": {
-              "$ref": "#/definitions/Work"
-            }
           }
         ],
         "security": [
