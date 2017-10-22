@@ -7,19 +7,43 @@ export default class SingleWork extends React.Component {
 
   setWork(work)
   {
-    this.work = work;
+    this.state.work = work;
+    this.state.current_chapter = work.chapters[0]
+    this.state.chapter_index = 0
   }
 
   getWork(workId)
   {
   axios.get('/api/work/'+workId)
       .then(function (response) {
-        this.setState({work: response.data[0]});  
+        this.setState({
+          work: response.data[0],
+          current_chapter: response.data[0].chapters[0],
+          chapter_index: 0
+        });  
 
       }.bind(this))
       .catch(function (error) {
         console.log(error);
     });
+  }
+  nextChapter(evt)
+  {
+    var nextIndex = this.state.chapter_index + 1
+    var nextChapter = this.state.work.chapters[nextIndex]
+    this.setState({
+      current_chapter: nextChapter,
+      chapter_index: nextIndex
+    })
+  }
+  previousChapter()
+  {
+    var previousIndex = this.state.chapter_index - 1
+    var previousChapter = this.state.work.chapters[previousIndex]
+    this.setState({
+      current_chapter: previousChapter,
+      chapter_index: previousIndex
+    })
   }
   constructor(props) {
     super(props);
@@ -34,6 +58,7 @@ export default class SingleWork extends React.Component {
   "work_summary": "another terrible fic",
   "chapters": [{
     "id": "1",
+    "number": "1",
     "title": "bob goes to school",
     "chapter_summary": "stuff happens",
     "text": "weh weh weh weh",
@@ -41,6 +66,7 @@ export default class SingleWork extends React.Component {
     "image_url": "url"
   },
     {"id": "2",
+    "number": "2",
     "title": "bob fails at school",
     "chapter_summary": "stuff happens",
     "text": "bob sux",
@@ -50,7 +76,8 @@ export default class SingleWork extends React.Component {
   "tags": [{
     "fandom": ["hobbits", "star trek"]},
     {"primary pairing": ["trip tucker / thorin"]}]};
-    this.state = {workId: props.match.params.workId, work: empty};
+    this.state = {workId: props.match.params.workId, work: empty, current_chapter: empty.chapters[0],
+      chapter_index: 0};
   }
   componentWillMount() { 
     this.getWork(this.state.workId); 
@@ -63,6 +90,8 @@ export default class SingleWork extends React.Component {
 
   
   render() {
+    const nextDisabled = this.state.chapter_index + 1 >= this.state.work.chapters.length;
+    const previousDisabled = this.state.chapter_index === 0;
     return (
       <div>
         <div className="panel panel-default">
@@ -82,13 +111,12 @@ export default class SingleWork extends React.Component {
     <div className="col-md-2"><h5>Complete? {this.state.work.is_complete}</h5></div>
     <div className="col-md-2"><h5>Word Count: {this.state.work.word_count}</h5></div>
   </div>
+  <br/>
+  <br/>
+  <hr/>
   <div className="row">
     <div className="col-md-12">
-      {this.state.work.chapters.map(chapter => 
-          <div key={chapter.id}>
-            <Chapter chapter={chapter}/>
-          </div>
-        )}
+      <Chapter chapter={this.state.current_chapter}/>
     </div>
   </div>
   
@@ -103,7 +131,8 @@ export default class SingleWork extends React.Component {
         </div> 
         </div>
       )}
-  
+  <button className="btn btn-link" onMouseDown={evt => this.previousChapter(evt)} disabled={previousDisabled}>Previous Chapter</button>
+  <button className="btn btn-link" onMouseDown={evt => this.nextChapter(evt)} disabled={nextDisabled}>Next Chapter</button>
   </div>
   </div>
       </div>

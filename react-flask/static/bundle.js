@@ -77,11 +77,11 @@
 
 	var _WorkStub2 = _interopRequireDefault(_WorkStub);
 
-	var _TagItem = __webpack_require__(544);
+	var _TagItem = __webpack_require__(491);
 
 	var _TagItem2 = _interopRequireDefault(_TagItem);
 
-	var _NewWork = __webpack_require__(545);
+	var _NewWork = __webpack_require__(492);
 
 	var _NewWork2 = _interopRequireDefault(_NewWork);
 
@@ -46679,15 +46679,15 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _axios = __webpack_require__(491);
+	var _axios = __webpack_require__(493);
 
 	var _axios2 = _interopRequireDefault(_axios);
 
-	var _Chapter = __webpack_require__(517);
+	var _Chapter = __webpack_require__(519);
 
 	var _Chapter2 = _interopRequireDefault(_Chapter);
 
-	var _TagList = __webpack_require__(543);
+	var _TagList = __webpack_require__(545);
 
 	var _TagList2 = _interopRequireDefault(_TagList);
 
@@ -46705,15 +46705,41 @@
 	  _createClass(SingleWork, [{
 	    key: 'setWork',
 	    value: function setWork(work) {
-	      this.work = work;
+	      this.state.work = work;
+	      this.state.current_chapter = work.chapters[0];
+	      this.state.chapter_index = 0;
 	    }
 	  }, {
 	    key: 'getWork',
 	    value: function getWork(workId) {
 	      _axios2.default.get('/api/work/' + workId).then(function (response) {
-	        this.setState({ work: response.data[0] });
+	        this.setState({
+	          work: response.data[0],
+	          current_chapter: response.data[0].chapters[0],
+	          chapter_index: 0
+	        });
 	      }.bind(this)).catch(function (error) {
 	        console.log(error);
+	      });
+	    }
+	  }, {
+	    key: 'nextChapter',
+	    value: function nextChapter(evt) {
+	      var nextIndex = this.state.chapter_index + 1;
+	      var nextChapter = this.state.work.chapters[nextIndex];
+	      this.setState({
+	        current_chapter: nextChapter,
+	        chapter_index: nextIndex
+	      });
+	    }
+	  }, {
+	    key: 'previousChapter',
+	    value: function previousChapter() {
+	      var previousIndex = this.state.chapter_index - 1;
+	      var previousChapter = this.state.work.chapters[previousIndex];
+	      this.setState({
+	        current_chapter: previousChapter,
+	        chapter_index: previousIndex
 	      });
 	    }
 	  }]);
@@ -46734,12 +46760,14 @@
 	      "work_summary": "another terrible fic",
 	      "chapters": [{
 	        "id": "1",
+	        "number": "1",
 	        "title": "bob goes to school",
 	        "chapter_summary": "stuff happens",
 	        "text": "weh weh weh weh",
 	        "audio_url": "url",
 	        "image_url": "url"
 	      }, { "id": "2",
+	        "number": "2",
 	        "title": "bob fails at school",
 	        "chapter_summary": "stuff happens",
 	        "text": "bob sux",
@@ -46748,7 +46776,8 @@
 	      "chapter_count": "5",
 	      "tags": [{
 	        "fandom": ["hobbits", "star trek"] }, { "primary pairing": ["trip tucker / thorin"] }] };
-	    _this.state = { workId: props.match.params.workId, work: empty };
+	    _this.state = { workId: props.match.params.workId, work: empty, current_chapter: empty.chapters[0],
+	      chapter_index: 0 };
 	    return _this;
 	  }
 
@@ -46766,6 +46795,10 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
+	      var _this2 = this;
+
+	      var nextDisabled = this.state.chapter_index + 1 >= this.state.work.chapters.length;
+	      var previousDisabled = this.state.chapter_index === 0;
 	      return _react2.default.createElement(
 	        'div',
 	        null,
@@ -46849,19 +46882,16 @@
 	                )
 	              )
 	            ),
+	            _react2.default.createElement('br', null),
+	            _react2.default.createElement('br', null),
+	            _react2.default.createElement('hr', null),
 	            _react2.default.createElement(
 	              'div',
 	              { className: 'row' },
 	              _react2.default.createElement(
 	                'div',
 	                { className: 'col-md-12' },
-	                this.state.work.chapters.map(function (chapter) {
-	                  return _react2.default.createElement(
-	                    'div',
-	                    { key: chapter.id },
-	                    _react2.default.createElement(_Chapter2.default, { chapter: chapter })
-	                  );
-	                })
+	                _react2.default.createElement(_Chapter2.default, { chapter: this.state.current_chapter })
 	              )
 	            ),
 	            _react2.default.createElement('hr', null),
@@ -46879,7 +46909,21 @@
 	                  )
 	                )
 	              );
-	            })
+	            }),
+	            _react2.default.createElement(
+	              'button',
+	              { className: 'btn btn-link', onMouseDown: function onMouseDown(evt) {
+	                  return _this2.previousChapter(evt);
+	                }, disabled: previousDisabled },
+	              'Previous Chapter'
+	            ),
+	            _react2.default.createElement(
+	              'button',
+	              { className: 'btn btn-link', onMouseDown: function onMouseDown(evt) {
+	                  return _this2.nextChapter(evt);
+	                }, disabled: nextDisabled },
+	              'Next Chapter'
+	            )
 	          )
 	        )
 	      );
@@ -46895,7 +46939,72 @@
 /* 491 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(492);
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(3);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRouterDom = __webpack_require__(43);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var TagItem = function (_React$Component) {
+	  _inherits(TagItem, _React$Component);
+
+	  function TagItem(props) {
+	    _classCallCheck(this, TagItem);
+
+	    var _this = _possibleConstructorReturn(this, (TagItem.__proto__ || Object.getPrototypeOf(TagItem)).call(this, props));
+
+	    _this.state = { tag: props.tag };
+	    return _this;
+	  }
+
+	  _createClass(TagItem, [{
+	    key: 'componentWillMount',
+	    value: function componentWillMount() {
+	      //do things
+	    }
+	  }, {
+	    key: 'componentWillUpdate',
+	    value: function componentWillUpdate(nextProps, nextState) {}
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        'li',
+	        { className: 'tag_li', id: this.state.tag },
+	        this.state.tag,
+	        _react2.default.createElement(
+	          'a',
+	          { className: 'close_icon_link', onClick: this.props.removeTag },
+	          _react2.default.createElement(
+	            'span',
+	            { className: 'close_icon' },
+	            'x'
+	          )
+	        )
+	      );
+	    }
+	  }]);
+
+	  return TagItem;
+	}(_react2.default.Component);
+
+	exports.default = TagItem;
 
 /***/ }),
 /* 492 */
@@ -46903,10 +47012,373 @@
 
 	'use strict';
 
-	var utils = __webpack_require__(493);
-	var bind = __webpack_require__(494);
-	var Axios = __webpack_require__(496);
-	var defaults = __webpack_require__(497);
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(3);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _axios = __webpack_require__(493);
+
+	var _axios2 = _interopRequireDefault(_axios);
+
+	var _Chapter = __webpack_require__(519);
+
+	var _Chapter2 = _interopRequireDefault(_Chapter);
+
+	var _TagList = __webpack_require__(545);
+
+	var _TagList2 = _interopRequireDefault(_TagList);
+
+	var _ChapterForm = __webpack_require__(546);
+
+	var _ChapterForm2 = _interopRequireDefault(_ChapterForm);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var NewWork = function (_React$Component) {
+	  _inherits(NewWork, _React$Component);
+
+	  _createClass(NewWork, [{
+	    key: 'addWork',
+	    value: function addWork(evt) {
+	      evt.preventDefault();
+	      _axios2.default.post(this.state.postUrl, {
+	        title: this.state.work_title,
+	        work_summary: this.state.work_summary,
+	        is_complete: this.state.is_complete,
+	        work_notes: this.state.work_notes,
+	        work_tags: this.state.work_tags,
+	        chapters: this.state.work_chapters
+	      }).then(function (response) {
+	        console.log(response);
+	      }).catch(function (error) {
+	        console.log(error);
+	      });
+	    }
+	  }, {
+	    key: 'updateTitle',
+	    value: function updateTitle(evt) {
+	      this.setState({
+	        title: evt.target.value
+	      });
+	    }
+	  }, {
+	    key: 'updateWorkSummary',
+	    value: function updateWorkSummary(evt) {
+	      this.setState({
+	        work_summary: evt.target.value
+	      });
+	    }
+	  }, {
+	    key: 'updateCheckbox',
+	    value: function updateCheckbox(evt) {
+	      this.setState({
+	        is_complete: evt.target.value
+	      });
+	    }
+	  }, {
+	    key: 'updateWorkNotes',
+	    value: function updateWorkNotes(evt) {
+	      this.setState({
+	        work_notes: evt.target.value
+	      });
+	    }
+	  }, {
+	    key: 'handler',
+	    value: function handler(e) {
+	      e.preventDefault();
+
+	      var original = this.state.chapters;
+	      original[e.target.parentElement.parentElement.id - 1][e.target.name] = e.target.value;
+	      this.setState({
+	        chapters: original
+	      });
+	    }
+	  }, {
+	    key: 'uploadAudio',
+	    value: function uploadAudio(e) {
+	      e.preventDefault();
+	      var target = e.target;
+	      // Get the selected file from the input element
+	      var file = e.target.files[0];
+	      // Create a new tus upload
+	      var upload = new tus.Upload(file, {
+	        endpoint: "http://127.0.0.1:9292/audio/",
+	        chunkSize: 5 * 1024 * 1024,
+	        retryDelays: [0, 1000, 3000, 5000],
+	        onError: function onError(error) {
+	          console.log("Failed because: " + error);
+	        },
+	        onProgress: function onProgress(bytesUploaded, bytesTotal) {
+	          var percentage = (bytesUploaded / bytesTotal * 100).toFixed(2);
+	          console.log(bytesUploaded, bytesTotal, percentage + "%");
+	        },
+	        onSuccess: function onSuccess() {
+	          console.log("Download %s from %s", upload.file.name, upload.url);
+	        }
+	      });
+	      // Start the upload
+	      upload.start();
+	    }
+	  }, {
+	    key: 'uploadImage',
+	    value: function uploadImage(e) {
+	      e.preventDefault();
+	      var target = e.target;
+	      // Get the selected file from the input element
+	      var file = e.target.files[0];
+	      // Create a new tus upload
+	      var upload = new tus.Upload(file, {
+	        endpoint: "http://127.0.0.1:9292/audio/",
+	        chunkSize: 5 * 1024 * 1024,
+	        retryDelays: [0, 1000, 3000, 5000],
+	        onError: function onError(error) {
+	          console.log("Failed because: " + error);
+	        },
+	        onProgress: function onProgress(bytesUploaded, bytesTotal) {
+	          var percentage = (bytesUploaded / bytesTotal * 100).toFixed(2);
+	          console.log(bytesUploaded, bytesTotal, percentage + "%");
+	        },
+	        onSuccess: function onSuccess() {
+	          console.log("Download %s from %s", upload.file.name, upload.url);
+	        }
+	      });
+	      // Start the upload
+	      upload.start();
+	    }
+	  }, {
+	    key: 'addChapter',
+	    value: function addChapter() {
+	      var newChapter = { chapter_title: '', chapter_summary: '', chapter_notes: '', chapter_image: '',
+	        chapter_audio: '', chapter_text: '', chapter_key: 1 };
+	      this.state.chapters.push(newChapter);
+	    }
+	  }, {
+	    key: 'appendChapter',
+	    value: function appendChapter(evt) {
+	      evt.preventDefault();
+	      var key = this.state.chapters.length + 1;
+	      var newChapter = { chapter_title: '', chapter_summary: '', chapter_notes: '', chapter_image: '',
+	        chapter_audio: '', chapter_text: '', chapter_key: key };
+	      var original = this.state.chapters;
+	      original.push(newChapter);
+	      this.setState({
+	        chapters: original
+	      });
+	    }
+	  }, {
+	    key: 'saveWork',
+	    value: function saveWork() {
+	      _axios2.default.post('/api/work/new').then(function (response) {
+	        this.setState({ work: response.data[0] });
+	      }.bind(this)).catch(function (error) {
+	        console.log(error);
+	      });
+	    }
+	  }, {
+	    key: 'getTagCategories',
+	    value: function getTagCategories() {
+	      _axios2.default.get('/api/tag/categories').then(function (response) {
+	        this.setState({ work_tags: [{ 'fandom': ['buffy', 'the good place'] }, { 'pairing': ['buffy/tahani', 'chidi/willow'] }, { 'themes': ['soulbonding'] }] });
+	      }.bind(this)).catch(function (error) {
+	        console.log(error);
+	      });
+	    }
+	  }]);
+
+	  function NewWork(props) {
+	    _classCallCheck(this, NewWork);
+
+	    var _this = _possibleConstructorReturn(this, (NewWork.__proto__ || Object.getPrototypeOf(NewWork)).call(this, props));
+
+	    if (_this.props.is_edit) {
+	      _this.state = { title: _this.props.work_title, work_summary: _this.props.work_summary,
+	        is_complete: _this.props.is_complete, work_notes: _this.props.work_notes,
+	        work_tags: _this.props.work_tags, chapters: _this.props.work_chapters, is_edit: true,
+	        work_id: _this.props.work_id, postUrl: '/api/works/' + _this.props.work_id };
+	      _this.handler = _this.handler.bind(_this);
+	      _this.uploadAudio = _this.uploadAudio.bind(_this);
+	      _this.uploadImage = _this.uploadImage.bind(_this);
+	    } else {
+	      _this.state = { title: '', work_summary: '', is_complete: false, work_notes: '',
+	        work_tags: [], chapters: [], is_edit: false, postUrl: '/api/works/' };
+	      _this.addChapter();
+	      _this.handler = _this.handler.bind(_this);
+	      _this.uploadAudio = _this.uploadAudio.bind(_this);
+	      _this.uploadImage = _this.uploadImage.bind(_this);
+	      _this.getTagCategories();
+	    }
+	    return _this;
+	  }
+
+	  _createClass(NewWork, [{
+	    key: 'componentWillMount',
+	    value: function componentWillMount() {
+	      //todo call get categories
+	    }
+	  }, {
+	    key: 'componentWillUpdate',
+	    value: function componentWillUpdate(nextProps, nextState) {}
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var _this2 = this;
+
+	      return _react2.default.createElement(
+	        'div',
+	        null,
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'panel panel-default' },
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'panel-body' },
+	            _react2.default.createElement(
+	              'form',
+	              null,
+	              _react2.default.createElement(
+	                'div',
+	                { className: 'form-group' },
+	                _react2.default.createElement(
+	                  'label',
+	                  { htmlFor: 'work_title' },
+	                  'Title'
+	                ),
+	                _react2.default.createElement('input', { id: 'work_title', className: 'form-control', value: this.state.title, onChange: function onChange(evt) {
+	                    return _this2.updateTitle(evt);
+	                  } })
+	              ),
+	              _react2.default.createElement(
+	                'div',
+	                { className: 'form-group' },
+	                _react2.default.createElement(
+	                  'label',
+	                  { htmlFor: 'work_author' },
+	                  'Author'
+	                ),
+	                _react2.default.createElement('input', { id: 'work_author', className: 'form-control', value: 'dummyAuthor' })
+	              ),
+	              _react2.default.createElement('hr', null),
+	              _react2.default.createElement(
+	                'div',
+	                { className: 'form-group' },
+	                _react2.default.createElement(
+	                  'label',
+	                  { htmlFor: 'work_summary' },
+	                  'Summary'
+	                ),
+	                _react2.default.createElement('textarea', { id: 'work_summary', className: 'form-control', rows: '3', value: this.state.work_summary, onChange: function onChange(evt) {
+	                    return _this2.updateWorkSummary(evt);
+	                  } })
+	              ),
+	              _react2.default.createElement(
+	                'div',
+	                { className: 'checkbox' },
+	                _react2.default.createElement(
+	                  'label',
+	                  null,
+	                  _react2.default.createElement('input', { type: 'checkbox', id: 'complete', onChange: function onChange(evt) {
+	                      return _this2.updateCheckbox(evt);
+	                    } }),
+	                  'Work is complete?'
+	                )
+	              ),
+	              _react2.default.createElement('hr', null),
+	              _react2.default.createElement(
+	                'div',
+	                { className: 'form-group' },
+	                _react2.default.createElement(
+	                  'label',
+	                  { htmlFor: 'work_notes' },
+	                  'Notes'
+	                ),
+	                _react2.default.createElement('input', { id: 'work_notes', className: 'form-control', value: this.state.work_notes, onChange: function onChange(evt) {
+	                    return _this2.updateWorkNotes(evt);
+	                  } })
+	              ),
+	              _react2.default.createElement(
+	                'div',
+	                { className: 'form-group' },
+	                this.state.work_tags.map(function (tag) {
+	                  return _react2.default.createElement(
+	                    'div',
+	                    { key: Object.keys(tag) },
+	                    _react2.default.createElement(_TagList2.default, { tag_category: Object.keys(tag), tags: Object.values(tag) })
+	                  );
+	                })
+	              ),
+	              _react2.default.createElement('br', null),
+	              _react2.default.createElement('br', null),
+	              _react2.default.createElement('hr', null),
+	              _react2.default.createElement(
+	                'div',
+	                { className: 'form-group' },
+	                this.state.chapters.map(function (chapter) {
+	                  return _react2.default.createElement(_ChapterForm2.default, { key: chapter.chapter_key, chapter_number: chapter.chapter_key, handler: _this2.handler, handlerAudio: _this2.uploadAudio,
+	                    handlerImage: _this2.uploadImage, chapter: chapter });
+	                })
+	              ),
+	              _react2.default.createElement(
+	                'div',
+	                { className: 'form-group' },
+	                _react2.default.createElement(
+	                  'button',
+	                  { className: 'btn btn-link', onMouseDown: function onMouseDown(evt) {
+	                      return _this2.appendChapter(evt);
+	                    } },
+	                  'Add Chapter'
+	                )
+	              ),
+	              _react2.default.createElement(
+	                'div',
+	                { className: 'form-group' },
+	                _react2.default.createElement(
+	                  'button',
+	                  { onMouseDown: function onMouseDown(evt) {
+	                      return _this2.addWork(evt);
+	                    }, className: 'btn btn-default' },
+	                  'Submit'
+	                )
+	              )
+	            )
+	          )
+	        )
+	      );
+	    }
+	  }]);
+
+	  return NewWork;
+	}(_react2.default.Component);
+
+	exports.default = NewWork;
+
+/***/ }),
+/* 493 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__(494);
+
+/***/ }),
+/* 494 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var utils = __webpack_require__(495);
+	var bind = __webpack_require__(496);
+	var Axios = __webpack_require__(498);
+	var defaults = __webpack_require__(499);
 
 	/**
 	 * Create an instance of Axios
@@ -46939,15 +47411,15 @@
 	};
 
 	// Expose Cancel & CancelToken
-	axios.Cancel = __webpack_require__(514);
-	axios.CancelToken = __webpack_require__(515);
-	axios.isCancel = __webpack_require__(511);
+	axios.Cancel = __webpack_require__(516);
+	axios.CancelToken = __webpack_require__(517);
+	axios.isCancel = __webpack_require__(513);
 
 	// Expose all/spread
 	axios.all = function all(promises) {
 	  return Promise.all(promises);
 	};
-	axios.spread = __webpack_require__(516);
+	axios.spread = __webpack_require__(518);
 
 	module.exports = axios;
 
@@ -46956,13 +47428,13 @@
 
 
 /***/ }),
-/* 493 */
+/* 495 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var bind = __webpack_require__(494);
-	var isBuffer = __webpack_require__(495);
+	var bind = __webpack_require__(496);
+	var isBuffer = __webpack_require__(497);
 
 	/*global toString:true*/
 
@@ -47265,7 +47737,7 @@
 
 
 /***/ }),
-/* 494 */
+/* 496 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -47282,7 +47754,7 @@
 
 
 /***/ }),
-/* 495 */
+/* 497 */
 /***/ (function(module, exports) {
 
 	/*!
@@ -47309,17 +47781,17 @@
 
 
 /***/ }),
-/* 496 */
+/* 498 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var defaults = __webpack_require__(497);
-	var utils = __webpack_require__(493);
-	var InterceptorManager = __webpack_require__(508);
-	var dispatchRequest = __webpack_require__(509);
-	var isAbsoluteURL = __webpack_require__(512);
-	var combineURLs = __webpack_require__(513);
+	var defaults = __webpack_require__(499);
+	var utils = __webpack_require__(495);
+	var InterceptorManager = __webpack_require__(510);
+	var dispatchRequest = __webpack_require__(511);
+	var isAbsoluteURL = __webpack_require__(514);
+	var combineURLs = __webpack_require__(515);
 
 	/**
 	 * Create a new instance of Axios
@@ -47401,13 +47873,13 @@
 
 
 /***/ }),
-/* 497 */
+/* 499 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
 
-	var utils = __webpack_require__(493);
-	var normalizeHeaderName = __webpack_require__(498);
+	var utils = __webpack_require__(495);
+	var normalizeHeaderName = __webpack_require__(500);
 
 	var DEFAULT_CONTENT_TYPE = {
 	  'Content-Type': 'application/x-www-form-urlencoded'
@@ -47423,10 +47895,10 @@
 	  var adapter;
 	  if (typeof XMLHttpRequest !== 'undefined') {
 	    // For browsers use XHR adapter
-	    adapter = __webpack_require__(499);
+	    adapter = __webpack_require__(501);
 	  } else if (typeof process !== 'undefined') {
 	    // For node use HTTP adapter
-	    adapter = __webpack_require__(499);
+	    adapter = __webpack_require__(501);
 	  }
 	  return adapter;
 	}
@@ -47500,12 +47972,12 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
 
 /***/ }),
-/* 498 */
+/* 500 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(493);
+	var utils = __webpack_require__(495);
 
 	module.exports = function normalizeHeaderName(headers, normalizedName) {
 	  utils.forEach(headers, function processHeader(value, name) {
@@ -47518,18 +47990,18 @@
 
 
 /***/ }),
-/* 499 */
+/* 501 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
 
-	var utils = __webpack_require__(493);
-	var settle = __webpack_require__(500);
-	var buildURL = __webpack_require__(503);
-	var parseHeaders = __webpack_require__(504);
-	var isURLSameOrigin = __webpack_require__(505);
-	var createError = __webpack_require__(501);
-	var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(506);
+	var utils = __webpack_require__(495);
+	var settle = __webpack_require__(502);
+	var buildURL = __webpack_require__(505);
+	var parseHeaders = __webpack_require__(506);
+	var isURLSameOrigin = __webpack_require__(507);
+	var createError = __webpack_require__(503);
+	var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(508);
 
 	module.exports = function xhrAdapter(config) {
 	  return new Promise(function dispatchXhrRequest(resolve, reject) {
@@ -47626,7 +48098,7 @@
 	    // This is only done if running in a standard browser environment.
 	    // Specifically not if we're in a web worker, or react-native.
 	    if (utils.isStandardBrowserEnv()) {
-	      var cookies = __webpack_require__(507);
+	      var cookies = __webpack_require__(509);
 
 	      // Add xsrf header
 	      var xsrfValue = (config.withCredentials || isURLSameOrigin(config.url)) && config.xsrfCookieName ?
@@ -47705,12 +48177,12 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
 
 /***/ }),
-/* 500 */
+/* 502 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var createError = __webpack_require__(501);
+	var createError = __webpack_require__(503);
 
 	/**
 	 * Resolve or reject a Promise based on response status.
@@ -47737,12 +48209,12 @@
 
 
 /***/ }),
-/* 501 */
+/* 503 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var enhanceError = __webpack_require__(502);
+	var enhanceError = __webpack_require__(504);
 
 	/**
 	 * Create an Error with the specified message, config, error code, request and response.
@@ -47761,7 +48233,7 @@
 
 
 /***/ }),
-/* 502 */
+/* 504 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -47788,12 +48260,12 @@
 
 
 /***/ }),
-/* 503 */
+/* 505 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(493);
+	var utils = __webpack_require__(495);
 
 	function encode(val) {
 	  return encodeURIComponent(val).
@@ -47862,12 +48334,12 @@
 
 
 /***/ }),
-/* 504 */
+/* 506 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(493);
+	var utils = __webpack_require__(495);
 
 	/**
 	 * Parse headers into an object
@@ -47905,12 +48377,12 @@
 
 
 /***/ }),
-/* 505 */
+/* 507 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(493);
+	var utils = __webpack_require__(495);
 
 	module.exports = (
 	  utils.isStandardBrowserEnv() ?
@@ -47979,7 +48451,7 @@
 
 
 /***/ }),
-/* 506 */
+/* 508 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -48021,12 +48493,12 @@
 
 
 /***/ }),
-/* 507 */
+/* 509 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(493);
+	var utils = __webpack_require__(495);
 
 	module.exports = (
 	  utils.isStandardBrowserEnv() ?
@@ -48080,12 +48552,12 @@
 
 
 /***/ }),
-/* 508 */
+/* 510 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(493);
+	var utils = __webpack_require__(495);
 
 	function InterceptorManager() {
 	  this.handlers = [];
@@ -48138,15 +48610,15 @@
 
 
 /***/ }),
-/* 509 */
+/* 511 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(493);
-	var transformData = __webpack_require__(510);
-	var isCancel = __webpack_require__(511);
-	var defaults = __webpack_require__(497);
+	var utils = __webpack_require__(495);
+	var transformData = __webpack_require__(512);
+	var isCancel = __webpack_require__(513);
+	var defaults = __webpack_require__(499);
 
 	/**
 	 * Throws a `Cancel` if cancellation has been requested.
@@ -48223,12 +48695,12 @@
 
 
 /***/ }),
-/* 510 */
+/* 512 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(493);
+	var utils = __webpack_require__(495);
 
 	/**
 	 * Transform the data for a request or a response
@@ -48249,7 +48721,7 @@
 
 
 /***/ }),
-/* 511 */
+/* 513 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -48260,7 +48732,7 @@
 
 
 /***/ }),
-/* 512 */
+/* 514 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -48280,7 +48752,7 @@
 
 
 /***/ }),
-/* 513 */
+/* 515 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -48300,7 +48772,7 @@
 
 
 /***/ }),
-/* 514 */
+/* 516 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -48325,12 +48797,12 @@
 
 
 /***/ }),
-/* 515 */
+/* 517 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var Cancel = __webpack_require__(514);
+	var Cancel = __webpack_require__(516);
 
 	/**
 	 * A `CancelToken` is an object that can be used to request cancellation of an operation.
@@ -48388,7 +48860,7 @@
 
 
 /***/ }),
-/* 516 */
+/* 518 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -48421,7 +48893,7 @@
 
 
 /***/ }),
-/* 517 */
+/* 519 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -48438,11 +48910,11 @@
 
 	var _reactRouterDom = __webpack_require__(43);
 
-	var _reactImage = __webpack_require__(518);
+	var _reactImage = __webpack_require__(520);
 
 	var _reactImage2 = _interopRequireDefault(_reactImage);
 
-	var _reactPlayer = __webpack_require__(527);
+	var _reactPlayer = __webpack_require__(529);
 
 	var _reactPlayer2 = _interopRequireDefault(_reactPlayer);
 
@@ -48497,6 +48969,9 @@
 	              _react2.default.createElement(
 	                'h2',
 	                null,
+	                'Chapter ',
+	                this.state.chapter.number,
+	                ': ',
 	                this.state.chapter.title
 	              )
 	            )
@@ -48555,7 +49030,7 @@
 	exports.default = Chapter;
 
 /***/ }),
-/* 518 */
+/* 520 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -48572,7 +49047,7 @@
 
 	var _objectWithoutProperties3 = _interopRequireDefault(_objectWithoutProperties2);
 
-	var _getPrototypeOf = __webpack_require__(519);
+	var _getPrototypeOf = __webpack_require__(521);
 
 	var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
 
@@ -48580,7 +49055,7 @@
 
 	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
 
-	var _createClass2 = __webpack_require__(523);
+	var _createClass2 = __webpack_require__(525);
 
 	var _createClass3 = _interopRequireDefault(_createClass2);
 
@@ -48777,28 +49252,28 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
 
 /***/ }),
-/* 519 */
+/* 521 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	module.exports = { "default": __webpack_require__(520), __esModule: true };
+	module.exports = { "default": __webpack_require__(522), __esModule: true };
 
 /***/ }),
-/* 520 */
+/* 522 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	__webpack_require__(521);
+	__webpack_require__(523);
 	module.exports = __webpack_require__(91).Object.getPrototypeOf;
 
 
 /***/ }),
-/* 521 */
+/* 523 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	// 19.1.2.9 Object.getPrototypeOf(O)
 	var toObject = __webpack_require__(122);
 	var $getPrototypeOf = __webpack_require__(140);
 
-	__webpack_require__(522)('getPrototypeOf', function () {
+	__webpack_require__(524)('getPrototypeOf', function () {
 	  return function getPrototypeOf(it) {
 	    return $getPrototypeOf(toObject(it));
 	  };
@@ -48806,7 +49281,7 @@
 
 
 /***/ }),
-/* 522 */
+/* 524 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	// most Object methods by ES6 should accept primitives
@@ -48822,14 +49297,14 @@
 
 
 /***/ }),
-/* 523 */
+/* 525 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
 
 	exports.__esModule = true;
 
-	var _defineProperty = __webpack_require__(524);
+	var _defineProperty = __webpack_require__(526);
 
 	var _defineProperty2 = _interopRequireDefault(_defineProperty);
 
@@ -48854,16 +49329,16 @@
 	}();
 
 /***/ }),
-/* 524 */
+/* 526 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	module.exports = { "default": __webpack_require__(525), __esModule: true };
+	module.exports = { "default": __webpack_require__(527), __esModule: true };
 
 /***/ }),
-/* 525 */
+/* 527 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	__webpack_require__(526);
+	__webpack_require__(528);
 	var $Object = __webpack_require__(91).Object;
 	module.exports = function defineProperty(it, key, desc) {
 	  return $Object.defineProperty(it, key, desc);
@@ -48871,7 +49346,7 @@
 
 
 /***/ }),
-/* 526 */
+/* 528 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var $export = __webpack_require__(89);
@@ -48880,7 +49355,7 @@
 
 
 /***/ }),
-/* 527 */
+/* 529 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -48897,47 +49372,47 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _props2 = __webpack_require__(528);
+	var _props2 = __webpack_require__(530);
 
-	var _utils = __webpack_require__(529);
+	var _utils = __webpack_require__(531);
 
-	var _YouTube = __webpack_require__(532);
+	var _YouTube = __webpack_require__(534);
 
 	var _YouTube2 = _interopRequireDefault(_YouTube);
 
-	var _SoundCloud = __webpack_require__(534);
+	var _SoundCloud = __webpack_require__(536);
 
 	var _SoundCloud2 = _interopRequireDefault(_SoundCloud);
 
-	var _Vimeo = __webpack_require__(535);
+	var _Vimeo = __webpack_require__(537);
 
 	var _Vimeo2 = _interopRequireDefault(_Vimeo);
 
-	var _Facebook = __webpack_require__(536);
+	var _Facebook = __webpack_require__(538);
 
 	var _Facebook2 = _interopRequireDefault(_Facebook);
 
-	var _FilePlayer = __webpack_require__(537);
+	var _FilePlayer = __webpack_require__(539);
 
 	var _FilePlayer2 = _interopRequireDefault(_FilePlayer);
 
-	var _Streamable = __webpack_require__(538);
+	var _Streamable = __webpack_require__(540);
 
 	var _Streamable2 = _interopRequireDefault(_Streamable);
 
-	var _Vidme = __webpack_require__(539);
+	var _Vidme = __webpack_require__(541);
 
 	var _Vidme2 = _interopRequireDefault(_Vidme);
 
-	var _Wistia = __webpack_require__(540);
+	var _Wistia = __webpack_require__(542);
 
 	var _Wistia2 = _interopRequireDefault(_Wistia);
 
-	var _DailyMotion = __webpack_require__(541);
+	var _DailyMotion = __webpack_require__(543);
 
 	var _DailyMotion2 = _interopRequireDefault(_DailyMotion);
 
-	var _Twitch = __webpack_require__(542);
+	var _Twitch = __webpack_require__(544);
 
 	var _Twitch2 = _interopRequireDefault(_Twitch);
 
@@ -49149,7 +49624,7 @@
 	exports['default'] = ReactPlayer;
 
 /***/ }),
-/* 528 */
+/* 530 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -49314,7 +49789,7 @@
 	var DEPRECATED_CONFIG_PROPS = exports.DEPRECATED_CONFIG_PROPS = ['soundcloudConfig', 'youtubeConfig', 'facebookConfig', 'dailymotionConfig', 'vimeoConfig', 'vidmeConfig', 'fileConfig', 'wistiaConfig'];
 
 /***/ }),
-/* 529 */
+/* 531 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -49331,15 +49806,15 @@
 	exports.getConfig = getConfig;
 	exports.omit = omit;
 
-	var _loadScript = __webpack_require__(530);
+	var _loadScript = __webpack_require__(532);
 
 	var _loadScript2 = _interopRequireDefault(_loadScript);
 
-	var _deepmerge = __webpack_require__(531);
+	var _deepmerge = __webpack_require__(533);
 
 	var _deepmerge2 = _interopRequireDefault(_deepmerge);
 
-	var _props = __webpack_require__(528);
+	var _props = __webpack_require__(530);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
@@ -49494,7 +49969,7 @@
 	}
 
 /***/ }),
-/* 530 */
+/* 532 */
 /***/ (function(module, exports) {
 
 	
@@ -49565,7 +50040,7 @@
 
 
 /***/ }),
-/* 531 */
+/* 533 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	(function (global, factory) {
@@ -49668,7 +50143,7 @@
 
 
 /***/ }),
-/* 532 */
+/* 534 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -49687,11 +50162,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _Base2 = __webpack_require__(533);
+	var _Base2 = __webpack_require__(535);
 
 	var _Base3 = _interopRequireDefault(_Base2);
 
-	var _utils = __webpack_require__(529);
+	var _utils = __webpack_require__(531);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
@@ -49888,7 +50363,7 @@
 	exports['default'] = YouTube;
 
 /***/ }),
-/* 533 */
+/* 535 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -49901,7 +50376,7 @@
 
 	var _react = __webpack_require__(3);
 
-	var _props2 = __webpack_require__(528);
+	var _props2 = __webpack_require__(530);
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -50088,7 +50563,7 @@
 	exports['default'] = Base;
 
 /***/ }),
-/* 534 */
+/* 536 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -50107,11 +50582,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _Base2 = __webpack_require__(533);
+	var _Base2 = __webpack_require__(535);
 
 	var _Base3 = _interopRequireDefault(_Base2);
 
-	var _utils = __webpack_require__(529);
+	var _utils = __webpack_require__(531);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
@@ -50273,7 +50748,7 @@
 	exports['default'] = SoundCloud;
 
 /***/ }),
-/* 535 */
+/* 537 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -50292,11 +50767,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _Base2 = __webpack_require__(533);
+	var _Base2 = __webpack_require__(535);
 
 	var _Base3 = _interopRequireDefault(_Base2);
 
-	var _utils = __webpack_require__(529);
+	var _utils = __webpack_require__(531);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
@@ -50462,7 +50937,7 @@
 	exports['default'] = Vimeo;
 
 /***/ }),
-/* 536 */
+/* 538 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -50479,11 +50954,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _Base2 = __webpack_require__(533);
+	var _Base2 = __webpack_require__(535);
 
 	var _Base3 = _interopRequireDefault(_Base2);
 
-	var _utils = __webpack_require__(529);
+	var _utils = __webpack_require__(531);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
@@ -50630,7 +51105,7 @@
 	exports['default'] = Facebook;
 
 /***/ }),
-/* 537 */
+/* 539 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -50649,11 +51124,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _Base2 = __webpack_require__(533);
+	var _Base2 = __webpack_require__(535);
 
 	var _Base3 = _interopRequireDefault(_Base2);
 
-	var _utils = __webpack_require__(529);
+	var _utils = __webpack_require__(531);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
@@ -50935,7 +51410,7 @@
 	exports['default'] = FilePlayer;
 
 /***/ }),
-/* 538 */
+/* 540 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -50952,11 +51427,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _Base2 = __webpack_require__(533);
+	var _Base2 = __webpack_require__(535);
 
 	var _Base3 = _interopRequireDefault(_Base2);
 
-	var _utils = __webpack_require__(529);
+	var _utils = __webpack_require__(531);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
@@ -51095,7 +51570,7 @@
 	exports['default'] = Streamable;
 
 /***/ }),
-/* 539 */
+/* 541 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -51106,7 +51581,7 @@
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _FilePlayer2 = __webpack_require__(537);
+	var _FilePlayer2 = __webpack_require__(539);
 
 	var _FilePlayer3 = _interopRequireDefault(_FilePlayer2);
 
@@ -51195,7 +51670,7 @@
 	exports['default'] = Vidme;
 
 /***/ }),
-/* 540 */
+/* 542 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -51214,11 +51689,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _Base2 = __webpack_require__(533);
+	var _Base2 = __webpack_require__(535);
 
 	var _Base3 = _interopRequireDefault(_Base2);
 
-	var _utils = __webpack_require__(529);
+	var _utils = __webpack_require__(531);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
@@ -51351,7 +51826,7 @@
 	exports['default'] = Wistia;
 
 /***/ }),
-/* 541 */
+/* 543 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -51370,11 +51845,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _Base2 = __webpack_require__(533);
+	var _Base2 = __webpack_require__(535);
 
 	var _Base3 = _interopRequireDefault(_Base2);
 
-	var _utils = __webpack_require__(529);
+	var _utils = __webpack_require__(531);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
@@ -51571,7 +52046,7 @@
 	exports['default'] = DailyMotion;
 
 /***/ }),
-/* 542 */
+/* 544 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -51588,11 +52063,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _Base2 = __webpack_require__(533);
+	var _Base2 = __webpack_require__(535);
 
 	var _Base3 = _interopRequireDefault(_Base2);
 
-	var _utils = __webpack_require__(529);
+	var _utils = __webpack_require__(531);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
@@ -51742,7 +52217,7 @@
 	exports['default'] = Twitch;
 
 /***/ }),
-/* 543 */
+/* 545 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -51759,7 +52234,7 @@
 
 	var _reactRouterDom = __webpack_require__(43);
 
-	var _TagItem = __webpack_require__(544);
+	var _TagItem = __webpack_require__(491);
 
 	var _TagItem2 = _interopRequireDefault(_TagItem);
 
@@ -51889,423 +52364,6 @@
 	}(_react2.default.Component);
 
 	exports.default = TagList;
-
-/***/ }),
-/* 544 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(3);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactRouterDom = __webpack_require__(43);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var TagItem = function (_React$Component) {
-	  _inherits(TagItem, _React$Component);
-
-	  function TagItem(props) {
-	    _classCallCheck(this, TagItem);
-
-	    var _this = _possibleConstructorReturn(this, (TagItem.__proto__ || Object.getPrototypeOf(TagItem)).call(this, props));
-
-	    _this.state = { tag: props.tag };
-	    return _this;
-	  }
-
-	  _createClass(TagItem, [{
-	    key: 'componentWillMount',
-	    value: function componentWillMount() {
-	      //do things
-	    }
-	  }, {
-	    key: 'componentWillUpdate',
-	    value: function componentWillUpdate(nextProps, nextState) {}
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      return _react2.default.createElement(
-	        'li',
-	        { className: 'tag_li', id: this.state.tag },
-	        this.state.tag,
-	        _react2.default.createElement(
-	          'a',
-	          { className: 'close_icon_link', onClick: this.props.removeTag },
-	          _react2.default.createElement(
-	            'span',
-	            { className: 'close_icon' },
-	            'x'
-	          )
-	        )
-	      );
-	    }
-	  }]);
-
-	  return TagItem;
-	}(_react2.default.Component);
-
-	exports.default = TagItem;
-
-/***/ }),
-/* 545 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(3);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _axios = __webpack_require__(491);
-
-	var _axios2 = _interopRequireDefault(_axios);
-
-	var _Chapter = __webpack_require__(517);
-
-	var _Chapter2 = _interopRequireDefault(_Chapter);
-
-	var _TagList = __webpack_require__(543);
-
-	var _TagList2 = _interopRequireDefault(_TagList);
-
-	var _ChapterForm = __webpack_require__(546);
-
-	var _ChapterForm2 = _interopRequireDefault(_ChapterForm);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var NewWork = function (_React$Component) {
-	  _inherits(NewWork, _React$Component);
-
-	  _createClass(NewWork, [{
-	    key: 'addWork',
-	    value: function addWork(evt) {
-	      evt.preventDefault();
-	      console.log(this.state);
-	    }
-	  }, {
-	    key: 'updateTitle',
-	    value: function updateTitle(evt) {
-	      this.setState({
-	        title: evt.target.value
-	      });
-	    }
-	  }, {
-	    key: 'updateWorkSummary',
-	    value: function updateWorkSummary(evt) {
-	      this.setState({
-	        work_summary: evt.target.value
-	      });
-	    }
-	  }, {
-	    key: 'updateCheckbox',
-	    value: function updateCheckbox(evt) {
-	      this.setState({
-	        is_complete: evt.target.value
-	      });
-	    }
-	  }, {
-	    key: 'updateWorkNotes',
-	    value: function updateWorkNotes(evt) {
-	      this.setState({
-	        work_notes: evt.target.value
-	      });
-	    }
-	  }, {
-	    key: 'handler',
-	    value: function handler(e) {
-	      e.preventDefault();
-	      var original = this.state.chapters;
-	      original[e.target.parentElement.parentElement.id - 1][e.target.name] = e.target.value;
-	      this.setState({
-	        chapters: original
-	      });
-	      console.log(this.state.chapters);
-	    }
-	  }, {
-	    key: 'uploadAudio',
-	    value: function uploadAudio(e) {
-	      e.preventDefault();
-	      var target = e.target;
-	      // Get the selected file from the input element
-	      var file = e.target.files[0];
-	      // Create a new tus upload
-	      var upload = new tus.Upload(file, {
-	        endpoint: "http://127.0.0.1:9292/audio/",
-	        chunkSize: 5 * 1024 * 1024,
-	        retryDelays: [0, 1000, 3000, 5000],
-	        onError: function onError(error) {
-	          console.log("Failed because: " + error);
-	        },
-	        onProgress: function onProgress(bytesUploaded, bytesTotal) {
-	          var percentage = (bytesUploaded / bytesTotal * 100).toFixed(2);
-	          console.log(bytesUploaded, bytesTotal, percentage + "%");
-	        },
-	        onSuccess: function onSuccess() {
-	          console.log("Download %s from %s", upload.file.name, upload.url);
-	        }
-	      });
-	      // Start the upload
-	      upload.start();
-	    }
-	  }, {
-	    key: 'uploadImage',
-	    value: function uploadImage(e) {
-	      e.preventDefault();
-	      var target = e.target;
-	      // Get the selected file from the input element
-	      var file = e.target.files[0];
-	      // Create a new tus upload
-	      var upload = new tus.Upload(file, {
-	        endpoint: "http://127.0.0.1:9292/audio/",
-	        chunkSize: 5 * 1024 * 1024,
-	        retryDelays: [0, 1000, 3000, 5000],
-	        onError: function onError(error) {
-	          console.log("Failed because: " + error);
-	        },
-	        onProgress: function onProgress(bytesUploaded, bytesTotal) {
-	          var percentage = (bytesUploaded / bytesTotal * 100).toFixed(2);
-	          console.log(bytesUploaded, bytesTotal, percentage + "%");
-	        },
-	        onSuccess: function onSuccess() {
-	          console.log("Download %s from %s", upload.file.name, upload.url);
-	        }
-	      });
-	      // Start the upload
-	      upload.start();
-	    }
-	  }, {
-	    key: 'addChapter',
-	    value: function addChapter() {
-	      var newChapter = { chapter_title: '', chapter_summary: '', chapter_notes: '', chapter_image: '',
-	        chapter_audio: '', chapter_text: '', chapter_key: 1 };
-	      this.state.chapters.push(newChapter);
-	    }
-	  }, {
-	    key: 'appendChapter',
-	    value: function appendChapter(evt) {
-	      evt.preventDefault();
-	      var key = this.state.chapters.length + 1;
-	      var newChapter = { chapter_title: '', chapter_summary: '', chapter_notes: '', chapter_image: '',
-	        chapter_audio: '', chapter_text: '', chapter_key: key };
-	      var original = this.state.chapters;
-	      original.push(newChapter);
-	      this.setState({
-	        chapters: original
-	      });
-	    }
-	  }, {
-	    key: 'saveWork',
-	    value: function saveWork() {
-	      _axios2.default.post('/api/work/new').then(function (response) {
-	        this.setState({ work: response.data[0] });
-	      }.bind(this)).catch(function (error) {
-	        console.log(error);
-	      });
-	    }
-	  }, {
-	    key: 'getTagCategories',
-	    value: function getTagCategories() {
-	      _axios2.default.get('/api/tag/categories').then(function (response) {
-	        this.setState({ work_tags: [{ 'fandom': ['buffy', 'the good place'] }, { 'pairing': ['buffy/tahani', 'chidi/willow'] }, { 'themes': ['soulbonding'] }] });
-	      }.bind(this)).catch(function (error) {
-	        console.log(error);
-	      });
-	    }
-	  }]);
-
-	  function NewWork(props) {
-	    _classCallCheck(this, NewWork);
-
-	    var _this = _possibleConstructorReturn(this, (NewWork.__proto__ || Object.getPrototypeOf(NewWork)).call(this, props));
-
-	    if (_this.props.is_edit) {
-	      _this.state = { title: _this.props.work_title, work_summary: _this.props.work_summary,
-	        is_complete: _this.props.is_complete, work_notes: _this.props.work_notes,
-	        work_tags: _this.props.work_tags, chapters: _this.props.work_chapters, is_edit: true };
-	      _this.handler = _this.handler.bind(_this);
-	      _this.uploadAudio = _this.uploadAudio.bind(_this);
-	      _this.uploadImage = _this.uploadImage.bind(_this);
-	    } else {
-	      _this.state = { title: '', work_summary: '', is_complete: false, work_notes: '',
-	        work_tags: [], chapters: [], is_edit: false };
-	      _this.addChapter();
-	      _this.handler = _this.handler.bind(_this);
-	      _this.uploadAudio = _this.uploadAudio.bind(_this);
-	      _this.uploadImage = _this.uploadImage.bind(_this);
-	      _this.getTagCategories();
-	    }
-
-	    return _this;
-	  }
-
-	  _createClass(NewWork, [{
-	    key: 'componentWillMount',
-	    value: function componentWillMount() {
-	      //todo call get categories
-	    }
-	  }, {
-	    key: 'componentWillUpdate',
-	    value: function componentWillUpdate(nextProps, nextState) {}
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      var _this2 = this;
-
-	      return _react2.default.createElement(
-	        'div',
-	        null,
-	        _react2.default.createElement(
-	          'div',
-	          { className: 'panel panel-default' },
-	          _react2.default.createElement(
-	            'div',
-	            { className: 'panel-body' },
-	            _react2.default.createElement(
-	              'form',
-	              null,
-	              _react2.default.createElement(
-	                'div',
-	                { className: 'form-group' },
-	                _react2.default.createElement(
-	                  'label',
-	                  { htmlFor: 'work_title' },
-	                  'Title'
-	                ),
-	                _react2.default.createElement('input', { id: 'work_title', className: 'form-control', value: this.state.title, onChange: function onChange(evt) {
-	                    return _this2.updateTitle(evt);
-	                  } })
-	              ),
-	              _react2.default.createElement(
-	                'div',
-	                { className: 'form-group' },
-	                _react2.default.createElement(
-	                  'label',
-	                  { htmlFor: 'work_author' },
-	                  'Author'
-	                ),
-	                _react2.default.createElement('input', { id: 'work_author', className: 'form-control', value: 'dummyAuthor' })
-	              ),
-	              _react2.default.createElement('hr', null),
-	              _react2.default.createElement(
-	                'div',
-	                { className: 'form-group' },
-	                _react2.default.createElement(
-	                  'label',
-	                  { htmlFor: 'work_summary' },
-	                  'Summary'
-	                ),
-	                _react2.default.createElement('textarea', { id: 'work_summary', className: 'form-control', rows: '3', value: this.state.work_summary, onChange: function onChange(evt) {
-	                    return _this2.updateWorkSummary(evt);
-	                  } })
-	              ),
-	              _react2.default.createElement(
-	                'div',
-	                { className: 'checkbox' },
-	                _react2.default.createElement(
-	                  'label',
-	                  null,
-	                  _react2.default.createElement('input', { type: 'checkbox', id: 'complete', onChange: function onChange(evt) {
-	                      return _this2.updateCheckbox(evt);
-	                    } }),
-	                  'Work is complete?'
-	                )
-	              ),
-	              _react2.default.createElement('hr', null),
-	              _react2.default.createElement(
-	                'div',
-	                { className: 'form-group' },
-	                _react2.default.createElement(
-	                  'label',
-	                  { htmlFor: 'work_notes' },
-	                  'Notes'
-	                ),
-	                _react2.default.createElement('input', { id: 'work_notes', className: 'form-control', value: this.state.work_notes, onChange: function onChange(evt) {
-	                    return _this2.updateWorkNotes(evt);
-	                  } })
-	              ),
-	              _react2.default.createElement(
-	                'div',
-	                { className: 'form-group' },
-	                this.state.work_tags.map(function (tag) {
-	                  return _react2.default.createElement(
-	                    'div',
-	                    { key: Object.keys(tag) },
-	                    _react2.default.createElement(_TagList2.default, { tag_category: Object.keys(tag), tags: Object.values(tag) })
-	                  );
-	                })
-	              ),
-	              _react2.default.createElement('br', null),
-	              _react2.default.createElement('br', null),
-	              _react2.default.createElement('hr', null),
-	              _react2.default.createElement(
-	                'div',
-	                { className: 'form-group' },
-	                this.state.chapters.map(function (chapter) {
-	                  return _react2.default.createElement(_ChapterForm2.default, { key: chapter.chapter_key, chapter_number: chapter.chapter_key, handler: _this2.handler, handlerAudio: _this2.uploadAudio,
-	                    handlerImage: _this2.uploadImage, chapter: chapter });
-	                })
-	              ),
-	              _react2.default.createElement(
-	                'div',
-	                { className: 'form-group' },
-	                _react2.default.createElement(
-	                  'button',
-	                  { className: 'btn btn-link', onClick: function onClick(evt) {
-	                      return _this2.appendChapter(evt);
-	                    } },
-	                  'Add Chapter'
-	                )
-	              ),
-	              _react2.default.createElement(
-	                'div',
-	                { className: 'form-group' },
-	                _react2.default.createElement(
-	                  'button',
-	                  { type: 'submit', onClick: function onClick(evt) {
-	                      return _this2.addWork(evt);
-	                    }, className: 'btn btn-default' },
-	                  'Submit'
-	                )
-	              )
-	            )
-	          )
-	        )
-	      );
-	    }
-	  }]);
-
-	  return NewWork;
-	}(_react2.default.Component);
-
-	exports.default = NewWork;
 
 /***/ }),
 /* 546 */

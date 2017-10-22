@@ -28,12 +28,14 @@ def get_work(workId):
   "work_summary": "some stuff happens",
   "chapters": [{
     "id": "1",
+    "number": "1",
     "title": "bob goes to school",
     "text": "weh weh weh weh",
     "audio_url": "../audio/01 Family Problems.mp3",
     "image_url": "url"
   },
     {"id": "2",
+    "number": "2",
     "title": "bob fails at school",
     "text": "bloop",
     "audio_url": "url",

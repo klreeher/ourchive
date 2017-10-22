@@ -26,7 +26,7 @@ export default class Chapter extends React.Component {
       <div>
         <div className="work_text">
   <div className="row">
-    <div className="col-md-12"><h2>{this.state.chapter.title}</h2></div>
+    <div className="col-md-12"><h2>Chapter {this.state.chapter.number}: {this.state.chapter.title}</h2></div>
   </div>
   <div className="row">
     <div className="col-md-12"><blockquote>{this.state.chapter.chapter_summary}</blockquote></div>
