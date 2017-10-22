@@ -51779,7 +51779,8 @@
 
 	    var _this = _possibleConstructorReturn(this, (TagList.__proto__ || Object.getPrototypeOf(TagList)).call(this, props));
 
-	    _this.state = { tags: props.tags[0], tag_category: props.tag_category };
+	    _this.state = { tags: props.tags[0], tag_category: props.tag_category, oldItem: '' };
+	    _this.removeTag = _this.removeTag.bind(_this);
 	    return _this;
 	  }
 
@@ -51790,22 +51791,96 @@
 	    }
 	  }, {
 	    key: 'componentWillUpdate',
-	    value: function componentWillUpdate(nextProps, nextState) {}
+	    value: function componentWillUpdate(nextProps, nextState) {
+	      //do things
+	    }
+	  }, {
+	    key: 'componentDidUpdate',
+	    value: function componentDidUpdate() {
+	      if (this.state.oldItem !== '') {
+	        document.getElementById("tags_ul" + this.state.tag_category).appendChild(this.state.oldItem);
+	        document.getElementById("new_textBox" + this.state.tag_category).focus();
+	        this.state.oldItem = '';
+	      }
+	    }
+	  }, {
+	    key: 'removeTag',
+	    value: function removeTag(event) {
+	      event.preventDefault();
+	      var oldTags = this.state.tags;
+	      var tagText = event.target.parentElement.parentElement.id;
+	      var newTags = oldTags.filter(function (tag) {
+	        return tag !== tagText;
+	      });
+	      this.setState({
+	        tags: newTags
+	      });
+	    }
+	  }, {
+	    key: 'create_work_tag',
+	    value: function create_work_tag(val, oldItem) {
+	      var original = this.state.tags;
+	      var filtered = original.filter(function (tag) {
+	        return tag == val;
+	      });
+	      if (filtered.length > 0) return;
+	      original.push(val);
+	      this.setState({
+	        tags: original,
+	        oldItem: oldItem
+	      });
+	    }
+	  }, {
+	    key: 'newTag',
+	    value: function newTag(event) {
+	      var characterPressed = String.fromCharCode(event.which);
+	      if (characterPressed == ',') {
+	        if (event.target.value != '') {
+	          var oldVal = event.target.value;
+	          event.target.value = '';
+	          var id = event.target.id.charAt(0);
+	          var oldItem = event.target.parentElement;
+	          this.create_work_tag(oldVal, oldItem);
+	          event.preventDefault();
+	        }
+	      }
+	    }
 	  }, {
 	    key: 'render',
 	    value: function render() {
+	      var _this2 = this;
+
 	      return _react2.default.createElement(
 	        'div',
-	        null,
-	        _react2.default.createElement('hr', null),
+	        { className: 'row' },
 	        _react2.default.createElement(
 	          'div',
-	          { className: 'col-md-3 tag_category' },
-	          this.state.tag_category
-	        ),
-	        this.state.tags.map(function (tag) {
-	          return _react2.default.createElement(_TagItem2.default, { tag: tag });
-	        })
+	          { className: 'col-md-12' },
+	          _react2.default.createElement(
+	            'ul',
+	            { className: 'list-inline', id: "tags_ul" + this.state.tag_category },
+	            _react2.default.createElement('hr', null),
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'col-md-3 tag_category' },
+	              this.state.tag_category
+	            ),
+	            this.state.tags.map(function (tag) {
+	              return _react2.default.createElement(
+	                'div',
+	                { key: tag },
+	                _react2.default.createElement(_TagItem2.default, { tag: tag, removeTag: _this2.removeTag })
+	              );
+	            }),
+	            _react2.default.createElement(
+	              'li',
+	              { className: 'new_li' },
+	              _react2.default.createElement('input', { type: 'text', id: "new_textBox" + this.state.tag_category, className: 'new_textBox', onKeyPress: function onKeyPress(evt) {
+	                  return _this2.newTag(evt);
+	                } })
+	            )
+	          )
+	        )
 	      );
 	    }
 	  }]);
@@ -51862,12 +51937,6 @@
 	    key: 'componentWillUpdate',
 	    value: function componentWillUpdate(nextProps, nextState) {}
 	  }, {
-	    key: 'removeTag',
-	    value: function removeTag(event) {
-	      var target = event.target.parentElement.parentElement;
-	      target.remove();
-	    }
-	  }, {
 	    key: 'render',
 	    value: function render() {
 	      return _react2.default.createElement(
@@ -51876,7 +51945,7 @@
 	        this.state.tag,
 	        _react2.default.createElement(
 	          'a',
-	          { className: 'close_icon_link', onClick: this.removeTag },
+	          { className: 'close_icon_link', onClick: this.props.removeTag },
 	          _react2.default.createElement(
 	            'span',
 	            { className: 'close_icon' },
@@ -52065,7 +52134,7 @@
 	    key: 'getTagCategories',
 	    value: function getTagCategories() {
 	      _axios2.default.get('/api/tag/categories').then(function (response) {
-	        this.setState({ work: response.data[0] });
+	        this.setState({ work_tags: [{ 'fandom': ['buffy', 'the good place'] }, { 'pairing': ['buffy/tahani', 'chidi/willow'] }, { 'themes': ['soulbonding'] }] });
 	      }.bind(this)).catch(function (error) {
 	        console.log(error);
 	      });
@@ -52091,6 +52160,7 @@
 	      _this.handler = _this.handler.bind(_this);
 	      _this.uploadAudio = _this.uploadAudio.bind(_this);
 	      _this.uploadImage = _this.uploadImage.bind(_this);
+	      _this.getTagCategories();
 	    }
 
 	    return _this;
@@ -52181,25 +52251,28 @@
 	                    return _this2.updateWorkNotes(evt);
 	                  } })
 	              ),
-	              this.state.work_tags.map(function (tag) {
-	                return _react2.default.createElement(
-	                  'div',
-	                  { className: 'row' },
-	                  _react2.default.createElement(
+	              _react2.default.createElement(
+	                'div',
+	                { className: 'form-group' },
+	                this.state.work_tags.map(function (tag) {
+	                  return _react2.default.createElement(
 	                    'div',
-	                    { className: 'col-md-12' },
-	                    _react2.default.createElement(
-	                      'ul',
-	                      { className: 'list-inline' },
-	                      _react2.default.createElement(_TagList2.default, { tag_category: Object.keys(tag), tags: Object.values(tag) })
-	                    )
-	                  )
-	                );
-	              }),
-	              this.state.chapters.map(function (chapter) {
-	                return _react2.default.createElement(_ChapterForm2.default, { key: chapter.chapter_key, chapter_number: chapter.chapter_key, handler: _this2.handler, handlerAudio: _this2.uploadAudio,
-	                  handlerImage: _this2.uploadImage, chapter: chapter });
-	              }),
+	                    { key: Object.keys(tag) },
+	                    _react2.default.createElement(_TagList2.default, { tag_category: Object.keys(tag), tags: Object.values(tag) })
+	                  );
+	                })
+	              ),
+	              _react2.default.createElement('br', null),
+	              _react2.default.createElement('br', null),
+	              _react2.default.createElement('hr', null),
+	              _react2.default.createElement(
+	                'div',
+	                { className: 'form-group' },
+	                this.state.chapters.map(function (chapter) {
+	                  return _react2.default.createElement(_ChapterForm2.default, { key: chapter.chapter_key, chapter_number: chapter.chapter_key, handler: _this2.handler, handlerAudio: _this2.uploadAudio,
+	                    handlerImage: _this2.uploadImage, chapter: chapter });
+	                })
+	              ),
 	              _react2.default.createElement(
 	                'div',
 	                { className: 'form-group' },
