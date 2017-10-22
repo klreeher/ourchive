@@ -126,7 +126,7 @@
 	      _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/', component: Home }),
 	      _react2.default.createElement(_reactRouterDom.Route, { path: '/works', component: WorkCollection }),
 	      _react2.default.createElement(_reactRouterDom.Route, { path: '/work/:workId', component: _SingleWork2.default }),
-	      _react2.default.createElement(_reactRouterDom.Route, { path: '/create/work', component: _NewWork2.default })
+	      _react2.default.createElement(_reactRouterDom.Route, { path: '/create/work', is_edit: 'false', component: _NewWork2.default })
 	    )
 	  );
 	};
@@ -52077,12 +52077,22 @@
 
 	    var _this = _possibleConstructorReturn(this, (NewWork.__proto__ || Object.getPrototypeOf(NewWork)).call(this, props));
 
-	    _this.state = { title: '', work_summary: '', is_complete: false, work_notes: '',
-	      work_tags: [], chapters: [] };
-	    _this.addChapter();
-	    _this.handler = _this.handler.bind(_this);
-	    _this.uploadAudio = _this.uploadAudio.bind(_this);
-	    _this.uploadImage = _this.uploadImage.bind(_this);
+	    if (_this.props.is_edit) {
+	      _this.state = { title: _this.props.work_title, work_summary: _this.props.work_summary,
+	        is_complete: _this.props.is_complete, work_notes: _this.props.work_notes,
+	        work_tags: _this.props.work_tags, chapters: _this.props.work_chapters, is_edit: true };
+	      _this.handler = _this.handler.bind(_this);
+	      _this.uploadAudio = _this.uploadAudio.bind(_this);
+	      _this.uploadImage = _this.uploadImage.bind(_this);
+	    } else {
+	      _this.state = { title: '', work_summary: '', is_complete: false, work_notes: '',
+	        work_tags: [], chapters: [], is_edit: false };
+	      _this.addChapter();
+	      _this.handler = _this.handler.bind(_this);
+	      _this.uploadAudio = _this.uploadAudio.bind(_this);
+	      _this.uploadImage = _this.uploadImage.bind(_this);
+	    }
+
 	    return _this;
 	  }
 
@@ -52188,7 +52198,7 @@
 	              }),
 	              this.state.chapters.map(function (chapter) {
 	                return _react2.default.createElement(_ChapterForm2.default, { key: chapter.chapter_key, chapter_number: chapter.chapter_key, handler: _this2.handler, handlerAudio: _this2.uploadAudio,
-	                  handlerImage: _this2.uploadImage });
+	                  handlerImage: _this2.uploadImage, chapter: chapter });
 	              }),
 	              _react2.default.createElement(
 	                'div',
@@ -52260,7 +52270,7 @@
 
 	    var _this = _possibleConstructorReturn(this, (Chapter.__proto__ || Object.getPrototypeOf(Chapter)).call(this, props));
 
-	    _this.state = { chapter_number: props.chapter_number };
+	    _this.state = { chapter_number: props.chapter_number, chapter: props.chapter };
 	    return _this;
 	  }
 
@@ -52288,7 +52298,8 @@
 	            { htmlFor: "chapter_title_" + this.state.chapter_number },
 	            'Chapter Title'
 	          ),
-	          _react2.default.createElement('input', { id: "chapter_title_" + this.state.chapter_number, name: 'chapter_title', onChange: this.props.handler, className: 'form-control' })
+	          _react2.default.createElement('input', { id: "chapter_title_" + this.state.chapter_number, value: this.state.chapter.chapter_title,
+	            name: 'chapter_title', onChange: this.props.handler, className: 'form-control' })
 	        ),
 	        _react2.default.createElement(
 	          'div',
@@ -52298,7 +52309,8 @@
 	            { htmlFor: 'chapter_summary' },
 	            'Chapter Summary'
 	          ),
-	          _react2.default.createElement('textarea', { id: 'chapter_summary', className: 'form-control', name: 'chapter_summary', onChange: this.props.handler, rows: '3' })
+	          _react2.default.createElement('textarea', { id: 'chapter_summary', className: 'form-control', name: 'chapter_summary', value: this.state.chapter.chapter_summary,
+	            onChange: this.props.handler, rows: '3' })
 	        ),
 	        _react2.default.createElement(
 	          'div',
@@ -52308,7 +52320,8 @@
 	            { htmlFor: 'chapter_notes' },
 	            'Chapter Notes'
 	          ),
-	          _react2.default.createElement('textarea', { id: 'chapter_notes', className: 'form-control', name: 'chapter_notes', onChange: this.props.handler, rows: '3' })
+	          _react2.default.createElement('textarea', { id: 'chapter_notes', className: 'form-control', name: 'chapter_notes', value: this.state.chapter.chapter_notes,
+	            onChange: this.props.handler, rows: '3' })
 	        ),
 	        _react2.default.createElement(
 	          'div',
@@ -52318,7 +52331,7 @@
 	            { htmlFor: 'chapter_image' },
 	            'Chapter Image'
 	          ),
-	          _react2.default.createElement('input', (_React$createElement = { className: 'input-file', type: 'file', id: 'chapter_image' }, _defineProperty(_React$createElement, 'className', 'form-control'), _defineProperty(_React$createElement, 'name', 'chapter_image'), _defineProperty(_React$createElement, 'onChange', this.props.handlerImage), _React$createElement))
+	          _react2.default.createElement('input', (_React$createElement = { className: 'input-file', type: 'file', id: 'chapter_image' }, _defineProperty(_React$createElement, 'className', 'form-control'), _defineProperty(_React$createElement, 'value', this.state.chapter.chapter_image), _defineProperty(_React$createElement, 'name', 'chapter_image'), _defineProperty(_React$createElement, 'onChange', this.props.handlerImage), _React$createElement))
 	        ),
 	        _react2.default.createElement(
 	          'div',
@@ -52328,7 +52341,7 @@
 	            { htmlFor: 'chapter_audio' },
 	            'Chapter Audio'
 	          ),
-	          _react2.default.createElement('input', (_React$createElement2 = { className: 'input-file', type: 'file', id: 'chapter_audio' }, _defineProperty(_React$createElement2, 'className', 'form-control'), _defineProperty(_React$createElement2, 'name', 'chapter_audio'), _defineProperty(_React$createElement2, 'onChange', this.props.handlerAudio), _React$createElement2))
+	          _react2.default.createElement('input', (_React$createElement2 = { className: 'input-file', type: 'file', id: 'chapter_audio' }, _defineProperty(_React$createElement2, 'className', 'form-control'), _defineProperty(_React$createElement2, 'name', 'chapter_audio'), _defineProperty(_React$createElement2, 'value', this.state.chapter.chapter_audio), _defineProperty(_React$createElement2, 'onChange', this.props.handlerAudio), _React$createElement2))
 	        ),
 	        _react2.default.createElement(
 	          'div',
