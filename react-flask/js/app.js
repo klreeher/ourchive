@@ -35,7 +35,7 @@ const BasicExample = () => (
       <Route exact path="/" component={Home}/>
       <Route path="/works" component={WorkCollection}/>
       <Route path="/work/:workId" component={SingleWork}/>
-      <Route path="/create/work" component={NewWork}/>
+      <Route path="/create/work" is_edit="false" component={NewWork}/>
     </div>
   </Router>
 )

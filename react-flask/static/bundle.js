@@ -126,7 +126,7 @@
 	      _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/', component: Home }),
 	      _react2.default.createElement(_reactRouterDom.Route, { path: '/works', component: WorkCollection }),
 	      _react2.default.createElement(_reactRouterDom.Route, { path: '/work/:workId', component: _SingleWork2.default }),
-	      _react2.default.createElement(_reactRouterDom.Route, { path: '/create/work', component: _NewWork2.default })
+	      _react2.default.createElement(_reactRouterDom.Route, { path: '/create/work', is_edit: 'false', component: _NewWork2.default })
 	    )
 	  );
 	};
@@ -51779,7 +51779,8 @@
 
 	    var _this = _possibleConstructorReturn(this, (TagList.__proto__ || Object.getPrototypeOf(TagList)).call(this, props));
 
-	    _this.state = { tags: props.tags[0], tag_category: props.tag_category };
+	    _this.state = { tags: props.tags[0], tag_category: props.tag_category, oldItem: '' };
+	    _this.removeTag = _this.removeTag.bind(_this);
 	    return _this;
 	  }
 
@@ -51790,22 +51791,96 @@
 	    }
 	  }, {
 	    key: 'componentWillUpdate',
-	    value: function componentWillUpdate(nextProps, nextState) {}
+	    value: function componentWillUpdate(nextProps, nextState) {
+	      //do things
+	    }
+	  }, {
+	    key: 'componentDidUpdate',
+	    value: function componentDidUpdate() {
+	      if (this.state.oldItem !== '') {
+	        document.getElementById("tags_ul" + this.state.tag_category).appendChild(this.state.oldItem);
+	        document.getElementById("new_textBox" + this.state.tag_category).focus();
+	        this.state.oldItem = '';
+	      }
+	    }
+	  }, {
+	    key: 'removeTag',
+	    value: function removeTag(event) {
+	      event.preventDefault();
+	      var oldTags = this.state.tags;
+	      var tagText = event.target.parentElement.parentElement.id;
+	      var newTags = oldTags.filter(function (tag) {
+	        return tag !== tagText;
+	      });
+	      this.setState({
+	        tags: newTags
+	      });
+	    }
+	  }, {
+	    key: 'create_work_tag',
+	    value: function create_work_tag(val, oldItem) {
+	      var original = this.state.tags;
+	      var filtered = original.filter(function (tag) {
+	        return tag == val;
+	      });
+	      if (filtered.length > 0) return;
+	      original.push(val);
+	      this.setState({
+	        tags: original,
+	        oldItem: oldItem
+	      });
+	    }
+	  }, {
+	    key: 'newTag',
+	    value: function newTag(event) {
+	      var characterPressed = String.fromCharCode(event.which);
+	      if (characterPressed == ',') {
+	        if (event.target.value != '') {
+	          var oldVal = event.target.value;
+	          event.target.value = '';
+	          var id = event.target.id.charAt(0);
+	          var oldItem = event.target.parentElement;
+	          this.create_work_tag(oldVal, oldItem);
+	          event.preventDefault();
+	        }
+	      }
+	    }
 	  }, {
 	    key: 'render',
 	    value: function render() {
+	      var _this2 = this;
+
 	      return _react2.default.createElement(
 	        'div',
-	        null,
-	        _react2.default.createElement('hr', null),
+	        { className: 'row' },
 	        _react2.default.createElement(
 	          'div',
-	          { className: 'col-md-3 tag_category' },
-	          this.state.tag_category
-	        ),
-	        this.state.tags.map(function (tag) {
-	          return _react2.default.createElement(_TagItem2.default, { tag: tag });
-	        })
+	          { className: 'col-md-12' },
+	          _react2.default.createElement(
+	            'ul',
+	            { className: 'list-inline', id: "tags_ul" + this.state.tag_category },
+	            _react2.default.createElement('hr', null),
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'col-md-3 tag_category' },
+	              this.state.tag_category
+	            ),
+	            this.state.tags.map(function (tag) {
+	              return _react2.default.createElement(
+	                'div',
+	                { key: tag },
+	                _react2.default.createElement(_TagItem2.default, { tag: tag, removeTag: _this2.removeTag })
+	              );
+	            }),
+	            _react2.default.createElement(
+	              'li',
+	              { className: 'new_li' },
+	              _react2.default.createElement('input', { type: 'text', id: "new_textBox" + this.state.tag_category, className: 'new_textBox', onKeyPress: function onKeyPress(evt) {
+	                  return _this2.newTag(evt);
+	                } })
+	            )
+	          )
+	        )
 	      );
 	    }
 	  }]);
@@ -51862,12 +51937,6 @@
 	    key: 'componentWillUpdate',
 	    value: function componentWillUpdate(nextProps, nextState) {}
 	  }, {
-	    key: 'removeTag',
-	    value: function removeTag(event) {
-	      var target = event.target.parentElement.parentElement;
-	      target.remove();
-	    }
-	  }, {
 	    key: 'render',
 	    value: function render() {
 	      return _react2.default.createElement(
@@ -51876,7 +51945,7 @@
 	        this.state.tag,
 	        _react2.default.createElement(
 	          'a',
-	          { className: 'close_icon_link', onClick: this.removeTag },
+	          { className: 'close_icon_link', onClick: this.props.removeTag },
 	          _react2.default.createElement(
 	            'span',
 	            { className: 'close_icon' },
@@ -52065,7 +52134,7 @@
 	    key: 'getTagCategories',
 	    value: function getTagCategories() {
 	      _axios2.default.get('/api/tag/categories').then(function (response) {
-	        this.setState({ work: response.data[0] });
+	        this.setState({ work_tags: [{ 'fandom': ['buffy', 'the good place'] }, { 'pairing': ['buffy/tahani', 'chidi/willow'] }, { 'themes': ['soulbonding'] }] });
 	      }.bind(this)).catch(function (error) {
 	        console.log(error);
 	      });
@@ -52077,12 +52146,23 @@
 
 	    var _this = _possibleConstructorReturn(this, (NewWork.__proto__ || Object.getPrototypeOf(NewWork)).call(this, props));
 
-	    _this.state = { title: '', work_summary: '', is_complete: false, work_notes: '',
-	      work_tags: [], chapters: [] };
-	    _this.addChapter();
-	    _this.handler = _this.handler.bind(_this);
-	    _this.uploadAudio = _this.uploadAudio.bind(_this);
-	    _this.uploadImage = _this.uploadImage.bind(_this);
+	    if (_this.props.is_edit) {
+	      _this.state = { title: _this.props.work_title, work_summary: _this.props.work_summary,
+	        is_complete: _this.props.is_complete, work_notes: _this.props.work_notes,
+	        work_tags: _this.props.work_tags, chapters: _this.props.work_chapters, is_edit: true };
+	      _this.handler = _this.handler.bind(_this);
+	      _this.uploadAudio = _this.uploadAudio.bind(_this);
+	      _this.uploadImage = _this.uploadImage.bind(_this);
+	    } else {
+	      _this.state = { title: '', work_summary: '', is_complete: false, work_notes: '',
+	        work_tags: [], chapters: [], is_edit: false };
+	      _this.addChapter();
+	      _this.handler = _this.handler.bind(_this);
+	      _this.uploadAudio = _this.uploadAudio.bind(_this);
+	      _this.uploadImage = _this.uploadImage.bind(_this);
+	      _this.getTagCategories();
+	    }
+
 	    return _this;
 	  }
 
@@ -52171,25 +52251,28 @@
 	                    return _this2.updateWorkNotes(evt);
 	                  } })
 	              ),
-	              this.state.work_tags.map(function (tag) {
-	                return _react2.default.createElement(
-	                  'div',
-	                  { className: 'row' },
-	                  _react2.default.createElement(
+	              _react2.default.createElement(
+	                'div',
+	                { className: 'form-group' },
+	                this.state.work_tags.map(function (tag) {
+	                  return _react2.default.createElement(
 	                    'div',
-	                    { className: 'col-md-12' },
-	                    _react2.default.createElement(
-	                      'ul',
-	                      { className: 'list-inline' },
-	                      _react2.default.createElement(_TagList2.default, { tag_category: Object.keys(tag), tags: Object.values(tag) })
-	                    )
-	                  )
-	                );
-	              }),
-	              this.state.chapters.map(function (chapter) {
-	                return _react2.default.createElement(_ChapterForm2.default, { key: chapter.chapter_key, chapter_number: chapter.chapter_key, handler: _this2.handler, handlerAudio: _this2.uploadAudio,
-	                  handlerImage: _this2.uploadImage });
-	              }),
+	                    { key: Object.keys(tag) },
+	                    _react2.default.createElement(_TagList2.default, { tag_category: Object.keys(tag), tags: Object.values(tag) })
+	                  );
+	                })
+	              ),
+	              _react2.default.createElement('br', null),
+	              _react2.default.createElement('br', null),
+	              _react2.default.createElement('hr', null),
+	              _react2.default.createElement(
+	                'div',
+	                { className: 'form-group' },
+	                this.state.chapters.map(function (chapter) {
+	                  return _react2.default.createElement(_ChapterForm2.default, { key: chapter.chapter_key, chapter_number: chapter.chapter_key, handler: _this2.handler, handlerAudio: _this2.uploadAudio,
+	                    handlerImage: _this2.uploadImage, chapter: chapter });
+	                })
+	              ),
 	              _react2.default.createElement(
 	                'div',
 	                { className: 'form-group' },
@@ -52260,7 +52343,7 @@
 
 	    var _this = _possibleConstructorReturn(this, (Chapter.__proto__ || Object.getPrototypeOf(Chapter)).call(this, props));
 
-	    _this.state = { chapter_number: props.chapter_number };
+	    _this.state = { chapter_number: props.chapter_number, chapter: props.chapter };
 	    return _this;
 	  }
 
@@ -52288,7 +52371,8 @@
 	            { htmlFor: "chapter_title_" + this.state.chapter_number },
 	            'Chapter Title'
 	          ),
-	          _react2.default.createElement('input', { id: "chapter_title_" + this.state.chapter_number, name: 'chapter_title', onChange: this.props.handler, className: 'form-control' })
+	          _react2.default.createElement('input', { id: "chapter_title_" + this.state.chapter_number, value: this.state.chapter.chapter_title,
+	            name: 'chapter_title', onChange: this.props.handler, className: 'form-control' })
 	        ),
 	        _react2.default.createElement(
 	          'div',
@@ -52298,7 +52382,8 @@
 	            { htmlFor: 'chapter_summary' },
 	            'Chapter Summary'
 	          ),
-	          _react2.default.createElement('textarea', { id: 'chapter_summary', className: 'form-control', name: 'chapter_summary', onChange: this.props.handler, rows: '3' })
+	          _react2.default.createElement('textarea', { id: 'chapter_summary', className: 'form-control', name: 'chapter_summary', value: this.state.chapter.chapter_summary,
+	            onChange: this.props.handler, rows: '3' })
 	        ),
 	        _react2.default.createElement(
 	          'div',
@@ -52308,7 +52393,8 @@
 	            { htmlFor: 'chapter_notes' },
 	            'Chapter Notes'
 	          ),
-	          _react2.default.createElement('textarea', { id: 'chapter_notes', className: 'form-control', name: 'chapter_notes', onChange: this.props.handler, rows: '3' })
+	          _react2.default.createElement('textarea', { id: 'chapter_notes', className: 'form-control', name: 'chapter_notes', value: this.state.chapter.chapter_notes,
+	            onChange: this.props.handler, rows: '3' })
 	        ),
 	        _react2.default.createElement(
 	          'div',
@@ -52318,7 +52404,7 @@
 	            { htmlFor: 'chapter_image' },
 	            'Chapter Image'
 	          ),
-	          _react2.default.createElement('input', (_React$createElement = { className: 'input-file', type: 'file', id: 'chapter_image' }, _defineProperty(_React$createElement, 'className', 'form-control'), _defineProperty(_React$createElement, 'name', 'chapter_image'), _defineProperty(_React$createElement, 'onChange', this.props.handlerImage), _React$createElement))
+	          _react2.default.createElement('input', (_React$createElement = { className: 'input-file', type: 'file', id: 'chapter_image' }, _defineProperty(_React$createElement, 'className', 'form-control'), _defineProperty(_React$createElement, 'value', this.state.chapter.chapter_image), _defineProperty(_React$createElement, 'name', 'chapter_image'), _defineProperty(_React$createElement, 'onChange', this.props.handlerImage), _React$createElement))
 	        ),
 	        _react2.default.createElement(
 	          'div',
@@ -52328,7 +52414,7 @@
 	            { htmlFor: 'chapter_audio' },
 	            'Chapter Audio'
 	          ),
-	          _react2.default.createElement('input', (_React$createElement2 = { className: 'input-file', type: 'file', id: 'chapter_audio' }, _defineProperty(_React$createElement2, 'className', 'form-control'), _defineProperty(_React$createElement2, 'name', 'chapter_audio'), _defineProperty(_React$createElement2, 'onChange', this.props.handlerAudio), _React$createElement2))
+	          _react2.default.createElement('input', (_React$createElement2 = { className: 'input-file', type: 'file', id: 'chapter_audio' }, _defineProperty(_React$createElement2, 'className', 'form-control'), _defineProperty(_React$createElement2, 'name', 'chapter_audio'), _defineProperty(_React$createElement2, 'value', this.state.chapter.chapter_audio), _defineProperty(_React$createElement2, 'onChange', this.props.handlerAudio), _React$createElement2))
 	        ),
 	        _react2.default.createElement(
 	          'div',

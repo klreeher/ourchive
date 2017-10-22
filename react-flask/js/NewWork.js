@@ -127,7 +127,12 @@ export default class NewWork extends React.Component {
   {
   axios.get('/api/tag/categories')
       .then(function (response) {
-        this.setState({work: response.data[0]});  
+        this.setState({work_tags: [
+
+            {'fandom': ['buffy', 'the good place']},
+            {'pairing': ['buffy/tahani', 'chidi/willow']},
+            {'themes': ['soulbonding']}
+          ]});  
 
       }.bind(this))
       .catch(function (error) {
@@ -136,12 +141,26 @@ export default class NewWork extends React.Component {
   }
   constructor(props) {
     super(props);
-    this.state = {title: '', work_summary: '', is_complete: false, work_notes: '', 
-      work_tags: [], chapters: []};
-    this.addChapter();
-    this.handler = this.handler.bind(this);
-    this.uploadAudio = this.uploadAudio.bind(this);
-    this.uploadImage = this.uploadImage.bind(this);
+    if (this.props.is_edit)
+    {
+        this.state = {title: this.props.work_title, work_summary: this.props.work_summary, 
+          is_complete: this.props.is_complete, work_notes: this.props.work_notes, 
+          work_tags: this.props.work_tags, chapters: this.props.work_chapters, is_edit: true};
+        this.handler = this.handler.bind(this);
+        this.uploadAudio = this.uploadAudio.bind(this);
+        this.uploadImage = this.uploadImage.bind(this);
+    }
+    else
+    {
+        this.state = {title: '', work_summary: '', is_complete: false, work_notes: '', 
+          work_tags: [], chapters: [], is_edit: false};
+        this.addChapter();
+        this.handler = this.handler.bind(this);
+        this.uploadAudio = this.uploadAudio.bind(this);
+        this.uploadImage = this.uploadImage.bind(this);
+        this.getTagCategories();
+    }
+    
   }
   componentWillMount() { 
     //todo call get categories
@@ -180,20 +199,22 @@ export default class NewWork extends React.Component {
             <label htmlFor="work_notes">Notes</label>
             <input id="work_notes" className="form-control" value={this.state.work_notes} onChange={evt => this.updateWorkNotes(evt)}></input>
           </div>
+          <div className="form-group">
           {this.state.work_tags.map(tag => 
-            <div className="row">
-              <div className="col-md-12">
-                <ul className="list-inline">
+              <div key={Object.keys(tag)}>
                   <TagList tag_category={Object.keys(tag)} tags={Object.values(tag)}/>
-                </ul>
-              </div> 
-            </div>
+              </div>
           )}
-          
-          {this.state.chapters.map(chapter => (
+          </div>
+          <br/>
+          <br/>
+          <hr/>
+          <div className="form-group">
+          {this.state.chapters.map(chapter => (                        
                         <ChapterForm key={chapter.chapter_key} chapter_number={chapter.chapter_key} handler={this.handler} handlerAudio={this.uploadAudio}
-                        handlerImage={this.uploadImage}/>
+                        handlerImage={this.uploadImage} chapter={chapter}/>
                     ))}
+          </div>
         <div className="form-group">
           <button className="btn btn-link" onClick={evt => this.appendChapter(evt)}>Add Chapter</button>
         </div>
