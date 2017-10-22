@@ -16,11 +16,7 @@ var json = {
   "is_complete": "yes",
   "word_count": "100",
   "work_summary": "another terrible fic",
-  "chapters": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack",
-    "start": "python app.py"
-  }},{
+  "chapter_count": "5"},{
   	"key": "2",
   "name": "bob",
   "url": "1.1.0",
@@ -29,11 +25,7 @@ var json = {
   "is_complete": "yes",
   "word_count": "100",
   "work_summary": "another terrible fic",
-  "chapters": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack",
-    "start": "python app.py"
-  }}
+  "chapter_count": "5"}
   ]
 };
 

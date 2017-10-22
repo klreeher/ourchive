@@ -4,6 +4,7 @@ import Work from './Work';
 import SingleWork from './SingleWork';
 import WorkStub from './WorkStub';
 import TagItem from './TagItem';
+import NewWork from './NewWork';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {
@@ -34,6 +35,7 @@ const BasicExample = () => (
       <Route exact path="/" component={Home}/>
       <Route path="/works" component={WorkCollection}/>
       <Route path="/work/:workId" component={SingleWork}/>
+      <Route path="/create/work" component={NewWork}/>
     </div>
   </Router>
 )

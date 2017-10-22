@@ -1,10 +1,17 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, send_file, send_from_directory
 import json
+from flask_cors import CORS
+
 app = Flask(__name__)
+CORS(app, supports_credentials=True)
 
 @app.route('/')
 def hello_world():
   return render_template('index.html')
+
+@app.route('/audio/<string:audio_file>')
+def audio(audio_file):
+  return send_from_directory(filename=audio_file, directory='audio')
 
 @app.route('/api/work/<int:workId>')
 def get_work(workId):
@@ -19,21 +26,21 @@ def get_work(workId):
   "is_complete": "true",
   "word_count": "4000",
   "work_summary": "some stuff happens",
-  "chapters": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack",
-    "start": "python app.py"
+  "chapters": [{
+    "id": "1",
+    "title": "bob goes to school",
+    "text": "weh weh weh weh",
+    "audio_url": "../audio/01 Family Problems.mp3",
+    "image_url": "url"
   },
-  "tags": [
-    {
-      	"id": "1",
-  		"text": "buffy summers"
-    },
-    {
-    	"id": "2",
-      	"text": "faith lehane"
-    }
-  ]}])
+    {"id": "2",
+    "title": "bob fails at school",
+    "text": "bloop",
+    "audio_url": "url",
+    "image_url": "url"}],
+  "tags": [{
+    "fandom": ["buffy", "xena"]},
+    {"primary pairing": ["buffy/faith"]}]}])
   return work
 
 @app.route('/<path:path>')

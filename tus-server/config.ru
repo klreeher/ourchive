@@ -1,6 +1,6 @@
 require "tus/server"
 
-map "/files" do
+map "/audio" do
   run Tus::Server
 end
 
