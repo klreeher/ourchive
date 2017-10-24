@@ -1,9 +1,20 @@
 from flask import Flask, render_template, send_file, send_from_directory
 import json
-from flask_cors import CORS
+from flask.ext.tus import tus_manager
 
 app = Flask(__name__)
-CORS(app, supports_credentials=True)
+tm = tus_manager(app, upload_url='/file-upload')
+
+@tm.upload_file_handler
+def upload_file_hander( upload_file_path, filename ):
+    app.logger.info( "doing something cool with {}, {}".format( upload_file_path, filename))
+    return filename
+
+# serve the uploaded files
+@app.route('/uploads/<path:filename>', methods=['GET'])
+def download(filename):
+  uploads = os.path.join(app.root_path, tm.upload_folder)
+  return send_from_directory(directory=uploads, filename=filename)
 
 @app.route('/')
 def hello_world():

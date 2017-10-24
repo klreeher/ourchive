@@ -112,14 +112,6 @@ export default class SingleWork extends React.Component {
     <div className="col-md-2"><h5>Word Count: {this.state.work.word_count}</h5></div>
   </div>
   <br/>
-  <br/>
-  <hr/>
-  <div className="row">
-    <div className="col-md-12">
-      <Chapter chapter={this.state.current_chapter}/>
-    </div>
-  </div>
-  
   <hr/>
   
       {this.state.work.tags.map(tag => 
@@ -131,6 +123,13 @@ export default class SingleWork extends React.Component {
         </div> 
         </div>
       )}
+  <br/>
+  <hr/>
+  <div className="row">
+    <div className="col-md-12">
+      <Chapter chapter={this.state.current_chapter}/>
+    </div>
+  </div>  
   <button className="btn btn-link" onMouseDown={evt => this.previousChapter(evt)} disabled={previousDisabled}>Previous Chapter</button>
   <button className="btn btn-link" onMouseDown={evt => this.nextChapter(evt)} disabled={nextDisabled}>Next Chapter</button>
   </div>

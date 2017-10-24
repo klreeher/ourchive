@@ -1,3 +1,4 @@
+react-flask/uploads/*
 react-flask/audio/*
 venv/*
 tus-server/data/*

@@ -46883,17 +46883,6 @@
 	              )
 	            ),
 	            _react2.default.createElement('br', null),
-	            _react2.default.createElement('br', null),
-	            _react2.default.createElement('hr', null),
-	            _react2.default.createElement(
-	              'div',
-	              { className: 'row' },
-	              _react2.default.createElement(
-	                'div',
-	                { className: 'col-md-12' },
-	                _react2.default.createElement(_Chapter2.default, { chapter: this.state.current_chapter })
-	              )
-	            ),
 	            _react2.default.createElement('hr', null),
 	            this.state.work.tags.map(function (tag) {
 	              return _react2.default.createElement(
@@ -46910,6 +46899,17 @@
 	                )
 	              );
 	            }),
+	            _react2.default.createElement('br', null),
+	            _react2.default.createElement('hr', null),
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'row' },
+	              _react2.default.createElement(
+	                'div',
+	                { className: 'col-md-12' },
+	                _react2.default.createElement(_Chapter2.default, { chapter: this.state.current_chapter })
+	              )
+	            ),
 	            _react2.default.createElement(
 	              'button',
 	              { className: 'btn btn-link', onMouseDown: function onMouseDown(evt) {
@@ -47114,9 +47114,10 @@
 	      var file = e.target.files[0];
 	      // Create a new tus upload
 	      var upload = new tus.Upload(file, {
-	        endpoint: "http://127.0.0.1:9292/audio/",
+	        endpoint: "http://127.0.0.1:5000/file-upload",
 	        chunkSize: 5 * 1024 * 1024,
 	        retryDelays: [0, 1000, 3000, 5000],
+	        metadata: { filename: file.name },
 	        onError: function onError(error) {
 	          console.log("Failed because: " + error);
 	        },
