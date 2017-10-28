@@ -11,7 +11,7 @@ tus-server: bundle exec rackup -p 9292 -o 10.0.2.15 config.ru &
 
 ## development environment
 
-prerequisites: python3, virtualenv
+prerequisites: python3, virtualenv or pipenv
 
 ensure commands to python (including pip) are pointing to python3
 
