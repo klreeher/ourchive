@@ -1,8 +1,10 @@
 react-flask/uploads/*
 react-flask/audio/*
 venv/*
+ourchive-env/*
 tus-server/data/*
 .DS_Store
 venv
 node_modules
 static/bundle.js
+npm-debug.log

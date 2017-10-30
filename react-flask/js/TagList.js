@@ -3,14 +3,53 @@ import {
   Link
 } from 'react-router-dom';
 import TagItem from './TagItem';
+import Autosuggest from 'react-autosuggest';
+
+
+// Imagine you have a list of languages that you'd like to autosuggest.
+const languages = [
+  {
+    name: 'C',
+    year: 1972
+  },
+  {
+    name: 'Elm',
+    year: 2012
+  }
+];
+
+// Teach Autosuggest how to calculate suggestions for any given input value.
+const getSuggestions = value => {
+  const inputValue = value.trim().toLowerCase();
+  const inputLength = inputValue.length;
+
+  return inputLength === 0 ? [] : languages.filter(lang =>
+    lang.name.toLowerCase().slice(0, inputLength) === inputValue
+  );
+};
+
+// When suggestion is clicked, Autosuggest needs to populate the input
+// based on the clicked suggestion. Teach Autosuggest how to calculate the
+// input value for every given suggestion.
+const getSuggestionValue = suggestion => suggestion.name;
+
+// Use your imagination to render suggestions.
+const renderSuggestion = suggestion => (
+  <div>
+    {suggestion.name}
+  </div>
+);
 
 export default class TagList extends React.Component {
 
 
   constructor(props) {
     super(props);
-    this.state = {tags: props.tags[0], tag_category: props.tag_category, oldItem: ''};
+    this.state = {tags: props.tags[0], tag_category: props.tag_category, oldItem: '', value: '', suggestions: []};
     this.removeTag = this.removeTag.bind(this);
+    this.onChange = this.onChange.bind(this);
+    this.onSuggestionsFetchRequested = this.onSuggestionsFetchRequested.bind(this);
+    this.onSuggestionsClearRequested = this.onSuggestionsClearRequested.bind(this);
   }
   componentWillMount() { 
     //do things
@@ -26,6 +65,26 @@ export default class TagList extends React.Component {
       document.getElementById("new_textBox"+this.state.tag_category).focus()
       this.state.oldItem = ''
     }    
+  }
+  onChange(event, newValue) {
+    this.setState({
+      value: newValue
+    })
+  }
+
+  // Autosuggest will call this function every time you need to update suggestions.
+  // You already implemented this logic above, so just use it.
+  onSuggestionsFetchRequested(value) {
+    this.setState({
+      suggestions: getSuggestions(value)
+    })
+  }
+
+  // Autosuggest will call this function every time you need to clear suggestions.
+  onSuggestionsClearRequested() {
+    this.setState({
+      suggestions: []
+    })
   }
   removeTag(event)
   {
@@ -62,6 +121,13 @@ export default class TagList extends React.Component {
     }
   }
   render() {
+    const { value, suggestions } = this.state;
+     // Autosuggest will pass through all these props to the input.
+    const inputProps = {
+      placeholder: 'Type a programming language',
+      value,
+      onChange: this.onChange
+    };
     return (
       <div className="row">
         <div className="col-md-12">
@@ -74,7 +140,16 @@ export default class TagList extends React.Component {
                   </div>
                 )}
                 <li className="new_li"><input type="text" id={"new_textBox"+this.state.tag_category} className="new_textBox" onKeyPress={evt => this.newTag(evt)}/></li>
+          
           </ul>
+          <Autosuggest
+        suggestions={suggestions}
+        onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
+        onSuggestionsClearRequested={this.onSuggestionsClearRequested}
+        getSuggestionValue={getSuggestionValue}
+        renderSuggestion={renderSuggestion}
+        inputProps={inputProps}
+      />
         </div> 
       </div>
     );
