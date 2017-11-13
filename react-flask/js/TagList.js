@@ -13,6 +13,10 @@ const languages = [
     year: 1972
   },
   {
+    name: 'C++',
+    year: 1990
+  },
+  {
     name: 'Elm',
     year: 2012
   }
@@ -20,7 +24,7 @@ const languages = [
 
 // Teach Autosuggest how to calculate suggestions for any given input value.
 const getSuggestions = value => {
-  const inputValue = value.trim().toLowerCase();
+  const inputValue = value["value"].trim().toLowerCase();
   const inputLength = inputValue.length;
 
   return inputLength === 0 ? [] : languages.filter(lang =>
@@ -68,7 +72,7 @@ export default class TagList extends React.Component {
   }
   onChange(event, newValue) {
     this.setState({
-      value: newValue
+      value: newValue["newValue"]
     })
   }
 
