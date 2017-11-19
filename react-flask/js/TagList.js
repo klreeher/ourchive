@@ -54,6 +54,7 @@ export default class TagList extends React.Component {
     this.onChange = this.onChange.bind(this);
     this.onSuggestionsFetchRequested = this.onSuggestionsFetchRequested.bind(this);
     this.onSuggestionsClearRequested = this.onSuggestionsClearRequested.bind(this);
+    this.newTagAuto = this.newTagAuto.bind(this);
   }
   componentWillMount() { 
     //do things
@@ -124,37 +125,56 @@ export default class TagList extends React.Component {
       }
     }
   }
+  newTagAuto(event, suggestion) {
+    var oldVal = event.target.value
+    event.target.value = ''
+    this.create_work_tag(suggestion.suggestionValue, '');
+    event.preventDefault();
+    this.setState({
+      value: ""
+    })
+  }
   render() {
     const { value, suggestions } = this.state;
      // Autosuggest will pass through all these props to the input.
     const inputProps = {
-      placeholder: 'Type a programming language',
+      placeholder: 'Add a tag...',
       value,
       onChange: this.onChange
     };
     return (
+      <div>
       <div className="row">
         <div className="col-md-12">
-          <ul className="list-inline" id={"tags_ul"+this.state.tag_category}>
-            <hr/>
-            <div className="col-md-3 tag_category">{this.state.tag_category}</div>
+          <div className="col-md-3 tag_category">{this.state.tag_category}</div>
+          <br/>
+          <hr/>
+          </div>
+            <div className="col-md-5">
+            <ul className="list-inline" id={"tags_ul"+this.state.tag_category}>
                 {this.state.tags.map(tag => 
                   <div key={tag}>
                     <TagItem tag={tag} removeTag={this.removeTag}/>
                   </div>
                 )}
-                <li className="new_li"><input type="text" id={"new_textBox"+this.state.tag_category} className="new_textBox" onKeyPress={evt => this.newTag(evt)}/></li>
-          
-          </ul>
-          <Autosuggest
+            </ul>
+            </div>  
+      
+
+      <div className="col-md-4">
+      <Autosuggest id={"autosuggest"+this.state.tag_category}
         suggestions={suggestions}
         onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
         onSuggestionsClearRequested={this.onSuggestionsClearRequested}
         getSuggestionValue={getSuggestionValue}
         renderSuggestion={renderSuggestion}
         inputProps={inputProps}
+        onSuggestionSelected={this.newTagAuto}
       />
-        </div> 
+      </div>
+      </div>
+      <br/>
+      <br/>
       </div>
     );
   }

@@ -51873,6 +51873,7 @@
 	    _this.onChange = _this.onChange.bind(_this);
 	    _this.onSuggestionsFetchRequested = _this.onSuggestionsFetchRequested.bind(_this);
 	    _this.onSuggestionsClearRequested = _this.onSuggestionsClearRequested.bind(_this);
+	    _this.newTagAuto = _this.newTagAuto.bind(_this);
 	    return _this;
 	  }
 
@@ -51966,6 +51967,17 @@
 	      }
 	    }
 	  }, {
+	    key: 'newTagAuto',
+	    value: function newTagAuto(event, suggestion) {
+	      var oldVal = event.target.value;
+	      event.target.value = '';
+	      this.create_work_tag(suggestion.suggestionValue, '');
+	      event.preventDefault();
+	      this.setState({
+	        value: ""
+	      });
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
 	      var _this2 = this;
@@ -51976,49 +51988,58 @@
 	      // Autosuggest will pass through all these props to the input.
 
 	      var inputProps = {
-	        placeholder: 'Type a programming language',
+	        placeholder: 'Add a tag...',
 	        value: value,
 	        onChange: this.onChange
 	      };
 	      return _react2.default.createElement(
 	        'div',
-	        { className: 'row' },
+	        null,
 	        _react2.default.createElement(
 	          'div',
-	          { className: 'col-md-12' },
+	          { className: 'row' },
 	          _react2.default.createElement(
-	            'ul',
-	            { className: 'list-inline', id: "tags_ul" + this.state.tag_category },
-	            _react2.default.createElement('hr', null),
+	            'div',
+	            { className: 'col-md-12' },
 	            _react2.default.createElement(
 	              'div',
 	              { className: 'col-md-3 tag_category' },
 	              this.state.tag_category
 	            ),
-	            this.state.tags.map(function (tag) {
-	              return _react2.default.createElement(
-	                'div',
-	                { key: tag },
-	                _react2.default.createElement(_TagItem2.default, { tag: tag, removeTag: _this2.removeTag })
-	              );
-	            }),
+	            _react2.default.createElement('br', null),
+	            _react2.default.createElement('hr', null)
+	          ),
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'col-md-5' },
 	            _react2.default.createElement(
-	              'li',
-	              { className: 'new_li' },
-	              _react2.default.createElement('input', { type: 'text', id: "new_textBox" + this.state.tag_category, className: 'new_textBox', onKeyPress: function onKeyPress(evt) {
-	                  return _this2.newTag(evt);
-	                } })
+	              'ul',
+	              { className: 'list-inline', id: "tags_ul" + this.state.tag_category },
+	              this.state.tags.map(function (tag) {
+	                return _react2.default.createElement(
+	                  'div',
+	                  { key: tag },
+	                  _react2.default.createElement(_TagItem2.default, { tag: tag, removeTag: _this2.removeTag })
+	                );
+	              })
 	            )
 	          ),
-	          _react2.default.createElement(_reactAutosuggest2.default, {
-	            suggestions: suggestions,
-	            onSuggestionsFetchRequested: this.onSuggestionsFetchRequested,
-	            onSuggestionsClearRequested: this.onSuggestionsClearRequested,
-	            getSuggestionValue: getSuggestionValue,
-	            renderSuggestion: renderSuggestion,
-	            inputProps: inputProps
-	          })
-	        )
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'col-md-4' },
+	            _react2.default.createElement(_reactAutosuggest2.default, { id: "autosuggest" + this.state.tag_category,
+	              suggestions: suggestions,
+	              onSuggestionsFetchRequested: this.onSuggestionsFetchRequested,
+	              onSuggestionsClearRequested: this.onSuggestionsClearRequested,
+	              getSuggestionValue: getSuggestionValue,
+	              renderSuggestion: renderSuggestion,
+	              inputProps: inputProps,
+	              onSuggestionSelected: this.newTagAuto
+	            })
+	          )
+	        ),
+	        _react2.default.createElement('br', null),
+	        _react2.default.createElement('br', null)
 	      );
 	    }
 	  }]);
