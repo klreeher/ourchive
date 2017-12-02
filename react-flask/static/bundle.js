@@ -52093,7 +52093,8 @@
 	              onSuggestionSelected: this.newTagAuto
 	            })
 	          )
-	        )
+	        ),
+	        _react2.default.createElement('br', null)
 	      );
 	    }
 	  }]);

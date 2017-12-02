@@ -188,6 +188,7 @@ export default class TagList extends React.Component {
             />
           </div>
         </div>
+        <br/>
       </div>
     );
   }
