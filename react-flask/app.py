@@ -70,7 +70,12 @@ def get_bookmarks(curatorId):
           "summary": "someBODY once told me the world is gonna roll me",
           "rating": "*****",
           "curator": "sally",
-          "description": "this tingled my nether bits and also I'm at war with the author now"
+          "description": "this tingled my nether bits and also I'm at war with the author now",
+          "links": [1, 2],
+          "tags": [
+            {"fandom": ["buffy", "xena"]},
+            {"primary pairing": ["buffy/faith"]}
+          ]
         }
     ]}])
   return bookmarks

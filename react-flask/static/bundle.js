@@ -54697,6 +54697,10 @@
 
 	var _reactRouterDom2 = _interopRequireDefault(_reactRouterDom);
 
+	var _TagList = __webpack_require__(543);
+
+	var _TagList2 = _interopRequireDefault(_TagList);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -54764,7 +54768,8 @@
 																											'h3',
 																											null,
 																											this.state.bookmark.title,
-																											' BY this.state.bookmark.creator'
+																											' BY ',
+																											this.state.bookmark.creator
 																									)
 																							)
 																					)
@@ -54782,50 +54787,50 @@
 																							)
 																					)
 																			)
-																	),
+																	)
+															),
+															_react2.default.createElement(
+																	'div',
+																	{ className: 'row' },
 																	_react2.default.createElement(
 																			'div',
-																			{ className: 'row' },
+																			{ className: 'col-md-12' },
 																			_react2.default.createElement(
 																					'div',
-																					{ className: 'col-md-12' },
+																					null,
 																					_react2.default.createElement(
-																							'div',
+																							'h3',
 																							null,
-																							_react2.default.createElement(
-																									'h3',
-																									null,
-																									this.state.bookmark.rating
-																							)
+																							this.state.bookmark.rating
 																					)
 																			)
-																	),
+																	)
+															),
+															_react2.default.createElement(
+																	'div',
+																	{ className: 'row' },
 																	_react2.default.createElement(
 																			'div',
-																			{ className: 'row' },
+																			{ className: 'col-md-12' },
 																			_react2.default.createElement(
 																					'div',
-																					{ className: 'col-md-12' },
-																					_react2.default.createElement(
-																							'div',
-																							null,
-																							this.state.bookmark.curator,
-																							' says...'
-																					)
+																					null,
+																					this.state.bookmark.curator,
+																					' says...'
 																			)
-																	),
-																	_react2.default.createElement('br', null),
+																	)
+															),
+															_react2.default.createElement('br', null),
+															_react2.default.createElement(
+																	'div',
+																	{ className: 'row' },
 																	_react2.default.createElement(
 																			'div',
-																			{ className: 'row' },
+																			{ className: 'col-md-11 col-md-offset-1' },
 																			_react2.default.createElement(
 																					'div',
-																					{ className: 'col-md-11 col-md-offset-1' },
-																					_react2.default.createElement(
-																							'div',
-																							null,
-																							this.state.bookmark.description
-																					)
+																					null,
+																					this.state.bookmark.description
 																			)
 																	)
 															),
@@ -54852,37 +54857,40 @@
 																			'div',
 																			{ className: 'col-md-11 col-md-offset-1' },
 																			_react2.default.createElement(
-																					'div',
-																					null,
-																					'LINK LINK LINK LINK LINK LINK'
+																					'ul',
+																					{ className: 'list-inline' },
+																					this.state.bookmark.links.map(function (link) {
+																							return _react2.default.createElement(
+																									'li',
+																									null,
+																									_react2.default.createElement(
+																											'div',
+																											{ key: link },
+																											link
+																									)
+																							);
+																					})
 																			)
 																	)
 															),
 															_react2.default.createElement(
 																	'div',
 																	{ className: 'row' },
-																	_react2.default.createElement(
-																			'div',
-																			{ className: 'col-md-12' },
-																			_react2.default.createElement(
+																	this.state.bookmark.tags.map(function (tag) {
+																			return _react2.default.createElement(
 																					'div',
-																					null,
-																					'TAG CATEGORY 1:'
-																			)
-																	)
-															),
-															_react2.default.createElement(
-																	'div',
-																	{ className: 'row' },
-																	_react2.default.createElement(
-																			'div',
-																			{ className: 'col-md-11 col-md-offset-1' },
-																			_react2.default.createElement(
-																					'div',
-																					null,
-																					'TAG TAG TAG TAG REUSE TAGLIST HERE'
-																			)
-																	)
+																					{ className: 'row' },
+																					_react2.default.createElement(
+																							'div',
+																							{ className: 'col-md-12' },
+																							_react2.default.createElement(
+																									'ul',
+																									{ className: 'list-inline' },
+																									_react2.default.createElement(_TagList2.default, { tag_category: Object.keys(tag), tags: Object.values(tag) })
+																							)
+																					)
+																			);
+																	})
 															)
 													),
 													_react2.default.createElement(
