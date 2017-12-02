@@ -68,12 +68,16 @@ we provide a [swagger spec](https://swagger.io/docs/specification/2-0/paths-and-
 
 **prerequisites**: python3, virtualenv
 
+<<<<<<< HEAD
 <a name="tus-server-for-file-upload"></a>
 ### tus-server for file upload
 tus-server: bundle exec rackup -p 9292 -o 10.0.2.15 config.ru &
 
 <a name="how-to-set-up-ourchive-for-local-development"></a>
 ### how to set up ourchive for local development
+=======
+prerequisites: python3, virtualenv or pipenv
+>>>>>>> work-crud
 
 ensure commands to python (including pip) are pointing to python3
 
@@ -88,8 +92,11 @@ Then: open 2 terminal windows (or sessions/whatever) to `ourchive/react-flask`.
 In the first: `python app.py`
 
 In the second: `webpack --watch`
+<<<<<<< HEAD
 
 
 ---
 
 ![Dream a bit bigger, darling.](inception-dream-bigger.gif)
+=======
+>>>>>>> work-crud

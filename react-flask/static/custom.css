@@ -269,3 +269,52 @@ div {
     list-style: square;
   }
 }
+
+.react-autosuggest__suggestions-container {
+
+    font-weight: normal;
+    padding: 0 0 0 0; 
+    display: block;
+    float: bottom;
+    width: inherit;
+}
+
+.react-autosuggest__input {
+    box-shadow: none;
+    border: 1px solid #ffffff;
+    padding: .2em .5em .2em .5em;
+    
+    margin: 2px 5px 2px 0;
+    width: inherit;
+    outline: none;
+    user-select: text;
+    cursor: auto;
+}
+
+.react-autosuggest__suggestions-container--open {
+
+    border: 0px;
+
+    background: none;
+    background-color: #FFF;
+    list-style: square;
+    font-weight: normal;
+    padding: .2em .5em .2em .5em; 
+    display: block;
+    float: bottom;
+    margin: 2px 5px 2px 0;
+}
+
+.react-autosuggest__suggestions-list {
+
+  list-style-type: none;
+}
+
+.viewer-creator {
+  visibility: visible;
+
+}
+
+.viewer {
+  visibility: hidden;
+}

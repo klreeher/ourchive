@@ -5,6 +5,7 @@ import SingleWork from './SingleWork';
 import WorkStub from './WorkStub';
 import TagItem from './TagItem';
 import NewWork from './NewWork';
+import BookmarkList from './BookmarkList';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {
@@ -35,6 +36,7 @@ const BasicExample = () => (
       <Route exact path="/" component={Home}/>
       <Route path="/works" component={WorkCollection}/>
       <Route path="/work/:workId" component={SingleWork}/>
+      <Route path="/bookmark/:curatorId" component={BookmarkList}/>
       <Route path="/create/work" is_edit="false" component={NewWork}/>
     </div>
   </Router>
