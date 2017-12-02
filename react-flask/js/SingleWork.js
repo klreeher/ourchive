@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import Chapter from './Chapter';
 import TagList from './TagList';
+import Link from 'react-router-dom';
 
 export default class SingleWork extends React.Component {
 
@@ -26,6 +27,16 @@ export default class SingleWork extends React.Component {
       .catch(function (error) {
         console.log(error);
     });
+  }
+
+  updateWork(workId)
+  {
+
+  }
+
+  deleteWork(workId)
+  {
+
   }
   nextChapter(evt)
   {
@@ -77,7 +88,7 @@ export default class SingleWork extends React.Component {
     "fandom": ["hobbits", "star trek"]},
     {"primary pairing": ["trip tucker / thorin"]}]};
     this.state = {workId: props.match.params.workId, work: empty, current_chapter: empty.chapters[0],
-      chapter_index: 0};
+      chapter_index: 0, viewer_is_creator: false};
   }
   componentWillMount() { 
     this.getWork(this.state.workId); 
@@ -96,6 +107,13 @@ export default class SingleWork extends React.Component {
       <div>
         <div className="panel panel-default">
         <div className="panel-body">
+          <div className={this.state.viewer_is_creator ? "viewer-creator row" : "viewer row"}>
+          <div className="col-md-3">
+            <button>Edit</button>
+            <button>Delete</button>
+          </div>
+        </div>
+        
   <div className="row">
     <div className="col-md-12"><h1>{this.state.work.title}</h1></div>
   </div>

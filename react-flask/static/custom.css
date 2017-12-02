@@ -309,3 +309,12 @@ div {
 
   list-style-type: none;
 }
+
+.viewer-creator {
+  visibility: visible;
+
+}
+
+.viewer {
+  visibility: hidden;
+}

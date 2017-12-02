@@ -85,6 +85,10 @@
 
 	var _NewWork2 = _interopRequireDefault(_NewWork);
 
+	var _BookmarkList = __webpack_require__(560);
+
+	var _BookmarkList2 = _interopRequireDefault(_BookmarkList);
+
 	var _react = __webpack_require__(3);
 
 	var _react2 = _interopRequireDefault(_react);
@@ -126,6 +130,7 @@
 	      _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/', component: Home }),
 	      _react2.default.createElement(_reactRouterDom.Route, { path: '/works', component: WorkCollection }),
 	      _react2.default.createElement(_reactRouterDom.Route, { path: '/work/:workId', component: _SingleWork2.default }),
+	      _react2.default.createElement(_reactRouterDom.Route, { path: '/bookmark/:curatorId', component: _BookmarkList2.default }),
 	      _react2.default.createElement(_reactRouterDom.Route, { path: '/create/work', is_edit: 'false', component: _NewWork2.default })
 	    )
 	  );
@@ -5043,7 +5048,7 @@
 	        ),
 	        _react2.default.createElement(
 	          _reactRouterBootstrap.IndexLinkContainer,
-	          { to: '/bookmarks' },
+	          { to: '/bookmark/1' },
 	          _react2.default.createElement(
 	            _reactBootstrap.NavItem,
 	            null,
@@ -46691,6 +46696,10 @@
 
 	var _TagList2 = _interopRequireDefault(_TagList);
 
+	var _reactRouterDom = __webpack_require__(43);
+
+	var _reactRouterDom2 = _interopRequireDefault(_reactRouterDom);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -46722,6 +46731,12 @@
 	        console.log(error);
 	      });
 	    }
+	  }, {
+	    key: 'updateWork',
+	    value: function updateWork(workId) {}
+	  }, {
+	    key: 'deleteWork',
+	    value: function deleteWork(workId) {}
 	  }, {
 	    key: 'nextChapter',
 	    value: function nextChapter(evt) {
@@ -46777,7 +46792,7 @@
 	      "tags": [{
 	        "fandom": ["hobbits", "star trek"] }, { "primary pairing": ["trip tucker / thorin"] }] };
 	    _this.state = { workId: props.match.params.workId, work: empty, current_chapter: empty.chapters[0],
-	      chapter_index: 0 };
+	      chapter_index: 0, viewer_is_creator: false };
 	    return _this;
 	  }
 
@@ -46808,6 +46823,24 @@
 	          _react2.default.createElement(
 	            'div',
 	            { className: 'panel-body' },
+	            _react2.default.createElement(
+	              'div',
+	              { className: this.state.viewer_is_creator ? "viewer-creator row" : "viewer row" },
+	              _react2.default.createElement(
+	                'div',
+	                { className: 'col-md-3' },
+	                _react2.default.createElement(
+	                  'button',
+	                  null,
+	                  'Edit'
+	                ),
+	                _react2.default.createElement(
+	                  'button',
+	                  null,
+	                  'Delete'
+	                )
+	              )
+	            ),
 	            _react2.default.createElement(
 	              'div',
 	              { className: 'row' },
@@ -54537,6 +54570,287 @@
 	}(_react2.default.Component);
 
 	exports.default = Chapter;
+
+/***/ }),
+/* 560 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+			value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(3);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _axios = __webpack_require__(491);
+
+	var _axios2 = _interopRequireDefault(_axios);
+
+	var _Chapter = __webpack_require__(517);
+
+	var _Chapter2 = _interopRequireDefault(_Chapter);
+
+	var _TagList = __webpack_require__(543);
+
+	var _TagList2 = _interopRequireDefault(_TagList);
+
+	var _reactRouterDom = __webpack_require__(43);
+
+	var _reactRouterDom2 = _interopRequireDefault(_reactRouterDom);
+
+	var _SingleWork = __webpack_require__(490);
+
+	var _SingleWork2 = _interopRequireDefault(_SingleWork);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var BookmarkList = function (_React$Component) {
+			_inherits(BookmarkList, _React$Component);
+
+			_createClass(BookmarkList, [{
+					key: 'getBookmarks',
+					value: function getBookmarks(curatorId) {
+							_axios2.default.get('/api/bookmark/curator/' + curatorId).then(function (response) {
+									this.setState({
+											bookmarks: response.data[0],
+											current_page: response.data[1]
+
+									});
+
+									console.log(this.state.bookmarks);
+							}.bind(this)).catch(function (error) {
+									console.log(error);
+							});
+					}
+			}]);
+
+			function BookmarkList(props) {
+					_classCallCheck(this, BookmarkList);
+
+					var _this = _possibleConstructorReturn(this, (BookmarkList.__proto__ || Object.getPrototypeOf(BookmarkList)).call(this, props));
+
+					_this.state = { curatorId: props.match.params.curatorId, bookmarks: [], current_page: 0 };
+
+					return _this;
+			}
+
+			_createClass(BookmarkList, [{
+					key: 'componentWillMount',
+					value: function componentWillMount() {
+							this.getBookmarks(this.state.curatorId);
+					}
+			}, {
+					key: 'render',
+					value: function render() {
+							return _react2.default.createElement(
+									'div',
+									null,
+									_react2.default.createElement(
+											'div',
+											{ className: 'panel panel-default' },
+											_react2.default.createElement(
+													'div',
+													{ className: 'panel-body' },
+													_react2.default.createElement(
+															'div',
+															{ className: 'col-xs-8' },
+															_react2.default.createElement(
+																	'div',
+																	{ className: 'row' },
+																	_react2.default.createElement(
+																			'div',
+																			{ className: 'col-md-2' },
+																			_react2.default.createElement(
+																					'div',
+																					null,
+																					'[CHAPTER ONE IMAGE HERE]',
+																					_react2.default.createElement('br', null),
+																					_react2.default.createElement('br', null),
+																					_react2.default.createElement('br', null)
+																			)
+																	),
+																	_react2.default.createElement(
+																			'div',
+																			{ className: 'col-md-8' },
+																			_react2.default.createElement(
+																					'div',
+																					{ className: 'row' },
+																					_react2.default.createElement(
+																							'div',
+																							{ className: 'col-md-12' },
+																							_react2.default.createElement(
+																									'div',
+																									null,
+																									_react2.default.createElement(
+																											'h3',
+																											null,
+																											'UNE TITLE BY SO-AND-SO'
+																									)
+																							)
+																					)
+																			),
+																			_react2.default.createElement(
+																					'div',
+																					{ className: 'row' },
+																					_react2.default.createElement(
+																							'div',
+																							{ className: 'col-md-11 col-md-offset-1' },
+																							_react2.default.createElement(
+																									'div',
+																									null,
+																									'SUMMARY SUMMARY SUMMARY'
+																							)
+																					)
+																			)
+																	),
+																	_react2.default.createElement(
+																			'div',
+																			{ className: 'row' },
+																			_react2.default.createElement(
+																					'div',
+																					{ className: 'col-md-12' },
+																					_react2.default.createElement(
+																							'div',
+																							null,
+																							_react2.default.createElement(
+																									'h3',
+																									null,
+																									'******'
+																							)
+																					)
+																			)
+																	),
+																	_react2.default.createElement(
+																			'div',
+																			{ className: 'row' },
+																			_react2.default.createElement(
+																					'div',
+																					{ className: 'col-md-12' },
+																					_react2.default.createElement(
+																							'div',
+																							null,
+																							'[name] says...'
+																					)
+																			)
+																	),
+																	_react2.default.createElement('br', null),
+																	_react2.default.createElement(
+																			'div',
+																			{ className: 'row' },
+																			_react2.default.createElement(
+																					'div',
+																					{ className: 'col-md-11 col-md-offset-1' },
+																					_react2.default.createElement(
+																							'div',
+																							null,
+																							'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer eget sapien in tortor mattis accumsan. Proin rutrum, libero non luctus euismod, augue mauris viverra felis, a ullamcorper ex lorem laoreet nisl. Suspendisse eleifend id tellus eget sodales. Proin magna ante, maximus ac felis nec, ultricies consectetur nisl. Curabitur sollicitudin odio id nulla tincidunt suscipit. Sed ornare vehicula enim eu bibendum. Sed sit amet condimentum lorem. Curabitur eu fermentum sapien. Integer vel volutpat nunc. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec bibendum dignissim tincidunt. Morbi id quam mollis eros faucibus venenatis. Quisque malesuada nunc nec mi dapibus iaculis. Aenean eget scelerisque leo. Sed tincidunt, nisi nec bibendum laoreet, ex tortor pretium enim, quis volutpat lacus purus a dui. Ut tellus massa, maximus varius mauris at, aliquet vestibulum risus. Praesent luctus imperdiet molestie. Nam suscipit ex non pulvinar suscipit. Phasellus sem augue, eleifend non pulvinar vel, tempus vitae purus. Curabitur vel posuere erat. Vivamus venenatis ante et facilisis vulputate. Quisque et tempus erat. Nullam luctus fermentum condimentum. Sed mollis pellentesque augue, id molestie augue suscipit eget. Nulla et aliquam risus. Aliquam ullamcorper ut ante sed pellentesque. Sed lacus massa, tristique non enim sit amet, commodo condimentum diam. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Aenean tincidunt odio sed urna hendrerit, nec semper nibh congue. Fusce elit justo, semper ut porta ac, pretium a massa. Nulla faucibus, purus eu lobortis vehicula, sem tortor maximus velit, a luctus ante mauris et elit. Vivamus mattis elit quis tellus ultricies maximus. Suspendisse rutrum dolor eu velit rhoncus, a tempor tellus tristique. Suspendisse potenti. Ut venenatis convallis turpis, vitae pellentesque lectus sagittis luctus. Quisque a consectetur leo. Aenean dapibus, lectus non tempor ultrices, quam sem accumsan eros, eu accumsan urna ligula at mauris. Nullam vitae orci id nibh pellentesque pellentesque in et nisl. Suspendisse tristique eros at ullamcorper lobortis. Suspendisse finibus rutrum odio et imperdiet. Curabitur at posuere elit. Pellentesque eleifend volutpat tellus ut hendrerit. In egestas, est ac dictum tempor, ligula dui sagittis ligula, in egestas nisl nisl eget sapien. Integer pulvinar eu orci eu scelerisque. Ut a malesuada nisl, non porta urna. Pellentesque libero magna, pharetra nec mi ut, mattis tincidunt est. Praesent nec ex sit amet turpis luctus dictum porttitor vitae libero. Donec in mi massa. Aenean tempor iaculis massa ac vestibulum. Maecenas finibus mi sed ligula mollis, non bibendum mauris consequat. Pellentesque non lacinia velit. Donec id sollicitudin dolor. Sed sagittis tempus sollicitudin. Sed dui erat, facilisis sit amet mollis sit amet, congue id nunc. Donec nec nunc vel justo maximus pellentesque non a nisl. Maecenas imperdiet, ante dignissim condimentum consectetur, augue arcu eleifend felis, in molestie metus metus eget diam. In sit amet varius nisi, ut tempor ex.'
+																					)
+																			)
+																	)
+															),
+															_react2.default.createElement('br', null),
+															_react2.default.createElement(
+																	'div',
+																	{ className: 'row' },
+																	_react2.default.createElement(
+																			'div',
+																			{ className: 'col-md-12' },
+																			_react2.default.createElement(
+																					'div',
+																					null,
+																					'If you like this, [name] recommends...'
+																			)
+																	)
+															),
+															_react2.default.createElement(
+																	'div',
+																	{ className: 'row' },
+																	_react2.default.createElement(
+																			'div',
+																			{ className: 'col-md-11 col-md-offset-1' },
+																			_react2.default.createElement(
+																					'div',
+																					null,
+																					'LINK LINK LINK LINK LINK LINK'
+																			)
+																	)
+															),
+															_react2.default.createElement(
+																	'div',
+																	{ className: 'row' },
+																	_react2.default.createElement(
+																			'div',
+																			{ className: 'col-md-12' },
+																			_react2.default.createElement(
+																					'div',
+																					null,
+																					'TAG CATEGORY 1:'
+																			)
+																	)
+															),
+															_react2.default.createElement(
+																	'div',
+																	{ className: 'row' },
+																	_react2.default.createElement(
+																			'div',
+																			{ className: 'col-md-11 col-md-offset-1' },
+																			_react2.default.createElement(
+																					'div',
+																					null,
+																					'TAG TAG TAG TAG REUSE TAGLIST HERE'
+																			)
+																	)
+															)
+													),
+													_react2.default.createElement(
+															'div',
+															{ className: 'col-xs-4' },
+															_react2.default.createElement(
+																	'div',
+																	{ className: 'row' },
+																	'MY SIDEBAR BRINGS ALL THE BOYS TO THE YARD'
+															),
+															_react2.default.createElement(
+																	'div',
+																	{ className: 'row' },
+																	'and they\'re like, IT\'S BETTER THAN YOURS'
+															),
+															_react2.default.createElement(
+																	'div',
+																	{ className: 'row' },
+																	'DAMN RIGHT'
+															),
+															_react2.default.createElement(
+																	'div',
+																	{ className: 'row' },
+																	_react2.default.createElement(
+																			'h3',
+																			null,
+																			'IT\'S BETTER THAN YOURS'
+																	)
+															)
+													)
+											)
+									)
+							);
+					}
+			}]);
+
+			return BookmarkList;
+	}(_react2.default.Component);
+
+	exports.default = BookmarkList;
 
 /***/ })
 /******/ ]);
