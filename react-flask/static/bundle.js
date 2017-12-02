@@ -131,7 +131,8 @@
 	      _react2.default.createElement(_reactRouterDom.Route, { path: '/works', component: WorkCollection }),
 	      _react2.default.createElement(_reactRouterDom.Route, { path: '/work/:workId', component: _SingleWork2.default }),
 	      _react2.default.createElement(_reactRouterDom.Route, { path: '/bookmark/:curatorId', component: _BookmarkList2.default }),
-	      _react2.default.createElement(_reactRouterDom.Route, { path: '/create/work', is_edit: 'false', component: _NewWork2.default })
+	      _react2.default.createElement(_reactRouterDom.Route, { path: '/create/work', is_edit: 'false', component: _NewWork2.default }),
+	      _react2.default.createElement(_reactRouterDom.Route, { path: '/user/:userId', component: Home })
 	    )
 	  );
 	};
@@ -46529,6 +46530,7 @@
 	  "employees": [{
 	    "key": "1",
 	    "name": "barb",
+	    "creator_id": 1,
 	    "url": "butts",
 	    "title": "bleh bleh bleh",
 	    "main": "index.js",
@@ -46537,6 +46539,7 @@
 	    "work_summary": "another terrible fic",
 	    "chapter_count": "5" }, {
 	    "key": "2",
+	    "creator_id": 2,
 	    "name": "bob",
 	    "url": "1.1.0",
 	    "title": "sequel to my garbage",
@@ -46612,7 +46615,11 @@
 	            this.props.work.title
 	          ),
 	          ' by ',
-	          this.props.work.name
+	          _react2.default.createElement(
+	            _reactRouterDom.Link,
+	            { to: "/user/" + this.props.work.creator_id },
+	            this.props.work.name
+	          )
 	        )
 	      ),
 	      _react2.default.createElement(
@@ -46698,8 +46705,6 @@
 
 	var _reactRouterDom = __webpack_require__(43);
 
-	var _reactRouterDom2 = _interopRequireDefault(_reactRouterDom);
-
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -46766,6 +46771,7 @@
 
 	    var empty = {
 	      "key": "1",
+	      "creator_id": 1,
 	      "name": "barb",
 	      "url": "butts",
 	      "title": "bleh bleh bleh",
@@ -46861,9 +46867,13 @@
 	                'div',
 	                { className: 'col-md-12' },
 	                _react2.default.createElement(
-	                  'h2',
+	                  'center',
 	                  null,
-	                  this.state.work.name
+	                  _react2.default.createElement(
+	                    _reactRouterDom.Link,
+	                    { to: "/user/" + this.state.work.creator_id },
+	                    this.state.work.name
+	                  )
 	                )
 	              )
 	            ),
@@ -46886,7 +46896,7 @@
 	              { className: 'row' },
 	              _react2.default.createElement(
 	                'div',
-	                { className: 'col-md-2 col-md-offset-6' },
+	                { className: 'col-md-2 col-md-offset-4' },
 	                _react2.default.createElement(
 	                  'h5',
 	                  null,
@@ -46913,7 +46923,8 @@
 	                  'Word Count: ',
 	                  this.state.work.word_count
 	                )
-	              )
+	              ),
+	              _react2.default.createElement('div', { className: 'col-md-2' })
 	            ),
 	            _react2.default.createElement('br', null),
 	            _react2.default.createElement('hr', null),

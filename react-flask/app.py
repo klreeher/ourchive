@@ -30,6 +30,7 @@ def get_work(workId):
     [
 	{
   	"key": "1",
+    "creator_id": 2,
   "name": "barb",
   "url": "butts",
   "title": "bleh bleh bleh",

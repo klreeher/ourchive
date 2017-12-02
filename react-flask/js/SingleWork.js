@@ -2,7 +2,9 @@ import React from 'react';
 import axios from 'axios';
 import Chapter from './Chapter';
 import TagList from './TagList';
-import Link from 'react-router-dom';
+import {
+  Link
+} from 'react-router-dom';
 
 export default class SingleWork extends React.Component {
 
@@ -60,6 +62,7 @@ export default class SingleWork extends React.Component {
     super(props);
     var empty = {
   "key": "1",
+  "creator_id": 1,
   "name": "barb",
   "url": "butts",
   "title": "bleh bleh bleh",
@@ -118,16 +121,19 @@ export default class SingleWork extends React.Component {
     <div className="col-md-12"><h1>{this.state.work.title}</h1></div>
   </div>
   <div className="row">
-    <div className="col-md-12"><h2>{this.state.work.name}</h2></div>
+    <div className="col-md-12">
+      <center><Link to={"/user/"+this.state.work.creator_id}>{this.state.work.name}</Link></center>
+    </div>
   </div>
   <hr/>
   <div className="row">
     <div className="col-md-12"><h4>{this.state.work.work_summary}</h4></div>
   </div>
   <div className="row">
-    <div className="col-md-2 col-md-offset-6"><h5>Chapters: {Object.keys(this.state.work.chapters).length}</h5></div>
+    <div className="col-md-2 col-md-offset-4"><h5>Chapters: {Object.keys(this.state.work.chapters).length}</h5></div>
     <div className="col-md-2"><h5>Complete? {this.state.work.is_complete}</h5></div>
     <div className="col-md-2"><h5>Word Count: {this.state.work.word_count}</h5></div>
+    <div className="col-md-2"></div>
   </div>
   <br/>
   <hr/>

@@ -10,6 +10,7 @@ var json = {
 	{
 	"key": "1",
   "name": "barb",
+  "creator_id": 1,
   "url": "butts",
   "title": "bleh bleh bleh",
   "main": "index.js",
@@ -18,6 +19,7 @@ var json = {
   "work_summary": "another terrible fic",
   "chapter_count": "5"},{
   	"key": "2",
+    "creator_id": 2,
   "name": "bob",
   "url": "1.1.0",
   "title": "sequel to my garbage",

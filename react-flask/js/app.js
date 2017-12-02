@@ -38,6 +38,7 @@ const BasicExample = () => (
       <Route path="/work/:workId" component={SingleWork}/>
       <Route path="/bookmark/:curatorId" component={BookmarkList}/>
       <Route path="/create/work" is_edit="false" component={NewWork}/>
+      <Route path="/user/:userId" component={Home}/>
     </div>
   </Router>
 )
