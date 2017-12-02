@@ -41,78 +41,77 @@ export default class BookmarkItem extends React.Component {
 			        		</div>
 						</div>
 					</div>
-	        <div className="row">
-	            <div className="col-md-12">
-	                <div><h3>{this.state.bookmark.rating}</h3></div>
-	            </div>
-	        </div>
-	        <div className="row">
-	            <div className="col-md-12">
-	                <div>
-	                	{this.state.bookmark.curator} says...
-	                </div>
-	            </div>
-	        </div>	
-	        <br/>			        
-	        <div className="row">
-	            <div className="col-md-11 col-md-offset-1">
-	                <div>
-	                	{this.state.bookmark.description}
-	                </div>
-	            </div>
-	        </div>
-			      			
-  			<br/>
-  			<div className="row">
-	            <div className="col-md-12">
-	                <div>
-	                	If you like this, {this.state.bookmark.curator} recommends...
-	                </div>
-	            </div>
-	            
-	        </div>
-	        <div className="row">
-		        <div className="col-md-11 col-md-offset-1">
-			        <ul className="list-inline">
-				        {this.state.bookmark.links.map(link => 
-				          <li>
-				         	<div key={link}>
-				            	{link}
-				          	</div>
-				          </li>
-				        )}
-				    </ul>
-		        </div>
-		    </div>
-	        <div className="row">
-	             {this.state.bookmark.tags.map(tag => 
 			        <div className="row">
-			        <div className="col-md-12">
-			            <ul className="list-inline">
-			              <TagList tag_category={Object.keys(tag)} tags={Object.values(tag)}/>
-			            </ul>
-			        </div> 
+			            <div className="col-md-12">
+			                <div><h3>{this.state.bookmark.rating}</h3></div>
+			            </div>
 			        </div>
-			      )}		            
-	        </div>
-        </div>
-        <div className="col-xs-4">
-        	<div className="row">
-        		MY SIDEBAR BRINGS ALL THE BOYS TO THE YARD
-        	</div>
-        	<div className="row">
-        		and they're like, IT'S BETTER THAN YOURS
-        	</div>
-        	<div className="row">
-        		DAMN RIGHT
-        	</div>
-        	<div className="row">		        	
-        		<h3>IT'S BETTER THAN YOURS</h3>
-        	</div>
-        </div>
-      </div>	
-      </div>
-      </div>
+			        <div className="row">
+			            <div className="col-md-12">
+			                <div>
+			                	{this.state.bookmark.curator} says...
+			                </div>
+			            </div>
+			        </div>	
+			        <br/>			        
+			        <div className="row">
+			            <div className="col-md-11 col-md-offset-1">
+			                <div>
+			                	{this.state.bookmark.description}
+			                </div>
+			            </div>
+			        </div>			      			
+		  			<br/>
+		  			<div className="row">
+			            <div className="col-md-12">
+			                <div>
+			                	If you like this, {this.state.bookmark.curator} recommends...
+			                </div>
+			            </div>
+			            
+			        </div>
+			        <div className="row">
+				        <div className="col-md-11 col-md-offset-1">
+					        <ul className="list-inline">
+						        {this.state.bookmark.links.map(link => 
+						          <li>
+						         	<div key={link}>
+						            	{link}
+						          	</div>
+						          </li>
+						        )}
+						    </ul>
+				        </div>
+				    </div>
+			        <div className="row">
+			             {this.state.bookmark.tags.map(tag => 
+					        <div className="row">
+					        <div className="col-md-12">
+					            <ul className="list-inline">
+					              <TagList tag_category={Object.keys(tag)} tags={Object.values(tag)}/>
+					            </ul>
+					        </div> 
+					        </div>
+					      )}		            
+			        </div>
+		        </div>
+		        <div className="col-xs-4">
+		        	<div className="row">
+		        		MY SIDEBAR BRINGS ALL THE BOYS TO THE YARD
+		        	</div>
+		        	<div className="row">
+		        		and they're like, IT'S BETTER THAN YOURS
+		        	</div>
+		        	<div className="row">
+		        		DAMN RIGHT
+		        	</div>
+		        	<div className="row">		        	
+		        		<h3>IT'S BETTER THAN YOURS</h3>
+		        	</div>
+		        </div>
+		      </div>	
+		  </div>
+		</div>
     );
   }
 

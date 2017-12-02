@@ -51918,6 +51918,7 @@
 	    _this.onSuggestionsFetchRequested = _this.onSuggestionsFetchRequested.bind(_this);
 	    _this.onSuggestionsClearRequested = _this.onSuggestionsClearRequested.bind(_this);
 	    _this.newTagAuto = _this.newTagAuto.bind(_this);
+	    _this.newTag = _this.newTag.bind(_this);
 	    return _this;
 	  }
 
@@ -51943,6 +51944,18 @@
 	  }, {
 	    key: 'onChange',
 	    value: function onChange(event, newValue) {
+	      var newVal = newValue["newValue"];
+	      if (newVal != '') {
+	        if (newVal.slice(-1) == ',') {
+	          var oldVal = newVal.slice(0, -1);
+	          this.create_work_tag(oldVal, '');
+	          event.preventDefault();
+	          this.setState({
+	            value: ""
+	          });
+	          return;
+	        }
+	      }
 	      this.setState({
 	        value: newValue["newValue"]
 	      });
@@ -51999,6 +52012,7 @@
 	    key: 'newTag',
 	    value: function newTag(event) {
 	      var characterPressed = String.fromCharCode(event.which);
+	      console.log(characterPressed);
 	      if (characterPressed == ',') {
 	        if (event.target.value != '') {
 	          var oldVal = event.target.value;
@@ -52038,24 +52052,22 @@
 	      };
 	      return _react2.default.createElement(
 	        'div',
-	        null,
+	        { className: 'col-md-12' },
 	        _react2.default.createElement(
 	          'div',
 	          { className: 'row' },
 	          _react2.default.createElement(
 	            'div',
-	            { className: 'col-md-12' },
-	            _react2.default.createElement(
-	              'div',
-	              { className: 'col-md-3 tag_category' },
-	              this.state.tag_category
-	            ),
-	            _react2.default.createElement('br', null),
-	            _react2.default.createElement('hr', null)
-	          ),
+	            { className: 'col-md-3 tag_category' },
+	            this.state.tag_category
+	          )
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'row' },
 	          _react2.default.createElement(
 	            'div',
-	            { className: 'col-md-5' },
+	            { className: 'col-md-5 col-md-offset-1' },
 	            _react2.default.createElement(
 	              'ul',
 	              { className: 'list-inline', id: "tags_ul" + this.state.tag_category },
@@ -52081,9 +52093,7 @@
 	              onSuggestionSelected: this.newTagAuto
 	            })
 	          )
-	        ),
-	        _react2.default.createElement('br', null),
-	        _react2.default.createElement('br', null)
+	        )
 	      );
 	    }
 	  }]);

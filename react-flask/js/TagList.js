@@ -55,6 +55,7 @@ export default class TagList extends React.Component {
     this.onSuggestionsFetchRequested = this.onSuggestionsFetchRequested.bind(this);
     this.onSuggestionsClearRequested = this.onSuggestionsClearRequested.bind(this);
     this.newTagAuto = this.newTagAuto.bind(this);
+    this.newTag = this.newTag.bind(this);
   }
   componentWillMount() { 
     //do things
@@ -72,9 +73,22 @@ export default class TagList extends React.Component {
     }    
   }
   onChange(event, newValue) {
-    this.setState({
-      value: newValue["newValue"]
-    })
+    var newVal = newValue["newValue"]
+    if (newVal != '') {
+      if (newVal.slice(-1) == ',') {        
+          var oldVal = newVal.slice(0, -1)
+          this.create_work_tag(oldVal, '');
+          event.preventDefault();
+          this.setState({
+            value: ""
+          })
+          return
+
+      }
+    }
+   this.setState({
+        value: newValue["newValue"]
+      })  
   }
 
   // Autosuggest will call this function every time you need to update suggestions.
@@ -113,6 +127,7 @@ export default class TagList extends React.Component {
   }
   newTag(event) {
     var characterPressed = String.fromCharCode(event.which);
+    console.log(characterPressed);
     if (characterPressed == ',') {
       if (event.target.value != '') {
         var oldVal = event.target.value
@@ -143,38 +158,36 @@ export default class TagList extends React.Component {
       onChange: this.onChange
     };
     return (
-      <div>
-      <div className="row">
-        <div className="col-md-12">
-          <div className="col-md-3 tag_category">{this.state.tag_category}</div>
-          <br/>
-          <hr/>
-          </div>
-            <div className="col-md-5">
-            <ul className="list-inline" id={"tags_ul"+this.state.tag_category}>
-                {this.state.tags.map(tag => 
-                  <div key={tag}>
-                    <TagItem tag={tag} removeTag={this.removeTag}/>
-                  </div>
-                )}
-            </ul>
+      <div className="col-md-12">
+        <div className="row">
+            <div className="col-md-3 tag_category">
+              {this.state.tag_category}
+            </div>
+        </div>
+        <div className="row">
+            <div className="col-md-5 col-md-offset-1">
+              <ul className="list-inline" id={"tags_ul"+this.state.tag_category}>
+                  {this.state.tags.map(tag => 
+                    <div key={tag}>
+                      <TagItem tag={tag} removeTag={this.removeTag}/>
+                    </div>
+                  )}
+              </ul>
             </div>  
       
 
-      <div className="col-md-4">
-      <Autosuggest id={"autosuggest"+this.state.tag_category}
-        suggestions={suggestions}
-        onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
-        onSuggestionsClearRequested={this.onSuggestionsClearRequested}
-        getSuggestionValue={getSuggestionValue}
-        renderSuggestion={renderSuggestion}
-        inputProps={inputProps}
-        onSuggestionSelected={this.newTagAuto}
-      />
-      </div>
-      </div>
-      <br/>
-      <br/>
+          <div className="col-md-4">
+            <Autosuggest id={"autosuggest"+this.state.tag_category}
+              suggestions={suggestions}
+              onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
+              onSuggestionsClearRequested={this.onSuggestionsClearRequested}
+              getSuggestionValue={getSuggestionValue}
+              renderSuggestion={renderSuggestion}
+              inputProps={inputProps}
+              onSuggestionSelected={this.newTagAuto}
+            />
+          </div>
+        </div>
       </div>
     );
   }
