@@ -60,49 +60,18 @@ def get_work(workId):
 @app.route('/api/bookmark/curator/<int:curatorId>')
 def get_bookmarks(curatorId):
   bookmarks = json.dumps(
-    [
+    [ {"bookmarks": [
       {
           "key": "1",
-          "name": "barb",
-          "url": "butts",
+          "chapter_image": "butts.png",
           "title": "bleh bleh bleh",
-          "main": "index.js",
-          "is_complete": "true",
-          "word_count": "4000",
-          "work_summary": "some stuff happens",
-          "chapters": [
-            {
-              "id": "1",
-              "number": "1",
-              "title": "bob goes to school",
-              "text": "weh weh weh weh",
-              "audio_url": "../audio/01 Family Problems.mp3",
-              "image_url": "url"
-            },
-            {
-              "id": "2",
-              "number": "2",
-              "title": "bob fails at school",
-              "text": "bloop",
-              "audio_url": "url",
-              "image_url": "url"
-            }
-          ],
-          "tags": [
-            {
-              "fandom": [
-                "buffy",
-                "xena"
-              ]
-            },
-            {
-              "primary pairing": [
-                "buffy/faith"
-              ]
-            }
-          ]
+          "creator": "impertinence",
+          "summary": "someBODY once told me the world is gonna roll me",
+          "rating": "*****",
+          "curator": "sally",
+          "description": "this tingled my nether bits and also I'm at war with the author now"
         }
-    ])
+    ]}])
   return bookmarks
 
 @app.route('/<path:path>')
