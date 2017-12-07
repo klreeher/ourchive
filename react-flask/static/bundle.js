@@ -97,6 +97,10 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
+	var _BookmarkForm = __webpack_require__(562);
+
+	var _BookmarkForm2 = _interopRequireDefault(_BookmarkForm);
+
 	var _reactRouterDom = __webpack_require__(43);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -132,7 +136,8 @@
 	      _react2.default.createElement(_reactRouterDom.Route, { path: '/work/:workId', component: _SingleWork2.default }),
 	      _react2.default.createElement(_reactRouterDom.Route, { path: '/bookmark/:curatorId', component: _BookmarkList2.default }),
 	      _react2.default.createElement(_reactRouterDom.Route, { path: '/create/work', is_edit: 'false', component: _NewWork2.default }),
-	      _react2.default.createElement(_reactRouterDom.Route, { path: '/user/:userId', component: Home })
+	      _react2.default.createElement(_reactRouterDom.Route, { path: '/user/:userId', component: Home }),
+	      _react2.default.createElement(_reactRouterDom.Route, { path: '/bookmarks/new', component: _BookmarkForm2.default })
 	    )
 	  );
 	};
@@ -5054,6 +5059,15 @@
 	            _reactBootstrap.NavItem,
 	            null,
 	            'Bookmarks'
+	          )
+	        ),
+	        _react2.default.createElement(
+	          _reactRouterBootstrap.IndexLinkContainer,
+	          { to: '/bookmarks/new' },
+	          _react2.default.createElement(
+	            _reactBootstrap.NavItem,
+	            null,
+	            'New Bookmark'
 	          )
 	        )
 	      )
@@ -54942,6 +54956,208 @@
 	}(_react2.default.Component);
 
 	exports.default = BookmarkItem;
+
+/***/ }),
+/* 562 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(3);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _axios = __webpack_require__(491);
+
+	var _axios2 = _interopRequireDefault(_axios);
+
+	var _reactRouterDom = __webpack_require__(43);
+
+	var _reactRouterDom2 = _interopRequireDefault(_reactRouterDom);
+
+	var _reactBootstrap = __webpack_require__(83);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var BookmarkForm = function (_React$Component) {
+		_inherits(BookmarkForm, _React$Component);
+
+		_createClass(BookmarkForm, [{
+			key: 'addBookmark',
+			value: function addBookmark(evt) {
+				evt.preventDefault();
+				console.log(this.state);
+			}
+		}]);
+
+		function BookmarkForm(props) {
+			_classCallCheck(this, BookmarkForm);
+
+			var json = {
+
+				"key": "1",
+				"chapter_image": "butts.png",
+				"title": "bleh bleh bleh",
+				"creator": "impertinence",
+				"summary": "someBODY once told me the world is gonna roll me",
+				"links": [1, 2],
+				"tags": [{ "fandom": ["buffy", "xena"] }, { "primary pairing": ["buffy/faith"] }]
+			};
+
+			var _this = _possibleConstructorReturn(this, (BookmarkForm.__proto__ || Object.getPrototypeOf(BookmarkForm)).call(this, props));
+
+			_this.state = _this.state = { bookmark: json, value: "" };
+			_this.setDescription = _this.setDescription.bind(_this);
+			_this.setRating = _this.setRating.bind(_this);
+
+			return _this;
+		}
+
+		_createClass(BookmarkForm, [{
+			key: 'setDescription',
+			value: function setDescription(e) {
+				this.setState({ description: e.target.value });
+			}
+		}, {
+			key: 'setRating',
+			value: function setRating(e) {
+				this.setState({ rating: parseInt(e.currentTarget.value) });
+			}
+		}, {
+			key: 'render',
+			value: function render() {
+				var _this2 = this;
+
+				return _react2.default.createElement(
+					'div',
+					{ className: 'panel panel-default' },
+					_react2.default.createElement(
+						'div',
+						{ className: 'panel-body' },
+						_react2.default.createElement(
+							'form',
+							null,
+							_react2.default.createElement(
+								_reactBootstrap.FormGroup,
+								{ controlId: 'formControlsTitle' },
+								_react2.default.createElement(
+									_reactBootstrap.ControlLabel,
+									null,
+									'Title'
+								),
+								_react2.default.createElement(
+									_reactBootstrap.FormControl.Static,
+									null,
+									this.state.bookmark.title,
+									' '
+								),
+								_react2.default.createElement(
+									_reactBootstrap.HelpBlock,
+									null,
+									'The work\'s title'
+								)
+							),
+							_react2.default.createElement(
+								_reactBootstrap.FormGroup,
+								{ controlId: 'formControlsSummary' },
+								_react2.default.createElement(
+									_reactBootstrap.ControlLabel,
+									null,
+									'Summary'
+								),
+								_react2.default.createElement(
+									_reactBootstrap.FormControl.Static,
+									null,
+									this.state.bookmark.summary,
+									' '
+								),
+								_react2.default.createElement(
+									_reactBootstrap.HelpBlock,
+									null,
+									'The work\'s summary'
+								)
+							),
+							_react2.default.createElement(
+								_reactBootstrap.FormGroup,
+								{ controlId: 'formControlsDescription' },
+								_react2.default.createElement(
+									_reactBootstrap.ControlLabel,
+									null,
+									'Summary'
+								),
+								_react2.default.createElement(_reactBootstrap.FormControl, { componentClass: 'textarea',
+									value: this.state.description,
+									placeholder: 'Enter your review, description, or other curation notes here.',
+									onChange: this.setDescription
+								})
+							),
+							_react2.default.createElement(
+								_reactBootstrap.FormGroup,
+								null,
+								_react2.default.createElement(
+									_reactBootstrap.ControlLabel,
+									null,
+									'Rating'
+								),
+								_react2.default.createElement(
+									_reactBootstrap.Radio,
+									{ name: 'radioGroup', checked: this.state.rating === 1, onChange: this.setRating, value: '1' },
+									'1'
+								),
+								_react2.default.createElement(
+									_reactBootstrap.Radio,
+									{ name: 'radioGroup', checked: this.state.rating === 2, onChange: this.setRating, value: '2' },
+									'2'
+								),
+								_react2.default.createElement(
+									_reactBootstrap.Radio,
+									{ name: 'radioGroup', checked: this.state.rating === 3, onChange: this.setRating, value: '3' },
+									'3'
+								),
+								_react2.default.createElement(
+									_reactBootstrap.Radio,
+									{ name: 'radioGroup', checked: this.state.rating === 4, onChange: this.setRating, value: '4' },
+									'4'
+								),
+								_react2.default.createElement(
+									_reactBootstrap.Radio,
+									{ name: 'radioGroup', checked: this.state.rating === 5, onChange: this.setRating, value: '5' },
+									'5'
+								)
+							),
+							_react2.default.createElement(
+								'div',
+								{ className: 'form-group' },
+								_react2.default.createElement(
+									'button',
+									{ onMouseDown: function onMouseDown(evt) {
+											return _this2.addBookmark(evt);
+										}, className: 'btn btn-default' },
+									'Submit'
+								)
+							)
+						)
+					)
+				);
+			}
+		}]);
+
+		return BookmarkForm;
+	}(_react2.default.Component);
+
+	exports.default = BookmarkForm;
 
 /***/ })
 /******/ ]);

@@ -8,6 +8,7 @@ import NewWork from './NewWork';
 import BookmarkList from './BookmarkList';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import BookmarkForm from './BookmarkForm';
 import {
   BrowserRouter as Router,
   Route,
@@ -39,6 +40,7 @@ const BasicExample = () => (
       <Route path="/bookmark/:curatorId" component={BookmarkList}/>
       <Route path="/create/work" is_edit="false" component={NewWork}/>
       <Route path="/user/:userId" component={Home}/>
+      <Route path="/bookmarks/new" component={BookmarkForm}/>
     </div>
   </Router>
 )
