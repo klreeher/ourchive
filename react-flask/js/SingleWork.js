@@ -22,7 +22,8 @@ export default class SingleWork extends React.Component {
         this.setState({
           work: response.data[0],
           current_chapter: response.data[0].chapters[0],
-          chapter_index: 0
+          chapter_index: 0,
+          viewer_is_creator: true
         });  
 
       }.bind(this))

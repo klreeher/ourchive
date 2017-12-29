@@ -46744,7 +46744,8 @@
 	        this.setState({
 	          work: response.data[0],
 	          current_chapter: response.data[0].chapters[0],
-	          chapter_index: 0
+	          chapter_index: 0,
+	          viewer_is_creator: true
 	        });
 	      }.bind(this)).catch(function (error) {
 	        console.log(error);
@@ -54705,7 +54706,7 @@
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-			value: true
+		value: true
 	});
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -54735,224 +54736,251 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 	var BookmarkItem = function (_React$Component) {
-			_inherits(BookmarkItem, _React$Component);
+		_inherits(BookmarkItem, _React$Component);
 
-			function BookmarkItem(props) {
-					_classCallCheck(this, BookmarkItem);
+		function BookmarkItem(props) {
+			_classCallCheck(this, BookmarkItem);
 
-					var _this = _possibleConstructorReturn(this, (BookmarkItem.__proto__ || Object.getPrototypeOf(BookmarkItem)).call(this, props));
+			var _this = _possibleConstructorReturn(this, (BookmarkItem.__proto__ || Object.getPrototypeOf(BookmarkItem)).call(this, props));
 
-					_this.state = _this.state = { bookmark: props.bookmark };
+			_this.state = _this.state = { bookmark: props.bookmark, viewer_is_creator: true };
 
-					return _this;
-			}
+			return _this;
+		}
 
-			_createClass(BookmarkItem, [{
-					key: 'render',
-					value: function render() {
-							return _react2.default.createElement(
+		_createClass(BookmarkItem, [{
+			key: 'render',
+			value: function render() {
+				return _react2.default.createElement(
+					'div',
+					null,
+					_react2.default.createElement(
+						'div',
+						{ className: 'panel panel-default' },
+						_react2.default.createElement(
+							'div',
+							{ className: 'panel-body' },
+							_react2.default.createElement(
+								'div',
+								{ className: 'col-xs-8' },
+								_react2.default.createElement(
 									'div',
-									null,
+									{ className: 'row' },
 									_react2.default.createElement(
+										'div',
+										{ className: this.state.viewer_is_creator ? "viewer-creator row" : "viewer row" },
+										_react2.default.createElement(
 											'div',
-											{ className: 'panel panel-default' },
+											{ className: 'col-xs-1' },
 											_react2.default.createElement(
-													'div',
-													{ className: 'panel-body' },
-													_react2.default.createElement(
-															'div',
-															{ className: 'col-xs-8' },
-															_react2.default.createElement(
-																	'div',
-																	{ className: 'row' },
-																	_react2.default.createElement(
-																			'div',
-																			{ className: 'col-md-2' },
-																			_react2.default.createElement(
-																					'div',
-																					null,
-																					this.state.bookmark.chapter_image,
-																					_react2.default.createElement('br', null),
-																					_react2.default.createElement('br', null),
-																					_react2.default.createElement('br', null)
-																			)
-																	),
-																	_react2.default.createElement(
-																			'div',
-																			{ className: 'col-md-8' },
-																			_react2.default.createElement(
-																					'div',
-																					{ className: 'row' },
-																					_react2.default.createElement(
-																							'div',
-																							{ className: 'col-md-12' },
-																							_react2.default.createElement(
-																									'div',
-																									null,
-																									_react2.default.createElement(
-																											'h3',
-																											null,
-																											this.state.bookmark.title,
-																											' BY ',
-																											this.state.bookmark.creator
-																									)
-																							)
-																					)
-																			),
-																			_react2.default.createElement(
-																					'div',
-																					{ className: 'row' },
-																					_react2.default.createElement(
-																							'div',
-																							{ className: 'col-md-11 col-md-offset-1' },
-																							_react2.default.createElement(
-																									'div',
-																									null,
-																									this.state.bookmark.summary
-																							)
-																					)
-																			)
-																	)
-															),
-															_react2.default.createElement(
-																	'div',
-																	{ className: 'row' },
-																	_react2.default.createElement(
-																			'div',
-																			{ className: 'col-md-12' },
-																			_react2.default.createElement(
-																					'div',
-																					null,
-																					_react2.default.createElement(
-																							'h3',
-																							null,
-																							this.state.bookmark.rating
-																					)
-																			)
-																	)
-															),
-															_react2.default.createElement(
-																	'div',
-																	{ className: 'row' },
-																	_react2.default.createElement(
-																			'div',
-																			{ className: 'col-md-12' },
-																			_react2.default.createElement(
-																					'div',
-																					null,
-																					this.state.bookmark.curator,
-																					' says...'
-																			)
-																	)
-															),
-															_react2.default.createElement('br', null),
-															_react2.default.createElement(
-																	'div',
-																	{ className: 'row' },
-																	_react2.default.createElement(
-																			'div',
-																			{ className: 'col-md-11 col-md-offset-1' },
-																			_react2.default.createElement(
-																					'div',
-																					null,
-																					this.state.bookmark.description
-																			)
-																	)
-															),
-															_react2.default.createElement('br', null),
-															_react2.default.createElement(
-																	'div',
-																	{ className: 'row' },
-																	_react2.default.createElement(
-																			'div',
-																			{ className: 'col-md-12' },
-																			_react2.default.createElement(
-																					'div',
-																					null,
-																					'If you like this, ',
-																					this.state.bookmark.curator,
-																					' recommends...'
-																			)
-																	)
-															),
-															_react2.default.createElement(
-																	'div',
-																	{ className: 'row' },
-																	_react2.default.createElement(
-																			'div',
-																			{ className: 'col-md-11 col-md-offset-1' },
-																			_react2.default.createElement(
-																					'ul',
-																					{ className: 'list-inline' },
-																					this.state.bookmark.links.map(function (link) {
-																							return _react2.default.createElement(
-																									'li',
-																									null,
-																									_react2.default.createElement(
-																											'div',
-																											{ key: link },
-																											link
-																									)
-																							);
-																					})
-																			)
-																	)
-															),
-															_react2.default.createElement(
-																	'div',
-																	{ className: 'row' },
-																	this.state.bookmark.tags.map(function (tag) {
-																			return _react2.default.createElement(
-																					'div',
-																					{ className: 'row' },
-																					_react2.default.createElement(
-																							'div',
-																							{ className: 'col-md-12' },
-																							_react2.default.createElement(
-																									'ul',
-																									{ className: 'list-inline' },
-																									_react2.default.createElement(_TagList2.default, { tag_category: Object.keys(tag), tags: Object.values(tag) })
-																							)
-																					)
-																			);
-																	})
-															)
-													),
-													_react2.default.createElement(
-															'div',
-															{ className: 'col-xs-4' },
-															_react2.default.createElement(
-																	'div',
-																	{ className: 'row' },
-																	'MY SIDEBAR BRINGS ALL THE BOYS TO THE YARD'
-															),
-															_react2.default.createElement(
-																	'div',
-																	{ className: 'row' },
-																	'and they\'re like, IT\'S BETTER THAN YOURS'
-															),
-															_react2.default.createElement(
-																	'div',
-																	{ className: 'row' },
-																	'DAMN RIGHT'
-															),
-															_react2.default.createElement(
-																	'div',
-																	{ className: 'row' },
-																	_react2.default.createElement(
-																			'h3',
-																			null,
-																			'IT\'S BETTER THAN YOURS'
-																	)
-															)
-													)
+												'button',
+												null,
+												'Edit'
 											)
+										),
+										_react2.default.createElement(
+											'div',
+											{ className: 'col-xs-1' },
+											_react2.default.createElement(
+												'button',
+												null,
+												'Delete'
+											)
+										)
 									)
-							);
-					}
-			}]);
+								),
+								_react2.default.createElement('br', null),
+								_react2.default.createElement(
+									'div',
+									{ className: 'row' },
+									_react2.default.createElement(
+										'div',
+										{ className: 'col-md-2' },
+										_react2.default.createElement(
+											'div',
+											null,
+											this.state.bookmark.chapter_image,
+											_react2.default.createElement('br', null),
+											_react2.default.createElement('br', null),
+											_react2.default.createElement('br', null)
+										)
+									),
+									_react2.default.createElement(
+										'div',
+										{ className: 'col-md-8' },
+										_react2.default.createElement(
+											'div',
+											{ className: 'row' },
+											_react2.default.createElement(
+												'div',
+												{ className: 'col-md-12' },
+												_react2.default.createElement(
+													'div',
+													null,
+													_react2.default.createElement(
+														'h3',
+														null,
+														this.state.bookmark.title,
+														' BY ',
+														this.state.bookmark.creator
+													)
+												)
+											)
+										),
+										_react2.default.createElement(
+											'div',
+											{ className: 'row' },
+											_react2.default.createElement(
+												'div',
+												{ className: 'col-md-11 col-md-offset-1' },
+												_react2.default.createElement(
+													'div',
+													null,
+													this.state.bookmark.summary
+												)
+											)
+										)
+									)
+								),
+								_react2.default.createElement(
+									'div',
+									{ className: 'row' },
+									_react2.default.createElement(
+										'div',
+										{ className: 'col-md-12' },
+										_react2.default.createElement(
+											'div',
+											null,
+											_react2.default.createElement(
+												'h3',
+												null,
+												this.state.bookmark.rating
+											)
+										)
+									)
+								),
+								_react2.default.createElement(
+									'div',
+									{ className: 'row' },
+									_react2.default.createElement(
+										'div',
+										{ className: 'col-md-12' },
+										_react2.default.createElement(
+											'div',
+											null,
+											this.state.bookmark.curator,
+											' says...'
+										)
+									)
+								),
+								_react2.default.createElement('br', null),
+								_react2.default.createElement(
+									'div',
+									{ className: 'row' },
+									_react2.default.createElement(
+										'div',
+										{ className: 'col-md-11 col-md-offset-1' },
+										_react2.default.createElement(
+											'div',
+											null,
+											this.state.bookmark.description
+										)
+									)
+								),
+								_react2.default.createElement('br', null),
+								_react2.default.createElement(
+									'div',
+									{ className: 'row' },
+									_react2.default.createElement(
+										'div',
+										{ className: 'col-md-12' },
+										_react2.default.createElement(
+											'div',
+											null,
+											'If you like this, ',
+											this.state.bookmark.curator,
+											' recommends...'
+										)
+									)
+								),
+								_react2.default.createElement(
+									'div',
+									{ className: 'row' },
+									_react2.default.createElement(
+										'div',
+										{ className: 'col-md-11 col-md-offset-1' },
+										_react2.default.createElement(
+											'ul',
+											{ className: 'list-inline' },
+											this.state.bookmark.links.map(function (link) {
+												return _react2.default.createElement(
+													'li',
+													null,
+													_react2.default.createElement(
+														'div',
+														{ key: link },
+														link
+													)
+												);
+											})
+										)
+									)
+								),
+								_react2.default.createElement(
+									'div',
+									{ className: 'row' },
+									this.state.bookmark.tags.map(function (tag) {
+										return _react2.default.createElement(
+											'div',
+											{ className: 'row' },
+											_react2.default.createElement(
+												'div',
+												{ className: 'col-md-12' },
+												_react2.default.createElement(
+													'ul',
+													{ className: 'list-inline' },
+													_react2.default.createElement(_TagList2.default, { tag_category: Object.keys(tag), tags: Object.values(tag) })
+												)
+											)
+										);
+									})
+								)
+							),
+							_react2.default.createElement(
+								'div',
+								{ className: 'col-xs-4' },
+								_react2.default.createElement(
+									'div',
+									{ className: 'row' },
+									'MY SIDEBAR BRINGS ALL THE BOYS TO THE YARD'
+								),
+								_react2.default.createElement(
+									'div',
+									{ className: 'row' },
+									'and they\'re like, IT\'S BETTER THAN YOURS'
+								),
+								_react2.default.createElement(
+									'div',
+									{ className: 'row' },
+									'DAMN RIGHT'
+								),
+								_react2.default.createElement(
+									'div',
+									{ className: 'row' },
+									_react2.default.createElement(
+										'h3',
+										null,
+										'IT\'S BETTER THAN YOURS'
+									)
+								)
+							)
+						)
+					)
+				);
+			}
+		}]);
 
-			return BookmarkItem;
+		return BookmarkItem;
 	}(_react2.default.Component);
 
 	exports.default = BookmarkItem;

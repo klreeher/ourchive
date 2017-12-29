@@ -9,7 +9,7 @@ export default class BookmarkItem extends React.Component {
 
 	constructor(props) {
 	    super(props);
-	    this.state = this.state = {bookmark: props.bookmark};
+	    this.state = this.state = {bookmark: props.bookmark, viewer_is_creator: true};
     
     }
 
@@ -20,6 +20,17 @@ export default class BookmarkItem extends React.Component {
       	<div className="panel panel-default">
         	<div className="panel-body">
 				<div className="col-xs-8">
+					<div className="row">
+						<div className={this.state.viewer_is_creator ? "viewer-creator row" : "viewer row"}>
+				          <div className="col-xs-1">
+				            <button>Edit</button>				            
+				          </div>
+				          <div className="col-xs-1">
+				          	<button>Delete</button>
+				          </div>
+				       	</div>
+					</div>
+					<br/>
       				<div className="row">
 			    		<div className="col-md-2">
 			        		<div>{this.state.bookmark.chapter_image}
