@@ -55009,6 +55009,10 @@
 
 	var _reactRouterDom2 = _interopRequireDefault(_reactRouterDom);
 
+	var _TagList = __webpack_require__(543);
+
+	var _TagList2 = _interopRequireDefault(_TagList);
+
 	var _reactBootstrap = __webpack_require__(83);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -55164,6 +55168,17 @@
 									{ name: 'radioGroup', checked: this.state.rating === 5, onChange: this.setRating, value: '5' },
 									'5'
 								)
+							),
+							_react2.default.createElement(
+								_reactBootstrap.FormGroup,
+								null,
+								this.state.bookmark.tags.map(function (tag) {
+									return _react2.default.createElement(
+										'div',
+										{ key: Object.keys(tag) },
+										_react2.default.createElement(_TagList2.default, { tag_category: Object.keys(tag), tags: Object.values(tag) })
+									);
+								})
 							),
 							_react2.default.createElement(
 								'div',

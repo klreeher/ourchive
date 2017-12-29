@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import Link from 'react-router-dom';
+import TagList from './TagList';
 import {FormGroup, Checkbox, ControlLabel, HelpBlock, FormControl, Button, Radio} from 'react-bootstrap';
 
 export default class BookmarkForm extends React.Component {
@@ -86,6 +87,14 @@ export default class BookmarkForm extends React.Component {
 					        5
 					      </Radio>
 					    </FormGroup>
+
+					    <FormGroup>
+				          {this.state.bookmark.tags.map(tag => 
+				              <div key={Object.keys(tag)}>
+				                  <TagList tag_category={Object.keys(tag)} tags={Object.values(tag)}/>
+				              </div>
+				          )}
+				       	</FormGroup>
 
 					    <div className="form-group">
 				          <button onMouseDown={evt => this.addBookmark(evt)} className="btn btn-default">Submit</button>
