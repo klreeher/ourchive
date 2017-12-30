@@ -70,7 +70,6 @@ we provide a [swagger spec](https://swagger.io/docs/specification/2-0/paths-and-
 
 **prerequisites**: python3, virtualenv
 
-<<<<<<< HEAD
 <a name="tus-server-for-file-upload"></a>
 ### tus-server for file upload
 tus-server: bundle exec rackup -p 9292 -o 10.0.2.15 config.ru &
