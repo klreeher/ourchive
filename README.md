@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/c-e-p/ourchive.svg?branch=travis-ci)](https://travis-ci.org/c-e-p/ourchive)
+
 # ourchive
 
 ourchive is a configurable, multi-media archive app. It grew out of a need for archival web apps that focus on browsability and searchability, and are able to be easily installed and maintained by a non-technical administrator.
@@ -68,20 +70,15 @@ we provide a [swagger spec](https://swagger.io/docs/specification/2-0/paths-and-
 
 **prerequisites**: python3, virtualenv
 
-<<<<<<< HEAD
 <a name="tus-server-for-file-upload"></a>
 ### tus-server for file upload
 tus-server: bundle exec rackup -p 9292 -o 10.0.2.15 config.ru &
 
 <a name="how-to-set-up-ourchive-for-local-development"></a>
 ### how to set up ourchive for local development
-=======
-prerequisites: python3, virtualenv or pipenv
->>>>>>> work-crud
 
 ensure commands to python (including pip) are pointing to python3
 
-    cd react-flask
     virtualenv venv
     . venv/bin/activate
     pip install -r requirements.txt
@@ -92,11 +89,7 @@ Then: open 2 terminal windows (or sessions/whatever) to `ourchive/react-flask`.
 In the first: `python app.py`
 
 In the second: `webpack --watch`
-<<<<<<< HEAD
-
 
 ---
 
 ![Dream a bit bigger, darling.](inception-dream-bigger.gif)
-=======
->>>>>>> work-crud
