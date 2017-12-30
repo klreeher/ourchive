@@ -101,6 +101,10 @@
 
 	var _BookmarkForm2 = _interopRequireDefault(_BookmarkForm);
 
+	var _UserProfile = __webpack_require__(563);
+
+	var _UserProfile2 = _interopRequireDefault(_UserProfile);
+
 	var _reactRouterDom = __webpack_require__(43);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -137,7 +141,8 @@
 	      _react2.default.createElement(_reactRouterDom.Route, { path: '/bookmark/:curatorId', component: _BookmarkList2.default }),
 	      _react2.default.createElement(_reactRouterDom.Route, { path: '/create/work', is_edit: 'false', component: _NewWork2.default }),
 	      _react2.default.createElement(_reactRouterDom.Route, { path: '/user/:userId', component: Home }),
-	      _react2.default.createElement(_reactRouterDom.Route, { path: '/bookmarks/new', component: _BookmarkForm2.default })
+	      _react2.default.createElement(_reactRouterDom.Route, { path: '/bookmarks/new', component: _BookmarkForm2.default }),
+	      _react2.default.createElement(_reactRouterDom.Route, { path: '/user/1', component: _UserProfile2.default })
 	    )
 	  );
 	};
@@ -5068,6 +5073,15 @@
 	            _reactBootstrap.NavItem,
 	            null,
 	            'New Bookmark'
+	          )
+	        ),
+	        _react2.default.createElement(
+	          _reactRouterBootstrap.IndexLinkContainer,
+	          { to: '/user/1' },
+	          _react2.default.createElement(
+	            _reactBootstrap.NavItem,
+	            null,
+	            'User Profile'
 	          )
 	        )
 	      )
@@ -55201,6 +55215,74 @@
 	}(_react2.default.Component);
 
 	exports.default = BookmarkForm;
+
+/***/ }),
+/* 563 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(3);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _axios = __webpack_require__(491);
+
+	var _axios2 = _interopRequireDefault(_axios);
+
+	var _reactRouterDom = __webpack_require__(43);
+
+	var _reactRouterDom2 = _interopRequireDefault(_reactRouterDom);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var UserProfile = function (_React$Component) {
+		_inherits(UserProfile, _React$Component);
+
+		function UserProfile(props) {
+			_classCallCheck(this, UserProfile);
+
+			var user = {
+
+				"userName": "elena",
+				"metadata": "blah blah"
+			};
+
+			var _this = _possibleConstructorReturn(this, (UserProfile.__proto__ || Object.getPrototypeOf(UserProfile)).call(this, props));
+
+			_this.state = _this.state = { user: user };
+			localStorage.setItem('profile', JSON.stringify(user));
+
+			return _this;
+		}
+
+		_createClass(UserProfile, [{
+			key: 'render',
+			value: function render() {
+				return _react2.default.createElement(
+					'div',
+					null,
+					'hello world'
+				);
+			}
+		}]);
+
+		return UserProfile;
+	}(_react2.default.Component);
+
+	exports.default = UserProfile;
 
 /***/ })
 /******/ ]);
