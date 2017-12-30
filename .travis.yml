@@ -21,6 +21,7 @@ services:
 after_success:
     - mkdir build
     - mv * build
+    - ls -a
     - tar -czf package.tgz build
     - export SSHPASS=$DEPLOY_PASS
     - sshpass -e scp package.tgz $DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH
