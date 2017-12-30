@@ -55223,7 +55223,7 @@
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-		value: true
+				value: true
 	});
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -55249,37 +55249,131 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 	var UserProfile = function (_React$Component) {
-		_inherits(UserProfile, _React$Component);
+				_inherits(UserProfile, _React$Component);
 
-		function UserProfile(props) {
-			_classCallCheck(this, UserProfile);
+				function UserProfile(props) {
+							_classCallCheck(this, UserProfile);
 
-			var user = {
+							var _this = _possibleConstructorReturn(this, (UserProfile.__proto__ || Object.getPrototypeOf(UserProfile)).call(this, props));
 
-				"userName": "elena",
-				"metadata": "blah blah"
-			};
+							_this.state = _this.state = { user: {} };
+							return _this;
+				}
 
-			var _this = _possibleConstructorReturn(this, (UserProfile.__proto__ || Object.getPrototypeOf(UserProfile)).call(this, props));
+				_createClass(UserProfile, [{
+							key: 'getUser',
+							value: function getUser() {
+										var user = {
 
-			_this.state = _this.state = { user: user };
-			localStorage.setItem('profile', JSON.stringify(user));
+													"userName": "elena",
+													"aboutMe": "HATE EFFORT, LOVE BADFIC",
+													"lastLogin": "2017-07-04",
+													"works_count": 25,
+													"bookmarks_count": 30
+										};
+										var userProfile = localStorage.getItem('profile');
+										if (userProfile == null) {
+													localStorage.setItem('profile', JSON.stringify(user));
+													this.setState({
+																user: user
+													});
+													console.log("USER PROFILE WAS NULL");
+										} else {
+													this.setState({
+																user: JSON.parse(userProfile)
+													});
+													console.log("USER PROFILE WAS NOT NULL");
+										}
+							}
+				}, {
+							key: 'componentWillMount',
+							value: function componentWillMount() {
+										this.getUser();
+							}
+				}, {
+							key: 'render',
+							value: function render() {
+										return _react2.default.createElement(
+													'div',
+													{ className: 'panel panel-default' },
+													_react2.default.createElement(
+																'div',
+																{ className: 'panel-body' },
+																_react2.default.createElement(
+																			'div',
+																			{ className: 'row' },
+																			_react2.default.createElement(
+																						'div',
+																						{ className: 'col-md-4' },
+																						_react2.default.createElement(
+																									'h3',
+																									null,
+																									this.state.user.userName
+																						)
+																			)
+																),
+																_react2.default.createElement(
+																			'div',
+																			{ className: 'row' },
+																			_react2.default.createElement(
+																						'div',
+																						{ className: 'col-md-2' },
+																						'About:'
+																			),
+																			_react2.default.createElement(
+																						'div',
+																						{ className: 'col-md-10' },
+																						this.state.user.aboutMe
+																			)
+																),
+																_react2.default.createElement(
+																			'div',
+																			{ className: 'row' },
+																			_react2.default.createElement(
+																						'div',
+																						{ className: 'col-md-2' },
+																						'Last Login:'
+																			),
+																			_react2.default.createElement(
+																						'div',
+																						{ className: 'col-md-10' },
+																						this.state.user.lastLogin
+																			)
+																),
+																_react2.default.createElement(
+																			'div',
+																			{ className: 'row' },
+																			_react2.default.createElement(
+																						'div',
+																						{ className: 'col-md-2' },
+																						'Works:'
+																			),
+																			_react2.default.createElement(
+																						'div',
+																						{ className: 'col-md-10' },
+																						this.state.user.works_count
+																			)
+																),
+																_react2.default.createElement(
+																			'div',
+																			{ className: 'row' },
+																			_react2.default.createElement(
+																						'div',
+																						{ className: 'col-md-2' },
+																						'Bookmarks:'
+																			),
+																			_react2.default.createElement(
+																						'div',
+																						{ className: 'col-md-10' },
+																						this.state.user.bookmarks_count
+																			)
+																)
+													)
+										);
+							}
+				}]);
 
-			return _this;
-		}
-
-		_createClass(UserProfile, [{
-			key: 'render',
-			value: function render() {
-				return _react2.default.createElement(
-					'div',
-					null,
-					'hello world'
-				);
-			}
-		}]);
-
-		return UserProfile;
+				return UserProfile;
 	}(_react2.default.Component);
 
 	exports.default = UserProfile;
