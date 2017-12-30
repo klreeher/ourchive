@@ -1,4 +1,15 @@
+env:
+    global:
+      secure:
+        - "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"
 sudo: enabled
+addons:
+    apt:
+        packages:
+            - sshpass
 language: python
 python:
  - "3.5.2"
@@ -8,3 +19,10 @@ install:
 script: sh run_travis.sh
 services:
  - postgresql
+after_success:
+    - mkdir build
+    - mv * build
+    - tar -czf package.tgz build
+    - export SSHPASS=$DEPLOY_PASS
+    - sshpass -e scp package.tgz $DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH
+    - sshpass -e ssh $DEPLOY_USER@$DEPLOY_HOST $DEPLOY_PATH/deploy.sh
