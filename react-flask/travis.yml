@@ -1,0 +1,10 @@
+sudo: enabled
+language: python
+python:
+ - "3.5.2"
+install: 
+ - pip install -r requirements.txt
+ - npm install -g webpack; npm install
+script: sh run_travis.sh
+services:
+ - postgresql
