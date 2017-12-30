@@ -23,5 +23,5 @@ after_success:
     - mv * build
     - tar -czf package.tgz build
     - export SSHPASS=$DEPLOY_PASS
-    - sshpass -o StrictHostKeyChecking=no -e scp package.tgz $DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH
-    - sshpass -o StrictHostKeyChecking=no -e ssh $DEPLOY_USER@$DEPLOY_HOST $DEPLOY_PATH/deploy.sh
+    - sshpass -e scp -o StrictHostKeyChecking=no package.tgz $DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH
+    - sshpass -e ssh -o StrictHostKeyChecking=no $DEPLOY_USER@$DEPLOY_HOST $DEPLOY_PATH/deploy.sh
