@@ -76,8 +76,6 @@ tus-server: bundle exec rackup -p 9292 -o 10.0.2.15 config.ru &
 
 <a name="how-to-set-up-ourchive-for-local-development"></a>
 ### how to set up ourchive for local development
-=======
-prerequisites: python3, virtualenv or pipenv
 
 ensure commands to python (including pip) are pointing to python3
 
