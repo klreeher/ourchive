@@ -3,11 +3,13 @@ import axios from 'axios';
 import Link from 'react-router-dom';
 import {Tabs, Tab} from 'react-bootstrap';
 import WorkStub from './WorkStub';
+import BookmarkItem from './BookmarkItem';
 
 export default class UserContainer extends React.Component {
 	constructor(props) {    
 	  	super(props);	  	
-	    this.state = {user: this.props.user, works: this.props.works};
+	    this.state = {user: this.props.user, works: this.props.works, 
+	    	bookmarks: this.prop.bookmarks};
     }
 
     componentWillMount() { 
@@ -18,7 +20,8 @@ export default class UserContainer extends React.Component {
 	
 	}
 	componentWillReceiveProps(nextProps) {
-	  this.setState({ user: nextProps.user, works: nextProps.works });  
+	  this.setState({ user: nextProps.user, works: nextProps.works,
+	  	bookmarks: nextProps.bookmarks });  
 	}
 
     render() {
@@ -80,8 +83,14 @@ export default class UserContainer extends React.Component {
 	    </Tab>
     	<Tab eventKey={3} title="Bookmarks">
     		<div className="col-md-12">
-
-	        		Tab 3 content
+    		<br/>
+    			<div className="list">
+			        {this.state.bookmarks.map(bookmark => 
+			          <div key={bookmark.key}>
+			            <BookmarkItem bookmark={bookmark}/>
+			          </div>
+			        )}
+			    </div>
 	        </div>
     	</Tab>
   	  </Tabs>

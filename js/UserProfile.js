@@ -51,9 +51,15 @@ export default class UserProfile extends React.Component {
     	//todo add axios
     }
 
+    getBookmarks()
+    {
+    	//todo add axios
+    }
+
     componentWillMount() { 
     	this.getUser();
     	this.getWorks();
+    	this.getBookmarks();
   	}
 
     render() {
