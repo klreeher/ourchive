@@ -4,18 +4,20 @@ import Link from 'react-router-dom';
 import {Tabs, Tab} from 'react-bootstrap';
 import WorkStub from './WorkStub';
 import UserContainer from './UserContainer';
+import EditDeleteButtons from './EditDeleteButtons';
 
 
-export default class UserProfile extends React.Component {
+export default class MyProfile extends React.Component {
 	constructor(props) {    
 	  	super(props);	  	
-	    this.state = this.state = {user: {}, works: [], bookmarks: []};
+	    this.state = this.state = {user: {}, works: []};
     }
 
     fetchUser(userId)
   	{
 	  	axios.get('/api/user/'+userId)
 	      .then(function (response) {
+	      	localStorage.setItem('profile', JSON.stringify(response.data));
 	        this.setState({
 	          user: response.data
 	        });  
@@ -28,7 +30,19 @@ export default class UserProfile extends React.Component {
 
     getUser()
     {
-    	this.fetchUser(this.props.match.params.userId);
+    	
+    	var userProfile = localStorage.getItem('profile');
+    	if (userProfile == null)
+    	{
+    		//todo: this means user should log in probably?
+    		this.fetchUser(1);
+    	} 
+    	else
+    	{
+    		this.setState({
+	          user: JSON.parse(userProfile)
+	        }); 
+    	}
     }
 
     getWorks(index)
@@ -39,7 +53,6 @@ export default class UserProfile extends React.Component {
     {
     	//todo add axios
     }
-
     componentWillMount() { 
     	this.getUser();
     	this.getWorks(0);
@@ -48,9 +61,12 @@ export default class UserProfile extends React.Component {
 
     render() {
     return (
-
-      <UserContainer user={this.state.user} works={this.state.works}/>
-
+    	<div>
+    		<EditDeleteButtons viewer_is_creator={true}/>
+    		<br/>
+    		<br/>
+      		<UserContainer user={this.state.user} works={this.state.works}/>
+      	</div>
     );
   }
 

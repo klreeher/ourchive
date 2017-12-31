@@ -10,6 +10,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import BookmarkForm from './BookmarkForm';
 import UserProfile from './UserProfile';
+import MyProfile from './MyProfile';
 import {
   BrowserRouter as Router,
   Route,
@@ -24,7 +25,7 @@ const WorkCollection = ({ match }) => (
 
 const Home = () => (
   <div>
-    <h2>Home</h2>
+    <h2>Home - Hello World</h2>
   </div>
 )
 
@@ -41,7 +42,8 @@ const BasicExample = () => (
       <Route path="/bookmark/:curatorId" component={BookmarkList}/>
       <Route path="/create/work" is_edit="false" component={NewWork}/>
       <Route path="/bookmarks/new" component={BookmarkForm}/>
-      <Route path="/my-profile" component={UserProfile}/>
+      <Route path="/my-profile" component={MyProfile}/>
+      <Route path="/user/:userId" component={UserProfile}/>
     </div>
   </Router>
 )

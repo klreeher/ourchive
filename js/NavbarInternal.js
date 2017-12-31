@@ -38,6 +38,9 @@ var NavbarInternal = React.createClass({
       <NavItem>New Bookmark</NavItem>
     </IndexLinkContainer>
     <IndexLinkContainer to="/my-profile">
+      <NavItem>My Profile</NavItem>
+    </IndexLinkContainer>
+    <IndexLinkContainer to="/user/1">
       <NavItem>User Profile</NavItem>
     </IndexLinkContainer>
     </Nav>
