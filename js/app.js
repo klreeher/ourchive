@@ -24,7 +24,7 @@ const WorkCollection = ({ match }) => (
 
 const Home = () => (
   <div>
-    <h2>Home</h2>
+    <h2>Home - Hello World</h2>
   </div>
 )
 
