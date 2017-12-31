@@ -57,6 +57,17 @@ def get_work(workId):
     {"primary pairing": ["buffy/faith"]}]}])
   return work
 
+@app.route('/api/user/<int:userId>')
+def get_user(userId):
+  user = json.dumps(
+      {
+        "userName": "elena",
+        "aboutMe": "HUNDRED YARD HATER",
+        "lastLogin": "2017-07-04",
+        "works_count": 25,
+        "bookmarks_count": 30
+      })
+  return user
 
 @app.route('/api/bookmark/curator/<int:curatorId>')
 def get_bookmarks(curatorId):

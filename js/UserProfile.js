@@ -3,6 +3,7 @@ import axios from 'axios';
 import Link from 'react-router-dom';
 import {Tabs, Tab} from 'react-bootstrap';
 import WorkStub from './WorkStub';
+import UserContainer from './UserContainer';
 
 
 export default class UserProfile extends React.Component {
@@ -11,23 +12,29 @@ export default class UserProfile extends React.Component {
 	    this.state = this.state = {user: {}, works: []};
     }
 
+    fetchUser(userId)
+  	{
+	  	axios.get('/api/user/'+userId)
+	      .then(function (response) {
+	      	localStorage.setItem('profile', JSON.stringify(response.data));
+	        this.setState({
+	          user: response.data
+	        });  
+
+	      }.bind(this))
+	      .catch(function (error) {
+	        console.log(error);
+	    });
+  	}
+
     getUser()
     {
-    	var user = {
-		
-		  "userName": "elena",
-	      "aboutMe": "HATE EFFORT, LOVE BADFIC",
-	      "lastLogin": "2017-07-04",
-	      "works_count": 25,
-	      "bookmarks_count": 30
-	  	};
+    	
     	var userProfile = localStorage.getItem('profile');
     	if (userProfile == null)
     	{
-    		localStorage.setItem('profile', JSON.stringify(user));
-    		this.setState({
-	          user: user
-	        }); 
+    		//todo: this means user should log in probably?
+    		this.fetchUser(1);
 	        console.log("USER PROFILE WAS NULL");
     	} 
     	else
@@ -52,67 +59,7 @@ export default class UserProfile extends React.Component {
     render() {
     return (
 
-      <Tabs defaultActiveKey={1} id="uncontrolled-tab-example">
-        <Tab eventKey={1} title="Profile">
-	    	<div className="col-md-12">
-		        	<div className="row">
-		        		<div className="col-md-4">
-		        			<h3>{this.state.user.userName}</h3>
-		        		</div>	        		
-		        	</div>
-		        	<div className="row">
-		        		<div className="col-md-2">
-		        			About:
-		        		</div>
-		        		<div className="col-md-10">
-		        			{this.state.user.aboutMe}
-		        		</div>
-		        	</div>
-		        	<div className="row">
-		        		<div className="col-md-2">
-		        			Last Login:
-		        		</div>
-		        		<div className="col-md-10">
-		        			{this.state.user.lastLogin}
-		        		</div>
-		        	</div>
-		        	<div className="row">
-		        		<div className="col-md-2">
-		        			Works:
-		        		</div>
-		        		<div className="col-md-10">
-		        			{this.state.user.works_count}
-		        		</div>
-		        	</div>
-		        	<div className="row">
-		        		<div className="col-md-2">
-		        			Bookmarks:
-		        		</div>
-		        		<div className="col-md-10">
-		        			{this.state.user.bookmarks_count}
-		        		</div>
-		        	</div>
-	        	</div>
-    	</Tab>
-    	<Tab eventKey={2} title="Works">
-    		<div className="col-md-12">
-    			<br/>
-	    		<div className="list">
-			    	{this.state.works.map(work => 
-			    		<div className="list-row panel panel-default" key={work.key}>
-			    			<WorkStub work={work}/>
-			    		</div>
-			    		)}
-			  	</div>
-	    	</div>
-	    </Tab>
-    	<Tab eventKey={3} title="Bookmarks">
-    		<div className="col-md-12">
-
-	        		Tab 3 content
-	        </div>
-    	</Tab>
-  	  </Tabs>
+      <UserContainer user={this.state.user} works={this.state.works}/>
 
     );
   }
