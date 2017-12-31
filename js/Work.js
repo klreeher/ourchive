@@ -5,7 +5,7 @@ import {
 import WorkStub from './WorkStub';
 
 var json = {
-	"employees": 
+	"works": 
 	[
 	{
 	"key": "1",
@@ -39,7 +39,7 @@ var Work = React.createClass({
   render() {
     return (
       <div className="list">
-    	{json.employees.map(work => 
+    	{json.works.map(work => 
     		<div className="list-row panel panel-default" key={work.key}>
     			<WorkStub work={work}/>
     		</div>

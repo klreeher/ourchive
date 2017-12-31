@@ -40,9 +40,8 @@ const BasicExample = () => (
       <Route path="/work/:workId" component={SingleWork}/>
       <Route path="/bookmark/:curatorId" component={BookmarkList}/>
       <Route path="/create/work" is_edit="false" component={NewWork}/>
-      <Route path="/user/:userId" component={Home}/>
       <Route path="/bookmarks/new" component={BookmarkForm}/>
-      <Route path="/user/1" component={UserProfile}/>
+      <Route path="/my-profile" component={UserProfile}/>
     </div>
   </Router>
 )
