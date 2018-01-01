@@ -49,7 +49,7 @@ export default class UserProfile extends React.Component {
     render() {
     return (
 
-      <UserContainer user={this.state.user} works={this.state.works}/>
+      <UserContainer user={this.state.user} works={this.state.works} bookmarks={this.state.bookmarks}/>
 
     );
   }

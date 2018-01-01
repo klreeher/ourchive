@@ -40,7 +40,7 @@ var NavbarInternal = React.createClass({
     <IndexLinkContainer to="/my-profile">
       <NavItem>My Profile</NavItem>
     </IndexLinkContainer>
-    <IndexLinkContainer to="/user/1">
+    <IndexLinkContainer to="/user/1/show">
       <NavItem>User Profile</NavItem>
     </IndexLinkContainer>
     </Nav>

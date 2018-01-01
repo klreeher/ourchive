@@ -65,7 +65,8 @@ def get_user(userId):
         "aboutMe": "HUNDRED YARD HATER",
         "lastLogin": "2017-07-04",
         "works_count": 25,
-        "bookmarks_count": 30
+        "bookmarks_count": 30,
+        "userId": 1
       })
   return user
 

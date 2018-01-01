@@ -11,6 +11,8 @@ import ReactDOM from 'react-dom';
 import BookmarkForm from './BookmarkForm';
 import UserProfile from './UserProfile';
 import MyProfile from './MyProfile';
+import UserForm from './UserForm';
+
 import {
   BrowserRouter as Router,
   Route,
@@ -43,7 +45,8 @@ const BasicExample = () => (
       <Route path="/create/work" is_edit="false" component={NewWork}/>
       <Route path="/bookmarks/new" component={BookmarkForm}/>
       <Route path="/my-profile" component={MyProfile}/>
-      <Route path="/user/:userId" component={UserProfile}/>
+      <Route path="/user/:userId/show" component={UserProfile}/>
+      <Route path="/user/:userId/edit" component={UserForm}/>
     </div>
   </Router>
 )

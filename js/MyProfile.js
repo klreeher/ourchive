@@ -10,7 +10,7 @@ import EditDeleteButtons from './EditDeleteButtons';
 export default class MyProfile extends React.Component {
 	constructor(props) {    
 	  	super(props);	  	
-	    this.state = this.state = {user: {}, works: []};
+	    this.state = this.state = {user: {}, works: [], bookmarks: []};
     }
 
     fetchUser(userId)
@@ -62,10 +62,10 @@ export default class MyProfile extends React.Component {
     render() {
     return (
     	<div>
-    		<EditDeleteButtons viewer_is_creator={true}/>
+    		<EditDeleteButtons viewer_is_creator={true} editHref={"user/"+this.state.user.userId+"/edit"}/>
     		<br/>
     		<br/>
-      		<UserContainer user={this.state.user} works={this.state.works}/>
+      		<UserContainer user={this.state.user} works={this.state.works} bookmarks={this.state.bookmarks}/>
       	</div>
     );
   }
