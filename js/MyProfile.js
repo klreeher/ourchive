@@ -11,6 +11,8 @@ export default class MyProfile extends React.Component {
 	constructor(props) {    
 	  	super(props);	  	
 	    this.state = this.state = {user: {}, works: [], bookmarks: []};
+        this.getUser = this.getUser.bind(this);
+        this.getWorks = this.getWorks.bind(this);
     }
 
     fetchUser(userId)
@@ -19,7 +21,9 @@ export default class MyProfile extends React.Component {
 	      .then(function (response) {
 	      	localStorage.setItem('profile', JSON.stringify(response.data));
 	        this.setState({
-	          user: response.data
+	          user: response.data,
+              bookmarks: response.data.bookmarks,
+              works: response.data.works
 	        });  
 
 	      }.bind(this))
@@ -39,24 +43,43 @@ export default class MyProfile extends React.Component {
     	} 
     	else
     	{
+            var userData = JSON.parse(userProfile);
+            this.getWorks(0, userData.userId);
+            this.getBookmarks(0, userData.userId);
     		this.setState({
-	          user: JSON.parse(userProfile)
+	          user: userData
 	        }); 
     	}
     }
 
-    getWorks(index)
+    getWorks(index, userId)
     {
-    	//todo add axios
+    	axios.get('/api/work/creator/'+userId)
+          .then(function (response) {
+            this.setState({
+              works: response.data.works
+            });  
+
+          }.bind(this))
+          .catch(function (error) {
+            console.log(error);
+        });
     }
-    getBookmarks(index)
+    getBookmarks(index, userId)
     {
-    	//todo add axios
+    	axios.get('/api/bookmark/curator/'+userId)
+          .then(function (response) {
+            this.setState({                
+              bookmarks: response.data.bookmarks
+            });  
+
+          }.bind(this))
+          .catch(function (error) {
+            console.log(error);
+        });
     }
     componentWillMount() { 
     	this.getUser();
-    	this.getWorks(0);
-    	this.getBookmarks(0);
   	}
 
     render() {

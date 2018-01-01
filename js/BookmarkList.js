@@ -11,7 +11,7 @@ export default class BookmarkList extends React.Component {
 	  axios.get('/api/bookmark/curator/'+curatorId)
 	      .then(function (response) {
 	        this.setState({	        	
-	          bookmarks: response.data[0]["bookmarks"]
+	          bookmarks: response.data.bookmarks
 
 	        });
 	      }.bind(this))

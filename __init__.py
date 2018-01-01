@@ -66,14 +66,26 @@ def get_user(userId):
         "lastLogin": "2017-07-04",
         "works_count": 25,
         "bookmarks_count": 30,
-        "userId": 1
+        "userId": 1,
+        "works": [
+        {
+          "key": "1",
+          "title": "a series of unfortunate dev choices",
+          "name": "impertinence",
+          "creator_id": 2,
+          "chapter_count": 3,
+          "is_complete": "false",
+          "word_count": 100500,
+          "work_summary": "some stuff happens"
+        }],
+        "bookmarks": []
       })
   return user
 
 @app.route('/api/bookmark/curator/<int:curatorId>')
 def get_bookmarks(curatorId):
   bookmarks = json.dumps(
-    [ {"bookmarks": [
+    {"bookmarks": [
       {
           "key": "1",
           "chapter_image": "butts.png",
@@ -89,8 +101,25 @@ def get_bookmarks(curatorId):
             {"primary pairing": ["buffy/faith"]}
           ]
         }
-    ]}])
+    ]})
   return bookmarks
+
+@app.route('/api/work/creator/<int:creatorId>')
+def get_works_by_creator(creatorId):
+  works = json.dumps(
+    {"works": [
+        {
+          "key": "1",
+          "title": "a series of unfortunate dev choices",
+          "name": "impertinence",
+          "creator_id": 2,
+          "chapter_count": 3,
+          "is_complete": "false",
+          "word_count": 100500,
+          "work_summary": "some stuff happens"
+        }]
+    })
+  return works
 
 @app.route('/<path:path>')
 def default(path):
