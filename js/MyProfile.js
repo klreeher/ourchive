@@ -62,7 +62,7 @@ export default class MyProfile extends React.Component {
     render() {
     return (
     	<div>
-    		<EditDeleteButtons viewer_is_creator={true} editHref={"user/"+this.state.user.userId+"/edit"}/>
+    		<EditDeleteButtons viewer_is_creator={true} editHref={"/user/"+this.state.user.userId+"/edit"}/>
     		<br/>
     		<br/>
       		<UserContainer user={this.state.user} works={this.state.works} bookmarks={this.state.bookmarks}/>
