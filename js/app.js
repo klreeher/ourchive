@@ -49,6 +49,7 @@ const BasicExample = () => (
       <Route path="/user/:userId/show" component={UserProfile}/>
       <Route path="/user/:userId/edit" component={UserForm}/>
       <Route path="/login" component={LoginForm}/>
+      <Route path="/logout" component={Home}/>
     </div>
   </Router>
 )

@@ -33,7 +33,16 @@ export default class LoginForm extends React.Component {
 
   login(evt) {
     evt.preventDefault();
-    //todo login!!!
+    axios.post('/api/login/', {
+      userName: this.state.userName, 
+      password: this.state.password
+    })
+    .then(function (response) {
+      console.log(response);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
   }
 
   render() {
