@@ -43,7 +43,8 @@ export default class NavbarInternal extends React.Component {
       localStorage.removeItem('jwt');
       this.setState({
         loggedIn: false
-      })
+      });
+      this.props.updateUser();
     })
     .catch(function (error) {
       console.log(error);
@@ -80,6 +81,7 @@ export default class NavbarInternal extends React.Component {
         password: "",
         loggedIn: true
       });
+
     })
     .catch(function (error) {
       console.log(error);
@@ -117,7 +119,7 @@ export default class NavbarInternal extends React.Component {
         <IndexLinkContainer to="/user/1/show">
           <NavItem>User Profile</NavItem>
         </IndexLinkContainer>
-        <NavItem href="/" onClick={evt => this.logout(evt)}>Logout</NavItem>
+        <NavItem onClick={evt => this.logout(evt)}>Logout</NavItem>
         </Nav>
       </Navbar>
     );

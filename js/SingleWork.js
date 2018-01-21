@@ -92,7 +92,7 @@ export default class SingleWork extends React.Component {
     "fandom": ["hobbits", "star trek"]},
     {"primary pairing": ["trip tucker / thorin"]}]};
     this.state = {workId: props.match.params.workId, work: empty, current_chapter: empty.chapters[0],
-      chapter_index: 0, viewer_is_creator: false};
+      chapter_index: 0, viewer_is_creator: false, user: this.props.user};
   }
   componentWillMount() { 
     this.getWork(this.state.workId); 
@@ -107,6 +107,7 @@ export default class SingleWork extends React.Component {
   render() {
     const nextDisabled = this.state.chapter_index + 1 >= this.state.work.chapters.length;
     const previousDisabled = this.state.chapter_index === 0;
+    const loggedIn = this.state.user != null;
     return (
       <div>
         <div className="panel panel-default">
