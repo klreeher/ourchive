@@ -43,6 +43,9 @@ var NavbarInternal = React.createClass({
     <IndexLinkContainer to="/user/1/show">
       <NavItem>User Profile</NavItem>
     </IndexLinkContainer>
+    <IndexLinkContainer to="/login">
+      <NavItem>Login</NavItem>
+    </IndexLinkContainer>
     </Nav>
   </Navbar>
     );
