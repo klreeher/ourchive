@@ -6,7 +6,9 @@ import {
   Nav,
   Navbar,
   NavItem,
-  NavDropdown
+  NavDropdown,
+  Modal,
+  Button
 } from 'react-bootstrap';
 import axios from 'axios';
 import { IndexLinkContainer } from 'react-router-bootstrap';
@@ -27,7 +29,9 @@ export default class NavbarInternal extends React.Component {
   constructor(props)
   {
     super(props);
-    this.state = {loggedIn: false};
+    this.state = {showModal: false};
+    this.setUserName = this.setUserName.bind(this);
+    this.setPassword = this.setPassword.bind(this);
   }
 
   logout(evt)
@@ -46,6 +50,43 @@ export default class NavbarInternal extends React.Component {
     });
     
   }
+
+  setUserName(evt) {
+    this.setState({
+      userName: evt.target.value
+    });
+  }
+  setPassword(evt) {
+    this.setState({
+      password: evt.target.value
+    });
+  }
+
+  showLogin(evt)
+  {
+    this.setState({ showModal: true });
+  }
+
+  handleLogin(evt) {
+    axios.post('/api/login/', {
+      userName: this.state.userName, 
+      password: this.state.password
+    })
+    .then((response) => {
+      localStorage.setItem('jwt', response.data);
+      this.setState({ 
+        showModal: false,
+        userName: "",
+        password: "",
+        loggedIn: true
+      });
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+    
+  }
+
   render() {
 
     const navbarLoggedIn = (
@@ -82,6 +123,7 @@ export default class NavbarInternal extends React.Component {
     );
 
     const navbarLoggedOut = (
+    <div>
       <Navbar>
         <Navbar.Header>
           <Navbar.Brand>
@@ -98,11 +140,38 @@ export default class NavbarInternal extends React.Component {
         <IndexLinkContainer to="/user/1/show">
           <NavItem>User Profile</NavItem>
         </IndexLinkContainer>
-        <IndexLinkContainer to="/login">
-          <NavItem>Login</NavItem>
-        </IndexLinkContainer>
+        <NavItem onClick={evt => this.showLogin(evt)}>Login</NavItem>
         </Nav>
       </Navbar>
+
+      <Modal show={this.state.showModal} onHide={evt => this.handleLogin(evt)}>
+          <Modal.Header closeButton>
+            <Modal.Title>Log In</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <div>
+              <div className="panel panel-default">
+                <div className="panel-body">
+                    <div className="form-group">
+                      <label htmlFor="userName">Username</label>
+                      <input id="userName" 
+                        name="userNameInput" onChange={this.setUserName} className="form-control"></input>
+                    </div>              
+                    <div className="form-group">
+                      <label htmlFor="password">Password</label>
+                      <input id="password" className="form-control" type="password"
+                      onChange={this.setPassword}></input>
+                    </div>
+                    <div className="form-group">
+                      <button onClick={evt => this.handleLogin(evt)} className="btn btn-default">Submit</button>
+                    </div>
+                </div>
+              </div>
+          </div>
+
+          </Modal.Body>
+        </Modal>
+      </div>
     );
 
     if (this.state.loggedIn)
