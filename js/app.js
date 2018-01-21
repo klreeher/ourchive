@@ -12,8 +12,6 @@ import BookmarkForm from './BookmarkForm';
 import UserProfile from './UserProfile';
 import MyProfile from './MyProfile';
 import UserForm from './UserForm';
-import LoginForm from './LoginForm';
-import Logout from './Logout';
 import Home from './Home';
 
 import {
@@ -42,8 +40,6 @@ const BasicExample = () => (
       <Route path="/my-profile" component={MyProfile}/>
       <Route path="/user/:userId/show" component={UserProfile}/>
       <Route path="/user/:userId/edit" component={UserForm}/>
-      <Route path="/login" component={LoginForm}/>
-      <Route path="/logout" component={Logout}/>
     </div>
   </Router>
 )
