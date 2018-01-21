@@ -2,13 +2,15 @@ import React from 'react';
 import {
   Link
 } from 'react-router-dom';
+import axios from 'axios';
+import { Redirect } from 'react-router';
 
 export default class LoginForm extends React.Component {
 
 
   constructor(props) {
     super(props);
-    this.state = {loginToken: "", userName: "", password: ""};
+    this.state = {loginToken: "", userName: "", password: "", isLoggedIn: false};
     this.setUserName = this.setUserName.bind(this);
     this.setPassword = this.setPassword.bind(this);
     this.login = this.login.bind(this);
@@ -37,8 +39,9 @@ export default class LoginForm extends React.Component {
       userName: this.state.userName, 
       password: this.state.password
     })
-    .then(function (response) {
-      console.log(response);
+    .then((response) => {
+      localStorage.setItem('jwt', response.data);
+      this.setState({redirect: true});
     })
     .catch(function (error) {
       console.log(error);
@@ -46,11 +49,13 @@ export default class LoginForm extends React.Component {
   }
 
   render() {
+    if (this.state.redirect) {
+      return <Redirect push to="/" />;
+    }
     return (
         <div>
           <div className="panel panel-default">
             <div className="panel-body">
-              <form>
                 <div className="form-group">
                   <label htmlFor="userName">Username</label>
                   <input id="userName" 
@@ -64,7 +69,6 @@ export default class LoginForm extends React.Component {
                 <div className="form-group">
                   <button onMouseDown={evt => this.login(evt)} className="btn btn-default">Submit</button>
                 </div>
-              </form>
             </div>
           </div>
       </div>

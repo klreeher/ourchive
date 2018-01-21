@@ -1,4 +1,4 @@
-from flask import Flask, render_template, send_file, send_from_directory
+from flask import Flask, render_template, send_file, send_from_directory, request
 import json
 from flask.ext.tus import tus_manager
 
@@ -15,6 +15,17 @@ def upload_file_hander( upload_file_path, filename ):
 def download(filename):
   uploads = os.path.join(app.root_path, tm.upload_folder)
   return send_from_directory(directory=uploads, filename=filename)
+
+
+@app.route('/api/login/', methods=['POST'])
+def login():
+  if not request.json:
+    abort(400)
+  if request.json["userName"] is None:
+    abort(400)
+  if request.json["password"] is None:
+    abort(400)
+  return request.json["userName"] + request.json["password"]
 
 @app.route('/')
 def hello_world():
