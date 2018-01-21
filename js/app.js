@@ -14,6 +14,7 @@ import MyProfile from './MyProfile';
 import UserForm from './UserForm';
 import LoginForm from './LoginForm';
 import Logout from './Logout';
+import Home from './Home';
 
 import {
   BrowserRouter as Router,
@@ -21,16 +22,8 @@ import {
   Link
 } from 'react-router-dom';
 
-
-
 const WorkCollection = ({ match }) => (
   <Work />
-)
-
-const Home = () => (
-  <div>
-    <h2>Home - Hello World</h2>
-  </div>
 )
 
 const BasicExample = () => (

@@ -17,7 +17,6 @@ export default class Logout extends React.Component {
     })
     .then((response) => {
       localStorage.removeItem('jwt');
-      this.setState({redirect: true});
     })
     .catch(function (error) {
       console.log(error);
@@ -26,11 +25,6 @@ export default class Logout extends React.Component {
   }
   componentWillUpdate(nextProps, nextState)
   {
-  }
-
-  login(evt) {
-    evt.preventDefault();
-    
   }
 
   render() {

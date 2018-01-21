@@ -10,16 +10,14 @@ export default class LoginForm extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {loginToken: "", userName: "", password: "", isLoggedIn: false};
+    this.state = {loginToken: "", userName: "", password: "", isLoggedIn: false,
+    redirectPath: props.redirectPath};
     this.setUserName = this.setUserName.bind(this);
     this.setPassword = this.setPassword.bind(this);
     this.login = this.login.bind(this);
   }
   componentWillMount() { 
     //do things
-  }
-  componentWillUpdate(nextProps, nextState)
-  {
   }
 
   setUserName(evt) {
@@ -50,7 +48,7 @@ export default class LoginForm extends React.Component {
 
   render() {
     if (this.state.redirect) {
-      return <Redirect push to="/" />;
+      return <Redirect push to="/my-profile" />;
     }
     return (
         <div>

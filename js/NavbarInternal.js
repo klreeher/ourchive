@@ -8,6 +8,7 @@ import {
   NavItem,
   NavDropdown
 } from 'react-bootstrap';
+import axios from 'axios';
 import { IndexLinkContainer } from 'react-router-bootstrap';
 
 export default class NavbarInternal extends React.Component {
@@ -27,6 +28,23 @@ export default class NavbarInternal extends React.Component {
   {
     super(props);
     this.state = {loggedIn: false};
+  }
+
+  logout(evt)
+  {
+    axios.post('/api/logout/', {      
+      jwt: localStorage.getItem('jwt')
+    })
+    .then((response) => {
+      localStorage.removeItem('jwt');
+      this.setState({
+        loggedIn: false
+      })
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+    
   }
   render() {
 
@@ -58,9 +76,7 @@ export default class NavbarInternal extends React.Component {
         <IndexLinkContainer to="/user/1/show">
           <NavItem>User Profile</NavItem>
         </IndexLinkContainer>
-        <IndexLinkContainer to="/logout">
-          <NavItem>Logout</NavItem>
-        </IndexLinkContainer>
+        <NavItem href="/" onClick={evt => this.logout(evt)}>Logout</NavItem>
         </Nav>
       </Navbar>
     );
