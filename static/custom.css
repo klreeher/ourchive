@@ -318,12 +318,3 @@ div {
 .viewer {
   visibility: hidden;
 }
-
-.logged-in {
-  visibility: visible;
-
-}
-
-.logged-out {
-  visibility: hidden;
-}
