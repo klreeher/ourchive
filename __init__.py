@@ -60,14 +60,32 @@ def get_work(workId):
     "title": "bob goes to school",
     "text": "weh weh weh weh",
     "audio_url": "../audio/01 Family Problems.mp3",
-    "image_url": "url"
+    "image_url": "url",
+    "comments": [
+      {
+        "id": 256,
+        "userName": "jane",
+        "userId": 2,
+        "text": "this was bad actually"
+      }
+    ]
   },
     {"id": "2",
     "number": "2",
     "title": "bob fails at school",
     "text": "bloop",
     "audio_url": "url",
-    "image_url": "url"}],
+    "image_url": "url",
+    "comments": [
+    {
+      "id": 257,
+        "userName": "elektra",
+        "userId": 2,
+        "text": "thanks i hate it"
+      }
+    ]
+    }
+  ],
   "tags": [{
     "fandom": ["buffy", "xena"]},
     {"primary pairing": ["buffy/faith"]}]}])

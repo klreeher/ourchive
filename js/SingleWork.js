@@ -78,7 +78,15 @@ export default class SingleWork extends React.Component {
     "chapter_summary": "stuff happens",
     "text": "weh weh weh weh",
     "audio_url": "url",
-    "image_url": "url"
+    "image_url": "url",
+    "comments": [
+      {
+        "id": 37,
+        "userName": "cathy",
+        "userId": 2,
+        "text": "this was good actually"
+      }
+    ]
   },
     {"id": "2",
     "number": "2",
@@ -86,7 +94,17 @@ export default class SingleWork extends React.Component {
     "chapter_summary": "stuff happens",
     "text": "bob sux",
     "audio_url": "url",
-    "image_url": "url"}],
+    "image_url": "url",
+    "comments": [
+      {
+        "id": 36,
+        "userName": "jane",
+        "userId": 2,
+        "text": "this was bad actually"
+      }
+    ]
+  }
+  ],
   "chapter_count": "5",
   "tags": [{
     "fandom": ["hobbits", "star trek"]},
