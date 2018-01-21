@@ -13,6 +13,7 @@ import UserProfile from './UserProfile';
 import MyProfile from './MyProfile';
 import UserForm from './UserForm';
 import LoginForm from './LoginForm';
+import Logout from './Logout';
 
 import {
   BrowserRouter as Router,
@@ -49,7 +50,7 @@ const BasicExample = () => (
       <Route path="/user/:userId/show" component={UserProfile}/>
       <Route path="/user/:userId/edit" component={UserForm}/>
       <Route path="/login" component={LoginForm}/>
-      <Route path="/logout" component={Home}/>
+      <Route path="/logout" component={Logout}/>
     </div>
   </Router>
 )

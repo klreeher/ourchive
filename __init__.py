@@ -16,6 +16,11 @@ def download(filename):
   uploads = os.path.join(app.root_path, tm.upload_folder)
   return send_from_directory(directory=uploads, filename=filename)
 
+@app.route('/api/logout/', methods=['POST'])
+def logout():
+  if not request.json:
+    abort(400)
+  return request.json["jwt"]
 
 @app.route('/api/login/', methods=['POST'])
 def login():
