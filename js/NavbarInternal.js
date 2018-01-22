@@ -69,24 +69,32 @@ export default class NavbarInternal extends React.Component {
   }
 
   handleLogin(evt) {
-    axios.post('/api/login/', {
+    if (this.state.userName != "" && this.state.userName != null 
+      && this.state.password != "" && this.state.password != null)
+    {
+      axios.post('/api/login/', {
       userName: this.state.userName, 
       password: this.state.password
-    })
-    .then((response) => {
-      localStorage.setItem('jwt', response.data);
-      this.props.updateUser();
-      this.setState({ 
-        showModal: false,
-        userName: "",
-        password: "",
-        loggedIn: true
-      });
+      })
+      .then((response) => {
+        localStorage.setItem('jwt', response.data);
+        this.props.updateUser();
+        this.setState({ 
+          userName: "",
+          password: "",
+          loggedIn: true,
+          showModal: false
+        });
 
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    }
+    else
+    {
+        this.setState({ showModal: false });
+    }
     
   }
 
