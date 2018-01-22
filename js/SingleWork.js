@@ -171,7 +171,7 @@ export default class SingleWork extends React.Component {
   <hr/>
   <div className="row">
     <div className="col-md-12">
-      <Chapter chapter={this.state.current_chapter}/>
+      <Chapter chapter={this.state.current_chapter} user={this.props.user}/>
     </div>
   </div>  
   <button className="btn btn-link" onMouseDown={evt => this.previousChapter(evt)} disabled={previousDisabled}>Previous Chapter</button>

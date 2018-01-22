@@ -75,6 +75,7 @@ export default class NavbarInternal extends React.Component {
     })
     .then((response) => {
       localStorage.setItem('jwt', response.data);
+      this.props.updateUser();
       this.setState({ 
         showModal: false,
         userName: "",

@@ -11,7 +11,9 @@ export default class Chapter extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {chapter: props.chapter};
+    this.state = {chapter: props.chapter, user: props.user, newCommentText: ""};
+    this.addComment = this.addComment.bind(this)
+    this.updateNewCommentText = this.updateNewCommentText.bind(this)
   }
   componentWillMount() { 
     //do things
@@ -21,6 +23,25 @@ export default class Chapter extends React.Component {
   }
   componentWillReceiveProps(nextProps) {
     this.setState({ chapter: nextProps.chapter });  
+  }
+  addComment(event)
+  {
+    if (this.state.newCommentText == null || this.state.newCommentText == "") return;
+    var commentUser = this.state.user != null && this.state.user != "" ? this.state.user : "Anonymous";
+    var newComment = {text: this.state.newCommentText, id: Math.random(), userName: commentUser};
+    var original = this.state.chapter;
+    original.comments.push(newComment);
+    this.setState({
+      chapter: original,
+      newCommentText: ""
+    });
+  }
+  updateNewCommentText(event)
+  {
+    this.setState(
+    {
+      newCommentText: event.target.value
+    })
   }
   render() {
     return (
@@ -52,12 +73,31 @@ export default class Chapter extends React.Component {
             </div>
           </div>
           <br/>
+          
+          <div className="row">
+            <div className="col-md-12">
+                Leave a comment:
+            </div>
+          </div>          
+          <div className="row">
+            <div className="col-md-12">
+              <textarea id="new_comment" value={this.state.newCommentText} rows="3"
+                  onChange={this.updateNewCommentText} className="form-control"></textarea>
+              
+            </div>
+          </div>
+          <br/>
+          <div className="row">
+            <div className="col-md-12">
+              <button onClick={this.addComment}>Add Comment</button>
+            </div>
+          </div>  
+          <br/>
           <div className="row">
             <div className="col-md-12">
               <h3>Comments</h3>
             </div>
-          </div>
-          <br/>
+          </div>   
           <div className="row">
             {this.state.chapter.comments.map(comment => 
               <div key={comment.id} className="col-md-12">
