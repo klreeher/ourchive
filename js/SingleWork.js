@@ -159,7 +159,7 @@ export default class SingleWork extends React.Component {
   <hr/>
   
       {this.state.work.tags.map(tag => 
-        <div className="row">
+        <div className="row" key={Math.random()}>
         <div className="col-md-12">
             <ul className="list-inline">
               <TagList tag_category={Object.keys(tag)} tags={Object.values(tag)}/>

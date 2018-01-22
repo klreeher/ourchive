@@ -11,8 +11,10 @@ export default class Chapter extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {chapter: props.chapter, user: props.user, newCommentText: ""};
+    this.state = {chapter: props.chapter, user: props.user, newCommentText: "",
+    toggleCommentsText: "Show Comments"};
     this.addComment = this.addComment.bind(this)
+    this.toggleComments = this.toggleComments.bind(this)
     this.updateNewCommentText = this.updateNewCommentText.bind(this)
   }
   componentWillMount() { 
@@ -23,6 +25,17 @@ export default class Chapter extends React.Component {
   }
   componentWillReceiveProps(nextProps) {
     this.setState({ chapter: nextProps.chapter });  
+  }
+  toggleComments(event)
+  {
+    event.preventDefault();
+    event.target.blur();
+    var showComments = !this.state.showComments;
+    var toggleText = showComments ? "Hide Comments" : "Show Comments";
+    this.setState({
+      showComments: showComments,
+      toggleCommentsText: toggleText
+    })
   }
   addComment(event)
   {
@@ -94,19 +107,24 @@ export default class Chapter extends React.Component {
           </div>  
           <br/>
           <div className="row">
-            <div className="col-md-12">
-              <h3>Comments</h3>
-            </div>
-          </div>   
-          <div className="row">
-            {this.state.chapter.comments.map(comment => 
-              <div key={comment.id} className="col-md-12">
-                <Comment comment={comment}/>
+            <button className="btn btn-link btn-lg" onClick={this.toggleComments}>{this.state.toggleCommentsText}</button>
+          </div>
+          <div className={this.state.showComments ? "viewer-creator" : "viewer"}>
+            <div className="row">
+              <div className="col-md-12">
+                <h3>Comments</h3>
               </div>
-                
-              )}
+            </div>   
+            <div className="row">
+              {this.state.chapter.comments.map(comment => 
+                <div key={comment.id} className="col-md-12">
+                  <Comment comment={comment}/>
+                </div>
+                  
+                )}
 
-          </div>      
+            </div>  
+          </div>    
         </div>
       </div>
     );

@@ -312,9 +312,11 @@ div {
 
 .viewer-creator {
   visibility: visible;
+  display: block;
 
 }
 
 .viewer {
   visibility: hidden;
+  display: none;
 }
