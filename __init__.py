@@ -67,7 +67,8 @@ def get_work(workId):
         "userName": "jane",
         "userId": 2,
         "text": "this was bad actually",
-        "comments": []
+        "comments": [],
+        "chapterId": "1"
       }
     ]
   },
@@ -83,13 +84,15 @@ def get_work(workId):
         "userName": "elektra",
         "userId": 2,
         "text": "thanks i hate it",
+        "chapterId": "1",
         "comments": [
           {
             "id": 258,
             "userName": "bortles",
             "userId": 3,
             "text": "fight me in 20 minutes outside the back lot, you coward",
-            "comments": []
+            "comments": [],
+            "chapterId": "1"
           }
         ]
       }

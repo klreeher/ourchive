@@ -5,6 +5,7 @@ import {
 import Image from 'react-image';
 import ReactPlayer from 'react-player';
 import Comment from './Comment';
+import NewComment from './NewComment';
 
 export default class Chapter extends React.Component {
 
@@ -24,7 +25,8 @@ export default class Chapter extends React.Component {
   {
   }
   componentWillReceiveProps(nextProps) {
-    this.setState({ chapter: nextProps.chapter });  
+    this.setState({ chapter: nextProps.chapter });
+    console.log(this.state);
   }
   toggleComments(event)
   {
@@ -39,9 +41,11 @@ export default class Chapter extends React.Component {
   }
   addComment(event)
   {
+    //TODO replace with db id
     if (this.state.newCommentText == null || this.state.newCommentText == "") return;
     var commentUser = this.state.user != null && this.state.user != "" ? this.state.user : "Anonymous";
-    var newComment = {text: this.state.newCommentText, id: Math.random(), userName: commentUser, comments: []};
+    var newComment = {text: this.state.newCommentText, id: Math.floor(Math.random() * 100) + this.state.chapter.id, userName: commentUser, comments: [],
+      parentId: null, chapterId: this.state.chapter.id};
     var original = this.state.chapter;
     original.comments.push(newComment);
     this.setState({
@@ -92,19 +96,9 @@ export default class Chapter extends React.Component {
                 Leave a comment:
             </div>
           </div>          
-          <div className="row">
-            <div className="col-md-12">
-              <textarea id="new_comment" value={this.state.newCommentText} rows="3"
-                  onChange={this.updateNewCommentText} className="form-control"></textarea>
-              
-            </div>
-          </div>
-          <br/>
-          <div className="row">
-            <div className="col-md-12">
-              <button onClick={this.addComment}>Add Comment</button>
-            </div>
-          </div>  
+          <NewComment comment={null} user={this.props.user} 
+            addComment={this.addComment} updateNewCommentText={this.updateNewCommentText}
+            newCommentText={this.state.newCommentText}/>
           <br/>
           <div className="row">
             <button className="btn btn-link btn-lg" onClick={this.toggleComments}>{this.state.toggleCommentsText}</button>
@@ -118,7 +112,7 @@ export default class Chapter extends React.Component {
             <div className="row">
               {this.state.chapter.comments.map(comment => 
                 <div key={comment.id} className="col-md-12">
-                  <Comment comment={comment} user={this.props.user}/>
+                  <Comment comment={comment} user={this.props.user} chapterId={this.state.chapter.id}/>
                 </div>
                   
                 )}

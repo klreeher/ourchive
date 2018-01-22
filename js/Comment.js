@@ -2,6 +2,7 @@ import React from 'react';
 import {
   Link
 } from 'react-router-dom';
+import NewComment from './NewComment';
 
 export default class Comment extends React.Component {
 
@@ -21,10 +22,13 @@ export default class Comment extends React.Component {
   }
   addComment(event)
   {
+    console.log(this.state);
+    var originalId = this.state.comment.id != null ? this.state.comment.id : 0;
+    //todo stub getting this from the db with db generated id
     if (this.state.newCommentText == null || this.state.newCommentText == "") return;
     var commentUser = this.state.user != null && this.state.user != "" ? this.state.user : "Anonymous";
-    var newComment = {text: this.state.newCommentText, id: Math.random(), userName: commentUser, comments: [],
-      parentCommentId: this.state.comment.id};
+    var newComment = {text: this.state.newCommentText, id: Math.floor(Math.random() * 100) + originalId, userName: commentUser, comments: [],
+      parentCommentId: this.state.comment.id, chapterId: this.state.comment.chapterId};
     var original = this.state.comment;
     original.comments.push(newComment);
     this.setState({
@@ -46,6 +50,7 @@ export default class Comment extends React.Component {
     {
       showReply: true
     })
+    event.target.blur();
   }
 
   render() {
@@ -58,19 +63,9 @@ export default class Comment extends React.Component {
             <button className="btn btn-link" onClick={this.showReply}>Reply</button>
           </div>
           <div className={this.state.showReply ? "viewer-creator" : "viewer"}>
-            <div className="row">
-              <div className="col-md-12">
-                <textarea value={this.state.newCommentText} rows="3"
-                    onChange={this.updateNewCommentText} className="form-control"></textarea>
-                
-              </div>
-            </div>
-            <br/>
-            <div className="row">
-              <div className="col-md-12">
-                <button onClick={this.addComment}>Add Reply</button>
-              </div>
-            </div>  
+            <NewComment comment={this.state.comment} user={this.props.user} 
+            addComment={this.addComment} updateNewCommentText={this.updateNewCommentText}
+            newCommentText={this.state.newCommentText}/>
           </div>
           <div className="row">
             {this.state.comment.comments.map(comment => 
