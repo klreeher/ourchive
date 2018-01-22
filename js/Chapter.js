@@ -26,7 +26,6 @@ export default class Chapter extends React.Component {
   }
   componentWillReceiveProps(nextProps) {
     this.setState({ chapter: nextProps.chapter });
-    console.log(this.state);
   }
   toggleComments(event)
   {

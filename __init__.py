@@ -135,6 +135,7 @@ def get_bookmarks(curatorId):
     {"bookmarks": [
       {
           "key": "1",
+          "id": 5,
           "chapter_image": "butts.png",
           "title": "bleh bleh bleh",
           "creator": "impertinence",
@@ -146,6 +147,16 @@ def get_bookmarks(curatorId):
           "tags": [
             {"fandom": ["buffy", "xena"]},
             {"primary pairing": ["buffy/faith"]}
+          ],
+          "comments": [
+            {
+              "id": 296,
+              "userName": "weirdusernamewithcharacter",
+              "userId": 4,
+              "text": "pls i want more help me find stories about dolphins!!",
+              "comments": [],
+              "bookmarkId": 5
+            }
           ]
         }
     ]})

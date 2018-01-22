@@ -22,7 +22,6 @@ export default class Comment extends React.Component {
   }
   addComment(event)
   {
-    console.log(this.state);
     var originalId = this.state.comment.id != null ? this.state.comment.id : 0;
     //todo stub getting this from the db with db generated id
     if (this.state.newCommentText == null || this.state.newCommentText == "") return;
