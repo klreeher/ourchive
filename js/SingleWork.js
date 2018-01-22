@@ -84,7 +84,8 @@ export default class SingleWork extends React.Component {
         "id": 37,
         "userName": "cathy",
         "userId": 2,
-        "text": "this was good actually"
+        "text": "this was good actually",
+        "comments": []
       }
     ]
   },
@@ -100,7 +101,8 @@ export default class SingleWork extends React.Component {
         "id": 36,
         "userName": "jane",
         "userId": 2,
-        "text": "this was bad actually"
+        "text": "this was bad actually",
+        "comments": []
       }
     ]
   }

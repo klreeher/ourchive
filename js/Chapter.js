@@ -41,7 +41,7 @@ export default class Chapter extends React.Component {
   {
     if (this.state.newCommentText == null || this.state.newCommentText == "") return;
     var commentUser = this.state.user != null && this.state.user != "" ? this.state.user : "Anonymous";
-    var newComment = {text: this.state.newCommentText, id: Math.random(), userName: commentUser};
+    var newComment = {text: this.state.newCommentText, id: Math.random(), userName: commentUser, comments: []};
     var original = this.state.chapter;
     original.comments.push(newComment);
     this.setState({
@@ -118,7 +118,7 @@ export default class Chapter extends React.Component {
             <div className="row">
               {this.state.chapter.comments.map(comment => 
                 <div key={comment.id} className="col-md-12">
-                  <Comment comment={comment}/>
+                  <Comment comment={comment} user={this.props.user}/>
                 </div>
                   
                 )}
