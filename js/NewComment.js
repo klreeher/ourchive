@@ -32,7 +32,8 @@ export default class NewComment extends React.Component {
           <div className="col-md-12">
             <button onClick={this.props.addComment}>Add Reply</button>
           </div>
-        </div> 
+        </div>
+        <br/> 
       </div>
     );
   }
