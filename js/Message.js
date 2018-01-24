@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import Link from 'react-router-dom';
 import {Tabs, Tab} from 'react-bootstrap';
+import NewComment from './NewComment';
 
 export default class MessageCenter extends React.Component {
 
@@ -13,12 +14,27 @@ export default class MessageCenter extends React.Component {
       this.sendMessage = this.sendMessage.bind(this);
       this.deleteMessage = this.deleteMessage.bind(this);
       this.markAsRead = this.markAsRead.bind(this);
+      this.updateNewMessageText = this.updateNewMessageText.bind(this);
+      this.showReply = this.showReply.bind(this);
     }
 
   sendMessage(event)
   {
-    event.target.blur()    
-    this.props.sendMessage(this.state.message.id, this.state.message.parent_id);
+    event.target.blur()
+    this.props.sendMessage(this.state.message.id, this.state.newMessageText);
+    this.setState(
+    {
+      showReply: false,
+      newMessageText: ""
+    }) 
+    
+  }
+  showReply(event)
+  {
+    this.setState(
+    {
+      showReply: true
+    })     
   }
   markAsRead(event)
   {
@@ -36,9 +52,12 @@ export default class MessageCenter extends React.Component {
     event.target.blur()
     this.props.deleteMessage(this.state.message.id);
   }
-  showInbox(event)
+  updateNewMessageText(event)
   {
-  	
+    this.setState(
+    {
+      newMessageText: event.target.value
+    })
   }
   render() {
     return (
@@ -57,9 +76,15 @@ export default class MessageCenter extends React.Component {
 	        	</div>
           {this.props.allowReply &&              
               <div className="panel-footer">
-                <button className="btn btn-link" onClick={this.sendMessage}>Reply</button> | 
+                <button className="btn btn-link" onClick={this.showReply}>Reply</button> | 
                 <button className="btn btn-link" onClick={this.deleteMessage}>Delete</button> | 
-                <button className="btn btn-link" onClick={this.markAsRead}>Mark read</button>
+                <button className="btn btn-link" onClick={this.markAsRead}>Mark read</button>                
+                <div className={this.state.showReply ? "viewer-creator" : "viewer"}>
+                  <br/>
+                  <NewComment comment={null} user={this.props.user} 
+                  addComment={this.sendMessage} updateNewCommentText={this.updateNewMessageText}
+                  newCommentText={this.state.newMessageText}/>
+                </div>
               </div>
           }
 	        
