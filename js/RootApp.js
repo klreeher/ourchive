@@ -19,6 +19,7 @@ import UserProfile from './UserProfile';
 import MyProfile from './MyProfile';
 import UserForm from './UserForm';
 import Home from './Home';
+import MessageCenter from './MessageCenter';
 
 export default class RootApp extends React.Component {
 
@@ -64,6 +65,7 @@ export default class RootApp extends React.Component {
           <Route path="/my-profile" component={MyProfile}/>
           <Route path="/user/:userId/show" component={UserProfile}/>
           <Route path="/user/:userId/edit" component={UserForm}/>
+          <Route path="/messages" component={MessageCenter}/>
         </div>
       </Router>
     );

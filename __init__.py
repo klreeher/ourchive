@@ -40,6 +40,34 @@ def hello_world():
 def audio(audio_file):
   return send_from_directory(filename=audio_file, directory='audio')
 
+@app.route('/api/message/to/<int:userId>')
+def get_inbox(userId):
+  messages = json.dumps(
+    [
+      {
+        "id": 1,
+        "to_user": 2,
+        "from_user": {
+          "username": "molly",
+          "userId": 3
+        },
+        "parent_id": 5,
+        "message_subject": "Your writing",
+        "message_content": "it's so good but have you thought about including more entymology. bugs are good i like them. beetles especially."
+      },
+      {
+        "id": 5,
+        "to_user": 2,
+        "from_user": {
+          "username": "joy",
+          "userId": 4
+        },
+        "message_subject": "Please let me archive this",
+        "message_content": "i'd like to put this on my webring, called Stuck in 2006, please let me know what you think. it's a good webring, we are obsessed with dolphins there, it's our favorite topic."
+      }  
+  ])
+  return messages
+
 @app.route('/api/work/<int:workId>')
 def get_work(workId):
   work = json.dumps(
@@ -142,7 +170,7 @@ def get_bookmarks(curatorId):
           "summary": "someBODY once told me the world is gonna roll me",
           "rating": "*****",
           "curator": "sally",
-          "description": "this tingled my nether bits and also I'm at war with the author now",
+          "description": "this touched my heart and also I'm at war with the author now",
           "links": [1, 2],
           "tags": [
             {"fandom": ["buffy", "xena"]},

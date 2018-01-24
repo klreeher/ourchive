@@ -114,7 +114,11 @@ export default class NavbarInternal extends React.Component {
             
         <NavItem href="/create/work">
             New Work
-        </NavItem>       
+        </NavItem>      
+
+        <NavItem href="/messages">
+            Messages
+        </NavItem>   
        
         <IndexLinkContainer to="/bookmark/1">
           <NavItem>Bookmarks</NavItem>
