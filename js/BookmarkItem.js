@@ -13,7 +13,7 @@ export default class BookmarkItem extends React.Component {
 	    super(props);
 	    this.state = {bookmark: props.bookmark, viewer_is_creator: true, newCommentText: "",
     		toggleCommentsText: "Show Comments", showComments: false,
-	    	user: this.props.user};
+	    	user: props.user};
     	this.addComment = this.addComment.bind(this)
     	this.toggleComments = this.toggleComments.bind(this)
     	this.updateNewCommentText = this.updateNewCommentText.bind(this)
