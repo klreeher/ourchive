@@ -8,7 +8,7 @@ export default class TagItem extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {tag: props.tag};
+    this.state = {tag: props.tag, underEdit: props.underEdit};
   }
   componentWillMount() { 
     //do things
@@ -20,7 +20,10 @@ export default class TagItem extends React.Component {
   
   render() {
     return (
-        <li className="tag_li" id={this.state.tag}>{this.state.tag}<a className="close_icon_link" onClick={this.props.removeTag}><span className="close_icon">x</span></a></li>
+        <li className="tag_li" id={this.state.tag}>{this.state.tag}
+        {this.state.underEdit && 
+          <a className="close_icon_link" onClick={this.props.removeTag}><span className="close_icon">x</span></a>
+        }</li>
     );
   }
 }

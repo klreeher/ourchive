@@ -136,7 +136,7 @@ export default class BookmarkItem extends React.Component {
 					        <div className="row">
 					        <div className="col-md-12">
 					            <ul className="list-inline">
-					              <TagList tag_category={Object.keys(tag)} tags={Object.values(tag)}/>
+					              <TagList tag_category={Object.keys(tag)} tags={Object.values(tag)} underEdit={false}/>
 					            </ul>
 					        </div> 
 					        </div>

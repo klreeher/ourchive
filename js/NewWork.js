@@ -214,7 +214,7 @@ export default class NewWork extends React.Component {
           <div className="form-group">
           {this.state.work_tags.map(tag => 
               <div key={Object.keys(tag)}>
-                  <TagList tag_category={Object.keys(tag)} tags={Object.values(tag)}/>
+                  <TagList tag_category={Object.keys(tag)} tags={Object.values(tag)} underEdit={true}/>
               </div>
           )}
           </div>

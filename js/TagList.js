@@ -49,7 +49,8 @@ export default class TagList extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {tags: props.tags[0], tag_category: props.tag_category, oldItem: '', value: '', suggestions: []};
+    this.state = {tags: props.tags[0], tag_category: props.tag_category, oldItem: '', value: '', suggestions: [],
+      underEdit: props.underEdit};
     this.removeTag = this.removeTag.bind(this);
     this.onChange = this.onChange.bind(this);
     this.onSuggestionsFetchRequested = this.onSuggestionsFetchRequested.bind(this);
@@ -169,24 +170,26 @@ export default class TagList extends React.Component {
               <ul className="list-inline" id={"tags_ul"+this.state.tag_category}>
                   {this.state.tags.map(tag => 
                     <div key={tag}>
-                      <TagItem tag={tag} removeTag={this.removeTag}/>
+                      <TagItem tag={tag} removeTag={this.removeTag} underEdit={this.state.underEdit}/>
                     </div>
                   )}
               </ul>
             </div>  
       
 
-          <div className="col-md-4">
-            <Autosuggest id={"autosuggest"+this.state.tag_category}
-              suggestions={suggestions}
-              onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
-              onSuggestionsClearRequested={this.onSuggestionsClearRequested}
-              getSuggestionValue={getSuggestionValue}
-              renderSuggestion={renderSuggestion}
-              inputProps={inputProps}
-              onSuggestionSelected={this.newTagAuto}
-            />
-          </div>
+          {this.state.underEdit && 
+            <div className="col-md-4">
+              <Autosuggest id={"autosuggest"+this.state.tag_category}
+                suggestions={suggestions}
+                onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
+                onSuggestionsClearRequested={this.onSuggestionsClearRequested}
+                getSuggestionValue={getSuggestionValue}
+                renderSuggestion={renderSuggestion}
+                inputProps={inputProps}
+                onSuggestionSelected={this.newTagAuto}
+              />
+            </div>
+          }
         </div>
         <br/>
       </div>
