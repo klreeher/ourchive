@@ -31,6 +31,9 @@ export default class BookmarkForm extends React.Component {
 	    this.state = this.state = {bookmark: json, value: ""};
 	    this.setDescription = this.setDescription.bind(this);
 	    this.setRating = this.setRating.bind(this);
+	    this.setTitle = this.setTitle.bind(this);
+	    this.updatePrivateCheckbox = this.updatePrivateCheckbox.bind(this);
+	    this.updateAddToQueue = this.updateAddToQueue.bind(this);
 
 	}
 
@@ -42,26 +45,36 @@ export default class BookmarkForm extends React.Component {
     	this.setState({ rating: parseInt(e.currentTarget.value) });
   	}
 
+  	setTitle(e) {
+    	this.setState({ title: e.target.value });
+  	}
+
+  	updatePrivateCheckbox(evt) {
+	    this.setState({
+	      is_private: evt.target.value
+	    });
+  	}
+
+  	updateAddToQueue(evt) {
+	    this.setState({
+	      is_queued: evt.target.value
+	    });
+  	}
 
   	render() {
 	    return (
-	    	<div className="panel panel-default">
-	        	<div className="panel-body">
+	    	<div className="container">
 			    	<form>
 			    		<FormGroup controlId="formControlsTitle">
 					      <ControlLabel>Title</ControlLabel>
-					      <FormControl.Static>{this.state.bookmark.title} </FormControl.Static>
-					      <HelpBlock>The work's title</HelpBlock>
-					    </FormGroup>
-
-					    <FormGroup controlId="formControlsSummary">
-					      <ControlLabel>Summary</ControlLabel>
-					      <FormControl.Static>{this.state.bookmark.summary} </FormControl.Static>
-					      <HelpBlock>The work's summary</HelpBlock>
+					      <FormControl componentClass="input" value={this.state.title} 
+					      placeholder="Enter a memorable title for your bookmark" 
+					      onChange={this.setTitle}
+					      />
 					    </FormGroup>
 					    
 					    <FormGroup controlId="formControlsDescription">
-					      <ControlLabel>Summary</ControlLabel>
+					      <ControlLabel>Bookmark Description</ControlLabel>
 					      <FormControl  componentClass="textarea" 
 					      	value={this.state.description}
 					      	placeholder="Enter your review, description, or other curation notes here."
@@ -96,11 +109,23 @@ export default class BookmarkForm extends React.Component {
 				          )}
 				       	</FormGroup>
 
+				       	<div className="checkbox">
+				            <label>
+				              <input type="checkbox" id="private" onChange={evt => this.updatePrivateCheckbox(evt)}/>Bookmark is private?
+				            </label>
+				        </div>
+
+				        <div className="checkbox">
+				            <label>
+				              <input type="checkbox" id="private" onChange={evt => this.updateAddToQueue(evt)}/>Add to queue?
+				            </label>
+				        </div>
+
+				        </form>
+
 					    <div className="form-group">
 				          <button onMouseDown={evt => this.addBookmark(evt)} className="btn btn-default">Submit</button>
 				        </div>
-					  </form>
-				</div>
 			</div>
 	    );
   }

@@ -33,13 +33,17 @@ export default class BookmarkList extends React.Component {
 
   render() {
     return (
-      <div className="list">
-        {this.state.bookmarks.map(bookmark => 
-          <div key={bookmark.key}>
-            <BookmarkItem bookmark={bookmark} user={this.props.user}/>
-          </div>
-        )}
-      </div>
+    	<div className="container">
+    		<div className="row">
+    			<h3>{this.state.curatorId}'s bookmarks</h3>
+    		</div>
+	        {this.state.bookmarks.map(bookmark => 
+	          <div key={bookmark.key}>
+	            <BookmarkItem bookmark={bookmark} user={this.props.user}/>
+	          </div>
+	        )}
+    	</div>
+      
     );
   }
 

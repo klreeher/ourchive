@@ -202,14 +202,28 @@ def get_bookmarks(curatorId):
       {
           "key": "1",
           "id": 5,
-          "chapter_image": "butts.png",
-          "title": "bleh bleh bleh",
-          "creator": "impertinence",
-          "summary": "someBODY once told me the world is gonna roll me",
-          "rating": "*****",
+          "work": {
+            "title": "bleh bleh bleh",
+            "creator": "impertinence",
+            "summary": "someBODY once told me the world is gonna roll me",
+            "word_count": 550000,
+            "is_complete": True,
+            "chapter_count": 15
+          },
+          "curator_title": "a bookmark i loved",
+          "rating": 5,
           "curator": "sally",
+          "curator_id": 2,
           "description": "this touched my heart and also I'm at war with the author now",
-          "links": [1, 2],
+          "links": [
+          {
+            "link": "http://archiveofourown.org/works/13187820", 
+            "text": "Garbage in, Garbage Out"
+          },
+          {
+            "link": "http://archiveofourown.org/works/260273/chapters/407178",
+            "text": "Gonna Be a Better One"
+          }],
           "tags": [
             {"fandom": ["buffy", "xena"]},
             {"primary pairing": ["buffy/faith"]}

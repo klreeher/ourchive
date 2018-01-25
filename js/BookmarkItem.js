@@ -53,142 +53,103 @@ export default class BookmarkItem extends React.Component {
   }
   render() {
     return (
-      <div>
-      	<div className="panel panel-default">
-        	<div className="panel-body">
-				<div className="col-xs-8">
-					<div className="row">
-						<div className={this.state.viewer_is_creator ? "viewer-creator row" : "viewer row"}>
-				          <div className="col-xs-1">
-				            <button>Edit</button>				            
-				          </div>
-				          <div className="col-xs-1">
-				          	<button>Delete</button>
-				          </div>
-				       	</div>
-					</div>
-					<br/>
-      				<div className="row">
-			    		<div className="col-md-2">
-			        		<div>{this.state.bookmark.chapter_image}
-			            	<br/>
-			            	<br/>
-			            	<br/>
-			        		</div>
-			    		</div>
-			    		<div className="col-md-8">
+    	<div>
+    	  <div className="panel panel-default">
+	      	<div className="panel-heading">
+	      		{this.state.bookmark.curator_title}
+	      		{this.state.viewer_is_creator && 
+		            		<div className="pull-right"> 
+		            			<button className="btn btn-link">Edit</button> | <button className="btn btn-link">Delete</button>
+		            		</div>
+		            	}
+	      	</div>
+	      	<div className="panel-body">
+		      	<div className="row">
+		      		<div className="col-md-12">
+		        		<blockquote>
 			        		<div className="row">
-			            		<div className="col-md-12">
-			                		<div><h3>{this.state.bookmark.title} BY {this.state.bookmark.creator}</h3></div>
-			            		</div>
+			        			<div className="col-md-12">{this.state.bookmark.work.title} by {this.state.bookmark.work.creator}</div>
 			        		</div>
-			        		<div className="row">				        	
-			            		<div className="col-md-11 col-md-offset-1">
-			                		<div>{this.state.bookmark.summary}</div>
-			            		</div>
+			        		<div className="row">
+			        			<div className="col-md-4">Complete? {this.state.bookmark.work.is_complete ? "True" : "False"}</div>
+			        			<div className="col-md-4">Word count: {this.state.bookmark.work.word_count}</div>
+			        			<div className="col-md-4">Chapter count: {this.state.bookmark.work.chapter_count}</div>
 			        		</div>
-						</div>
-					</div>
-			        <div className="row">
-			            <div className="col-md-12">
-			                <div><h3>{this.state.bookmark.rating}</h3></div>
-			            </div>
+		        		</blockquote>	
+	        		</div>        			
+		        </div>
+		        <div className="row">
+		            <div className="col-md-12">{this.state.bookmark.curator}'s rating: {this.state.bookmark.rating}</div>
+		            	
+		        </div>
+		        <div className="row">
+		            <div className="col-md-12">{this.state.bookmark.curator} says...</div>
+		        </div>			        
+		        <div className="row">
+		            <div className="col-xs-11 col-xs-offset-1">
+		                {this.state.bookmark.description}
+		            </div>
+		        </div>	
+				<div className="row">
+		        	<div className="col-md-12">If you like this, {this.state.bookmark.curator} recommends...</div>            
+		        </div>
+		        <div className="row">
+			        <div className="col-xs-11 col-xs-offset-1">
+				        <ol className="list-inline">
+					        {this.state.bookmark.links.map(link => 
+					          <li>
+					         	<div key={link.link}>
+					            	<a href={link.link}>{link.text}</a>
+					          	</div>
+					          </li>
+					        )}
+					    </ol>
 			        </div>
-			        <div className="row">
-			            <div className="col-md-12">
-			                <div>
-			                	{this.state.bookmark.curator} says...
-			                </div>
-			            </div>
-			        </div>	
-			        <br/>			        
-			        <div className="row">
-			            <div className="col-md-11 col-md-offset-1">
-			                <div>
-			                	{this.state.bookmark.description}
-			                </div>
-			            </div>
-			        </div>			      			
-		  			<br/>
-		  			<div className="row">
-			            <div className="col-md-12">
-			                <div>
-			                	If you like this, {this.state.bookmark.curator} recommends...
-			                </div>
-			            </div>
-			            
-			        </div>
-			        <div className="row">
-				        <div className="col-md-11 col-md-offset-1">
-					        <ul className="list-inline">
-						        {this.state.bookmark.links.map(link => 
-						          <li>
-						         	<div key={link}>
-						            	{link}
-						          	</div>
-						          </li>
-						        )}
-						    </ul>
+			    </div>
+		        <div className="row">
+		             {this.state.bookmark.tags.map(tag => 
+				        <div className="row">
+				        <div className="col-md-12">
+				            <ul className="list-inline">
+				              <TagList tag_category={Object.keys(tag)} tags={Object.values(tag)} underEdit={false}/>
+				            </ul>
+				        </div> 
 				        </div>
-				    </div>
-			        <div className="row">
-			             {this.state.bookmark.tags.map(tag => 
-					        <div className="row">
-					        <div className="col-md-12">
-					            <ul className="list-inline">
-					              <TagList tag_category={Object.keys(tag)} tags={Object.values(tag)} underEdit={false}/>
-					            </ul>
-					        </div> 
-					        </div>
-					      )}		            
-			        </div>
-
-			        <div className="row">
-			            <div className="col-md-12">
-			                Leave a comment:
-			            </div>
-			          </div>          
-			          <NewComment comment={null} user={this.props.user} 
-			            addComment={this.addComment} updateNewCommentText={this.updateNewCommentText}
-			            newCommentText={this.state.newCommentText}/>
-			          <br/>
-			          <div className="row">
-			            <button className="btn btn-link btn-lg" onClick={this.toggleComments}>{this.state.toggleCommentsText}</button>
-			          </div>
-			          <div className={this.state.showComments ? "viewer-creator" : "viewer"}>
-			            <div className="row">
-			              <div className="col-md-12">
-			                <h3>Comments</h3>
-			              </div>
-			            </div>   
-			            <div className="row">
-			              {this.state.bookmark.comments.map(comment => 
-			                <div key={comment.id} className="col-md-12">
-			                  <Comment comment={comment} user={this.props.user} chapterId={this.state.bookmark.id}/>
-			                </div>
-			                  
-			                )}
-
-			            </div> 
-			          </div>    
+				      )}		            
 		        </div>
-		        <div className="col-xs-4">
-		        	<div className="row">
-		        		MY SIDEBAR BRINGS ALL THE BOYS TO THE YARD
-		        	</div>
-		        	<div className="row">
-		        		and they're like, IT'S BETTER THAN YOURS
-		        	</div>
-		        	<div className="row">
-		        		DAMN RIGHT
-		        	</div>
-		        	<div className="row">		        	
-		        		<h3>IT'S BETTER THAN YOURS</h3>
-		        	</div>
-		        </div>
-		      </div>	
-		  </div>
-		</div>
+
+		        <div className="row">
+		            <div className="col-md-12">
+		                Leave a comment:
+		            </div>
+		          </div>          
+		          <NewComment comment={null} user={this.props.user} 
+		            addComment={this.addComment} updateNewCommentText={this.updateNewCommentText}
+		            newCommentText={this.state.newCommentText}/>
+		          <br/>
+		          <div className="row">
+		            <button className="btn btn-link btn-lg" onClick={this.toggleComments}>{this.state.toggleCommentsText}</button>
+		          </div>
+		          <div className={this.state.showComments ? "viewer-creator" : "viewer"}>
+		            <div className="row">
+		              <div className="col-md-12">
+		                <h3>Comments</h3>
+		              </div>
+		            </div>   
+		            <div className="row">
+		              {this.state.bookmark.comments.map(comment => 
+		                <div key={comment.id} className="col-md-12">
+		                  <Comment comment={comment} user={this.props.user} chapterId={this.state.bookmark.id}/>
+		                </div>
+		                  
+		                )}
+
+		            </div> 
+		          </div>  
+	          </div> 
+	  		</div>
+    	</div>
+      
     );
   }
 
