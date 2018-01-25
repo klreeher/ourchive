@@ -39,7 +39,7 @@ export default class BookmarkList extends React.Component {
     			<h3>{this.state.curator.curator_name}'s bookmarks</h3>
     		</div>
 	        {this.state.bookmarks.map(bookmark => 
-	          <div key={bookmark.key}>
+	          <div key={bookmark.id}>
 	            <BookmarkItem bookmark={bookmark} user={this.props.user} curator={this.state.curator}/>
 	          </div>
 	        )}

@@ -207,18 +207,17 @@ def get_bookmarks(curatorId):
 
     "bookmarks": [
       {
-          "key": "1",
           "id": 5,
           "work": {
             "title": "bleh bleh bleh",
-            "creator": "impertinence",
+            "creator": "e l dragons",
             "summary": "someBODY once told me the world is gonna roll me",
             "word_count": 550000,
             "is_complete": True,
             "chapter_count": 15
           },
           "curator_title": "a bookmark i loved",
-          "rating": 5,
+          "rating": 4,
           "description": "this touched my heart and also I'm at war with the author now",
           "links": [
           {
@@ -241,6 +240,36 @@ def get_bookmarks(curatorId):
               "text": "pls i want more help me find stories about dolphins!!",
               "comments": [],
               "bookmarkId": 5
+            }
+          ]
+        },
+        {
+          "id": 6,
+          "work": {
+            "title": "1000 bonfires in new york",
+            "creator": "margaret_iii",
+            "summary": "My apocalypse novel in its final form. Read at your own risk!",
+            "word_count": 95000000,
+            "is_complete": True,
+            "chapter_count": 300
+          },
+          "curator_title": "The story I'd take to a desert island",
+          "rating": 5,
+          "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+          "links": [
+          ],
+          "tags": [
+            {"fandom": ["apocalypse"]},
+            {"additional tags": ["new york", "disaffected artists", "new yorkers who are actually from missouri"]}
+          ],
+          "comments": [
+            {
+              "id": 297,
+              "userName": "how_dare_you",
+              "userId": 6,
+              "text": "YOU KNOW NOTHING ABOUT NEW YORKERS, JON SNOW",
+              "comments": [],
+              "bookmarkId": 6
             }
           ]
         }
