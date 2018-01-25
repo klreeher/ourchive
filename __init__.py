@@ -198,7 +198,14 @@ def get_user(userId):
 @app.route('/api/bookmark/curator/<int:curatorId>')
 def get_bookmarks(curatorId):
   bookmarks = json.dumps(
-    {"bookmarks": [
+    {
+
+    "curator": {
+      "curator_name": "sally",
+      "curator_id": 2
+    },
+
+    "bookmarks": [
       {
           "key": "1",
           "id": 5,
@@ -212,17 +219,15 @@ def get_bookmarks(curatorId):
           },
           "curator_title": "a bookmark i loved",
           "rating": 5,
-          "curator": "sally",
-          "curator_id": 2,
           "description": "this touched my heart and also I'm at war with the author now",
           "links": [
           {
-            "link": "http://archiveofourown.org/works/13187820", 
-            "text": "Garbage in, Garbage Out"
+            "link": "https://www.thekitchn.com/le-creuset-disney-mickey-mouse-collection-2018-255122", 
+            "text": "Capitalism"
           },
           {
-            "link": "http://archiveofourown.org/works/260273/chapters/407178",
-            "text": "Gonna Be a Better One"
+            "link": "http://google.com",
+            "text": "Our Best Friend Google"
           }],
           "tags": [
             {"fandom": ["buffy", "xena"]},

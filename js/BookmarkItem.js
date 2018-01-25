@@ -11,7 +11,7 @@ export default class BookmarkItem extends React.Component {
 
 	constructor(props) {
 	    super(props);
-	    this.state = {bookmark: props.bookmark, viewer_is_creator: true, newCommentText: "",
+	    this.state = {bookmark: props.bookmark, curator: props.curator, viewer_is_creator: true, newCommentText: "",
     		toggleCommentsText: "Show Comments", showComments: false,
 	    	user: props.user};
     	this.addComment = this.addComment.bind(this)
@@ -79,11 +79,11 @@ export default class BookmarkItem extends React.Component {
 	        		</div>        			
 		        </div>
 		        <div className="row">
-		            <div className="col-md-12">{this.state.bookmark.curator}'s rating: {this.state.bookmark.rating}</div>
+		            <div className="col-md-12">{this.state.curator.curator_name}'s rating: {this.state.bookmark.rating}</div>
 		            	
 		        </div>
 		        <div className="row">
-		            <div className="col-md-12">{this.state.bookmark.curator} says...</div>
+		            <div className="col-md-12">{this.state.curator.curator_name} says...</div>
 		        </div>			        
 		        <div className="row">
 		            <div className="col-xs-11 col-xs-offset-1">
@@ -91,7 +91,7 @@ export default class BookmarkItem extends React.Component {
 		            </div>
 		        </div>	
 				<div className="row">
-		        	<div className="col-md-12">If you like this, {this.state.bookmark.curator} recommends...</div>            
+		        	<div className="col-md-12">If you like this, {this.state.curator.curator_name} recommends...</div>            
 		        </div>
 		        <div className="row">
 			        <div className="col-xs-11 col-xs-offset-1">

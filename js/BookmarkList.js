@@ -11,7 +11,8 @@ export default class BookmarkList extends React.Component {
 	  axios.get('/api/bookmark/curator/'+curatorId)
 	      .then(function (response) {
 	        this.setState({	        	
-	          bookmarks: response.data.bookmarks
+	          bookmarks: response.data.bookmarks,
+	          curator: response.data.curator
 
 	        });
 	      }.bind(this))
@@ -22,7 +23,7 @@ export default class BookmarkList extends React.Component {
 
 	constructor(props) {
 	    super(props);
-	    this.state = {curatorId: props.match.params.curatorId, bookmarks: [], current_page: 0};
+	    this.state = {curatorId: props.match.params.curatorId, bookmarks: [], current_page: 0, curator: []};
     
     }
 
@@ -35,11 +36,11 @@ export default class BookmarkList extends React.Component {
     return (
     	<div className="container">
     		<div className="row">
-    			<h3>{this.state.curatorId}'s bookmarks</h3>
+    			<h3>{this.state.curator.curator_name}'s bookmarks</h3>
     		</div>
 	        {this.state.bookmarks.map(bookmark => 
 	          <div key={bookmark.key}>
-	            <BookmarkItem bookmark={bookmark} user={this.props.user}/>
+	            <BookmarkItem bookmark={bookmark} user={this.props.user} curator={this.state.curator}/>
 	          </div>
 	        )}
     	</div>
