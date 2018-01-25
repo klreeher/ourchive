@@ -27,7 +27,7 @@ export default class UserContainer extends React.Component {
     render() {
     return (
 
-      <Tabs defaultActiveKey={1} id="uncontrolled-tab-example">
+      <Tabs defaultActiveKey={1} id="user-container-nav">
         <Tab eventKey={1} title="Profile">
 	    	<div className="col-md-12">
 		        	<div className="row">
