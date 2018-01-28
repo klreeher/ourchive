@@ -108,7 +108,7 @@ export default class BookmarkItem extends React.Component {
 			    </div>
 		        <div className="row">
 		             {this.state.bookmark.tags.map(tag => 
-				        <div className="row">
+				        <div className="row" key={Math.random()}>
 				        <div className="col-md-12">
 				            <ul className="list-inline">
 				              <TagList tag_category={Object.keys(tag)} tags={Object.values(tag)} underEdit={false}/>

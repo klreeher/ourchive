@@ -9,7 +9,7 @@ export default class UserContainer extends React.Component {
 	constructor(props) {    
 	  	super(props);	  	
 	    this.state = {user: this.props.user, works: this.props.works, 
-	    	bookmarks: this.props.bookmarks};
+	    	bookmarks: this.props.bookmarks, curator: this.props.curator};
     }
 
     componentWillMount() { 
@@ -21,7 +21,7 @@ export default class UserContainer extends React.Component {
 	}
 	componentWillReceiveProps(nextProps) {
 	  this.setState({ user: nextProps.user, works: nextProps.works,
-	  	bookmarks: nextProps.bookmarks });  
+	  	bookmarks: nextProps.bookmarks, curator: nextProps.curator});  
 	}
 
     render() {
@@ -87,7 +87,7 @@ export default class UserContainer extends React.Component {
     			<div className="list">
 			        {this.state.bookmarks.map(bookmark => 
 			          <div key={bookmark.key}>
-			            <BookmarkItem bookmark={bookmark}/>
+			            <BookmarkItem bookmark={bookmark} curator={this.state.curator}/>
 			          </div>
 			        )}
 			    </div>

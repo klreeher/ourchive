@@ -9,7 +9,7 @@ import UserContainer from './UserContainer';
 export default class UserProfile extends React.Component {
 	constructor(props) {    
 	  	super(props);	  	
-	    this.state = this.state = {profile_user: {}, works: [], bookmarks: []};
+	    this.state = this.state = {profile_user: {}, works: [], bookmarks: [], curator: []};
       this.setMessageTitle = this.setMessageTitle.bind(this)
       this.setMessageText = this.setMessageText.bind(this)
     }
@@ -94,7 +94,8 @@ export default class UserProfile extends React.Component {
         axios.get('/api/bookmark/curator/'+userId)
           .then(function (response) {
             this.setState({                
-              bookmarks: response.data.bookmarks
+              bookmarks: response.data.bookmarks,
+              curator: response.data.curator
             });  
 
           }.bind(this))
@@ -119,7 +120,7 @@ export default class UserProfile extends React.Component {
         }
         
         <div className="row">
-          <UserContainer user={this.state.profile_user} works={this.state.works} bookmarks={this.state.bookmarks}/>
+          <UserContainer user={this.state.profile_user} works={this.state.works} bookmarks={this.state.bookmarks} curator={this.state.curator}/>
         </div>  
         <Modal show={this.state.showMessageModal} onHide={evt => this.handleSendMessage(evt)}>
           <Modal.Header closeButton>

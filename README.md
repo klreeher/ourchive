@@ -58,7 +58,9 @@ we base our development process on the [successful git branching model](http://n
 <a name="code-style-guide"></a>
 ### code style guide
 
-[imp put your style guide here]
+Our code right now is a less than ideal mix of pythonic and javascript conventions. We welcome updates.
+
+We try to adhere to [this javascript style guide](https://github.com/airbnb/javascript) and [this python style guide](https://www.python.org/dev/peps/pep-0008/).
 
 <a name="swagger-spec"></a>
 ## swagger spec
@@ -77,16 +79,16 @@ tus-server: bundle exec rackup -p 9292 -o 10.0.2.15 config.ru &
 <a name="how-to-set-up-ourchive-for-local-development"></a>
 ### how to set up ourchive for local development
 
-ensure commands to python (including pip) are pointing to python3
+ensure commands to python (including pip) are pointing to python3; do all of this in the project root.
 
     virtualenv venv
     . venv/bin/activate
     pip install -r requirements.txt
     sudo npm install -g webpack; npm install
 
-Then: open 2 terminal windows (or sessions/whatever) to `ourchive/react-flask`.
+When requirements are installed, open up two terminal sessions.
 
-In the first: `python app.py`
+In the first: `python __init__.py`
 
 In the second: `webpack --watch`
 
