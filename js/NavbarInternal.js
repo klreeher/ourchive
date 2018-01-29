@@ -131,6 +131,9 @@ export default class NavbarInternal extends React.Component {
           <IndexLinkContainer to="/messages">
             <NavItem>Messages</NavItem>
           </IndexLinkContainer>
+          <IndexLinkContainer to="/notifications">
+            <NavItem>Notifications</NavItem>
+          </IndexLinkContainer>
         </NavDropdown>      
         
         

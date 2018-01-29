@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import Link from 'react-router-dom';
-import {Tabs, Tab} from 'react-bootstrap';
+import {Tabs, Tab, DropdownButton, MenuItem} from 'react-bootstrap';
 
 export default class Notifications extends React.Component {
 
@@ -21,26 +21,49 @@ export default class Notifications extends React.Component {
   }
   render() {
     return (
-      <div>
+      <div className="container-fluid">
         <div className="row">
-          <div className="col-md-2">
-            sort meeee
-          </div>
-          <div className="col-md-4 col-md-offset-8">
-            sort meeee
+          <div className="col-md-3">
+
+            <DropdownButton
+              bsStyle="default"
+              title="Filter notifications by..."
+              key={1}
+              id={`dropdown-basic-${1}`}
+              >
+              <MenuItem eventKey="1">Comment</MenuItem>
+              <MenuItem eventKey="2">System Notification</MenuItem>
+              <MenuItem eventKey="2">All</MenuItem>              
+            </DropdownButton>            
           </div>
         </div>
-        <div className="row">
-    		    <div className="col-md-2">
-    	        Message Type
-    	       </div>	
-            <div className="col-md-6">
-              Message Type
-            </div>   
-            <div className="col-md-4">
-              Message DateTime
-            </div>         	
-        </div>
+        <br/>
+        <table className="table table-hover">
+          <thead>
+            <tr>
+              <th key="Content">Content</th>
+              <th key="Time">Time</th> 
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                New comment on [title] from [user]: blah blah blah blah blah blah...
+              </td>   
+              <td>
+                9/30/17 12:00 AM
+              </td>                    
+            </tr>
+            <tr>
+              <td>
+                An update to your bookmark subscription x has occurred...
+              </td>   
+              <td>
+                1/30/18 3:00 PM
+              </td> 
+            </tr>
+          </tbody>          
+        </table>        
       </div>
     );
   }

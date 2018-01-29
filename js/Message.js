@@ -22,10 +22,13 @@ export default class MessageCenter extends React.Component {
   {
     event.target.blur()
     this.props.sendMessage(this.state.message.id, this.state.newMessageText);
+    var oldMessage = this.state.message;
+    oldMessage.read = true;
     this.setState(
     {
       showReply: false,
-      newMessageText: ""
+      newMessageText: "",
+      message: oldMessage
     }) 
     
   }
