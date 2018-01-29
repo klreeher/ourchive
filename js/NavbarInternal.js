@@ -8,7 +8,8 @@ import {
   NavItem,
   NavDropdown,
   Modal,
-  Button
+  Button,
+  MenuItem
 } from 'react-bootstrap';
 import axios from 'axios';
 import { IndexLinkContainer } from 'react-router-bootstrap';
@@ -104,7 +105,7 @@ export default class NavbarInternal extends React.Component {
       <Navbar>
         <Navbar.Header>
           <Navbar.Brand>
-            <a href="#">React-Bootstrap</a>
+            <a href="/">Ourchive</a>
           </Navbar.Brand>
         </Navbar.Header>
         <Nav>
@@ -112,23 +113,27 @@ export default class NavbarInternal extends React.Component {
           <NavItem>Works</NavItem>
         </IndexLinkContainer>
             
-        <NavItem href="/create/work">
-            New Work
-        </NavItem>      
+        <IndexLinkContainer to="/create/work">
+            <NavItem>New Work</NavItem>
+        </IndexLinkContainer>   
 
-        <NavItem href="/messages">
-            Messages
-        </NavItem>   
-       
         <IndexLinkContainer to="/bookmark/1">
-          <NavItem>Bookmarks</NavItem>
-        </IndexLinkContainer>
-        <IndexLinkContainer to="/bookmarks/new">
-          <NavItem>New Bookmark</NavItem>
-        </IndexLinkContainer>
-        <IndexLinkContainer to="/my-profile">
-          <NavItem>My Profile</NavItem>
-        </IndexLinkContainer>
+            <NavItem>Bookmarks</NavItem>
+          </IndexLinkContainer>  
+
+        <NavDropdown eventKey={3} title="User" id="user-nav-dropdown">          
+          <IndexLinkContainer to="/bookmarks/new">
+            <NavItem>New Bookmark</NavItem>
+          </IndexLinkContainer>
+          <IndexLinkContainer to="/my-profile">
+            <NavItem>My Profile</NavItem>
+          </IndexLinkContainer>
+          <IndexLinkContainer to="/messages">
+            <NavItem>Messages</NavItem>
+          </IndexLinkContainer>
+        </NavDropdown>      
+        
+        
         <IndexLinkContainer to="/user/1/show">
           <NavItem>User Profile</NavItem>
         </IndexLinkContainer>
@@ -142,7 +147,7 @@ export default class NavbarInternal extends React.Component {
       <Navbar>
         <Navbar.Header>
           <Navbar.Brand>
-            <a href="#">React-Bootstrap</a>
+            <a href="/">Ourchive</a>
           </Navbar.Brand>
         </Navbar.Header>
         <Nav>
