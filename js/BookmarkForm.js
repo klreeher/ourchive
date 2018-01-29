@@ -102,13 +102,16 @@ export default class BookmarkForm extends React.Component {
 					    </FormGroup>
 
 					    <FormGroup>
+					     <div className="row">
 				          {this.state.bookmark.tags.map(tag => 
 				              <div key={Object.keys(tag)}>
 				                  <TagList tag_category={Object.keys(tag)} tags={Object.values(tag)} underEdit={true}/>
 				              </div>
 				          )}
+				          </div>
 				       	</FormGroup>
 
+				       	<FormGroup>
 				       	<div className="checkbox">
 				            <label>
 				              <input type="checkbox" id="private" onChange={evt => this.updatePrivateCheckbox(evt)}/>Bookmark is private?
@@ -120,6 +123,7 @@ export default class BookmarkForm extends React.Component {
 				              <input type="checkbox" id="private" onChange={evt => this.updateAddToQueue(evt)}/>Add to queue?
 				            </label>
 				        </div>
+				        </FormGroup>
 
 				        </form>
 

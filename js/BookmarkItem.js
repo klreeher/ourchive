@@ -96,12 +96,12 @@ export default class BookmarkItem extends React.Component {
 		        <div className="row">
 			        <div className="col-xs-11 col-xs-offset-1">
 				        <ol className="list-inline">
-					        {this.state.bookmark.links.map(link => 
-					          <li>
+					        {this.state.bookmark.links.map(link => 					          
 					         	<div key={link.link}>
+					         	  <li>
 					            	<a href={link.link}>{link.text}</a>
-					          	</div>
-					          </li>
+					              </li>
+					          	</div>					          
 					        )}
 					    </ol>
 			        </div>
