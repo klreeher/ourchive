@@ -112,10 +112,10 @@ export default class SingleWork extends React.Component {
           <div className="col-md-12"><h4>{this.state.work.work_summary}</h4></div>
         </div>
         <div className="row">
-          <div className="col-md-2 col-md-offset-4"><h5>Chapters: {Object.keys(this.state.work.chapters).length}</h5></div>
-          <div className="col-md-2"><h5>Complete? {this.state.work.is_complete}</h5></div>
-          <div className="col-md-2"><h5>Word Count: {this.state.work.word_count}</h5></div>
-          <div className="col-md-2"></div>
+          <div className="col-xs-2 col-xs-offset-4"><h5>Chapters: {Object.keys(this.state.work.chapters).length}</h5></div>
+          <div className="col-xs-2"><h5>Complete? {this.state.work.is_complete}</h5></div>
+          <div className="col-xs-2"><h5>Word Count: {this.state.work.word_count}</h5></div>
+          <div className="col-xs-2"></div>
         </div>
         <br/>
         <hr/>
@@ -129,8 +129,7 @@ export default class SingleWork extends React.Component {
           </div> 
           </div>
         )}
-        <br/>
-        <hr/>
+        
         
         { this.state.showAllChapters ? 
 
@@ -140,7 +139,8 @@ export default class SingleWork extends React.Component {
                 <button className="btn btn-link" onClick={evt => this.toggleAllChapters(evt)}>Hide All Chapters</button>
               </div>
             </div>
-              
+            <br/>
+            <hr/>
             {this.state.work.chapters.map(chapter => 
               <div className="row" key={chapter.id}>
                 <div className="col-md-12">
@@ -156,6 +156,8 @@ export default class SingleWork extends React.Component {
                 <button className="btn btn-link" onClick={evt => this.toggleAllChapters(evt)}>Show All Chapters</button>
               </div>
             </div>
+            <br/>
+            <hr/>
             <div className="row">
               <div className="col-md-12">
                 <Chapter chapter={this.state.current_chapter} user={this.props.user}/>
