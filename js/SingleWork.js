@@ -100,16 +100,16 @@ export default class SingleWork extends React.Component {
           </div>
         
         <div className="row">
-          <div className="col-xs-6 col-md-12"><h1>{this.state.work.title}</h1></div>
+          <div className="col-xs-9 col-md-12"><h1>{this.state.work.title}</h1></div>
         </div>
         <div className="row">
-          <div className="col-xs-6 col-md-12">
+          <div className="col-xs-9 col-md-12">
             <center><Link to={"/user/"+this.state.work.creator_id}>{this.state.work.name}</Link></center>
           </div>
         </div>
         <hr/>
         <div className="row">
-          <div className="col-xs-6 col-md-12"><h4>{this.state.work.work_summary}</h4></div>
+          <div className="col-xs-9 col-md-12"><h4>{this.state.work.work_summary}</h4></div>
         </div>
         <div className="row">
           <div className="col-xs-2"><h5>Chapters: {Object.keys(this.state.work.chapters).length}</h5></div>
@@ -122,7 +122,7 @@ export default class SingleWork extends React.Component {
     
         {this.state.work.tags.map(tag => 
           <div className="row" key={Math.random()}>
-          <div className="col-xs-6 col-md-12">
+          <div className="col-xs-9 col-md-12">
               <ul className="list-inline">
                 <TagList tag_category={Object.keys(tag)} tags={Object.values(tag)}/>
               </ul>

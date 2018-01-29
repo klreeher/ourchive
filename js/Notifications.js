@@ -21,9 +21,9 @@ export default class Notifications extends React.Component {
   }
   render() {
     return (
-      <div className="container-fluid">
+      <div className="container-fluid text-padding">
         <div className="row">
-          <div className="col-md-3">
+          <div className="col-xs-3">
 
             <DropdownButton
               bsStyle="default"
@@ -38,6 +38,7 @@ export default class Notifications extends React.Component {
           </div>
         </div>
         <br/>
+        <div className="table-responsive">
         <table className="table table-hover">
           <thead>
             <tr>
@@ -63,7 +64,8 @@ export default class Notifications extends React.Component {
               </td> 
             </tr>
           </tbody>          
-        </table>        
+        </table>  
+        </div>      
       </div>
     );
   }

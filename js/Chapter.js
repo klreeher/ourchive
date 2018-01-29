@@ -64,27 +64,27 @@ export default class Chapter extends React.Component {
       <div>
         <div className="work_text">
           <div className="row">
-            <div className="col-xs-6 col-md-12 "><h2>Chapter {this.state.chapter.number}: {this.state.chapter.title}</h2></div>
+            <div className="col-xs-9 col-md-12 "><h2>Chapter {this.state.chapter.number}: {this.state.chapter.title}</h2></div>
           </div>
           <div className="row">
-            <div className="col-xs-6 col-md-12"><blockquote>{this.state.chapter.chapter_summary}</blockquote></div>
+            <div className="col-xs-9 col-md-12"><blockquote>{this.state.chapter.chapter_summary}</blockquote></div>
           </div>
           <hr/>
 
           <div className="row">
-            <div className="col-xs-6 col-md-12">
+            <div className="col-xs-9 col-md-12">
               {this.state.chapter.text}
             </div>
           </div>
           <br/>
           <br/>
           <div className="row">
-            <div className="col-xs-6 col-md-12">
+            <div className="col-xs-9 col-md-12">
               <audio ref="audio_tag" src={this.state.chapter.audio_url} controls/>
             </div>
           </div>
           <div className="row">
-            <div className="col-xs-6 col-md-12">
+            <div className="col-xs-9 col-md-12">
               <Image file={this.state.chapter.image_url} alt='{this.state.chapter.chapter_summary}'/>
             </div>
           </div>
@@ -96,15 +96,13 @@ export default class Chapter extends React.Component {
             </div>
           </div>  
           <div className="row">
-          <div className="col-xs-6 col-md-12">
                 <NewComment comment={null} user={this.props.user} 
             addComment={this.addComment} updateNewCommentText={this.updateNewCommentText}
             newCommentText={this.state.newCommentText}/>
           </div>
-          </div>
           <br/>
           <div className="row">
-            <div className="col-xs-6 col-md-12">
+            <div className="col-xs-9 col-md-12">
               <button className="btn btn-link btn-lg" onClick={this.toggleComments}>{this.state.toggleCommentsText}</button>
             </div>
           </div>
@@ -115,7 +113,7 @@ export default class Chapter extends React.Component {
               </div>
             </div>   
             <div className="row">
-              <div className="col-xs-6 col-md-12">
+              <div className="col-xs-9 col-md-12">
                 {this.state.chapter.comments.map(comment => 
                   <div key={comment.id} className="col-md-12">
                     <Comment comment={comment} user={this.props.user} chapterId={this.state.chapter.id}/>
