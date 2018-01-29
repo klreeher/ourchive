@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import Link from 'react-router-dom';
 import {Tabs, Tab, DropdownButton, MenuItem} from 'react-bootstrap';
+import Notification from './Notification';
 
 export default class Notifications extends React.Component {
 
@@ -9,11 +10,36 @@ export default class Notifications extends React.Component {
 
 	constructor(props) {
 	    super(props);
-	    this.state = {user: this.props.user, notification: this.props.notification};
+	    this.state = {user: this.props.user, notifications: []};
       this.goToItem = this.goToItem.bind(this);
+      this.getNotifications = this.getNotifications.bind(this);
     }
 
-  
+  componentWillMount()
+  {
+    this.getNotifications();
+  }
+  getNotifications()
+  {
+    var notificationsJson = [
+      {
+        "type": "Comment",
+        "content": "New comment on [title] from [user]: blah blah blah blah blah blah...",
+        "dateCreated": "2018-01-18",
+        "id": 123
+      },
+      {
+        "type": "System Notification",
+        "content": "An update to your favorite collection [name] has occurred!",
+        "dateCreated": "2018-01-20",
+        "id": 124
+      }
+    ]
+    this.setState(
+    {
+      notifications: notificationsJson
+    })
+  }
   goToItem(event)
   {
     event.target.blur()
@@ -47,22 +73,10 @@ export default class Notifications extends React.Component {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>
-                New comment on [title] from [user]: blah blah blah blah blah blah...
-              </td>   
-              <td>
-                9/30/17 12:00 AM
-              </td>                    
-            </tr>
-            <tr>
-              <td>
-                An update to your bookmark subscription x has occurred...
-              </td>   
-              <td>
-                1/30/18 3:00 PM
-              </td> 
-            </tr>
+            {this.state.notifications.map(notification => 
+                    <Notification notification={notification} user={this.props.user} key={notification.id}/>
+                    
+            )}
           </tbody>          
         </table>  
         </div>      
