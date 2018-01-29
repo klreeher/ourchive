@@ -21,7 +21,7 @@ export default class NewComment extends React.Component {
     return (
       <div>
         <div className="row">
-          <div className="col-md-12">
+          <div className="col-xs-6 col-md-12">
             <textarea value={this.props.newCommentText} rows="3"
                 onChange={this.props.updateNewCommentText} className="form-control"></textarea>
             
@@ -29,7 +29,7 @@ export default class NewComment extends React.Component {
         </div>
         <br/>
         <div className="row">
-          <div className="col-md-12">
+          <div className="col-xs-6 col-md-12">
             <button onClick={this.props.addComment}>Add Reply</button>
           </div>
         </div>

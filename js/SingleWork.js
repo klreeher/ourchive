@@ -89,30 +89,30 @@ export default class SingleWork extends React.Component {
     const loggedIn = this.state.user != null;
     return (
 
-    <div className="container-fluid">
+    <div className="container-fluid text-padding">
       {this.state.work.id != undefined && 
         <div>
           <div className={this.state.viewer_is_creator ? "viewer-creator row" : "viewer row"}>
-            <div className="col-md-3">
+            <div className="col-md-3 col-xs-1">
               <button>Edit</button>
               <button>Delete</button>
             </div>
           </div>
         
         <div className="row">
-          <div className="col-md-12"><h1>{this.state.work.title}</h1></div>
+          <div className="col-xs-6 col-md-12"><h1>{this.state.work.title}</h1></div>
         </div>
         <div className="row">
-          <div className="col-md-12">
+          <div className="col-xs-6 col-md-12">
             <center><Link to={"/user/"+this.state.work.creator_id}>{this.state.work.name}</Link></center>
           </div>
         </div>
         <hr/>
         <div className="row">
-          <div className="col-md-12"><h4>{this.state.work.work_summary}</h4></div>
+          <div className="col-xs-6 col-md-12"><h4>{this.state.work.work_summary}</h4></div>
         </div>
         <div className="row">
-          <div className="col-xs-2 col-xs-offset-4"><h5>Chapters: {Object.keys(this.state.work.chapters).length}</h5></div>
+          <div className="col-xs-2"><h5>Chapters: {Object.keys(this.state.work.chapters).length}</h5></div>
           <div className="col-xs-2"><h5>Complete? {this.state.work.is_complete}</h5></div>
           <div className="col-xs-2"><h5>Word Count: {this.state.work.word_count}</h5></div>
           <div className="col-xs-2"></div>
@@ -122,7 +122,7 @@ export default class SingleWork extends React.Component {
     
         {this.state.work.tags.map(tag => 
           <div className="row" key={Math.random()}>
-          <div className="col-md-12">
+          <div className="col-xs-6 col-md-12">
               <ul className="list-inline">
                 <TagList tag_category={Object.keys(tag)} tags={Object.values(tag)}/>
               </ul>
@@ -143,9 +143,7 @@ export default class SingleWork extends React.Component {
             <hr/>
             {this.state.work.chapters.map(chapter => 
               <div className="row" key={chapter.id}>
-                <div className="col-md-12">
                   <Chapter chapter={chapter} user={this.props.user}/> 
-                </div>
               </div>
             )}
           </div> :
@@ -159,9 +157,7 @@ export default class SingleWork extends React.Component {
             <br/>
             <hr/>
             <div className="row">
-              <div className="col-md-12">
                 <Chapter chapter={this.state.current_chapter} user={this.props.user}/>
-              </div>
             </div>  
             <button className="btn btn-link" onMouseDown={evt => this.previousChapter(evt)} disabled={previousDisabled}>Previous Chapter</button>
             <button className="btn btn-link" onMouseDown={evt => this.nextChapter(evt)} disabled={nextDisabled}>Next Chapter</button>

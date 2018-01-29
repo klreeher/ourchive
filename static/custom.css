@@ -324,9 +324,3 @@ div {
 .text-padding {
   padding: 0px 27px 9px 27px;
 }
-
-@media (max-width: 375px) {
-    body {
-        font-size: 1.75em;
-    }
-}
