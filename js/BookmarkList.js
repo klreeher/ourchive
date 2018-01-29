@@ -34,9 +34,9 @@ export default class BookmarkList extends React.Component {
 
   render() {
     return (
-    	<div className="container">
+    	<div className="container-fluid">
     		<div className="row">
-    			<h3>{this.state.curator.curator_name}'s bookmarks</h3>
+    			<div className="col-md-12"><h3>{this.state.curator.curator_name}'s bookmarks</h3></div>
     		</div>
 	        {this.state.bookmarks.map(bookmark => 
 	          <div key={bookmark.id}>

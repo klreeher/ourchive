@@ -320,3 +320,10 @@ div {
   visibility: hidden;
   display: none;
 }
+
+.container-margin {
+  margin-left: 9px;
+  margin-right: 9px;
+  margin-top: 0px;
+  margin-bottom: 9px;
+}
