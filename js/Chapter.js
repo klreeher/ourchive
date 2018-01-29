@@ -72,7 +72,7 @@ export default class Chapter extends React.Component {
           <hr/>
 
           <div className="row">
-            <div className="col-md-12">
+            <div className="col-md-12 text-padding">
               {this.state.chapter.text}
             </div>
           </div>

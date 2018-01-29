@@ -321,9 +321,6 @@ div {
   display: none;
 }
 
-.container-margin {
-  margin-left: 9px;
-  margin-right: 9px;
-  margin-top: 0px;
-  margin-bottom: 9px;
+.text-padding {
+  padding: 0px 27px 9px 27px;
 }
