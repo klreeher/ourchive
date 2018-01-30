@@ -24,14 +24,19 @@ export default class SingleWork extends React.Component {
             work: response.data[0],
             current_chapter: response.data[0].chapters[0],
             chapter_index: 0,
-            viewer_is_creator: true
+            viewer_is_creator: true,
+            showAllChapters: this.props.location.search.length > 0
           }, () => {
-            if (this.props.match.params.commentId > 0)
+            var queryParams = new URLSearchParams(this.props.location.search);
+            var chapterId = queryParams.get('chapterId');
+            var commentId = queryParams.get('commentId');
+            if (this.state.showAllChapters)
               {
-                this.toggleChapterView(this.props.match.params.commentId, this.props.match.params.chapterId);
+                var comment = "comment_"+commentId;
+                var chapter = "chapter_"+chapterId+"_component";
+                this.refs[chapter].toggleComments(null, commentId);
               }
-          });  
-
+          }); 
         }.bind(this))
         .catch(function (error) {
           console.log(error);
@@ -78,25 +83,12 @@ export default class SingleWork extends React.Component {
     super(props);    
     this.state = {workId: props.match.params.workId, work: [], current_chapter: [],
       chapter_index: 0, viewer_is_creator: false, user: this.props.user, showAllChapters: false};
-    this.toggleChapterView.bind(this);
     
   }
 
-  toggleChapterView(commentId, chapterId)
-  {
-    this.setState({
-      showAllChapters: true
-    },() => {
-    var comment = "comment_"+commentId;
-    var chapter = "chapter_"+chapterId+"_component";
-    this.refs[chapter].toggleComments(null, commentId);
-  })
-    
-  }
   componentDidMount()
   {
     this.getWork(this.state.workId); 
-    
   }
   componentWillUpdate(nextProps, nextState)
   {
