@@ -13,6 +13,7 @@ export default class Notifications extends React.Component {
 	    this.state = {user: this.props.user, notifications: []};
       this.goToItem = this.goToItem.bind(this);
       this.getNotifications = this.getNotifications.bind(this);
+      this.filter = this.filter.bind(this);
     }
 
   componentWillMount()
@@ -37,13 +38,46 @@ export default class Notifications extends React.Component {
     ]
     this.setState(
     {
-      notifications: notificationsJson
+      notifications: notificationsJson,
+      notificationsOriginal: notificationsJson
     })
   }
   goToItem(event)
   {
-    event.target.blur()
-    
+
+  }
+  filterOnComments(evt)
+  {
+    var transform = this.filter("Comment")
+    this.setState({
+      notifications: transform
+    })
+  }
+  filterOnSystemNotification(evt)
+  {
+    var transform = this.filter("System Notification")
+    this.setState({
+      notifications: transform
+    })
+  }
+  filterOnAll(evt)
+  {
+    this.setState({
+      notifications: this.state.notificationsOriginal
+    })
+  }
+
+  filter(termToMatch)
+  {
+    var transform = []
+    for (var i = 0; i < this.state.notificationsOriginal.length; i++)
+    {
+      if (this.state.notificationsOriginal[i].type === termToMatch)
+      {
+        transform.push(this.state.notificationsOriginal[i]);
+      }
+    }
+    return transform
   }
   render() {
     return (
@@ -57,9 +91,9 @@ export default class Notifications extends React.Component {
               key={1}
               id={`dropdown-basic-${1}`}
               >
-              <MenuItem eventKey="1">Comment</MenuItem>
-              <MenuItem eventKey="2">System Notification</MenuItem>
-              <MenuItem eventKey="2">All</MenuItem>              
+              <MenuItem eventKey="1" onSelect={evt => this.filterOnComments(evt)}>Comment</MenuItem>
+              <MenuItem eventKey="2" onSelect={evt => this.filterOnSystemNotification(evt)}>System Notification</MenuItem>
+              <MenuItem eventKey="2" onSelect={evt => this.filterOnAll(evt)}>All</MenuItem>              
             </DropdownButton>            
           </div>
         </div>
