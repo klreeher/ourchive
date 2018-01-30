@@ -11,7 +11,6 @@ export default class Notifications extends React.Component {
 	constructor(props) {
 	    super(props);
 	    this.state = {user: this.props.user, notifications: []};
-      this.goToItem = this.goToItem.bind(this);
       this.getNotifications = this.getNotifications.bind(this);
       this.filter = this.filter.bind(this);
     }
@@ -27,7 +26,8 @@ export default class Notifications extends React.Component {
         "type": "Comment",
         "content": "New comment on [title] from [user]: blah blah blah blah blah blah...",
         "dateCreated": "2018-01-18",
-        "id": 123
+        "id": 123,
+        "workId": 1
       },
       {
         "type": "System Notification",
@@ -41,10 +41,6 @@ export default class Notifications extends React.Component {
       notifications: notificationsJson,
       notificationsOriginal: notificationsJson
     })
-  }
-  goToItem(event)
-  {
-
   }
   filterOnComments(evt)
   {
