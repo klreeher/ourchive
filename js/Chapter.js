@@ -70,7 +70,7 @@ export default class Chapter extends React.Component {
   render() {
     return (
       <div>
-        <div className="work_text">
+        <div className="text-padding">
           <div className="row">
             <div className="col-xs-9 col-md-12 "><h2>Chapter {this.state.chapter.number}: {this.state.chapter.title}</h2></div>
           </div>
