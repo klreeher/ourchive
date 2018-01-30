@@ -17,7 +17,8 @@ export default class Notification extends React.Component {
     evt.target.blur();
     if (this.state.notification.type === "Comment")
     {
-      history.push('/work/'+this.state.notification.workId);
+      //history.push('/');
+      history.push('/work/'+this.state.notification.workId+'/chapter/'+this.state.notification.chapterId+'/comment/'+this.state.notification.commentId);
     }
     else if (this.state.notification.type === "System Notification")
     {

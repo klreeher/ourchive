@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import axios from 'axios';
 import Chapter from './Chapter';
 import TagList from './TagList';
@@ -17,19 +18,24 @@ export default class SingleWork extends React.Component {
 
   getWork(workId)
   {
-  axios.get('/api/work/'+workId)
-      .then(function (response) {
-        this.setState({
-          work: response.data[0],
-          current_chapter: response.data[0].chapters[0],
-          chapter_index: 0,
-          viewer_is_creator: true
-        });  
+    axios.get('/api/work/'+workId)
+        .then(function (response) {
+          this.setState({
+            work: response.data[0],
+            current_chapter: response.data[0].chapters[0],
+            chapter_index: 0,
+            viewer_is_creator: true
+          }, () => {
+            if (this.props.match.params.commentId > 0)
+              {
+                this.toggleChapterView(this.props.match.params.commentId, this.props.match.params.chapterId);
+              }
+          });  
 
-      }.bind(this))
-      .catch(function (error) {
-        console.log(error);
-    });
+        }.bind(this))
+        .catch(function (error) {
+          console.log(error);
+      });
   }
 
   updateWork(workId)
@@ -72,14 +78,28 @@ export default class SingleWork extends React.Component {
     super(props);    
     this.state = {workId: props.match.params.workId, work: [], current_chapter: [],
       chapter_index: 0, viewer_is_creator: false, user: this.props.user, showAllChapters: false};
+    this.toggleChapterView.bind(this);
+    
   }
-  componentWillMount() { 
+
+  toggleChapterView(commentId, chapterId)
+  {
+    this.setState({
+      showAllChapters: true
+    },() => {
+    var comment = "comment_"+commentId;
+    var chapter = "chapter_"+chapterId+"_component";
+    this.refs[chapter].toggleComments(null, commentId);
+  })
+    
+  }
+  componentDidMount()
+  {
     this.getWork(this.state.workId); 
+    
   }
   componentWillUpdate(nextProps, nextState)
   {
-    //this.state.workId = nextProps.match.params.workId;
-    //this.getWork(this.state.workId);
   }
 
   
@@ -135,15 +155,15 @@ export default class SingleWork extends React.Component {
 
           <div>
             <div className="row">
-              <div className="col-md-2 col-md-offset-10">
+              <div className="col-md-2 col-md-offset-10" >
                 <button className="btn btn-link" onClick={evt => this.toggleAllChapters(evt)}>Hide All Chapters</button>
               </div>
             </div>
             <br/>
             <hr/>
             {this.state.work.chapters.map(chapter => 
-              <div className="row" key={chapter.id}>
-                  <Chapter chapter={chapter} user={this.props.user}/> 
+              <div className="row" key={chapter.id} id={"chapter_"+chapter.id} ref={"chapter_"+chapter.id}>
+                  <Chapter chapter={chapter} user={this.props.user} ref={"chapter_"+chapter.id+"_component"}/> 
               </div>
             )}
           </div> :
@@ -156,7 +176,7 @@ export default class SingleWork extends React.Component {
             </div>
             <br/>
             <hr/>
-            <div className="row">
+            <div className="row" id={"chapter_"+this.state.current_chapter.id}>
                 <Chapter chapter={this.state.current_chapter} user={this.props.user}/>
             </div>  
             <button className="btn btn-link" onMouseDown={evt => this.previousChapter(evt)} disabled={previousDisabled}>Previous Chapter</button>

@@ -2,6 +2,7 @@ import React from 'react';
 import {
   Link
 } from 'react-router-dom';
+import ReactDOM from 'react-dom';
 import Image from 'react-image';
 import ReactPlayer from 'react-player';
 import Comment from './Comment';
@@ -27,16 +28,23 @@ export default class Chapter extends React.Component {
   componentWillReceiveProps(nextProps) {
     this.setState({ chapter: nextProps.chapter });
   }
-  toggleComments(event)
+  toggleComments(event, commentId)
   {
-    event.preventDefault();
-    event.target.blur();
+    if (event != null) 
+    {
+      event.preventDefault();
+      event.target.blur();
+    }
     var showComments = !this.state.showComments;
     var toggleText = showComments ? "Hide Comments" : "Show Comments";
     this.setState({
       showComments: showComments,
       toggleCommentsText: toggleText
-    })
+    }, () => {
+        if (commentId > 0)
+        ReactDOM.findDOMNode(this.refs["comment_"+commentId]).scrollIntoView();
+      }
+    )
   }
   addComment(event)
   {
@@ -115,7 +123,7 @@ export default class Chapter extends React.Component {
             <div className="row">
               <div className="col-xs-9 col-md-12">
                 {this.state.chapter.comments.map(comment => 
-                  <div key={comment.id} className="col-md-12">
+                  <div key={comment.id} className="col-md-12" ref={"comment_"+comment.id}>
                     <Comment comment={comment} user={this.props.user} chapterId={this.state.chapter.id}/>
                   </div>
                     

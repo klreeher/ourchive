@@ -27,7 +27,9 @@ export default class Notifications extends React.Component {
         "content": "New comment on [title] from [user]: blah blah blah blah blah blah...",
         "dateCreated": "2018-01-18",
         "id": 123,
-        "workId": 1
+        "workId": 1,
+        "chapterId": 2,
+        "commentId": 257
       },
       {
         "type": "System Notification",
