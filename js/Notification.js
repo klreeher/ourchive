@@ -15,18 +15,24 @@ export default class Notification extends React.Component {
   goToItem(evt, history)
   {
     evt.target.blur();
-    if (this.state.notification.type === "Comment")
+    if (this.state.notification.type === "Work")
     {
-      //history.push('/');
+      
       history.push({
         pathname: '/work/'+this.state.notification.workId,
         search: '?chapterId='+this.state.notification.chapterId+'&commentId='+this.state.notification.commentId
       })
-      //history.push('/work/'+this.state.notification.workId+'/chapter/'++'/comment/'+this.state.notification.commentId);
     }
     else if (this.state.notification.type === "System Notification")
     {
       alert("system");
+    }
+    else if (this.state.notification.type === "Bookmark")
+    {
+      history.push({
+        pathname: '/bookmark/'+this.state.notification.bookmarkId,
+        search: '?commentId='+this.state.notification.commentId+'&bookmarkId='+this.state.notification.bookmarkId
+      })
     }
   }
 

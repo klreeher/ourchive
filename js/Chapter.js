@@ -42,7 +42,7 @@ export default class Chapter extends React.Component {
       toggleCommentsText: toggleText
     }, () => {
         if (commentId > 0)
-        ReactDOM.findDOMNode(this.refs["comment_"+commentId]).scrollIntoView();
+          ReactDOM.findDOMNode(this.refs["comment_"+commentId]).scrollIntoView();
       }
     )
   }
@@ -66,6 +66,7 @@ export default class Chapter extends React.Component {
     {
       newCommentText: event.target.value
     })
+    console.log(event.target.value);
   }
   render() {
     return (

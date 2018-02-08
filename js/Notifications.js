@@ -23,13 +23,21 @@ export default class Notifications extends React.Component {
   {
     var notificationsJson = [
       {
-        "type": "Comment",
+        "type": "Work",
         "content": "New comment on [title] from [user]: blah blah blah blah blah blah...",
         "dateCreated": "2018-01-18",
         "id": 123,
         "workId": 1,
         "chapterId": 2,
         "commentId": 257
+      },
+      {
+        "type": "Bookmark",
+        "content": "New comment on [bookmark title] from [user]: blah blah blah blah blah blah...",
+        "dateCreated": "2018-01-18",
+        "id": 125,
+        "bookmarkId": 5,
+        "commentId": 296
       },
       {
         "type": "System Notification",

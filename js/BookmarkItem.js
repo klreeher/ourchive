@@ -4,6 +4,7 @@ import Link from 'react-router-dom';
 import TagList from './TagList';
 import NewComment from './NewComment';
 import Comment from './Comment';
+import ReactDOM from 'react-dom';
 
 export default class BookmarkItem extends React.Component {
 
@@ -19,16 +20,23 @@ export default class BookmarkItem extends React.Component {
     	this.updateNewCommentText = this.updateNewCommentText.bind(this)
     }
 
-  toggleComments(event)
+  toggleComments(event, commentId)
   {
-    event.preventDefault();
-    event.target.blur();
+    if (event != null) 
+    {
+      event.preventDefault();
+      event.target.blur();
+    }
     var showComments = !this.state.showComments;
     var toggleText = showComments ? "Hide Comments" : "Show Comments";
     this.setState({
       showComments: showComments,
       toggleCommentsText: toggleText
-    })
+    }, () => {
+        if (commentId > 0)
+          ReactDOM.findDOMNode(this.refs["comment_"+commentId]).scrollIntoView();
+      }
+    )
   }
   addComment(event)
   {
@@ -138,7 +146,7 @@ export default class BookmarkItem extends React.Component {
 		            </div>   
 		            <div className="row">
 		              {this.state.bookmark.comments.map(comment => 
-		                <div key={comment.id} className="col-md-12">
+		                <div key={comment.id} className="col-md-12" ref={"comment_"+comment.id}>
 		                  <Comment comment={comment} user={this.props.user} chapterId={this.state.bookmark.id}/>
 		                </div>
 		                  
