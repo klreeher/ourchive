@@ -36,6 +36,12 @@ export default class Notification extends React.Component {
     }
   }
 
+  deleteItem(evt)
+  {
+    evt.target.blur();
+    this.props.deleteNotification(this.state.notification);
+  }
+
   
   render() {
     const History = withRouter(({ history }) => (
@@ -44,12 +50,15 @@ export default class Notification extends React.Component {
     ))
     return (
       <tr>
-        <td>
+        <td className="col-sm-8">
           <History/>
         </td>   
-        <td>
+        <td className="col-sm-2">
           bleh
-        </td>                    
+        </td>  
+        <td className="col-sm-2">
+          <button className="btn btn-link" onClick={evt => this.deleteItem(evt)}>Delete</button>
+        </td>                  
       </tr>
       
     );

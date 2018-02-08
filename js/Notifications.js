@@ -13,12 +13,39 @@ export default class Notifications extends React.Component {
 	    this.state = {user: this.props.user, notifications: []};
       this.getNotifications = this.getNotifications.bind(this);
       this.filter = this.filter.bind(this);
+      this.deleteNotification = this.deleteNotification.bind(this);
     }
 
   componentWillMount()
   {
     this.getNotifications();
   }
+
+  deleteNotification(notification)
+  {
+    console.log(notification.id)
+    var notificationsFiltered = this.state.notifications.filter(function( obj ) {
+        return obj.id !== notification.id;
+    });
+    this.setState(
+    {
+      notifications: notificationsFiltered
+    })
+  }
+
+  deleteAll(evt)
+  {
+    evt.target.blur();
+    if (confirm("Are you sure you want to delete ALL notifications? This cannot be reversed!")) {
+        console.log("delete all");
+        this.setState({
+          notifications: []
+        })
+    } else {
+        console.log("cancel delete all");
+    }
+  }
+
   getNotifications()
   {
     var notificationsJson = [
@@ -102,6 +129,9 @@ export default class Notifications extends React.Component {
               <MenuItem eventKey="2" onSelect={evt => this.filterOnAll(evt)}>All</MenuItem>              
             </DropdownButton>            
           </div>
+          <div className="col-xs-1">
+            <button className="btn btn-link" onClick={evt => this.deleteAll(evt)}>Delete All</button>
+          </div>
         </div>
         <br/>
         <div className="table-responsive">
@@ -114,7 +144,7 @@ export default class Notifications extends React.Component {
           </thead>
           <tbody>
             {this.state.notifications.map(notification => 
-                    <Notification notification={notification} user={this.props.user} key={notification.id}/>
+                    <Notification notification={notification} user={this.props.user} key={notification.id} deleteNotification={this.deleteNotification}/>
                     
             )}
           </tbody>          
