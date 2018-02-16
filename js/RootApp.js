@@ -58,7 +58,7 @@ export default class RootApp extends React.Component {
 
           <hr/>
 
-          <Route exact path="/" component={Home}/>
+          <Route exact path="/" component={(props, state, params) => <Home user={user} {...props}/>}/>
           <Route path="/works" component={Work}/>
           <Route path="/work/:workId" component={(props, state, params) => <SingleWork user={user} {...props}/>}/>
           <Route path="/bookmark/:curatorId" component={(props, state, params) => <BookmarkList user={user} {...props}/>}/>
