@@ -10,8 +10,9 @@ export default class Search extends React.Component {
 
 	constructor(props) {
 	    super(props);
-	    this.state = {user: this.props.user,  searchTerm: ""};
+	    this.state = {user: this.props.user,  searchTerm: "", advancedText: "Show Advanced Search"};
       this.doSearch = this.doSearch.bind(this);
+      this.toggleAdvanced = this.toggleAdvanced.bind(this);
     }
 
   doSearch(event)
@@ -28,6 +29,25 @@ export default class Search extends React.Component {
         .catch(function (error) {
           console.log(error);
       });
+  }  
+
+  toggleAdvanced(event)
+  {
+      event.target.blur()
+      if (this.state.advancedText === "Show Advanced Search")
+      {
+        this.setState({
+          showAdvancedSearch: true,
+          advancedText: "Hide Advanced Search"
+        })
+      }
+      else
+      {
+        this.setState({
+          showAdvancedSearch: false,
+          advancedText: "Show Advanced Search"
+        })
+      }
   }  
 
   updateSearchTerm(event)
@@ -47,9 +67,34 @@ export default class Search extends React.Component {
               <span className="input-group-btn">
                 <button className="btn btn-default" type="button" onClick={this.doSearch}>Search</button>
               </span>
+            </div>            
+          </div>
+          <div className="col-md-3">
+              <button className="btn btn-link" type="button" onClick={this.toggleAdvanced}>{this.state.advancedText}</button>
+            </div>
+        </div>
+        <br/>
+        {this.state.showAdvancedSearch ?
+          <div>
+            <div className="row">
+              <div className="col-md-4">
+                work type toggles
+              </div>
+              <div className="col-md-4">
+                work/bookmark toggles
+              </div>            
+            </div>
+            <div className="row">
+              <div className="col-md-6">
+                work field to search toggles - title, creator, summary, tags, text
+              </div>
+              <div className="col-md-6">
+                bookmark field to search toggles - title, creator, curator, work summary, curator description, tags, curator rating
+              </div>
             </div>
           </div>
-        </div>
+
+          : <div/>}
         <br/>
         <br/>       
 
