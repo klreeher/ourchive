@@ -45,8 +45,10 @@ def get_results(searchTerm):
       "bookmarks" : [
         {
           "id": 5,
-          "curator_name": "sally",
-          "curator_id": 2,
+          "curator": {
+            "curator_name": "sally",
+            "curator_id": 2
+          },
           "work": {
             "title": "sixteen guns in brixton",
             "creator": "e l dragons",
@@ -66,6 +68,7 @@ def get_results(searchTerm):
       ]
     }
   )
+  return results
 
 @app.route('/api/logout/', methods=['POST'])
 def logout():

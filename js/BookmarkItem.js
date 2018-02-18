@@ -101,7 +101,7 @@ export default class BookmarkItem extends React.Component {
 				<div className="row">
 		        	<div className="col-md-12">If you like this, {this.state.curator.curator_name} recommends...</div>            
 		        </div>
-		        <div className="row">
+		        {this.state.bookmark.links ? <div className="row">
 			        <div className="col-xs-11 col-xs-offset-1">
 				        <ol className="list-inline">
 					        {this.state.bookmark.links.map(link => 					          
@@ -113,7 +113,7 @@ export default class BookmarkItem extends React.Component {
 					        )}
 					    </ol>
 			        </div>
-			    </div>
+			    </div> : <div/>}
 		        <div className="row">
 		             {this.state.bookmark.tags.map(tag => 
 				        <div className="row" key={Math.random()}>
@@ -144,7 +144,7 @@ export default class BookmarkItem extends React.Component {
 		                <h3>Comments</h3>
 		              </div>
 		            </div>   
-		            <div className="row">
+		            {this.state.bookmark.comments ? <div className="row">
 		              {this.state.bookmark.comments.map(comment => 
 		                <div key={comment.id} className="col-md-12" ref={"comment_"+comment.id}>
 		                  <Comment comment={comment} user={this.props.user} chapterId={this.state.bookmark.id}/>
@@ -152,7 +152,7 @@ export default class BookmarkItem extends React.Component {
 		                  
 		                )}
 
-		            </div> 
+		            </div> : <div/>}
 		          </div>  
 	          </div> 
 	  		</div>
