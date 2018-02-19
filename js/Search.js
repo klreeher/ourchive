@@ -154,10 +154,10 @@ export default class Search extends React.Component {
                     <div className="col-sm-2">
                         <input type="checkbox" id="searchTitle" onChange={evt => this.updateBookmarkFields(evt, 1)} checked={this.state.searchTitle}/>  Search title?
                     </div>
-                    <div className="col-sm-2">
+                    <div className="col-sm-3">
                         <input type="checkbox" id="searchCreator" onChange={evt => this.updateBookmarkFields(evt, 2)} checked={this.state.searchCreator}/>  Search creator?
                     </div>
-                    <div className="col-sm-2">
+                    <div className="col-sm-3">
                         <input type="checkbox" id="searchCurator" onChange={evt => this.updateBookmarkFields(evt, 3)} checked={this.state.searchCurator}/>  Search curator?
                     </div>
                     <div className="col-sm-4">
