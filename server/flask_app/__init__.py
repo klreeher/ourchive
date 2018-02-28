@@ -1,9 +1,23 @@
 from flask import Flask, render_template, send_file, send_from_directory, request
 import json
 from flask.ext.tus import tus_manager
+from flask_cors import CORS
+from flask_bcrypt import Bcrypt
+from flask_sqlalchemy import SQLAlchemy
+import os
 
 app = Flask(__name__)
+CORS(app)
 tm = tus_manager(app, upload_url='/file-upload')
+
+bcrypt = Bcrypt(app)
+db = SQLAlchemy(app)
+
+app_settings = os.getenv(
+    'APP_SETTINGS',
+    'server.config.DevelopmentConfig'
+)
+app.config.from_object(app_settings)
 
 @tm.upload_file_handler
 def upload_file_hander( upload_file_path, filename ):
