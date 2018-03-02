@@ -15,7 +15,7 @@ export default class NewWork extends React.Component {
       is_complete: this.state.is_complete, 
       work_notes: this.state.work_notes, 
       work_tags: this.state.work_tags, 
-      chapters: this.state.work_chapters
+      chapters: this.state.chapters
     })
     .then(function (response) {
       console.log(response);

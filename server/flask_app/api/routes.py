@@ -2,6 +2,7 @@ import json
 from flask import render_template, request
 
 from . import api
+from server.flask_app.work import views as work
 
 @api.route('/<path:path>')
 def unknown_path(path):
@@ -148,8 +149,9 @@ def get_outbox(userId):
 
 @api.route('/api/work/', methods=['POST'])
 def post_work():
-  work.views.add_work(request.json)
-  return "YOU ARE HERE"
+  #todo login route
+  work_id = work.add_work(request.json)
+  return "no"
 
 @api.route('/api/work/<int:workId>', methods=['GET'])
 def get_work(workId):

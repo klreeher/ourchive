@@ -13,7 +13,9 @@ class User(db.Model):
     password = db.Column(db.String(255), nullable=False)
     registered_on = db.Column(db.DateTime, nullable=False)
     admin = db.Column(db.Boolean, nullable=False, default=False)
-    comments = db.relationship('Comment', backref='chapter',
+    comments = db.relationship('Comment', backref='comment_user',
+                                lazy='dynamic')
+    works = db.relationship('Work', backref='work_user',
                                 lazy='dynamic')
 
     def __init__(self, email, password, admin=False):
@@ -66,8 +68,10 @@ class Work(db.Model):
     work_summary = db.Column(db.String)
     is_complete = db.Column(db.Integer)
     word_count = db.Column(db.Integer)
-    chapters = db.relationship('Chapter', backref='work',
+    chapters = db.relationship('Chapter', backref='chapter_work',
                                 lazy='dynamic')
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    user = db.relationship('User', back_populates='works')
 
     def __repr__(self):
         return '<Work: {}>'.format(self.id)
@@ -82,7 +86,7 @@ class Chapter(db.Model):
     text = db.Column(db.String)
     audio_url = db.Column(db.String)
     image_url = db.Column(db.String)
-    comments = db.relationship('Comment', backref='chapter',
+    comments = db.relationship('Comment', backref='comment_chapter',
                                 lazy='dynamic')
 
     work_id = db.Column(db.Integer, db.ForeignKey('works.id'))
