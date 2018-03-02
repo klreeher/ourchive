@@ -88,7 +88,7 @@ ensure commands to python (including pip) are pointing to python3; do all of thi
 
 When requirements are installed, open up two terminal sessions.
 
-In the first: `python __init__.py`
+In the first: `python manage.py runserver`
 
 In the second: `webpack --watch`
 

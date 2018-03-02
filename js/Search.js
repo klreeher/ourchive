@@ -10,7 +10,9 @@ export default class Search extends React.Component {
 
 	constructor(props) {
 	    super(props);
-	    this.state = {user: this.props.user,  searchTerm: "", advancedText: "Show Advanced Search"};
+	    this.state = {user: this.props.user,  searchTerm: "", advancedText: "Show Advanced Search", searchBookmarks: true,
+      searchWorks: true, searchTitle: true, searchSummary: true, searchCreator: true, searchTags: true, searchText: true,
+      searchCurator: true, searchDescription: true, searchRating: true};
       this.doSearch = this.doSearch.bind(this);
       this.toggleAdvanced = this.toggleAdvanced.bind(this);
     }
@@ -19,6 +21,7 @@ export default class Search extends React.Component {
   {
       event.target.blur()
       if (this.state.searchTerm === "") return;
+      console.log(this.state)
       axios.get('/api/search/term/'+this.state.searchTerm)
         .then(function (response) {
           this.setState({           
@@ -64,22 +67,98 @@ export default class Search extends React.Component {
 
   updateWorkFields(event, key)
   {
-    console.log(key)
+    if (key===1) {
+      var oldVal = this.state.searchTitle;
+      this.setState({
+        searchTitle: !oldVal
+      })
+    }
+    else if (key ===2) {
+      var oldVal = this.state.searchCreator;
+      this.setState({
+        searchCreator: !oldVal
+      })
+    }
+    else if (key === 4) {
+      var oldVal = this.state.searchTags;
+      this.setState({
+        searchTags: !oldVal
+      })
+    }
+    else if (key === 3) {
+      var oldVal = this.state.searchSummary;
+      this.setState({
+        searchSummary: !oldVal
+      })
+    }
+    else if (key === 5) {
+      var oldVal = this.state.searchText;
+      this.setState({
+        searchText: !oldVal
+      })
+    }
   }
 
   updateBookmarkFields(event, key)
   {
-    console.log(key)
+    if (key===1) {
+      var oldVal = this.state.searchTitle;
+      this.setState({
+        searchTitle: !oldVal
+      })
+    }
+    else if (key ===2) {
+      var oldVal = this.state.searchCreator;
+      this.setState({
+        searchCreator: !oldVal
+      })
+    }
+    else if (key === 3) {
+      var oldVal = this.state.searchCurator;
+      this.setState({
+        searchCurator: !oldVal
+      })
+    }
+    else if (key === 4) {
+      var oldVal = this.state.searchSummary;
+      this.setState({
+        searchSummary: !oldVal
+      })
+    }
+    else if (key === 5) {
+      var oldVal = this.state.searchDescription;
+      this.setState({
+        searchDescription: !oldVal
+      })
+    }
+    else if (key === 6) {
+      var oldVal = this.state.searchTags;
+      this.setState({
+        searchTags: !oldVal
+      })
+    }
+    else if (key === 7) {
+      var oldVal = this.state.searchRating;
+      this.setState({
+        searchRating: !oldVal
+      })
+    }
   }
 
   updateSearchWorks(event)
   {
-    console.log(event.target.value)
+    var oldVal = this.state.searchWorks;
+    this.setState({
+      searchWorks: !oldVal
+    })
   }
 
   updateSearchBookmarks(event)
   {
-    console.log(event.target.value)
+    var oldVal = this.state.searchBookmarks;
+    this.setState({
+      searchBookmarks: !oldVal
+    })
   }
 
   render() {
@@ -90,7 +169,7 @@ export default class Search extends React.Component {
             <div className="input-group">
               <input className="form-control" value={this.state.searchTerm} onChange={evt => this.updateSearchTerm(evt)} placeholder="Search..."></input>
               <span className="input-group-btn">
-                <button className="btn btn-default" type="button" onClick={this.doSearch}>Search</button>
+                <button className="btn btn-default" type="button" onChange={this.doSearch}>Search</button>
               </span>
             </div>            
           </div>
@@ -115,10 +194,10 @@ export default class Search extends React.Component {
                       <input type="checkbox" id="searchTypeThree" onChange={evt => this.updateSearchType(evt, 3)}/>  Search work type 3?
                     </div>
                     <div className="col-sm-2">
-                        <input type="checkbox" id="searchWorks" onChange={evt => this.updateSearchWorks(evt)}/>  Search works?
+                        <input type="checkbox" id="searchWorks" checked={this.state.searchWorks} onChange={evt => this.updateSearchWorks(evt)}/>  Search works?
                     </div>
                     <div className="col-sm-4">
-                      <input type="checkbox" id="searchBookmarks" onChange={evt => this.updateSearchBookmarks(evt)}/>  Search bookmarks?
+                      <input type="checkbox" id="searchBookmarks" checked={this.state.searchBookmarks} onChange={evt => this.updateSearchBookmarks(evt)}/>  Search bookmarks?
                     </div>          
                   </div>
               </div>

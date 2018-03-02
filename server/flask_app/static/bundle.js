@@ -57013,7 +57013,9 @@
 
 	    var _this = _possibleConstructorReturn(this, (Search.__proto__ || Object.getPrototypeOf(Search)).call(this, props));
 
-	    _this.state = { user: _this.props.user, searchTerm: "", advancedText: "Show Advanced Search" };
+	    _this.state = { user: _this.props.user, searchTerm: "", advancedText: "Show Advanced Search", searchBookmarks: true,
+	      searchWorks: true, searchTitle: true, searchSummary: true, searchCreator: true, searchTags: true, searchText: true,
+	      searchCurator: true, searchDescription: true, searchRating: true };
 	    _this.doSearch = _this.doSearch.bind(_this);
 	    _this.toggleAdvanced = _this.toggleAdvanced.bind(_this);
 	    return _this;
@@ -57024,6 +57026,7 @@
 	    value: function doSearch(event) {
 	      event.target.blur();
 	      if (this.state.searchTerm === "") return;
+	      console.log(this.state);
 	      _axios2.default.get('/api/search/term/' + this.state.searchTerm).then(function (response) {
 	        this.setState({
 	          results: response.data
@@ -57064,22 +57067,88 @@
 	  }, {
 	    key: 'updateWorkFields',
 	    value: function updateWorkFields(event, key) {
-	      console.log(key);
+	      if (key === 1) {
+	        var oldVal = this.state.searchTitle;
+	        this.setState({
+	          searchTitle: !oldVal
+	        });
+	      } else if (key === 2) {
+	        var oldVal = this.state.searchCreator;
+	        this.setState({
+	          searchCreator: !oldVal
+	        });
+	      } else if (key === 4) {
+	        var oldVal = this.state.searchTags;
+	        this.setState({
+	          searchTags: !oldVal
+	        });
+	      } else if (key === 3) {
+	        var oldVal = this.state.searchSummary;
+	        this.setState({
+	          searchSummary: !oldVal
+	        });
+	      } else if (key === 5) {
+	        var oldVal = this.state.searchText;
+	        this.setState({
+	          searchText: !oldVal
+	        });
+	      }
 	    }
 	  }, {
 	    key: 'updateBookmarkFields',
 	    value: function updateBookmarkFields(event, key) {
-	      console.log(key);
+	      if (key === 1) {
+	        var oldVal = this.state.searchTitle;
+	        this.setState({
+	          searchTitle: !oldVal
+	        });
+	      } else if (key === 2) {
+	        var oldVal = this.state.searchCreator;
+	        this.setState({
+	          searchCreator: !oldVal
+	        });
+	      } else if (key === 3) {
+	        var oldVal = this.state.searchCurator;
+	        this.setState({
+	          searchCurator: !oldVal
+	        });
+	      } else if (key === 4) {
+	        var oldVal = this.state.searchSummary;
+	        this.setState({
+	          searchSummary: !oldVal
+	        });
+	      } else if (key === 5) {
+	        var oldVal = this.state.searchDescription;
+	        this.setState({
+	          searchDescription: !oldVal
+	        });
+	      } else if (key === 6) {
+	        var oldVal = this.state.searchTags;
+	        this.setState({
+	          searchTags: !oldVal
+	        });
+	      } else if (key === 7) {
+	        var oldVal = this.state.searchRating;
+	        this.setState({
+	          searchRating: !oldVal
+	        });
+	      }
 	    }
 	  }, {
 	    key: 'updateSearchWorks',
 	    value: function updateSearchWorks(event) {
-	      console.log(event.target.value);
+	      var oldVal = this.state.searchWorks;
+	      this.setState({
+	        searchWorks: !oldVal
+	      });
 	    }
 	  }, {
 	    key: 'updateSearchBookmarks',
 	    value: function updateSearchBookmarks(event) {
-	      console.log(event.target.value);
+	      var oldVal = this.state.searchBookmarks;
+	      this.setState({
+	        searchBookmarks: !oldVal
+	      });
 	    }
 	  }, {
 	    key: 'render',
@@ -57106,7 +57175,7 @@
 	                { className: 'input-group-btn' },
 	                _react2.default.createElement(
 	                  'button',
-	                  { className: 'btn btn-default', type: 'button', onClick: this.doSearch },
+	                  { className: 'btn btn-default', type: 'button', onChange: this.doSearch },
 	                  'Search'
 	                )
 	              )
@@ -57167,7 +57236,7 @@
 	                _react2.default.createElement(
 	                  'div',
 	                  { className: 'col-sm-2' },
-	                  _react2.default.createElement('input', { type: 'checkbox', id: 'searchWorks', onChange: function onChange(evt) {
+	                  _react2.default.createElement('input', { type: 'checkbox', id: 'searchWorks', checked: this.state.searchWorks, onChange: function onChange(evt) {
 	                      return _this2.updateSearchWorks(evt);
 	                    } }),
 	                  '  Search works?'
@@ -57175,7 +57244,7 @@
 	                _react2.default.createElement(
 	                  'div',
 	                  { className: 'col-sm-4' },
-	                  _react2.default.createElement('input', { type: 'checkbox', id: 'searchBookmarks', onChange: function onChange(evt) {
+	                  _react2.default.createElement('input', { type: 'checkbox', id: 'searchBookmarks', checked: this.state.searchBookmarks, onChange: function onChange(evt) {
 	                      return _this2.updateSearchBookmarks(evt);
 	                    } }),
 	                  '  Search bookmarks?'

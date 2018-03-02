@@ -4,7 +4,7 @@ module.exports = {
     "./js/app.js"
   ],
   output: {
-    path: __dirname + '/server/static',
+    path: __dirname + '/server/flask_app/static',
     filename: "bundle.js"
   },
   module: {
