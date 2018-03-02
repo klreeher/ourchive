@@ -4,7 +4,7 @@ module.exports = {
     "./js/app.js"
   ],
   output: {
-    path: __dirname + '/static',
+    path: __dirname + '/server/static',
     filename: "bundle.js"
   },
   module: {
