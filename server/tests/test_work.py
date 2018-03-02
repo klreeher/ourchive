@@ -71,9 +71,12 @@ class TestWorkView(BaseTestCase):
 
         tag_one = {}
         tag_one['text'] = "blah"
+        tag_one['id'] = 1
+
 
         tag_two = {}
-        tag_two['text'] = "blah"
+        tag_two['text'] = "bleh"
+        tag_two['id'] = 1
 
         data = {}
         data["title"] = "A Tale of Two Poor Students"

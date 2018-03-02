@@ -141,9 +141,15 @@ export default class NewWork extends React.Component {
         .then(function (response) {
           this.setState({work_tags: [
 
-              {'fandom': ['buffy', 'the good place']},
-              {'pairing': ['buffy/tahani', 'chidi/willow']},
-              {'themes': ['soulbonding']}
+              {'id': 1,
+               'label': 'fandom',
+               'tags': ['buffy', 'the good place']},
+              {'id': 2,
+               'label': 'pairing',
+               'tags': ['buffy/tahani', 'chidi/willow']},
+              {'id': 3,
+               'label': 'themes',
+               'tags': ['soulbonding']}
             ]});  
 
         }.bind(this))
@@ -213,8 +219,8 @@ export default class NewWork extends React.Component {
           </div>
           <div className="form-group">
           {this.state.work_tags.map(tag => 
-              <div key={Object.keys(tag)}>
-                  <TagList tag_category={Object.keys(tag)} tags={Object.values(tag)} underEdit={true}/>
+              <div key={tag.id}>
+                  <TagList tag_category={tag.label} tags={tag.tags} underEdit={true}/>
               </div>
           )}
           </div>

@@ -34,7 +34,11 @@ def add_chapters(work_id, chapters):
 
 def add_tags(work, tags):
 	for tag_item in tags:
-		work.tags.append(Tag(text=tag_item['text'], tag_type_id=1))
+		existing = Tag.query.filter_by(text=tag_item['text']).first()
+		if existing:
+			work.tags.append(existing)			
+		else:
+			work.tags.append(Tag(text=tag_item['text'], tag_type_id=tag_item['id']))
 	db.session.add(work)
 	db.session.commit()
 	return Tag.query.filter_by(tag_type_id=1)
