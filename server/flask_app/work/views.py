@@ -2,7 +2,7 @@ from flask import render_template
 
 from . import work
 from .. import db
-from ..models import Work
+from ..models import Work, Chapter
 
 @work.route('/')
 def homepage():
@@ -26,5 +26,11 @@ def add_work(json):
 		return -1
 
 def add_chapters(work_id, chapters):
-	for chapter in chapters:
-		print(chapter)
+	for chapter_item in chapters:
+		chapter = Chapter(title=chapter_item['title'], number=chapter_item['number'], text=chapter_item['text'], audio_url=chapter_item['audio_url'],image_url=chapter_item['image_url'],work_id=work_id)
+		db.session.add(chapter)
+		db.session.commit()
+	return Chapter.query.filter_by(work_id=work_id)
+
+def add_tags(work_id, tags):
+	return

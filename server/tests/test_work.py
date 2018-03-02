@@ -27,5 +27,38 @@ class TestWorkView(BaseTestCase):
         new_id = work.add_work(data)   
         self.assertTrue(new_id==1)
 
+    def test_add_chapters(self):
+
+        chapter = {}
+        chapter['title'] = "Chapter One Title"
+        chapter['number'] = 1
+        chapter['text'] = "Plot plot plot plot plot"
+        chapter['audio_url'] = ""
+        chapter['image_url'] = ""
+
+        data = {}
+        data["title"] = "A Tale of Two Poor Students"
+        data["is_complete"] = "true"
+        data["word_count"] = "4000"
+        data["work_summary"] = "some stuff happens"
+        data["work_tags"] = []
+        data["chapters"] = [chapter
+        ]
+
+        user = User(
+            email='test@test.com',
+            password='test'
+        )
+        db.session.add(user)
+        db.session.commit()
+        
+        workObj = Work()
+        db.session.add(workObj)
+        db.session.commit()
+
+        new_id = work.add_chapters(1, data["chapters"])   
+        self.assertTrue(new_id.first().title == "Chapter One Title")
+        self.assertTrue(new_id.count() == 1)
+
 if __name__ == '__main__':
     unittest.main()

@@ -2,6 +2,15 @@ import datetime
 import jwt
 
 from server.flask_app import app, db, bcrypt
+from sqlalchemy.ext.declarative import declarative_base
+
+Base = declarative_base()
+
+
+work_tag_table = db.Table('work_tag_table', 
+    db.Column('tag_id', db.Integer, db.ForeignKey('tags.id'), primary_key=True),
+    db.Column('work_id', db.Integer, db.ForeignKey('works.id'), primary_key=True)
+)
 
 
 class User(db.Model):
@@ -66,12 +75,16 @@ class Work(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(200))
     work_summary = db.Column(db.String)
+    work_notes = db.Column(db.String)
     is_complete = db.Column(db.Integer)
     word_count = db.Column(db.Integer)
     chapters = db.relationship('Chapter', backref='chapter_work',
                                 lazy='dynamic')
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     user = db.relationship('User', back_populates='works')
+
+    tags = db.relationship('Tag', secondary=work_tag_table, lazy='subquery',
+        backref=db.backref('work_tags', lazy=True))
 
     def __repr__(self):
         return '<Work: {}>'.format(self.id)
