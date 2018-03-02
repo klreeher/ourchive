@@ -2,7 +2,7 @@ from flask import render_template
 
 from . import work
 from .. import db
-from ..models import Work, Chapter
+from ..models import Work, Chapter, Tag
 
 @work.route('/')
 def homepage():
@@ -32,5 +32,9 @@ def add_chapters(work_id, chapters):
 		db.session.commit()
 	return Chapter.query.filter_by(work_id=work_id)
 
-def add_tags(work_id, tags):
-	return
+def add_tags(work, tags):
+	for tag_item in tags:
+		work.tags.append(Tag(text=tag_item['text'], tag_type_id=1))
+	db.session.add(work)
+	db.session.commit()
+	return Tag.query.filter_by(tag_type_id=1)
