@@ -21,7 +21,6 @@ export default class Search extends React.Component {
   {
       event.target.blur()
       if (this.state.searchTerm === "") return;
-      console.log(this.state)
       axios.get('/api/search/term/'+this.state.searchTerm)
         .then(function (response) {
           this.setState({           
@@ -169,7 +168,7 @@ export default class Search extends React.Component {
             <div className="input-group">
               <input className="form-control" value={this.state.searchTerm} onChange={evt => this.updateSearchTerm(evt)} placeholder="Search..."></input>
               <span className="input-group-btn">
-                <button className="btn btn-default" type="button" onChange={this.doSearch}>Search</button>
+                <button className="btn btn-default" type="button" onClick={this.doSearch}>Search</button>
               </span>
             </div>            
           </div>

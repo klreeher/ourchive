@@ -19,6 +19,9 @@ app_settings = os.getenv(
 )
 app.config.from_object(app_settings)
 
+from .work import work as work_blueprint
+app.register_blueprint(work_blueprint)
+
 @tm.upload_file_handler
 def upload_file_hander( upload_file_path, filename ):
     app.logger.info( "doing something cool with {}, {}".format( upload_file_path, filename))
@@ -100,9 +103,6 @@ def login():
     abort(400)
   return request.json["userName"] + request.json["password"]
 
-@app.route('/')
-def hello_world():
-  return render_template('index.html')
 
 @app.route('/audio/<string:audio_file>')
 def audio(audio_file):
@@ -182,9 +182,7 @@ def get_work(workId):
   	"id": 1,
     "creator_id": 2,
   "name": "lacey",
-  "url": "https://google.com",
   "title": "A Tale of Two Poor Students",
-  "main": "index.js",
   "is_complete": "true",
   "word_count": "4000",
   "work_summary": "some stuff happens",
@@ -360,10 +358,6 @@ def get_works_by_creator(creatorId):
         }]
     })
   return works
-
-@app.route('/<path:path>')
-def default(path):
-  return render_template('index.html')
 
 if __name__ == '__main__':
   app.run(debug=True)

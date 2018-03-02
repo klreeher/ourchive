@@ -13,6 +13,8 @@ class User(db.Model):
     password = db.Column(db.String(255), nullable=False)
     registered_on = db.Column(db.DateTime, nullable=False)
     admin = db.Column(db.Boolean, nullable=False, default=False)
+    comments = db.relationship('Comment', backref='chapter',
+                                lazy='dynamic')
 
     def __init__(self, email, password, admin=False):
         self.email = email
@@ -54,3 +56,76 @@ class User(db.Model):
             return 'Signature expired. Please log in again.'
         except jwt.InvalidTokenError:
             return 'Invalid token. Please log in again.'
+
+class Work(db.Model):
+
+    __tablename__ = 'works'
+
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(200))
+    work_summary = db.Column(db.String)
+    is_complete = db.Column(db.Integer)
+    word_count = db.Column(db.Integer)
+    chapters = db.relationship('Chapter', backref='work',
+                                lazy='dynamic')
+
+    def __repr__(self):
+        return '<Work: {}>'.format(self.id)
+
+class Chapter(db.Model):
+
+    __tablename__ = 'chapters'
+
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(200))
+    number = db.Column(db.Integer)
+    text = db.Column(db.String)
+    audio_url = db.Column(db.String)
+    image_url = db.Column(db.String)
+    comments = db.relationship('Comment', backref='chapter',
+                                lazy='dynamic')
+
+    work_id = db.Column(db.Integer, db.ForeignKey('works.id'))
+    work = db.relationship('Work', back_populates='chapters')
+
+    def __repr__(self):
+        return '<Chapter: {}>'.format(self.id)
+
+class Comment(db.Model):
+
+    __tablename__ = 'comments'
+
+    id = db.Column(db.Integer, primary_key=True)
+    text = db.Column(db.String)
+
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    user = db.relationship('User', back_populates='comments')
+
+    chapter_id = db.Column(db.Integer, db.ForeignKey('chapters.id'))
+    chapter = db.relationship('Chapter', back_populates='comments')
+
+    def __repr__(self):
+        return '<Comment: {}>'.format(self.id)
+
+class Tag(db.Model):
+
+    __tablename__ = 'tags'
+
+    id = db.Column(db.Integer, primary_key=True)
+    text = db.Column(db.String(120))
+    tag_type_id = db.Column(db.Integer, db.ForeignKey('tag_types.id'))
+    tag_type = db.relationship('TagType', back_populates='tags')
+
+    def __repr__(self):
+        return '<Tag: {}>'.format(self.id)
+
+class TagType(db.Model):
+
+    __tablename__ = 'tag_types'
+
+    id = db.Column(db.Integer, primary_key=True)
+    label = db.Column(db.String(200))
+    tags = db.relationship('Tag', back_populates='tag_type')
+
+    def __repr__(self):
+        return '<TagType: {}>'.format(self.id)
