@@ -33,6 +33,10 @@ def download(filename):
   uploads = os.path.join(app.root_path, tm.upload_folder)
   return send_from_directory(directory=uploads, filename=filename)
 
+@app.route('/<path:path>')
+def unknown_path(path):
+  return render_template('index.html')
+
 @app.route('/api/search/term/<string:searchTerm>')
 def get_results(searchTerm):
   results = json.dumps(
@@ -174,7 +178,12 @@ def get_outbox(userId):
   ])
   return messages
 
-@app.route('/api/work/<int:workId>')
+@app.route('/api/work/', methods=['POST'])
+def post_work():
+  work.views.add_work(request.json)
+  return "YOU ARE HERE"
+
+@app.route('/api/work/<int:workId>', methods=['GET'])
 def get_work(workId):
   work = json.dumps(
     [

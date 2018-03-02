@@ -10,7 +10,7 @@ export default class NewWork extends React.Component {
   {
     evt.preventDefault()
     axios.post(this.state.postUrl, {
-      title: this.state.work_title, 
+      title: this.state.title, 
       work_summary: this.state.work_summary, 
       is_complete: this.state.is_complete, 
       work_notes: this.state.work_notes, 
@@ -24,7 +24,7 @@ export default class NewWork extends React.Component {
       console.log(error);
     });
   }
-  updateTitle(evt) {
+  updateTitle(evt) {  
     this.setState({
       title: evt.target.value
     });
@@ -166,7 +166,7 @@ export default class NewWork extends React.Component {
     else
     {
         this.state = {title: '', work_summary: '', is_complete: false, work_notes: '', 
-          work_tags: [], chapters: [], is_edit: false, postUrl: '/api/works/'};
+          work_tags: [], chapters: [], is_edit: false, postUrl: '/api/work/'};
         this.addChapter();
         this.handler = this.handler.bind(this);
         this.uploadAudio = this.uploadAudio.bind(this);
@@ -230,11 +230,13 @@ export default class NewWork extends React.Component {
         <div className="form-group">
           <button className="btn btn-link" onMouseDown={evt => this.appendChapter(evt)}>Add Chapter</button>
         </div>
-        <div className="form-group">
-          <button onMouseDown={evt => this.addWork(evt)} className="btn btn-default">Submit</button>
-        </div>
+        
 
       </form>
+
+      <div className="form-group">
+          <button onMouseDown={evt => this.addWork(evt)} className="btn btn-default">Submit</button>
+      </div>
         
       </div>
       </div>

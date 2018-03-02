@@ -6,6 +6,7 @@ from . import work
 def homepage():
   return render_template('index.html')
 
-@work.route('/<path:path>')
-def unknown_path(path):
-  return render_template('index.html')
+def add_work(json):
+    # add login checks
+
+    print(json)
