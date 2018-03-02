@@ -1,43 +1,14 @@
-from flask import Flask, render_template, send_file, send_from_directory, request
 import json
-from flask.ext.tus import tus_manager
-from flask_cors import CORS
-from flask_bcrypt import Bcrypt
-from flask_sqlalchemy import SQLAlchemy
-import os
+from flask import render_template, request
 
-app = Flask(__name__)
-CORS(app)
-tm = tus_manager(app, upload_url='/file-upload')
+from . import api
 
-bcrypt = Bcrypt(app)
-db = SQLAlchemy(app)
-
-app_settings = os.getenv(
-    'APP_SETTINGS',
-    'server.config.DevelopmentConfig'
-)
-app.config.from_object(app_settings)
-
-from .work import work as work_blueprint
-app.register_blueprint(work_blueprint)
-
-from .api import api as api_blueprint
-app.register_blueprint(api_blueprint)
-
-@tm.upload_file_handler
-def upload_file_hander( upload_file_path, filename ):
-    app.logger.info( "doing something cool with {}, {}".format( upload_file_path, filename))
-    return filename
-
-# serve the uploaded files
-@app.route('/uploads/<path:filename>', methods=['GET'])
-def download(filename):
-  uploads = os.path.join(app.root_path, tm.upload_folder)
-  return send_from_directory(directory=uploads, filename=filename)
+@api.route('/<path:path>')
+def unknown_path(path):
+  return render_template('index.html')
 
 
-@app.route('/api/search/term/<string:searchTerm>')
+@api.route('/api/search/term/<string:searchTerm>')
 def get_results(searchTerm):
   results = json.dumps(
     {
@@ -91,13 +62,14 @@ def get_results(searchTerm):
   )
   return results
 
-@app.route('/api/logout/', methods=['POST'])
+
+@api.route('/api/logout/', methods=['POST'])
 def logout():
   if not request.json:
     abort(400)
   return request.json["jwt"]
 
-@app.route('/api/login/', methods=['POST'])
+@api.route('/api/login/', methods=['POST'])
 def login():
   if not request.json:
     abort(400)
@@ -108,11 +80,7 @@ def login():
   return request.json["userName"] + request.json["password"]
 
 
-@app.route('/audio/<string:audio_file>')
-def audio(audio_file):
-  return send_from_directory(filename=audio_file, directory='audio')
-
-@app.route('/api/message/to/<int:userId>')
+@api.route('/api/message/to/<int:userId>')
 def get_inbox(userId):
   messages = json.dumps(
     [
@@ -142,7 +110,7 @@ def get_inbox(userId):
   ])
   return messages
 
-@app.route('/api/message/from/<int:userId>')
+@api.route('/api/message/from/<int:userId>')
 def get_outbox(userId):
   messages = json.dumps(
     [
@@ -178,12 +146,12 @@ def get_outbox(userId):
   ])
   return messages
 
-@app.route('/api/work/', methods=['POST'])
+@api.route('/api/work/', methods=['POST'])
 def post_work():
   work.views.add_work(request.json)
   return "YOU ARE HERE"
 
-@app.route('/api/work/<int:workId>', methods=['GET'])
+@api.route('/api/work/<int:workId>', methods=['GET'])
 def get_work(workId):
   work = json.dumps(
     [
@@ -245,7 +213,7 @@ def get_work(workId):
     {"primary pairing": ["buffy/faith"]}]}])
   return work
 
-@app.route('/api/user/<int:userId>')
+@api.route('/api/user/<int:userId>')
 def get_user(userId):
   user = json.dumps(
       {
@@ -270,7 +238,7 @@ def get_user(userId):
       })
   return user
 
-@app.route('/api/bookmark/curator/<int:curatorId>')
+@api.route('/api/bookmark/curator/<int:curatorId>')
 def get_bookmarks(curatorId):
   bookmarks = json.dumps(
     {
@@ -351,7 +319,7 @@ def get_bookmarks(curatorId):
     ]})
   return bookmarks
 
-@app.route('/api/work/creator/<int:creatorId>')
+@api.route('/api/work/creator/<int:creatorId>')
 def get_works_by_creator(creatorId):
   works = json.dumps(
     {"works": [
@@ -367,7 +335,3 @@ def get_works_by_creator(creatorId):
         }]
     })
   return works
-
-if __name__ == '__main__':
-  app.run(debug=True)
-
