@@ -11,7 +11,7 @@ class TestWorkView(BaseTestCase):
     def test_add_work(self):
         data = {}
         data["title"] = "A Tale of Two Poor Students"
-        data["is_complete"] = "true"
+        data["is_complete"] = "False"
         data["word_count"] = "4000"
         data["work_summary"] = "some stuff happens"
         data["work_tags"] = []
@@ -26,7 +26,9 @@ class TestWorkView(BaseTestCase):
         db.session.commit()
 
         new_id = work.add_work(data, 1)   
+        selected_work = Work.query.filter_by(id=1).first()
         self.assertTrue(new_id==1)
+        self.assertTrue(selected_work.is_complete == 0)
 
     def test_add_chapters(self):
 

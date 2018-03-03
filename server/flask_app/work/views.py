@@ -17,9 +17,12 @@ def add_work(json, user_id):
 		work_notes = json['work_notes']
 		work_tags = json['work_tags']
 		chapters = json['chapters']
-		#todo implement complete
+		if json['is_complete'] == True:
+			is_complete = 1
+		else:
+			is_complete = 0
 		#todo we are committing too many times here!
-		work = Work(title=title,work_summary=work_summary,is_complete=0,word_count=0,user_id=user_id,work_notes=work_notes)
+		work = Work(title=title,work_summary=work_summary,is_complete=is_complete,word_count=0,user_id=user_id,work_notes=work_notes)
 		db.session.add(work)
 		db.session.commit()
 		word_count = add_chapters(work.id, chapters)

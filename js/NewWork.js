@@ -35,8 +35,9 @@ export default class NewWork extends React.Component {
     });
   }
   updateCheckbox(evt) {
+    var oldVal = this.state.is_complete;
     this.setState({
-      is_complete: evt.target.value
+      is_complete: !oldVal
     });
   }
   updateWorkNotes(evt) {
