@@ -103,8 +103,8 @@ class TestWorkView(BaseTestCase):
         db.session.commit()
 
         new_id = work.add_tags(workObj, data["work_tags"])   
-        self.assertTrue(new_id.first().text == "blah")
-        self.assertTrue(new_id.count() == 2)
+        self.assertTrue(new_id[0].text == "blah")
+        self.assertTrue(len(new_id) == 2)
 
 if __name__ == '__main__':
     unittest.main()

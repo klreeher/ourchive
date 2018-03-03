@@ -41,4 +41,5 @@ def add_tags(work, tags):
 			work.tags.append(Tag(text=tag_item['text'], tag_type_id=tag_item['id']))
 	db.session.add(work)
 	db.session.commit()
-	return Tag.query.filter_by(tag_type_id=1)
+	work = Work.query.filter_by(id=work.id).first()
+	return work.tags
