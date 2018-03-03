@@ -1,7 +1,7 @@
 import unittest
 
 from server.flask_app import db
-from server.flask_app.models import Work, User, TagType
+from server.flask_app.models import Work, User, TagType, Chapter
 from server.flask_app.work import views as work
 from server.tests.base import BaseTestCase
 import json
@@ -58,7 +58,8 @@ class TestWorkView(BaseTestCase):
         db.session.add(workObj)
         db.session.commit()
 
-        new_id = work.add_chapters(1, data["chapters"])   
+        work.add_chapters(1, data["chapters"])   
+        new_id = Chapter.query.filter_by(work_id=1)
         self.assertTrue(new_id.first().title == "Chapter One Title")
         self.assertTrue(new_id.count() == 1)
 
@@ -108,6 +109,11 @@ class TestWorkView(BaseTestCase):
         new_id = work.add_tags(workObj, data["work_tags"])   
         self.assertTrue(new_id[0].text == "blah")
         self.assertTrue(len(new_id) == 2)
+
+    def test_count_words(self):
+
+        count = work.count_words("this is a chapter. blah blah blah. horses - and- dogs")  
+        self.assertTrue(count == 10)
 
 if __name__ == '__main__':
     unittest.main()
