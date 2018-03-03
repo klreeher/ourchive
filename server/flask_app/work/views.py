@@ -8,19 +8,20 @@ from ..models import Work, Chapter, Tag
 def homepage():
   return render_template('index.html')
 
-def add_work(json):
+def add_work(json, user_id):
 	try:
 		title = json['title']
 		work_summary = json['work_summary']
 		is_complete = json['is_complete']
-		# todo migrate, add column
-		#work_notes = json['work_notes']
+		work_notes = json['work_notes']
 		work_tags = json['work_tags']
 		chapters = json['chapters']
-		work = Work(title=title,work_summary=work_summary,is_complete=0,word_count=0,user_id=1)
+		#todo implement complete & word count
+		work = Work(title=title,work_summary=work_summary,is_complete=0,word_count=0,user_id=user_id,work_notes=work_notes)
 		db.session.add(work)
 		db.session.commit()
 		add_chapters(work.id, chapters)
+		add_tags(work, work_tags)
 		return work.id
 	except KeyError:
 		return -1

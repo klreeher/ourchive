@@ -16,6 +16,7 @@ class TestWorkView(BaseTestCase):
         data["work_summary"] = "some stuff happens"
         data["work_tags"] = []
         data["chapters"] = []
+        data["work_notes"] = "a note here"
 
         user = User(
             email='test@test.com',
@@ -24,7 +25,7 @@ class TestWorkView(BaseTestCase):
         db.session.add(user)
         db.session.commit()
 
-        new_id = work.add_work(data)   
+        new_id = work.add_work(data, 1)   
         self.assertTrue(new_id==1)
 
     def test_add_chapters(self):
@@ -41,6 +42,7 @@ class TestWorkView(BaseTestCase):
         data["is_complete"] = "true"
         data["word_count"] = "4000"
         data["work_summary"] = "some stuff happens"
+        data["work_notes"] = "a note here"
         data["work_tags"] = []
         data["chapters"] = [chapter
         ]
@@ -84,6 +86,7 @@ class TestWorkView(BaseTestCase):
         data["word_count"] = "4000"
         data["work_summary"] = "some stuff happens"
         data["work_tags"] = [tag_one, tag_two]
+        data["work_notes"] = "a note here"
         data["chapters"] = [chapter
         ]
 
