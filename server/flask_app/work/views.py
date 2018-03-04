@@ -45,6 +45,7 @@ def add_work(json, user_id):
 		db.session.add(work)
 		db.session.commit()
 		add_tags(work, work_tags)
+		#todo add comments
 		return work.id
 	except KeyError:
 		return -1
@@ -102,19 +103,20 @@ def build_work_chapters(work):
 		chapter_json['text'] = chapter.text
 		chapter_json['audio_url'] = chapter.audio_url
 		chapter_json['image_url'] = chapter.image_url
-		chapter_json['comments'] = build_chapter_comments(chapter)
+		chapter_json['comments'] = build_chapter_comments(chapter.comments)
 		chapters.append(chapter)
 	return chapters
 
-def build_chapter_comments(chapter):
+def build_chapter_comments(comments):
 	comments = []
-	for comment in chapter.comments:
+	for comment in comments:
 		comment_json = {}
 		comment_json['id'] = comment.id
 		comment_json['userName'] = comment.user.username
 		comment_json['userId'] = comment.user.id
 		comment_json['text'] = comment.text
 		comment_json['chapterId'] = comment.chapter_id
+		comment_json['comments'] = build_chapter_comments(comment.comments)
 		comments.append(comment_json)
 	return comments
 
