@@ -1,7 +1,7 @@
 import unittest
 
 from server.flask_app import db
-from server.flask_app.models import Work, User, TagType, Chapter
+from server.flask_app.models import Work, User, TagType, Chapter, Tag
 from server.flask_app.work import views as work
 from server.tests.base import BaseTestCase
 import json
@@ -116,6 +116,52 @@ class TestWorkView(BaseTestCase):
 
         count = work.count_words("this is a chapter. blah blah blah. horses - and- dogs")  
         self.assertTrue(count == 10)
+
+    def test_delete_work(self):
+
+        user = User(
+            email='test@test.com',
+            password='test'
+        )
+        db.session.add(user)
+        db.session.commit()
+        
+        workObj = Work()
+        db.session.add(workObj)
+        db.session.commit()
+
+        work.delete_work(1)
+        works = Work.query.all()
+        self.assertTrue(len(works) == 0)
+
+    def test_build_work_tags(self):
+        user = User(
+            email='test@test.com',
+            password='test'
+        )
+        db.session.add(user)
+
+        tagType = TagType(label='one')
+        db.session.add(tagType)
+
+        tagType = TagType(label='two')
+        db.session.add(tagType)
+        
+
+        tag_one = Tag(tag_type_id=1, text='one')
+        tag_two = Tag(tag_type_id=2, text='two')
+
+        workObj = Work()
+        workObj.tags.append(tag_one)
+        workObj.tags.append(tag_two)
+        db.session.add(workObj)
+
+        db.session.commit()
+
+        tags = work.build_work_tags(workObj)
+        self.assertTrue(len(tags) == 2)
+        self.assertTrue(tags[0]['tags'][0].text == 'one')
+
 
 if __name__ == '__main__':
     unittest.main()

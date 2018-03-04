@@ -3,11 +3,26 @@ import re
 
 from . import work
 from .. import db
-from ..models import Work, Chapter, Tag
+from ..models import Work, Chapter, Tag, User, TagType
 
 @work.route('/')
 def homepage():
   return render_template('index.html')
+
+def get_work(work_id):
+	try:
+		return Work.query.filter_by(id=work_id).first()
+	except:
+		#todo log
+		return
+
+def delete_work(work_id):
+	try:
+		Work.query.filter_by(id=work_id).delete()
+		db.session.commit()
+	except:
+		#todo log
+		return
 
 def add_work(json, user_id):
 	try:
@@ -57,3 +72,45 @@ def add_tags(work, tags):
 
 def count_words(text):
 	return len(re.findall(r'\w+', text))
+
+def build_work(work):
+	creator = User.query.filter_by(id=work.user_id)
+	work = {}
+	work['id'] = work.id
+	work['creator_id'] = work.user_id
+	work['name'] = creator.username
+	work['title'] = work.title
+	if work.is_complete == 1:
+		work['is_complete'] = 'True'
+	else:
+		work['is_complete'] = 'False'
+	work['word_count'] = work.word_count
+	work['work_summary'] = work.work_summary
+	work['work_notes'] = work.work_notes
+	#todo i am sure there is a more elegant way to do all this de/serialization
+	work['chapters'] = build_work_chapters(work)
+	work['tags'] = build_work_tags(work)
+	return work
+
+def build_work_chapters(work):
+	chapters = []
+	for chapter in work.chapters:
+		chapter_json = {}
+		chapter_json['id'] = chapter.id
+		chapter_json['number'] = chapter.number
+		chapter_json['title'] = chapter.title
+		chapter_json['text'] = chapter.text
+		chapter_json['audio_url'] = chapter.audio_url
+		chapter_json['image_url'] = chapter.image_url
+		chapters.append(chapter)
+	return chapters
+
+def build_work_tags(work):
+	tags = []
+	for tag_type in TagType.query.all():
+		tag = {}
+		tag['id'] = tag_type.id
+		tag['label'] = tag_type.label
+		tag['tags'] = [x for x in work.tags if x.tag_type_id == tag_type.id]
+		tags.append(tag)
+	return tags
