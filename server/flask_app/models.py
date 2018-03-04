@@ -12,6 +12,11 @@ work_tag_table = db.Table('work_tag_table',
     db.Column('work_id', db.Integer, db.ForeignKey('works.id'), primary_key=True)
 )
 
+comment_to_comment = db.Table("comment_to_comment", 
+    db.Column("parent_comment_id", db.Integer, db.ForeignKey("comments.id"), primary_key=True),
+    db.Column("child_comment_id", db.Integer, db.ForeignKey("comments.id"), primary_key=True)
+)
+
 
 class User(db.Model):
     """ User Model for storing user related details """
@@ -121,6 +126,14 @@ class Comment(db.Model):
 
     chapter_id = db.Column(db.Integer, db.ForeignKey('chapters.id'))
     chapter = db.relationship('Chapter', back_populates='comments')
+
+
+    comments = db.relationship("Comment",
+                        secondary=comment_to_comment,
+                        primaryjoin=id==comment_to_comment.c.parent_comment_id,
+                        secondaryjoin=id==comment_to_comment.c.child_comment_id,
+                        backref="parent_comment"
+                )
 
     def __repr__(self):
         return '<Comment: {}>'.format(self.id)

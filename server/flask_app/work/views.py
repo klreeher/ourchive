@@ -102,8 +102,21 @@ def build_work_chapters(work):
 		chapter_json['text'] = chapter.text
 		chapter_json['audio_url'] = chapter.audio_url
 		chapter_json['image_url'] = chapter.image_url
+		chapter_json['comments'] = build_chapter_comments(chapter)
 		chapters.append(chapter)
 	return chapters
+
+def build_chapter_comments(chapter):
+	comments = []
+	for comment in chapter.comments:
+		comment_json = {}
+		comment_json['id'] = comment.id
+		comment_json['userName'] = comment.user.username
+		comment_json['userId'] = comment.user.id
+		comment_json['text'] = comment.text
+		comment_json['chapterId'] = comment.chapter_id
+		comments.append(comment_json)
+	return comments
 
 def build_work_tags(work):
 	tags = []

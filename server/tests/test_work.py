@@ -1,7 +1,7 @@
 import unittest
 
 from server.flask_app import db
-from server.flask_app.models import Work, User, TagType, Chapter, Tag
+from server.flask_app.models import Work, User, TagType, Chapter, Tag, Comment
 from server.flask_app.work import views as work
 from server.tests.base import BaseTestCase
 import json
@@ -161,6 +161,49 @@ class TestWorkView(BaseTestCase):
         tags = work.build_work_tags(workObj)
         self.assertTrue(len(tags) == 2)
         self.assertTrue(tags[0]['tags'][0].text == 'one')
+
+    def test_add_comments(self):
+        chapter = {}
+        chapter['title'] = "Chapter One Title"
+        chapter['number'] = 1
+        chapter['text'] = "Plot plot plot plot plot"
+        chapter['audio_url'] = ""
+        chapter['image_url'] = ""
+
+        data = {}
+        data["title"] = "A Tale of Two Poor Students"
+        data["is_complete"] = "true"
+        data["word_count"] = "4000"
+        data["work_summary"] = "some stuff happens"
+        data["work_notes"] = "a note here"
+        data["work_tags"] = []
+        data["chapters"] = [chapter
+        ]
+
+        
+
+        user = User(
+            email='test@test.com',
+            password='test'
+        )
+        db.session.add(user)
+        db.session.commit()
+        
+        workObj = Work()
+        db.session.add(workObj)
+        db.session.commit()
+
+        work.add_chapters(1, data["chapters"])   
+        
+        comment = Comment(user_id=1, text='hello world', chapter_id=1)
+        db.session.add(comment)
+        db.session.commit()
+        commentTwo = Comment(user_id=1, text='goodbye world', chapter_id=1)
+        comment.comments.append(commentTwo)
+        db.session.add(comment)
+        db.session.commit()
+
+        self.assertTrue(Comment.query.filter_by(id=1).first().comments[0].text=='goodbye world')
 
 
 if __name__ == '__main__':
