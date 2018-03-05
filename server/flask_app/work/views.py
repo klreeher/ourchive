@@ -25,7 +25,7 @@ def delete_work(work_id):
 		return
 def update_work(json):
 	try:
-		work = Work.query.filter_by(id = json['work_id'])
+		work = Work.query.filter_by(id = json['work_id']).first()
 		work.title = json['title']
 		work.work_summary = json['work_summary']
 		work.work_notes = json['work_notes']
@@ -35,7 +35,6 @@ def update_work(json):
 			work.is_complete = 1
 		else:
 			work.is_complete = 0
-		#todo we are committing too many times here!
 		db.session.add(work)
 		word_count = update_chapters(work.id, chapters)
 		work.word_count = word_count		

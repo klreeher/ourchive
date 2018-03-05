@@ -98,6 +98,24 @@ class TestWorkView(BaseTestCase):
         db.session.add(comment)
         db.session.commit()
 
+    def test_update_work(self):
+        data = self.build_data(True, True)
+
+        workObj = Work()
+        workObj.title = "Beginning Title"
+        db.session.add(workObj)
+        
+
+        work.add_chapters(workObj, data["chapters"])   
+        db.session.commit()
+
+        data['work_id'] = workObj.id
+
+        work.update_work(data)
+        workObj = Work.query.filter_by(id=workObj.id).first()
+        self.assertTrue(workObj.title == "A Tale of Two Poor Students")
+
+
     def build_data(self, build_tags, build_chapters):
         data = {}
         data["title"] = "A Tale of Two Poor Students"
