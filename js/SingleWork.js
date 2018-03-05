@@ -48,9 +48,31 @@ export default class SingleWork extends React.Component {
 
   }
 
-  deleteWork(workId)
+  deleteWork(evt, workId)
   {
-
+    axios.delete('/api/work/'+workId)
+        .then(function (response) {
+          this.setState({
+            work: [],
+            current_chapter: response.data.chapters ? response.data.chapters[0] : [],
+            chapter_index: 0,
+            viewer_is_creator: true,
+            showAllChapters: this.props.location.search.length > 0
+          }, () => {
+            var queryParams = new URLSearchParams(this.props.location.search);
+            var chapterId = queryParams.get('chapterId');
+            var commentId = queryParams.get('commentId');
+            if (this.state.showAllChapters)
+              {
+                var comment = "comment_"+commentId;
+                var chapter = "chapter_"+chapterId+"_component";
+                this.refs[chapter].toggleComments(null, commentId);
+              }
+          }); 
+        }.bind(this))
+        .catch(function (error) {
+          console.log(error);
+      });
   }
   nextChapter(evt)
   {
@@ -107,7 +129,7 @@ export default class SingleWork extends React.Component {
           <div className={this.state.viewer_is_creator ? "viewer-creator row" : "viewer row"}>
             <div className="col-md-3 col-xs-1">
               <button>Edit</button>
-              <button>Delete</button>
+              <button onClick={evt => this.deleteWork(evt, this.state.work.id)}>Delete</button>
             </div>
           </div>
         

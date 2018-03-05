@@ -153,10 +153,20 @@ def post_work():
   work_id = work.add_work(request.json, 1)
   return json.dumps({"work_id": work_id})
 
+@api.route('/api/work/<int:workId>', methods=['DELETE'])
+def delete_work(workId):
+  #todo login route
+  work.delete_work(workId)
+  return 'Deleted: ' + str(workId)
+
 @api.route('/api/work/<int:workId>', methods=['GET'])
 def get_work(workId):
   #todo error handling
-  return work.get_work(workId)
+  val = work.get_work(workId)
+  if val is not None:
+    return val
+  else:
+    return '404 Not Found'
 
 @api.route('/api/user/<int:userId>')
 def get_user(userId):
