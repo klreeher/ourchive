@@ -21,7 +21,7 @@ class TestWorkView(BaseTestCase):
         workObj = Work()
         db.session.add(workObj)
         db.session.commit()
-        work.add_chapters(1, data["chapters"])   
+        work.add_chapters(workObj, data["chapters"])   
         new_id = Chapter.query.filter_by(work_id=1)
         self.assertTrue(new_id.first().title == "Chapter One Title")
         self.assertTrue(new_id.count() == 1)
@@ -88,7 +88,7 @@ class TestWorkView(BaseTestCase):
         db.session.add(workObj)
         db.session.commit()
 
-        work.add_chapters(1, data["chapters"])   
+        work.add_chapters(workObj, data["chapters"])   
         
         comment = Comment(user_id=1, text='hello world', chapter_id=1)
         db.session.add(comment)

@@ -23,12 +23,32 @@ def delete_work(work_id):
 	except:
 		#todo log
 		return
+def update_work(json):
+	try:
+		work = Work.query.filter_by(id = json['work_id'])
+		work.title = json['title']
+		work.work_summary = json['work_summary']
+		work.work_notes = json['work_notes']
+		work_tags = json['work_tags']
+		chapters = json['chapters']
+		if json['is_complete'] == True:
+			work.is_complete = 1
+		else:
+			work.is_complete = 0
+		#todo we are committing too many times here!
+		db.session.add(work)
+		word_count = update_chapters(work.id, chapters)
+		work.word_count = word_count		
+		add_tags(work, work_tags)
+		db.session.commit()
+	except:
+		#todo log
+		return
 
 def add_work(json, user_id):
 	try:
 		title = json['title']
 		work_summary = json['work_summary']
-		is_complete = json['is_complete']
 		work_notes = json['work_notes']
 		work_tags = json['work_tags']
 		chapters = json['chapters']
@@ -39,23 +59,37 @@ def add_work(json, user_id):
 		#todo we are committing too many times here!
 		work = Work(title=title,work_summary=work_summary,is_complete=is_complete,word_count=0,user_id=user_id,work_notes=work_notes)
 		db.session.add(work)
-		db.session.commit()
-		word_count = add_chapters(work.id, chapters)
-		work.word_count = word_count
-		db.session.add(work)
-		db.session.commit()
+		word_count = add_chapters(work, chapters)
+		work.word_count = word_count		
 		add_tags(work, work_tags)
+		db.session.commit()
 		#todo add comments
 		return work.id
 	except KeyError:
 		return -1
 
-def add_chapters(work_id, chapters):
+def add_chapters(work, chapters):
 	count = 0
 	for chapter_item in chapters:
-		chapter = Chapter(title=chapter_item['title'], number=chapter_item['number'], text=chapter_item['text'], audio_url=chapter_item['audio_url'],image_url=chapter_item['image_url'],work_id=work_id)
-		db.session.add(chapter)
-		db.session.commit()
+		chapter = Chapter(title=chapter_item['title'], number=chapter_item['number'], text=chapter_item['text'], audio_url=chapter_item['audio_url'],image_url=chapter_item['image_url'])
+		work.chapters.append(chapter)
+		count = count + count_words(chapter_item['text'])
+	return count
+
+def update_chapters(work, chapters):
+	count = 0
+	for chapter_item in chapters:
+		chapter = Chapter.query.filter_by(id=chapter_item.id)
+		if chapter is None:
+			chapter = Chapter(title=chapter_item['title'], number=chapter_item['number'], text=chapter_item['text'], audio_url=chapter_item['audio_url'],image_url=chapter_item['image_url'],work_id=work_id)
+			work.chapters.append(chapter)
+		else:
+			chapter.title = chapter_item['title']
+			chapter.number = chapter_item['number']
+			chapter.text = chapter_item['text']
+			chapter.audio_url = chapter_item['audio_url']
+			chapter.image_url = chapter_item['image_url']
+			db.session.add(chapter)
 		count = count + count_words(chapter_item['text'])
 	return count
 
@@ -63,12 +97,10 @@ def add_tags(work, tags):
 	for tag_item in tags:
 		existing = Tag.query.filter_by(text=tag_item['text']).first()
 		if existing:
-			work.tags.append(existing)			
+			if existing not in work.tags:
+				work.tags.append(existing)			
 		else:
 			work.tags.append(Tag(text=tag_item['text'], tag_type_id=tag_item['id']))
-	db.session.add(work)
-	db.session.commit()
-	work = Work.query.filter_by(id=work.id).first()
 	return work.tags
 
 def count_words(text):
