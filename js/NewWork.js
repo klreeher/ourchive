@@ -109,16 +109,16 @@ export default class NewWork extends React.Component {
   }
   addChapter()
   {
-    var newChapter = {chapter_title: '', chapter_summary: '', chapter_notes: '', chapter_image: '',
-      chapter_audio: '', chapter_text: '', chapter_key: 1};
+    var newChapter = {title: '', summary: '', chapter_notes: '', image_url: '',
+      audio_url: '', text: '', number: 1};
     this.state.chapters.push(newChapter);
   }
   appendChapter(evt)
   {
     evt.preventDefault()
     var key = this.state.chapters.length+1;
-    var newChapter = {chapter_title: '', chapter_summary: '', chapter_notes: '', chapter_image: '',
-      chapter_audio: '', chapter_text: '', chapter_key: key};
+    var newChapter = {title: '', chapter_summary: '', chapter_notes: '', image_url: '',
+      audio_url: '', text: '', number: key};
     var original = this.state.chapters;
     original.push(newChapter);
     this.setState({
@@ -230,7 +230,7 @@ export default class NewWork extends React.Component {
           <hr/>
           <div className="form-group">
           {this.state.chapters.map(chapter => (                        
-                        <ChapterForm key={chapter.chapter_key} chapter_number={chapter.chapter_key} handler={this.handler} handlerAudio={this.uploadAudio}
+                        <ChapterForm key={chapter.number} chapter_number={chapter.number} handler={this.handler} handlerAudio={this.uploadAudio}
                         handlerImage={this.uploadImage} chapter={chapter}/>
                     ))}
           </div>

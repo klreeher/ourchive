@@ -45,26 +45,23 @@ def update_work(json):
 		return
 
 def add_work(json, user_id):
-	try:
-		title = json['title']
-		work_summary = json['work_summary']
-		work_notes = json['work_notes']
-		work_tags = json['work_tags']
-		chapters = json['chapters']
-		if json['is_complete'] == True:
-			is_complete = 1
-		else:
-			is_complete = 0
-		#todo we are committing too many times here!
-		work = Work(title=title,work_summary=work_summary,is_complete=is_complete,word_count=0,user_id=user_id,work_notes=work_notes)
-		db.session.add(work)
-		word_count = add_chapters(work, chapters)
-		work.word_count = word_count		
-		add_tags(work, work_tags)
-		db.session.commit()
-		return work.id
-	except KeyError:
-		return -1
+	title = json['title']
+	work_summary = json['work_summary']
+	work_notes = json['work_notes']
+	work_tags = json['work_tags']
+	chapters = json['chapters']
+	if json['is_complete'] == True:
+		is_complete = 1
+	else:
+		is_complete = 0
+	#todo we are committing too many times here!
+	work = Work(title=title,work_summary=work_summary,is_complete=is_complete,word_count=0,user_id=user_id,work_notes=work_notes)
+	db.session.add(work)
+	word_count = add_chapters(work, chapters)
+	work.word_count = word_count		
+	add_tags(work, work_tags)
+	db.session.commit()
+	return work.id
 
 def add_chapters(work, chapters):
 	count = 0
@@ -93,12 +90,13 @@ def update_chapters(work, chapters):
 
 def add_tags(work, tags):
 	for tag_item in tags:
-		existing = Tag.query.filter_by(text=tag_item['text']).first()
-		if existing:
-			if existing not in work.tags:
-				work.tags.append(existing)			
-		else:
-			work.tags.append(Tag(text=tag_item['text'], tag_type_id=tag_item['id']))
+		for tag in tag_item['tags']:
+			existing = Tag.query.filter_by(text=tag, tag_type_id=tag_item['id']).first()
+			if existing:
+				if existing not in work.tags:
+					work.tags.append(existing)			
+			else:
+				work.tags.append(Tag(text=tag, tag_type_id=tag_item['id']))
 	return work.tags
 
 def count_words(text):

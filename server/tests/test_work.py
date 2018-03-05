@@ -34,11 +34,15 @@ class TestWorkView(BaseTestCase):
 
         tagType = TagType()
         db.session.add(tagType)
+
+        tagTypeTwo = TagType()
+        db.session.add(tagTypeTwo)
         db.session.commit()
 
-        new_id = work.add_tags(workObj, data["work_tags"])   
-        self.assertTrue(new_id[0].text == "blah")
-        self.assertTrue(len(new_id) == 2)
+        new_id = work.add_tags(workObj, data["work_tags"])  
+        expected_len = [x for x in new_id if x.tag_type_id == 1] 
+        self.assertTrue(new_id[0].text == "one")
+        self.assertTrue(len(expected_len) == 3)
 
     def test_count_words(self):
 
@@ -127,13 +131,15 @@ class TestWorkView(BaseTestCase):
             data["work_tags"] = []
         else:
             tag_one = {}
-            tag_one['text'] = "blah"
+            tag_one['label'] = "blah"
             tag_one['id'] = 1
+            tag_one['tags'] = ['one', 'two', 'three']
 
 
             tag_two = {}
-            tag_two['text'] = "bleh"
-            tag_two['id'] = 1
+            tag_two['label'] = "bleh"
+            tag_two['id'] = 2
+            tag_two['tags'] = ['one', 'two', 'four']
             data["work_tags"] = [tag_one, tag_two]
         if build_chapters == False:
             data["chapters"] = []

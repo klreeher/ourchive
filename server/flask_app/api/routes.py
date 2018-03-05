@@ -151,7 +151,7 @@ def get_outbox(userId):
 def post_work():
   #todo login route
   work_id = work.add_work(request.json, 1)
-  return 200
+  return json.dumps({"work_id": work_id})
 
 @api.route('/api/work/<int:workId>', methods=['GET'])
 def get_work(workId):
