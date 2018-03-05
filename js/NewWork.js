@@ -3,10 +3,12 @@ import axios from 'axios';
 import Chapter from './Chapter';
 import TagList from './TagList';
 import ChapterForm from './ChapterForm';
+import { withRouter } from 'react-router-dom';
+
 
 export default class NewWork extends React.Component {
 
-  addWork(evt)
+  addWork(evt, history)
   {
     evt.preventDefault()
     axios.post(this.state.postUrl, {
@@ -18,7 +20,9 @@ export default class NewWork extends React.Component {
       chapters: this.state.chapters
     })
     .then(function (response) {
-      console.log(response);
+      history.push({
+        pathname: '/work/'+response.data.work_id
+      })
     })
     .catch(function (error) {
       console.log(error);
@@ -190,6 +194,10 @@ export default class NewWork extends React.Component {
 
   
   render() {
+    const AddOrUpdate = withRouter(({ history }) => (
+    <div> <button onMouseDown={evt => this.addWork(evt, history)} className="btn btn-default">Submit</button>
+    </div>
+    ))
     return (
       <div>
       <div className="panel panel-default">
@@ -242,7 +250,7 @@ export default class NewWork extends React.Component {
       </form>
 
       <div className="form-group">
-          <button onMouseDown={evt => this.addWork(evt)} className="btn btn-default">Submit</button>
+          <AddOrUpdate/>
       </div>
         
       </div>
