@@ -62,7 +62,6 @@ def add_work(json, user_id):
 		work.word_count = word_count		
 		add_tags(work, work_tags)
 		db.session.commit()
-		#todo add comments
 		return work.id
 	except KeyError:
 		return -1

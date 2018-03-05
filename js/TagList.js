@@ -49,7 +49,7 @@ export default class TagList extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {tags: props.tags[0], tag_category: props.tag_category, oldItem: '', value: '', suggestions: [],
+    this.state = {tags: props.tags, tag_category: props.tag_category, oldItem: '', value: '', suggestions: [],
       underEdit: props.underEdit};
     this.removeTag = this.removeTag.bind(this);
     this.onChange = this.onChange.bind(this);
@@ -166,7 +166,7 @@ export default class TagList extends React.Component {
             </div>
         </div>
         <div className="row">
-            <div className="col-md-5 col-md-offset-1">
+            <div className="col-md-5">
               <ul className="list-inline" id={"tags_ul"+this.state.tag_category}>
                   {this.state.tags.map(tag => 
                     <div key={tag}>
@@ -175,7 +175,7 @@ export default class TagList extends React.Component {
                   )}
               </ul>
             </div>  
-      
+
 
           {this.state.underEdit && 
             <div className="col-md-4">
