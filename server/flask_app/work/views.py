@@ -1,6 +1,6 @@
 from flask import render_template
 import re
-
+import json
 from . import work
 from .. import db
 from ..models import Work, Chapter, Tag, User, TagType
@@ -10,11 +10,11 @@ def homepage():
   return render_template('index.html')
 
 def get_work(work_id):
-	try:
-		return Work.query.filter_by(id=work_id).first()
-	except:
-		#todo log
-		return
+	work = Work.query.filter_by(id=work_id).first()
+	if work is not None:
+		return build_work(work)
+	else:
+		return None
 
 def delete_work(work_id):
 	try:
@@ -105,23 +105,24 @@ def count_words(text):
 	return len(re.findall(r'\w+', text))
 
 def build_work(work):
-	creator = User.query.filter_by(id=work.user_id)
-	work = {}
-	work['id'] = work.id
-	work['creator_id'] = work.user_id
-	work['name'] = creator.username
-	work['title'] = work.title
+	creator = User.query.filter_by(id=work.user_id).first()
+	work_json = {}
+	work_json['id'] = work.id
+	work_json['creator_id'] = work.user_id
+	work_json['name'] = creator.username
+	work_json['title'] = work.title
 	if work.is_complete == 1:
-		work['is_complete'] = 'True'
+		work_json['is_complete'] = 'True'
 	else:
-		work['is_complete'] = 'False'
-	work['word_count'] = work.word_count
-	work['work_summary'] = work.work_summary
-	work['work_notes'] = work.work_notes
+		work_json['is_complete'] = 'False'
+	work_json['word_count'] = work.word_count
+	work_json['work_summary'] = work.work_summary
+	work_json['work_notes'] = work.work_notes
 	#todo i am sure there is a more elegant way to do all this de/serialization
-	work['chapters'] = build_work_chapters(work)
-	work['tags'] = build_work_tags(work)
-	return work
+	work_json['chapters'] = build_work_chapters(work)
+	work_json['tags'] = build_work_tags(work)
+	print(json.dumps(work_json))
+	return json.dumps(work_json)
 
 def build_work_chapters(work):
 	chapters = []

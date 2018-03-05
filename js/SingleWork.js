@@ -21,8 +21,8 @@ export default class SingleWork extends React.Component {
     axios.get('/api/work/'+workId)
         .then(function (response) {
           this.setState({
-            work: response.data[0],
-            current_chapter: response.data[0].chapters[0],
+            work: response.data,
+            current_chapter: response.data.chapters[0],
             chapter_index: 0,
             viewer_is_creator: true,
             showAllChapters: this.props.location.search.length > 0
@@ -168,9 +168,9 @@ export default class SingleWork extends React.Component {
             </div>
             <br/>
             <hr/>
-            <div className="row" id={"chapter_"+this.state.current_chapter.id}>
+            {this.state.current_chapter && <div className="row" id={"chapter_"+this.state.current_chapter.id}>
                 <Chapter chapter={this.state.current_chapter} user={this.props.user}/>
-            </div>  
+            </div>  }
             <button className="btn btn-link" onMouseDown={evt => this.previousChapter(evt)} disabled={previousDisabled}>Previous Chapter</button>
             <button className="btn btn-link" onMouseDown={evt => this.nextChapter(evt)} disabled={nextDisabled}>Next Chapter</button>
           </div>
