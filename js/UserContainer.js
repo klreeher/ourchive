@@ -73,8 +73,8 @@ export default class UserContainer extends React.Component {
     		<div className="col-md-12">
     			<br/>
 	    		<div className="list">
-			    	{this.state.works.map(work => 
-			    		<div className="list-row panel panel-default" key={work.key}>
+			    	{this.state.works && this.state.works.map(work => 
+			    		<div className="list-row panel panel-default" key={work.id}>
 			    			<WorkStub work={work}/>
 			    		</div>
 			    		)}

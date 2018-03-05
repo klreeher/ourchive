@@ -83,7 +83,7 @@ class TestWorkView(BaseTestCase):
 
         tags = work.build_work_tags(workObj)
         self.assertTrue(len(tags) == 2)
-        self.assertTrue(tags[0]['tags'][0].text == 'one')
+        self.assertTrue(tags[0]['tags'][0] == 'one')
 
     def test_add_comments(self):
         data = self.build_data(True, True)
@@ -118,6 +118,20 @@ class TestWorkView(BaseTestCase):
         work.update_work(data)
         workObj = Work.query.filter_by(id=workObj.id).first()
         self.assertTrue(workObj.title == "A Tale of Two Poor Students")
+
+    def test_get_work_by_user(self):
+        data = self.build_data(True, True)
+
+        tagType = TagType(label='one')
+        db.session.add(tagType)
+
+        tagType = TagType(label='two')
+        db.session.add(tagType)
+
+        db.session.commit()
+        work.add_work(data, 1)   
+        selected_work = json.loads(work.get_by_user(1))
+        self.assertTrue(selected_work[0]['title'] == "A Tale of Two Poor Students")
 
 
     def build_data(self, build_tags, build_chapters):

@@ -266,17 +266,4 @@ def get_bookmarks(curatorId):
 
 @api.route('/api/work/creator/<int:creatorId>')
 def get_works_by_creator(creatorId):
-  works = json.dumps(
-    {"works": [
-        {
-          "key": "1",
-          "title": "a series of unfortunate dev choices",
-          "name": "ianastasia",
-          "creator_id": 2,
-          "chapter_count": 3,
-          "is_complete": "false",
-          "word_count": 100500,
-          "work_summary": "some stuff happens"
-        }]
-    })
-  return works
+  return work.get_by_user(creatorId)

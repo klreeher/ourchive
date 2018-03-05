@@ -58,7 +58,7 @@ export default class MyProfile extends React.Component {
     	axios.get('/api/work/creator/'+userId)
           .then(function (response) {
             this.setState({
-              works: response.data.works
+              works: response.data
             });  
 
           }.bind(this))

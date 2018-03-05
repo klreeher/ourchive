@@ -12,7 +12,17 @@ def homepage():
 def get_work(work_id):
 	work = Work.query.filter_by(id=work_id).first()
 	if work is not None:
-		return build_work(work)
+		return json.dumps(build_work(work))
+	else:
+		return None
+
+def get_by_user(user_id):
+	works = Work.query.filter_by(user_id=user_id)
+	if works is not None:
+		return_json = []
+		for work in works:
+			return_json.append(build_work(work))
+		return json.dumps(return_json)
 	else:
 		return None
 
@@ -117,10 +127,9 @@ def build_work(work):
 	work_json['work_summary'] = work.work_summary
 	work_json['work_notes'] = work.work_notes
 	#todo i am sure there is a more elegant way to do all this de/serialization
-	work_json['chapters'] = build_work_chapters(work)
+	work_json['chapters'] = list(build_work_chapters(work))
 	work_json['tags'] = build_work_tags(work)
-	print(json.dumps(work_json))
-	return json.dumps(work_json)
+	return work_json
 
 def build_work_chapters(work):
 	chapters = []
@@ -133,7 +142,7 @@ def build_work_chapters(work):
 		chapter_json['audio_url'] = chapter.audio_url
 		chapter_json['image_url'] = chapter.image_url
 		chapter_json['comments'] = build_chapter_comments(chapter.comments)
-		chapters.append(chapter)
+		chapters.append(chapter_json)
 	return chapters
 
 def build_chapter_comments(comments):
@@ -155,6 +164,6 @@ def build_work_tags(work):
 		tag = {}
 		tag['id'] = tag_type.id
 		tag['label'] = tag_type.label
-		tag['tags'] = [x for x in work.tags if x.tag_type_id == tag_type.id]
+		tag['tags'] = list([x.text for x in work.tags if x.tag_type_id == tag_type.id])
 		tags.append(tag)
 	return tags
