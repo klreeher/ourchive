@@ -12,7 +12,7 @@ export default class SingleWork extends React.Component {
   setWork(work)
   {
     this.state.work = work;
-    this.state.current_chapter = work.chapters[0]
+    this.state.current_chapter = work.chapters ? work.chapters[0] : []
     this.state.chapter_index = 0
   }
 
@@ -22,7 +22,7 @@ export default class SingleWork extends React.Component {
         .then(function (response) {
           this.setState({
             work: response.data,
-            current_chapter: response.data.chapters[0],
+            current_chapter: response.data.chapters ? response.data.chapters[0] : [],
             chapter_index: 0,
             viewer_is_creator: true,
             showAllChapters: this.props.location.search.length > 0
