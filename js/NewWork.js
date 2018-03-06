@@ -144,23 +144,24 @@ export default class NewWork extends React.Component {
   {
     axios.get('/api/tag/categories')
         .then(function (response) {
-          this.setState({work_tags: [
-
-              {'id': 1,
-               'label': 'fandom',
-               'tags': ['buffy', 'the good place']},
-              {'id': 2,
-               'label': 'pairing',
-               'tags': ['buffy/tahani', 'chidi/willow']},
-              {'id': 3,
-               'label': 'themes',
-               'tags': ['soulbonding']}
-            ]});  
+          this.setState({work_tags: response.data});  
 
         }.bind(this))
         .catch(function (error) {
           console.log(error);
       });
+  }
+  create_work_tag(val, oldItem, tags, tag_category) {
+    var original = tags;
+    var filtered = original.filter(tag => tag == val)
+    if (filtered.length > 0) return
+    original.push(val);
+    var copy = this.state.work_tags;
+    var tags = copy.filter(tag => tag.label == tag_category)[0]
+    tags.tags = original
+    this.setState({
+      work_tags: copy
+    })
   }
   constructor(props) {
     super(props);
@@ -183,7 +184,8 @@ export default class NewWork extends React.Component {
         this.uploadAudio = this.uploadAudio.bind(this);
         this.uploadImage = this.uploadImage.bind(this);
         this.getTagCategories();
-    }    
+    } 
+    this.create_work_tag = this.create_work_tag.bind(this)   
   }
   componentWillMount() { 
     //todo call get categories
@@ -199,9 +201,7 @@ export default class NewWork extends React.Component {
     </div>
     ))
     return (
-      <div>
-      <div className="panel panel-default">
-        <div className="panel-body">
+      <div className="container">
         <form>
           <div className="form-group">
             <label htmlFor="work_title">Title</label>
@@ -229,7 +229,7 @@ export default class NewWork extends React.Component {
           <div className="form-group">
           {this.state.work_tags.map(tag => 
               <div key={tag.id}>
-                  <TagList tag_category={tag.label} tags={tag.tags} underEdit={true}/>
+                  <TagList tag_category={tag.label} tags={tag.tags} underEdit={true} createWorkTags={this.create_work_tag}/>
               </div>
           )}
           </div>
@@ -251,9 +251,6 @@ export default class NewWork extends React.Component {
 
       <div className="form-group">
           <AddOrUpdate/>
-      </div>
-        
-      </div>
       </div>
       </div>
     );

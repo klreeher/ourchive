@@ -159,6 +159,10 @@ def delete_work(workId):
   work.delete_work(workId)
   return 'Deleted: ' + str(workId)
 
+@api.route('/api/tag/categories', methods=['GET'])
+def get_tag_categories():
+  return json.dumps(work.get_tag_categories())
+
 @api.route('/api/work/<int:workId>', methods=['GET'])
 def get_work(workId):
   #todo error handling

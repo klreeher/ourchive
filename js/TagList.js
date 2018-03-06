@@ -49,8 +49,15 @@ export default class TagList extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {tags: props.tags, tag_category: props.tag_category, oldItem: '', value: '', suggestions: [],
+    if (props.tags != null) {
+      this.state = {tags: props.tags, tag_category: props.tag_category, oldItem: '', value: '', suggestions: [],
       underEdit: props.underEdit};
+    }
+    else
+    {
+      this.state = {tags: [], tag_category: props.tag_category, oldItem: '', value: '', suggestions: [],
+      underEdit: props.underEdit};
+    }
     this.removeTag = this.removeTag.bind(this);
     this.onChange = this.onChange.bind(this);
     this.onSuggestionsFetchRequested = this.onSuggestionsFetchRequested.bind(this);
@@ -78,7 +85,7 @@ export default class TagList extends React.Component {
     if (newVal != '') {
       if (newVal.slice(-1) == ',') {        
           var oldVal = newVal.slice(0, -1)
-          this.create_work_tag(oldVal, '');
+          this.props.createWorkTags(oldVal, '', this.state.tags, this.state.tag_category);
           event.preventDefault();
           this.setState({
             value: ""
@@ -116,16 +123,7 @@ export default class TagList extends React.Component {
       tags: newTags
     })
   }
-  create_work_tag(val, oldItem) {
-    var original = this.state.tags;
-    var filtered = original.filter(tag => tag == val)
-    if (filtered.length > 0) return
-    original.push(val);
-    this.setState({
-      tags: original,
-      oldItem: oldItem
-    })
-  }
+
   newTag(event) {
     var characterPressed = String.fromCharCode(event.which);
     console.log(characterPressed);
@@ -135,7 +133,10 @@ export default class TagList extends React.Component {
         event.target.value = ''
         var id = event.target.id.charAt(0);
         var oldItem = event.target.parentElement
-        this.create_work_tag(oldVal, oldItem);
+        this.props.createWorkTags(oldVal, oldItem, this.state.tags, this.state.tag_category);
+        this.setState({
+          oldItem: oldItem
+        })
         event.preventDefault();
 
       }
@@ -144,10 +145,11 @@ export default class TagList extends React.Component {
   newTagAuto(event, suggestion) {
     var oldVal = event.target.value
     event.target.value = ''
-    this.create_work_tag(suggestion.suggestionValue, '');
+    this.props.createWorkTags(suggestion.suggestionValue, '', this.state.tags, this.state.tag_category);
     event.preventDefault();
     this.setState({
-      value: ""
+      value: "",
+      oldItem: oldVal
     })
   }
   render() {
@@ -168,7 +170,7 @@ export default class TagList extends React.Component {
         <div className="row">
             <div className="col-md-5">
               <ul className="list-inline" id={"tags_ul"+this.state.tag_category}>
-                  {this.state.tags.map(tag => 
+                  {this.state.tags && this.state.tags.map(tag => 
                     <div key={tag}>
                       <TagItem tag={tag} removeTag={this.removeTag} underEdit={this.state.underEdit}/>
                     </div>

@@ -9,6 +9,16 @@ from ..models import Work, Chapter, Tag, User, TagType
 def homepage():
   return render_template('index.html')
 
+def get_tag_categories():
+	tags = []
+	for tag_type in TagType.query.all():
+		tag = {}
+		tag['id'] = tag_type.id
+		tag['label'] = tag_type.label
+		tag['tags'] = []
+		tags.append(tag)
+	return tags
+
 def get_work(work_id):
 	work = Work.query.filter_by(id=work_id).first()
 	if work is not None:
