@@ -114,7 +114,7 @@ export default class NewWork extends React.Component {
         onProgress: (function(bytesUploaded, bytesTotal) {
             var percentage = (bytesUploaded / bytesTotal * 100).toFixed(2)
             this.updateStatus(percentage)
-        }).bind(this)
+        }).bind(this),
         onSuccess: (function() {
             console.log("Download %s from %s", upload.file.name, upload.url)
             this.finishUpload(upload.file.name)
