@@ -56,7 +56,7 @@ export default class Comment extends React.Component {
     return (
       <div className="panel panel-default">
         <div className="panel-heading">{this.state.comment.userName} says:</div>
-        <div className="panel-body">
+        <div className="panel-body render-linebreak">
             {this.state.comment.text}
           <div className="row">
             <button className="btn btn-link" onClick={this.showReply}>Reply</button>

@@ -226,7 +226,7 @@ export default class NewWork extends React.Component {
           <hr/>
           <div className="form-group">
             <label htmlFor="work_notes">Notes</label>
-            <input id="work_notes" className="form-control" value={this.state.work_notes} onChange={evt => this.updateWorkNotes(evt)}></input>
+            <textarea id="work_notes" className="form-control" rows="3" value={this.state.work_notes} onChange={evt => this.updateWorkNotes(evt)}></textarea>
           </div>
           <div className="form-group">
           {this.state.work_tags.map(tag => 
@@ -241,7 +241,7 @@ export default class NewWork extends React.Component {
           <div className="form-group">
           {this.state.chapters.map(chapter => (                        
                         <ChapterForm key={chapter.number} chapter_number={chapter.number} handler={this.handler} handlerAudio={this.uploadAudio}
-                        handlerImage={this.uploadImage} chapter={chapter}/>
+                        handlerImage={this.uploadImage} chapter={chapter} uploadStatus={this.state.uploadStatus}/>
                     ))}
           </div>
         <div className="form-group">

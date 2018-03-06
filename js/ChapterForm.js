@@ -34,6 +34,7 @@ export default class Chapter extends React.Component {
                 <textarea id="chapter_notes" className="form-control" name="chapter_notes" value={this.state.chapter.chapter_notes}
                 onChange={this.props.handler} rows="3"></textarea>
               </div>
+              {this.props.uploadStatus && <div><h5>Uploading: this.props.uploadStatus</h5></div>}
               <div className="form-group">
                 <label htmlFor="chapter_image">Chapter Image</label>
                 <input className='input-file' type='file' id="image_url" className="form-control" value={this.state.chapter.image_url}

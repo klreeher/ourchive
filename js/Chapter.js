@@ -13,8 +13,9 @@ export default class Chapter extends React.Component {
 
   constructor(props) {
     super(props);
+    var clean = DOMPurify.sanitize(props.chapter.text);
     this.state = {chapter: props.chapter, user: props.user, newCommentText: "",
-    toggleCommentsText: "Show Comments"};
+    toggleCommentsText: "Show Comments", cleaned_text: clean};
     this.addComment = this.addComment.bind(this)
     this.toggleComments = this.toggleComments.bind(this)
     this.updateNewCommentText = this.updateNewCommentText.bind(this)
@@ -76,13 +77,12 @@ export default class Chapter extends React.Component {
             <div className="col-xs-9 col-md-12 "><h2>Chapter {this.state.chapter.number}: {this.state.chapter.title}</h2></div>
           </div>
           <div className="row">
-            <div className="col-xs-9 col-md-12"><blockquote>{this.state.chapter.chapter_summary}</blockquote></div>
+            <div className="col-xs-9 col-md-12 render-linebreak"><blockquote>{this.state.chapter.chapter_summary}</blockquote></div>
           </div>
           <hr/>
 
           <div className="row">
-            <div className="col-xs-9 col-md-12">
-              {this.state.chapter.text}
+            <div className="col-xs-9 col-md-12 render-linebreak" dangerouslySetInnerHTML={{ __html: this.state.cleaned_text }}>
             </div>
           </div>
           <br/>

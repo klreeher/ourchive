@@ -324,3 +324,7 @@ div {
 .text-padding {
   padding: 0px 27px 9px 27px;
 }
+
+.render-linebreak {
+  white-space: pre-line;
+}

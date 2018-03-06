@@ -36,7 +36,14 @@ export default class SingleWork extends React.Component {
                 var chapter = "chapter_"+chapterId+"_component";
                 this.refs[chapter].toggleComments(null, commentId);
               }
-          }); 
+            var cleaned_summary = DOMPurify.sanitize(this.state.work.work_summary);
+            var cleaned_notes = DOMPurify.sanitize(this.state.work.work_notes);
+            this.setState({
+              safe_summary: cleaned_summary,
+              safe_notes: cleaned_notes
+            })
+          });
+
         }.bind(this))
         .catch(function (error) {
           console.log(error);
@@ -151,7 +158,14 @@ export default class SingleWork extends React.Component {
         </div>
         <hr/>
         <div className="row">
-          <div className="col-xs-9 col-md-12"><h4>{this.state.work.work_summary}</h4></div>
+          <div className="col-xs-9 col-md-12 render-linebreak" dangerouslySetInnerHTML={{ __html: this.state.safe_summary }}></div>
+        </div>
+        <hr/>
+        <div className="row">
+          <div className="col-xs-1"><h5>Notes</h5></div>
+        </div>
+        <div className="row">
+          <div className="col-xs-9 col-md-12 render-linebreak" dangerouslySetInnerHTML={{ __html: this.state.safe_notes }}></div>
         </div>
         <div className="row">
           <div className="col-xs-2"><h5>Chapters: {Object.keys(this.state.work.chapters).length}</h5></div>

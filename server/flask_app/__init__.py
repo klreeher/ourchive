@@ -9,7 +9,7 @@ import os
 app = Flask(__name__)
 CORS(app)
 
-upload_folder = ''
+upload_folder = '/home/imp/projects/ourchive/server/flask_app/uploads'
 tm = tus_manager(app, upload_url='/file-upload', upload_folder=upload_folder)
 
 bcrypt = Bcrypt(app)
