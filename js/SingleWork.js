@@ -4,7 +4,7 @@ import axios from 'axios';
 import Chapter from './Chapter';
 import TagList from './TagList';
 import {
-  Link
+  Link, withRouter 
 } from 'react-router-dom';
 
 export default class SingleWork extends React.Component {
@@ -43,9 +43,12 @@ export default class SingleWork extends React.Component {
       });
   }
 
-  updateWork(workId)
+  updateWork(evt, workId, history)
   {
-
+    history.push({
+        pathname: '/create/work/'+workId,
+        state: { work: this.state.work, is_edit: true }
+      })
   }
 
   deleteWork(evt, workId)
@@ -121,6 +124,11 @@ export default class SingleWork extends React.Component {
     const nextDisabled = this.state.work.chapters === undefined || this.state.chapter_index + 1 >= this.state.work.chapters.length;
     const previousDisabled = this.state.chapter_index === 0;
     const loggedIn = this.state.user != null;
+
+    const Update = withRouter(({ history }) => (
+    <button onMouseDown={evt => this.updateWork(evt, this.state.work.id, history)} className="btn btn-link">Update</button>
+    ))
+
     return (
 
     <div className="container-fluid text-padding">
@@ -128,8 +136,8 @@ export default class SingleWork extends React.Component {
         <div>
           <div className={this.state.viewer_is_creator ? "viewer-creator row" : "viewer row"}>
             <div className="col-md-3 col-xs-1">
-              <button>Edit</button>
-              <button onClick={evt => this.deleteWork(evt, this.state.work.id)}>Delete</button>
+              <Update/>
+              <button onClick={evt => this.deleteWork(evt, this.state.work.id)} className="btn btn-link">Delete</button>
             </div>
           </div>
         

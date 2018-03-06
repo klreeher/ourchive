@@ -44,26 +44,22 @@ def delete_work(work_id):
 		#todo log
 		return
 def update_work(json):
-	try:
-		work = Work.query.filter_by(id = json['work_id']).first()
-		work.title = json['title']
-		work.work_summary = json['work_summary']
-		work.work_notes = json['work_notes']
-		work_tags = json['work_tags']
-		chapters = json['chapters']
-		if json['is_complete'] == True:
-			work.is_complete = 1
-		else:
-			work.is_complete = 0
-		db.session.add(work)
-		word_count = update_chapters(work.id, chapters)
-		work.word_count = word_count		
-		add_tags(work, work_tags)
-		db.session.commit()
-	except:
-		#todo log
-		return
-
+	work = Work.query.filter_by(id = json['work_id']).first()
+	work.title = json['title']
+	work.work_summary = json['work_summary']
+	work.work_notes = json['work_notes']
+	work_tags = json['work_tags']
+	chapters = json['chapters']
+	if json['is_complete'] == True:
+		work.is_complete = 1
+	else:
+		work.is_complete = 0
+	db.session.add(work)
+	word_count = update_chapters(work.id, chapters)
+	work.word_count = word_count		
+	add_tags(work, work_tags)
+	db.session.commit()
+	return work.id
 def add_work(json, user_id):
 	title = json['title']
 	work_summary = json['work_summary']
@@ -94,7 +90,7 @@ def add_chapters(work, chapters):
 def update_chapters(work, chapters):
 	count = 0
 	for chapter_item in chapters:
-		chapter = Chapter.query.filter_by(id=chapter_item.id)
+		chapter = Chapter.query.filter_by(id=chapter_item['id']).first()
 		if chapter is None:
 			chapter = Chapter(title=chapter_item['title'], number=chapter_item['number'], text=chapter_item['text'], audio_url=chapter_item['audio_url'],image_url=chapter_item['image_url'],work_id=work_id)
 			work.chapters.append(chapter)

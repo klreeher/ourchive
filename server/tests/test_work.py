@@ -105,6 +105,16 @@ class TestWorkView(BaseTestCase):
     def test_update_work(self):
         data = self.build_data(True, True)
 
+        tagType = TagType(label='one')
+        db.session.add(tagType)
+
+        tagType = TagType(label='two')
+        db.session.add(tagType)
+        
+
+        tag_one = Tag(tag_type_id=1, text='one')
+        tag_two = Tag(tag_type_id=2, text='two')
+
         workObj = Work()
         workObj.title = "Beginning Title"
         db.session.add(workObj)
@@ -114,7 +124,7 @@ class TestWorkView(BaseTestCase):
         db.session.commit()
 
         data['work_id'] = workObj.id
-
+        data['chapters'][0]['id'] = workObj.chapters[0].id
         work.update_work(data)
         workObj = Work.query.filter_by(id=workObj.id).first()
         self.assertTrue(workObj.title == "A Tale of Two Poor Students")

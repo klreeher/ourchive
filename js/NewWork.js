@@ -17,7 +17,8 @@ export default class NewWork extends React.Component {
       is_complete: this.state.is_complete, 
       work_notes: this.state.work_notes, 
       work_tags: this.state.work_tags, 
-      chapters: this.state.chapters
+      chapters: this.state.chapters,
+      work_id: this.state.work_id
     })
     .then(function (response) {
       history.push({
@@ -165,12 +166,12 @@ export default class NewWork extends React.Component {
   }
   constructor(props) {
     super(props);
-    if (this.props.is_edit)
+    if (this.props.location.state.is_edit)
     {
-        this.state = {title: this.props.work_title, work_summary: this.props.work_summary, 
-          is_complete: this.props.is_complete, work_notes: this.props.work_notes, 
-          work_tags: this.props.work_tags, chapters: this.props.work_chapters, is_edit: true,
-          work_id: this.props.work_id, postUrl: '/api/works/'+this.props.work_id };
+        this.state = {title: this.props.location.state.work.title, work_summary: this.props.location.state.work.work_summary, 
+          is_complete: this.props.location.state.work.is_complete, work_notes: this.props.location.state.work.work_notes, 
+          work_tags: this.props.location.state.work.tags, chapters: this.props.location.state.work.chapters, is_edit: true,
+          work_id: this.props.location.state.work.id, postUrl: '/api/work/'+this.props.location.state.work.id };
         this.handler = this.handler.bind(this);
         this.uploadAudio = this.uploadAudio.bind(this);
         this.uploadImage = this.uploadImage.bind(this);

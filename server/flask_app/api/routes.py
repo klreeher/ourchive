@@ -153,6 +153,11 @@ def post_work():
   work_id = work.add_work(request.json, 1)
   return json.dumps({"work_id": work_id})
 
+@api.route('/api/work/<int:workId>', methods=['POST'])
+def update_work(workId):
+    work_id = work.update_work(request.json)
+    return json.dumps({"work_id": work_id})
+
 @api.route('/api/work/<int:workId>', methods=['DELETE'])
 def delete_work(workId):
   #todo login route
