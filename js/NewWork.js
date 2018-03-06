@@ -211,7 +211,7 @@ export default class NewWork extends React.Component {
           </div>
           <div className="form-group">
             <label htmlFor="work_author">Author</label>
-            <input id="work_author" className="form-control" value={this.state.user}></input>
+            <input id="work_author" className="form-control" value={this.state.user} disabled></input>
           </div>
           <hr/>
           <div className="form-group">
