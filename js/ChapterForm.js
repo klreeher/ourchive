@@ -46,7 +46,7 @@ export default class Chapter extends React.Component {
               </div>
               <div className="form-group">
                 <label htmlFor="chapter_text">Chapter Text</label>
-                <textarea id="chapter_text" className="form-control" name="text" onChange={this.props.handler} rows="10"></textarea>
+                <textarea id="text" className="form-control" name="text" onChange={this.props.handler} rows="10" value={this.state.chapter.text}></textarea>
               </div>
         </div>
 

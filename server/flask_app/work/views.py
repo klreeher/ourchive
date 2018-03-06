@@ -55,7 +55,7 @@ def update_work(json):
 	else:
 		work.is_complete = 0
 	db.session.add(work)
-	word_count = update_chapters(work.id, chapters)
+	word_count = update_chapters(work, chapters)
 	work.word_count = word_count		
 	add_tags(work, work_tags)
 	db.session.commit()
@@ -89,12 +89,12 @@ def add_chapters(work, chapters):
 
 def update_chapters(work, chapters):
 	count = 0
-	for chapter_item in chapters:
-		chapter = Chapter.query.filter_by(id=chapter_item['id']).first()
-		if chapter is None:
-			chapter = Chapter(title=chapter_item['title'], number=chapter_item['number'], text=chapter_item['text'], audio_url=chapter_item['audio_url'],image_url=chapter_item['image_url'],work_id=work_id)
+	for chapter_item in chapters:		
+		if 'id' not in chapter_item:
+			chapter = Chapter(title=chapter_item['title'], number=chapter_item['number'], text=chapter_item['text'], audio_url=chapter_item['audio_url'],image_url=chapter_item['image_url'])
 			work.chapters.append(chapter)
 		else:
+			chapter = Chapter.query.filter_by(id=chapter_item['id']).first()
 			chapter.title = chapter_item['title']
 			chapter.number = chapter_item['number']
 			chapter.text = chapter_item['text']
