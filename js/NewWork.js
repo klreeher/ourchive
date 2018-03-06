@@ -74,17 +74,28 @@ export default class NewWork extends React.Component {
         onError: function(error) {
             console.log("Failed because: " + error)
         },
-        onProgress: function(bytesUploaded, bytesTotal) {
+        onProgress: (function(bytesUploaded, bytesTotal) {
             var percentage = (bytesUploaded / bytesTotal * 100).toFixed(2)
-            console.log(bytesUploaded, bytesTotal, percentage + "%")
-        },
-        onSuccess: function() {
+            this.updateStatus(percentage)
+        }).bind(this),
+        onSuccess: (function() {
             console.log("Download %s from %s", upload.file.name, upload.url)
-
-        }
+            this.finishUpload(upload.file.name)
+        }).bind(this)
     })
     // Start the upload
     upload.start()
+  }
+  updateStatus(percentage){
+    this.setState({
+      showUpload: true,
+      uploadStatus: "Uploading: "+ percentage
+    })
+  }
+  finishUpload(fileName){
+    this.setState({
+      uploadStatus: "File uploaded: " + fileName
+    })
   }
   uploadImage(e)
   {
@@ -188,6 +199,7 @@ export default class NewWork extends React.Component {
         this.getTagCategories();
     } 
     this.create_work_tag = this.create_work_tag.bind(this)   
+    this.updateStatus = this.updateStatus.bind(this)
   }
   componentWillMount() { 
     //todo call get categories
@@ -241,7 +253,8 @@ export default class NewWork extends React.Component {
           <div className="form-group">
           {this.state.chapters.map(chapter => (                        
                         <ChapterForm key={chapter.number} chapter_number={chapter.number} handler={this.handler} handlerAudio={this.uploadAudio}
-                        handlerImage={this.uploadImage} chapter={chapter} uploadStatus={this.state.uploadStatus}/>
+                        handlerImage={this.uploadImage} chapter={chapter} uploadStatus={this.state.uploadStatus}
+                        showUpload={this.state.showUpload}/>
                     ))}
           </div>
         <div className="form-group">
