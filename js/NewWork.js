@@ -166,12 +166,13 @@ export default class NewWork extends React.Component {
   }
   constructor(props) {
     super(props);
-    if (this.props.location.state.is_edit)
+    if (this.props.location.state)
     {
         this.state = {title: this.props.location.state.work.title, work_summary: this.props.location.state.work.work_summary, 
           is_complete: this.props.location.state.work.is_complete, work_notes: this.props.location.state.work.work_notes, 
           work_tags: this.props.location.state.work.tags, chapters: this.props.location.state.work.chapters, is_edit: true,
-          work_id: this.props.location.state.work.id, postUrl: '/api/work/'+this.props.location.state.work.id };
+          work_id: this.props.location.state.work.id, postUrl: '/api/work/'+this.props.location.state.work.id,
+          user: this.props.user };
         this.handler = this.handler.bind(this);
         this.uploadAudio = this.uploadAudio.bind(this);
         this.uploadImage = this.uploadImage.bind(this);
@@ -179,7 +180,7 @@ export default class NewWork extends React.Component {
     else
     {
         this.state = {title: '', work_summary: '', is_complete: false, work_notes: '', 
-          work_tags: [], chapters: [], is_edit: false, postUrl: '/api/work/'};
+          work_tags: [], chapters: [], is_edit: false, postUrl: '/api/work/', user: this.props.user};
         this.addChapter();
         this.handler = this.handler.bind(this);
         this.uploadAudio = this.uploadAudio.bind(this);
@@ -210,7 +211,7 @@ export default class NewWork extends React.Component {
           </div>
           <div className="form-group">
             <label htmlFor="work_author">Author</label>
-            <input id="work_author" className="form-control" value="dummyAuthor"></input>
+            <input id="work_author" className="form-control" value={this.state.user}></input>
           </div>
           <hr/>
           <div className="form-group">
