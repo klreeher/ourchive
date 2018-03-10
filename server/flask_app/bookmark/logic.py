@@ -6,10 +6,18 @@ from .. import db
 from ..work import views
 from ..models import Work, Chapter, Tag, User, TagType, Bookmark
 
+
+def add_bookmark(data, user_id):
+	bookmark = Bookmark(curator_title=data["curator_title"],rating=data["rating"],description=data["description"],work_id=data["work_id"])
+	db.session.add(bookmark)	
+	add_tags(bookmark, data["tags"])
+	db.session.commit()
+	return bookmark.id
+
 def get_bookmark(bookmark_id):
-	bookmark = Bookmark.query.filter_by(id=bookmark_id)
+	bookmark = Bookmark.query.filter_by(id=bookmark_id).first()
 	if bookmark is not None:
-		return json.dumps(build_bookmark(bookmark))
+		return build_bookmark(bookmark)
 	else:
 		return None
 
@@ -19,7 +27,7 @@ def get_bookmarks_by_curator(curator_id):
 		return_json = []
 		for bookmark in bookmarks:
 			return_json.append(build_bookmark(bookmark))
-		return json.dumps(return_json)
+		return return_json
 	else:
 		return None
 
@@ -67,3 +75,14 @@ def build_bookmark_links(bookmark_links):
 		link['text'] = link.text
 		links.append(link)
 	return links
+
+def add_tags(bookmark, tags):
+	for tag_item in tags:
+		for tag in tag_item['tags']:
+			existing = Tag.query.filter_by(text=tag, tag_type_id=tag_item['id']).first()
+			if existing:
+				if existing not in bookmark.tags:
+					bookmark.tags.append(existing)			
+			else:
+				bookmark.tags.append(Tag(text=tag, tag_type_id=tag_item['id']))
+	return bookmark.tags
