@@ -75,8 +75,7 @@ export default class TagList extends React.Component {
   componentDidUpdate() {
     if (this.state.oldItem !== '')
     {
-      document.getElementById("tags_ul"+this.state.tag_category).appendChild(this.state.oldItem)
-      document.getElementById("new_textBox"+this.state.tag_category).focus()
+      document.getElementById("tags_ul"+this.state.tag_category).append(this.state.oldItem)
       this.state.oldItem = ''
     }    
   }

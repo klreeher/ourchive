@@ -10,7 +10,7 @@ app = Flask(__name__)
 CORS(app)
 
 upload_folder = '/home/imp/projects/ourchive/server/flask_app/uploads'
-tm = tus_manager(app, upload_url='/file-upload', upload_folder=upload_folder)
+tm = tus_manager(app, upload_url='/uploads', upload_folder=upload_folder)
 
 bcrypt = Bcrypt(app)
 db = SQLAlchemy(app)
@@ -28,7 +28,7 @@ from .api import api as api_blueprint
 app.register_blueprint(api_blueprint)
 
 @tm.upload_file_handler
-@app.route('/file-upload')
+@app.route('/uploads', methods=['POST'])
 def upload_file_hander( upload_file_path, filename ):
     app.logger.info( "doing something cool with {}, {}".format( upload_file_path, filename))
     return filename

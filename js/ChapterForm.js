@@ -42,7 +42,7 @@ export default class Chapter extends React.Component {
               </div>
               <div className="form-group">
                 <label htmlFor="chapter_audio">Chapter Audio</label>
-                <input className='input-file' type='file' id="audio_url" className="form-control" name="chapter_audio" value={this.state.chapter.audio_url}
+                <input className='input-file' type='file' id="audio_url" className="form-control" name="audio_url" 
                   onChange={this.props.handlerAudio}></input>
               </div>
               <div className="form-group">

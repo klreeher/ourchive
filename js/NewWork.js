@@ -61,13 +61,17 @@ export default class NewWork extends React.Component {
   }
   uploadAudio(e)
   {
+    this.setState({
+      chapterUploadId: e.target.parentElement.parentElement.id-1,
+      chapterUploadProperty: e.target.name 
+    })
     e.preventDefault()
     var target = e.target
     // Get the selected file from the input element
     var file = e.target.files[0]
     // Create a new tus upload
     var upload = new tus.Upload(file, {
-        endpoint: "http://127.0.0.1:5000/file-upload",
+        endpoint: "http://127.0.0.1:5000/uploads",
         chunkSize: 5*1024*1024,
         retryDelays: [0, 1000, 3000, 5000],
         metadata: {filename: file.name},
@@ -80,7 +84,8 @@ export default class NewWork extends React.Component {
         }).bind(this),
         onSuccess: (function() {
             console.log("Download %s from %s", upload.file.name, upload.url)
-            this.finishUpload(upload.file.name)
+            this.finishUpload(upload.file.name, upload.url, 
+              this.state.chapterUploadId, this.state.chapterUploadProperty)
         }).bind(this)
     })
     // Start the upload
@@ -92,10 +97,16 @@ export default class NewWork extends React.Component {
       uploadStatus: "Uploading: "+ percentage
     })
   }
-  finishUpload(fileName){
+  finishUpload(fileName, url, id, name){
     this.setState({
       uploadStatus: "File uploaded: " + fileName
     })
+    var original = this.state.chapters
+    original[id][name] = url
+    this.setState({
+      chapters: original
+    })
+    
   }
   uploadImage(e)
   {
@@ -105,7 +116,7 @@ export default class NewWork extends React.Component {
     var file = e.target.files[0]
     // Create a new tus upload
     var upload = new tus.Upload(file, {
-        endpoint: "http://127.0.0.1:9292/audio/",
+        endpoint: "http://127.0.0.1:5000/file-upload",
         chunkSize: 5*1024*1024,
         retryDelays: [0, 1000, 3000, 5000],
         onError: function(error) {
