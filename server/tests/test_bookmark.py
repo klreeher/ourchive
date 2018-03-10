@@ -26,6 +26,16 @@ class TestBookmark(BaseTestCase):
         new_bookmark = bookmark.get_bookmark(1)
         self.assertTrue(new_bookmark["curator_title"], "A Fic I Read")
 
+    def test_get_bookmarks_by_curator(self):
+        data = self.build_data(True, False, False)      
+        work_data = self.build_dummary_work_data(True, True)
+        work_id = work.add_work(work_data, 1)
+        work_fetched = Work.query.filter_by(id=work_id).first()
+        bookmark_id = bookmark.add_bookmark(data, 1)
+        fetched_bookmark = bookmark.get_bookmarks_by_curator(1)
+        self.assertTrue(fetched_bookmark[0]["rating"], 3)
+
+
     def build_data(self, build_tags, build_comments, build_links):
         data = {}
 

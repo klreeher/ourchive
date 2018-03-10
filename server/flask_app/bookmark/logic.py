@@ -9,6 +9,8 @@ from ..models import Work, Chapter, Tag, User, TagType, Bookmark
 
 def add_bookmark(data, user_id):
 	bookmark = Bookmark(curator_title=data["curator_title"],rating=data["rating"],description=data["description"],work_id=data["work_id"])
+	user = User.query.filter_by(id=user_id).first()
+	bookmark.user = user
 	db.session.add(bookmark)	
 	add_tags(bookmark, data["tags"])
 	db.session.commit()

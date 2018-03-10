@@ -187,7 +187,7 @@ class Bookmark(db.Model):
 
 
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    user = db.relationship('User', back_populates='bookmarks')
+    user = db.relationship('User')
 
     work_id = db.Column(db.Integer, db.ForeignKey('works.id'))
     work = db.relationship('Work', back_populates='bookmarks')
