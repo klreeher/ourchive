@@ -129,7 +129,8 @@ class TestBookmark(BaseTestCase):
             chapter['number'] = 1
             chapter['text'] = "Plot plot plot plot plot"
             chapter['audio_url'] = ""
-            chapter['image_url'] = ""            
+            chapter['image_url'] = ""   
+            chapter['summary'] = ""            
             data["chapters"] = [chapter]
 
         return data

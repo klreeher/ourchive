@@ -77,7 +77,7 @@ export default class Chapter extends React.Component {
             <div className="col-xs-9 col-md-12 "><h2>Chapter {this.state.chapter.number}: {this.state.chapter.title}</h2></div>
           </div>
           <div className="row">
-            <div className="col-xs-9 col-md-12 render-linebreak"><blockquote>{this.state.chapter.chapter_summary}</blockquote></div>
+            <div className="col-xs-9 col-md-12 render-linebreak"><blockquote>{this.state.chapter.summary}</blockquote></div>
           </div>
           <hr/>
 
@@ -94,7 +94,7 @@ export default class Chapter extends React.Component {
           </div>
           <div className="row">
             <div className="col-xs-9 col-md-12">
-              <Image file={this.state.chapter.image_url} alt='{this.state.chapter.chapter_summary}'/>
+              <Image file={this.state.chapter.image_url} alt='{this.state.chapter.summary}'/>
             </div>
           </div>
           <br/>

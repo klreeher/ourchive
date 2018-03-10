@@ -3,11 +3,11 @@ import {
   Link
 } from 'react-router-dom';
 
-export default class Chapter extends React.Component {
+export default class ChapterForm extends React.Component {
 
 
   constructor(props) {
-    super(props);
+    super(props);    
     this.state = {number: props.chapter_number, chapter: props.chapter};
   }
   componentWillMount() { 
@@ -25,8 +25,8 @@ export default class Chapter extends React.Component {
                   name="title" onChange={this.props.handler} className="form-control"></input>
               </div>              
               <div className="form-group">
-                <label htmlFor="chapter_summary">Chapter Summary</label>
-                <textarea id="chapter_summary" className="form-control" name="summary" value={this.state.chapter.summary}
+                <label htmlFor="summary">Chapter Summary</label>
+                <textarea id="summary" className="form-control" name="summary" value={this.state.chapter.summary}
                 onChange={this.props.handler} rows="3"></textarea>
               </div>
               <div className="form-group">

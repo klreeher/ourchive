@@ -186,7 +186,12 @@ def get_outbox(userId):
 @app.route('/api/work/', methods=['POST'])
 def post_work():
   work.views.add_work(request.json)
-  return "YOU ARE HERE"
+  return "Work added."
+
+@app.route('/api/work/<int:workId>', methods=['POST'])
+def update_work():
+  work.views.update_work(request.json)
+  return "Work updated."
 
 @app.route('/api/work/<int:workId>', methods=['GET'])
 def get_work(workId):
@@ -220,6 +225,10 @@ def get_user(userId):
 @app.route('/api/bookmark/curator/<int:curatorId>')
 def get_bookmarks(curatorId):
   return bookmark.logic.get_bookmarks_by_curator(curatorId)
+
+@app.route('/api/bookmark/<int:bookmarkId>')
+def get_bookmark(bookmarkId):
+  return bookmark.logic.get_bookmark(bookmarkId)
 
 @app.route('/api/work/creator/<int:creatorId>')
 def get_works_by_creator(creatorId):

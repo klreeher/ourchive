@@ -149,7 +149,7 @@ export default class NewWork extends React.Component {
   {
     evt.preventDefault()
     var key = this.state.chapters.length+1;
-    var newChapter = {title: '', chapter_summary: '', chapter_notes: '', image_url: '',
+    var newChapter = {title: '', summary: '', chapter_notes: '', image_url: '',
       audio_url: '', text: '', number: key};
     var original = this.state.chapters;
     original.push(newChapter);

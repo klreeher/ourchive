@@ -82,7 +82,8 @@ def add_work(json, user_id):
 def add_chapters(work, chapters):
 	count = 0
 	for chapter_item in chapters:
-		chapter = Chapter(title=chapter_item['title'], number=chapter_item['number'], text=chapter_item['text'], audio_url=chapter_item['audio_url'],image_url=chapter_item['image_url'])
+		chapter = Chapter(title=chapter_item['title'], number=chapter_item['number'], text=chapter_item['text'], audio_url=chapter_item['audio_url'],image_url=chapter_item['image_url'],
+			summary=chapter_item['summary'])
 		work.chapters.append(chapter)
 		count = count + count_words(chapter_item['text'])
 	return count
@@ -96,6 +97,7 @@ def update_chapters(work, chapters):
 		else:
 			chapter = Chapter.query.filter_by(id=chapter_item['id']).first()
 			chapter.title = chapter_item['title']
+			chapter.summary = chapter_item['summary']
 			chapter.number = chapter_item['number']
 			chapter.text = chapter_item['text']
 			chapter.audio_url = chapter_item['audio_url']
@@ -154,7 +156,7 @@ def build_work_stub(work):
 
 def build_work_chapters(work):
 	chapters = []
-	for chapter in work.chapters:
+	for chapter in work.chapters.order_by(Chapter.number.asc()):
 		chapter_json = {}
 		chapter_json['id'] = chapter.id
 		chapter_json['number'] = chapter.number
@@ -162,6 +164,7 @@ def build_work_chapters(work):
 		chapter_json['text'] = chapter.text
 		chapter_json['audio_url'] = chapter.audio_url
 		chapter_json['image_url'] = chapter.image_url
+		chapter_json['summary'] = chapter.summary
 		chapter_json['comments'] = build_chapter_comments(chapter.comments)
 		chapters.append(chapter_json)
 	return chapters
