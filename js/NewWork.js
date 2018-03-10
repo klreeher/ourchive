@@ -110,6 +110,10 @@ export default class NewWork extends React.Component {
   }
   uploadImage(e)
   {
+    this.setState({
+      chapterUploadId: e.target.parentElement.parentElement.id-1,
+      chapterUploadProperty: e.target.name 
+    })
     e.preventDefault()
     var target = e.target
     // Get the selected file from the input element
@@ -128,7 +132,8 @@ export default class NewWork extends React.Component {
         }).bind(this),
         onSuccess: (function() {
             console.log("Download %s from %s", upload.file.name, upload.url)
-            this.finishUpload(upload.file.name)
+            this.finishUpload(upload.file.name, upload.url, 
+              this.state.chapterUploadId, this.state.chapterUploadProperty)
         }).bind(this)
     })
     // Start the upload

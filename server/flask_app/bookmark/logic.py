@@ -1,7 +1,6 @@
 from flask import render_template
 import re
 import json
-from . import bookmark
 from .. import db
 from ..work import views
 from ..models import Work, Chapter, Tag, User, TagType, Bookmark
@@ -11,6 +10,18 @@ def add_bookmark(data, user_id):
 	bookmark = Bookmark(curator_title=data["curator_title"],rating=data["rating"],description=data["description"],work_id=data["work_id"])
 	user = User.query.filter_by(id=user_id).first()
 	bookmark.user = user
+	db.session.add(bookmark)	
+	add_tags(bookmark, data["tags"])
+	db.session.commit()
+	return bookmark.id
+
+def update_bookmark(data):
+	bookmark = Bookmark.query.filter_by(id=data['id']).first()
+	bookmark.curator_title = data["curator_title"]
+	bookmark.rating = data["rating"]
+	bookmark.description = data["description"]
+	add_tags(bookmark, data["tags"])
+	add_links(bookmark, data["links"])
 	db.session.add(bookmark)	
 	add_tags(bookmark, data["tags"])
 	db.session.commit()
@@ -96,3 +107,12 @@ def add_tags(bookmark, tags):
 			else:
 				bookmark.tags.append(Tag(text=tag, tag_type_id=tag_item['id']))
 	return bookmark.tags
+
+def add_links(bookmark, links):
+	for link in links:
+		existing = list([link['link'] for x in bookmark.links if x.link == link['link']])
+		if existing[0]['text'] == link['text']:
+			continue
+		bookmark.links.remove(existing)
+		bookmark.links.append(BookmarkLink(text=link['text'], link=link['link']))
+	return bookmark.links
