@@ -73,7 +73,7 @@ export default class TagList extends React.Component {
     //do things
   }
   componentDidUpdate() {
-    if (this.state.oldItem !== '' && this.state.oldItem != undefined)
+    if (this.state.oldItem !== '')
     {
       document.getElementById("tags_ul"+this.state.tag_category).append(this.state.oldItem)
       this.state.oldItem = ''

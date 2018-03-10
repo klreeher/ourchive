@@ -24,6 +24,9 @@ app.config.from_object(app_settings)
 from .work import work as work_blueprint
 app.register_blueprint(work_blueprint)
 
+from .bookmark import bookmark as bookmark_blueprint
+app.register_blueprint(bookmark_blueprint)
+
 from .api import api as api_blueprint
 app.register_blueprint(api_blueprint)
 
@@ -33,7 +36,6 @@ def upload_file_hander( upload_file_path, filename ):
     app.logger.info( "doing something cool with {}, {}".format( upload_file_path, filename))
     return filename
 
-# serve the uploaded files
 @app.route('/uploads/<path:filename>', methods=['GET'])
 def download(filename):
   uploads = os.path.join(app.root_path, tm.upload_folder)
@@ -188,65 +190,7 @@ def post_work():
 
 @app.route('/api/work/<int:workId>', methods=['GET'])
 def get_work(workId):
-  work = json.dumps(
-    [
-	{
-  	"id": 1,
-    "creator_id": 2,
-  "name": "lacey",
-  "title": "A Tale of Two Poor Students",
-  "is_complete": "true",
-  "word_count": "4000",
-  "work_summary": "some stuff happens",
-  "chapters": [{
-    "id": "1",
-    "number": "1",
-    "title": "bob goes to school",
-    "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sollicitudin a ante eu euismod. Etiam aliquam erat eget laoreet tristique. Aenean eget nisl id tortor dapibus elementum. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. In malesuada nulla purus, a fringilla velit ultricies ac. Praesent semper ornare sapien, ut tempus diam ultrices eu. Duis sed porttitor eros.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sollicitudin a ante eu euismod. Etiam aliquam erat eget laoreet tristique. Aenean eget nisl id tortor dapibus elementum. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. In malesuada nulla purus, a fringilla velit ultricies ac. Praesent semper ornare sapien, ut tempus diam ultrices eu. Duis sed porttitor eros.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sollicitudin a ante eu euismod. Etiam aliquam erat eget laoreet tristique. Aenean eget nisl id tortor dapibus elementum. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. In malesuada nulla purus, a fringilla velit ultricies ac. Praesent semper ornare sapien, ut tempus diam ultrices eu. Duis sed porttitor eros.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sollicitudin a ante eu euismod. Etiam aliquam erat eget laoreet tristique. Aenean eget nisl id tortor dapibus elementum. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. In malesuada nulla purus, a fringilla velit ultricies ac. Praesent semper ornare sapien, ut tempus diam ultrices eu. Duis sed porttitor eros.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sollicitudin a ante eu euismod. Etiam aliquam erat eget laoreet tristique. Aenean eget nisl id tortor dapibus elementum. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. In malesuada nulla purus, a fringilla velit ultricies ac. Praesent semper ornare sapien, ut tempus diam ultrices eu. Duis sed porttitor eros.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sollicitudin a ante eu euismod. Etiam aliquam erat eget laoreet tristique. Aenean eget nisl id tortor dapibus elementum. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. In malesuada nulla purus, a fringilla velit ultricies ac. Praesent semper ornare sapien, ut tempus diam ultrices eu. Duis sed porttitor eros.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sollicitudin a ante eu euismod. Etiam aliquam erat eget laoreet tristique. Aenean eget nisl id tortor dapibus elementum. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. In malesuada nulla purus, a fringilla velit ultricies ac. Praesent semper ornare sapien, ut tempus diam ultrices eu. Duis sed porttitor eros.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sollicitudin a ante eu euismod. Etiam aliquam erat eget laoreet tristique. Aenean eget nisl id tortor dapibus elementum. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. In malesuada nulla purus, a fringilla velit ultricies ac. Praesent semper ornare sapien, ut tempus diam ultrices eu. Duis sed porttitor eros.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sollicitudin a ante eu euismod. Etiam aliquam erat eget laoreet tristique. Aenean eget nisl id tortor dapibus elementum. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. In malesuada nulla purus, a fringilla velit ultricies ac. Praesent semper ornare sapien, ut tempus diam ultrices eu. Duis sed porttitor eros.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sollicitudin a ante eu euismod. Etiam aliquam erat eget laoreet tristique. Aenean eget nisl id tortor dapibus elementum. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. In malesuada nulla purus, a fringilla velit ultricies ac. Praesent semper ornare sapien, ut tempus diam ultrices eu. Duis sed porttitor eros.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sollicitudin a ante eu euismod. Etiam aliquam erat eget laoreet tristique. Aenean eget nisl id tortor dapibus elementum. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. In malesuada nulla purus, a fringilla velit ultricies ac. Praesent semper ornare sapien, ut tempus diam ultrices eu. Duis sed porttitor eros.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sollicitudin a ante eu euismod. Etiam aliquam erat eget laoreet tristique. Aenean eget nisl id tortor dapibus elementum. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. In malesuada nulla purus, a fringilla velit ultricies ac. Praesent semper ornare sapien, ut tempus diam ultrices eu. Duis sed porttitor eros.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sollicitudin a ante eu euismod. Etiam aliquam erat eget laoreet tristique. Aenean eget nisl id tortor dapibus elementum. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. In malesuada nulla purus, a fringilla velit ultricies ac. Praesent semper ornare sapien, ut tempus diam ultrices eu. Duis sed porttitor eros.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sollicitudin a ante eu euismod. Etiam aliquam erat eget laoreet tristique. Aenean eget nisl id tortor dapibus elementum. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. In malesuada nulla purus, a fringilla velit ultricies ac. Praesent semper ornare sapien, ut tempus diam ultrices eu. Duis sed porttitor eros.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sollicitudin a ante eu euismod. Etiam aliquam erat eget laoreet tristique. Aenean eget nisl id tortor dapibus elementum. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. In malesuada nulla purus, a fringilla velit ultricies ac. Praesent semper ornare sapien, ut tempus diam ultrices eu. Duis sed porttitor eros.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sollicitudin a ante eu euismod. Etiam aliquam erat eget laoreet tristique. Aenean eget nisl id tortor dapibus elementum. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. In malesuada nulla purus, a fringilla velit ultricies ac. Praesent semper ornare sapien, ut tempus diam ultrices eu. Duis sed porttitor eros.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sollicitudin a ante eu euismod. Etiam aliquam erat eget laoreet tristique. Aenean eget nisl id tortor dapibus elementum. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. In malesuada nulla purus, a fringilla velit ultricies ac. Praesent semper ornare sapien, ut tempus diam ultrices eu. Duis sed porttitor eros.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sollicitudin a ante eu euismod. Etiam aliquam erat eget laoreet tristique. Aenean eget nisl id tortor dapibus elementum. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. In malesuada nulla purus, a fringilla velit ultricies ac. Praesent semper ornare sapien, ut tempus diam ultrices eu. Duis sed porttitor eros.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sollicitudin a ante eu euismod. Etiam aliquam erat eget laoreet tristique. Aenean eget nisl id tortor dapibus elementum. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. In malesuada nulla purus, a fringilla velit ultricies ac. Praesent semper ornare sapien, ut tempus diam ultrices eu. Duis sed porttitor eros.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sollicitudin a ante eu euismod. Etiam aliquam erat eget laoreet tristique. Aenean eget nisl id tortor dapibus elementum. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. In malesuada nulla purus, a fringilla velit ultricies ac. Praesent semper ornare sapien, ut tempus diam ultrices eu. Duis sed porttitor eros.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sollicitudin a ante eu euismod. Etiam aliquam erat eget laoreet tristique. Aenean eget nisl id tortor dapibus elementum. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. In malesuada nulla purus, a fringilla velit ultricies ac. Praesent semper ornare sapien, ut tempus diam ultrices eu. Duis sed porttitor eros.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sollicitudin a ante eu euismod. Etiam aliquam erat eget laoreet tristique. Aenean eget nisl id tortor dapibus elementum. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. In malesuada nulla purus, a fringilla velit ultricies ac. Praesent semper ornare sapien, ut tempus diam ultrices eu. Duis sed porttitor eros.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sollicitudin a ante eu euismod. Etiam aliquam erat eget laoreet tristique. Aenean eget nisl id tortor dapibus elementum. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. In malesuada nulla purus, a fringilla velit ultricies ac. Praesent semper ornare sapien, ut tempus diam ultrices eu. Duis sed porttitor eros.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sollicitudin a ante eu euismod. Etiam aliquam erat eget laoreet tristique. Aenean eget nisl id tortor dapibus elementum. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. In malesuada nulla purus, a fringilla velit ultricies ac. Praesent semper ornare sapien, ut tempus diam ultrices eu. Duis sed porttitor eros.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sollicitudin a ante eu euismod. Etiam aliquam erat eget laoreet tristique. Aenean eget nisl id tortor dapibus elementum. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. In malesuada nulla purus, a fringilla velit ultricies ac. Praesent semper ornare sapien, ut tempus diam ultrices eu. Duis sed porttitor eros.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sollicitudin a ante eu euismod. Etiam aliquam erat eget laoreet tristique. Aenean eget nisl id tortor dapibus elementum. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. In malesuada nulla purus, a fringilla velit ultricies ac. Praesent semper ornare sapien, ut tempus diam ultrices eu. Duis sed porttitor eros.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sollicitudin a ante eu euismod. Etiam aliquam erat eget laoreet tristique. Aenean eget nisl id tortor dapibus elementum. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. In malesuada nulla purus, a fringilla velit ultricies ac. Praesent semper ornare sapien, ut tempus diam ultrices eu. Duis sed porttitor eros.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sollicitudin a ante eu euismod. Etiam aliquam erat eget laoreet tristique. Aenean eget nisl id tortor dapibus elementum. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. In malesuada nulla purus, a fringilla velit ultricies ac. Praesent semper ornare sapien, ut tempus diam ultrices eu. Duis sed porttitor eros.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sollicitudin a ante eu euismod. Etiam aliquam erat eget laoreet tristique. Aenean eget nisl id tortor dapibus elementum. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. In malesuada nulla purus, a fringilla velit ultricies ac. Praesent semper ornare sapien, ut tempus diam ultrices eu. Duis sed porttitor eros.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sollicitudin a ante eu euismod. Etiam aliquam erat eget laoreet tristique. Aenean eget nisl id tortor dapibus elementum. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. In malesuada nulla purus, a fringilla velit ultricies ac. Praesent semper ornare sapien, ut tempus diam ultrices eu. Duis sed porttitor eros.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sollicitudin a ante eu euismod. Etiam aliquam erat eget laoreet tristique. Aenean eget nisl id tortor dapibus elementum. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. In malesuada nulla purus, a fringilla velit ultricies ac. Praesent semper ornare sapien, ut tempus diam ultrices eu. Duis sed porttitor eros.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sollicitudin a ante eu euismod. Etiam aliquam erat eget laoreet tristique. Aenean eget nisl id tortor dapibus elementum. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. In malesuada nulla purus, a fringilla velit ultricies ac. Praesent semper ornare sapien, ut tempus diam ultrices eu. Duis sed porttitor eros.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sollicitudin a ante eu euismod. Etiam aliquam erat eget laoreet tristique. Aenean eget nisl id tortor dapibus elementum. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. In malesuada nulla purus, a fringilla velit ultricies ac. Praesent semper ornare sapien, ut tempus diam ultrices eu. Duis sed porttitor eros.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sollicitudin a ante eu euismod. Etiam aliquam erat eget laoreet tristique. Aenean eget nisl id tortor dapibus elementum. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. In malesuada nulla purus, a fringilla velit ultricies ac. Praesent semper ornare sapien, ut tempus diam ultrices eu. Duis sed porttitor eros.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sollicitudin a ante eu euismod. Etiam aliquam erat eget laoreet tristique. Aenean eget nisl id tortor dapibus elementum. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. In malesuada nulla purus, a fringilla velit ultricies ac. Praesent semper ornare sapien, ut tempus diam ultrices eu. Duis sed porttitor eros.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sollicitudin a ante eu euismod. Etiam aliquam erat eget laoreet tristique. Aenean eget nisl id tortor dapibus elementum. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. In malesuada nulla purus, a fringilla velit ultricies ac. Praesent semper ornare sapien, ut tempus diam ultrices eu. Duis sed porttitor eros.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sollicitudin a ante eu euismod. Etiam aliquam erat eget laoreet tristique. Aenean eget nisl id tortor dapibus elementum. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. In malesuada nulla purus, a fringilla velit ultricies ac. Praesent semper ornare sapien, ut tempus diam ultrices eu. Duis sed porttitor eros.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sollicitudin a ante eu euismod. Etiam aliquam erat eget laoreet tristique. Aenean eget nisl id tortor dapibus elementum. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. In malesuada nulla purus, a fringilla velit ultricies ac. Praesent semper ornare sapien, ut tempus diam ultrices eu. Duis sed porttitor eros.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sollicitudin a ante eu euismod. Etiam aliquam erat eget laoreet tristique. Aenean eget nisl id tortor dapibus elementum. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. In malesuada nulla purus, a fringilla velit ultricies ac. Praesent semper ornare sapien, ut tempus diam ultrices eu. Duis sed porttitor eros.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sollicitudin a ante eu euismod. Etiam aliquam erat eget laoreet tristique. Aenean eget nisl id tortor dapibus elementum. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. In malesuada nulla purus, a fringilla velit ultricies ac. Praesent semper ornare sapien, ut tempus diam ultrices eu. Duis sed porttitor eros.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sollicitudin a ante eu euismod. Etiam aliquam erat eget laoreet tristique. Aenean eget nisl id tortor dapibus elementum. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. In malesuada nulla purus, a fringilla velit ultricies ac. Praesent semper ornare sapien, ut tempus diam ultrices eu. Duis sed porttitor eros.",
-    "audio_url": "../audio/01 Family Problems.mp3",
-    "image_url": "url",
-    "comments": [
-      {
-        "id": 256,
-        "userName": "jane",
-        "userId": 2,
-        "text": "this was bad actually",
-        "comments": [],
-        "chapterId": "1"
-      }
-    ]
-  },
-    {"id": "2",
-    "number": "2",
-    "title": "bob fails at school",
-    "text": "bloop",
-    "audio_url": "url",
-    "image_url": "url",
-    "comments": [
-    {
-      "id": 257,
-        "userName": "elektra",
-        "userId": 2,
-        "text": "thanks i hate it",
-        "chapterId": "1",
-        "comments": [
-          {
-            "id": 258,
-            "userName": "bortles",
-            "userId": 3,
-            "text": "fight me in 20 minutes outside the back lot, you coward",
-            "comments": [],
-            "chapterId": "1"
-          }
-        ]
-      }
-    ]
-    }
-  ],
-  "tags": [{
-    "fandom": ["buffy", "xena"]},
-    {"primary pairing": ["buffy/faith"]}]}])
-  return work
+  return work.views.get_work(workId)
 
 @app.route('/api/user/<int:userId>')
 def get_user(userId):
@@ -275,84 +219,7 @@ def get_user(userId):
 
 @app.route('/api/bookmark/curator/<int:curatorId>')
 def get_bookmarks(curatorId):
-  bookmarks = json.dumps(
-    {
-
-    "curator": {
-      "curator_name": "sally",
-      "curator_id": 2
-    },
-
-    "bookmarks": [
-      {
-          "id": 5,
-          "work": {
-            "title": "sixteen guns in brixton",
-            "creator": "e l dragons",
-            "summary": "someBODY once told me the world is gonna roll me",
-            "word_count": 550000,
-            "is_complete": True,
-            "chapter_count": 15
-          },
-          "curator_title": "a bookmark i loved",
-          "rating": 4,
-          "description": "this touched my heart and also I'm at war with the author now",
-          "links": [
-          {
-            "link": "https://www.thekitchn.com/le-creuset-disney-mickey-mouse-collection-2018-255122", 
-            "text": "Capitalism"
-          },
-          {
-            "link": "http://google.com",
-            "text": "Our Best Friend Google"
-          }],
-          "tags": [
-            {"fandom": ["buffy", "xena"]},
-            {"primary pairing": ["buffy/faith"]}
-          ],
-          "comments": [
-            {
-              "id": 296,
-              "userName": "weirdusernamewithcharacter",
-              "userId": 4,
-              "text": "pls i want more help me find stories about dolphins!!",
-              "comments": [],
-              "bookmarkId": 5
-            }
-          ]
-        },
-        {
-          "id": 6,
-          "work": {
-            "title": "1000 bonfires in new york",
-            "creator": "margaret_iii",
-            "summary": "My apocalypse novel in its final form. Read at your own risk!",
-            "word_count": 95000000,
-            "is_complete": True,
-            "chapter_count": 300
-          },
-          "curator_title": "The story I'd take to a desert island",
-          "rating": 5,
-          "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-          "links": [
-          ],
-          "tags": [
-            {"fandom": ["apocalypse"]},
-            {"additional tags": ["new york", "disaffected artists", "new yorkers who are actually from missouri"]}
-          ],
-          "comments": [
-            {
-              "id": 297,
-              "userName": "how_dare_you",
-              "userId": 6,
-              "text": "YOU KNOW NOTHING ABOUT NEW YORKERS, JON SNOW",
-              "comments": [],
-              "bookmarkId": 6
-            }
-          ]
-        }
-    ]})
-  return bookmarks
+  return bookmark.logic.get_bookmarks_by_curator(curatorId)
 
 @app.route('/api/work/creator/<int:creatorId>')
 def get_works_by_creator(creatorId):

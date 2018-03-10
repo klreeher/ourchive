@@ -137,6 +137,21 @@ def build_work(work):
 	work_json['tags'] = build_work_tags(work)
 	return work_json
 
+def build_work_stub(work):
+	creator = User.query.filter_by(id=work.user_id).first()
+	work_json = {}
+	work_json['id'] = work.id
+	work_json['creator_id'] = work.user_id
+	work_json['name'] = creator.username
+	work_json['title'] = work.title
+	if work.is_complete == 1:
+		work_json['is_complete'] = 'True'
+	else:
+		work_json['is_complete'] = 'False'
+	work_json['word_count'] = work.word_count
+	work_json['work_summary'] = work.work_summary
+	return work_json
+
 def build_work_chapters(work):
 	chapters = []
 	for chapter in work.chapters:

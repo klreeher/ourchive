@@ -12,6 +12,11 @@ work_tag_table = db.Table('work_tag_table',
     db.Column('work_id', db.Integer, db.ForeignKey('works.id'), primary_key=True)
 )
 
+bookmark_tag_table = db.Table('bookmark_tag_table', 
+    db.Column('tag_id', db.Integer, db.ForeignKey('tags.id'), primary_key=True),
+    db.Column('bookmark_id', db.Integer, db.ForeignKey('bookmarks.id'), primary_key=True)
+)
+
 comment_to_comment = db.Table("comment_to_comment", 
     db.Column("parent_comment_id", db.Integer, db.ForeignKey("comments.id"), primary_key=True),
     db.Column("child_comment_id", db.Integer, db.ForeignKey("comments.id"), primary_key=True)
@@ -31,6 +36,8 @@ class User(db.Model):
     comments = db.relationship('Comment', backref='comment_user',
                                 lazy='dynamic')
     works = db.relationship('Work', backref='work_user',
+                                lazy='dynamic')
+    bookmarks = db.relationship('Bookmark', backref='bookmark_user',
                                 lazy='dynamic')
 
     def __init__(self, email, password, admin=False):
@@ -86,6 +93,10 @@ class Work(db.Model):
     word_count = db.Column(db.Integer)
     chapters = db.relationship('Chapter', backref='chapter_work',
                                 lazy='dynamic')
+
+    bookmarks = db.relationship('Bookmark', backref='bookmark_work',
+                                lazy='dynamic')
+
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     user = db.relationship('User', back_populates='works')
 
@@ -128,6 +139,9 @@ class Comment(db.Model):
     chapter_id = db.Column(db.Integer, db.ForeignKey('chapters.id'))
     chapter = db.relationship('Chapter', back_populates='comments')
 
+    bookmark_id = db.Column(db.Integer, db.ForeignKey('bookmarks.id'))
+    bookmark = db.relationship('Bookmark', back_populates='comments')
+
 
     comments = db.relationship("Comment",
                         secondary=comment_to_comment,
@@ -161,3 +175,48 @@ class TagType(db.Model):
 
     def __repr__(self):
         return '<TagType: {}>'.format(self.id)
+
+class Bookmark(db.Model):
+
+    __tablename__ = 'bookmarks'
+
+    id = db.Column(db.Integer, primary_key=True)
+    curator_title = db.Column(db.String(200))
+    rating = db.Column(db.Integer)
+    description = db.Column(db.String)
+
+
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    user = db.relationship('User', back_populates='bookmarks')
+
+    work_id = db.Column(db.Integer, db.ForeignKey('works.id'))
+    work = db.relationship('Work', back_populates='bookmarks')
+
+    tags = db.relationship('Tag', secondary=bookmark_tag_table, lazy='subquery',
+        backref=db.backref('bookmark_tags', lazy=True))
+
+    comments = db.relationship('Comment', backref='comment_bookmark',
+                                lazy='dynamic')
+
+    links = db.relationship('BookmarkLink', backref='link_bookmark',
+                                lazy='dynamic')
+
+def __repr__(self):
+    return '<Bookmark: {}>'.format(self.id)
+
+class BookmarkLink(db.Model):
+
+    __tablename__ = 'bookmark_links'
+
+    id = db.Column(db.Integer, primary_key=True)
+    link = db.Column(db.String(200))
+    text = db.Column(db.String(200))
+
+
+    bookmark_id = db.Column(db.Integer, db.ForeignKey('bookmarks.id'))
+    bookmark = db.relationship('Bookmark', back_populates='links')
+
+
+    def __repr__(self):
+        return '<BookmarkLink: {}>'.format(self.id)
+
