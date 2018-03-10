@@ -3,7 +3,7 @@ import re
 import json
 from .. import db
 from ..work import views
-from ..models import Work, Chapter, Tag, User, TagType, Bookmark
+from ..models import Work, Chapter, Tag, User, TagType, Bookmark, BookmarkLink
 
 
 def add_bookmark(data, user_id):
@@ -12,6 +12,7 @@ def add_bookmark(data, user_id):
 	bookmark.user = user
 	db.session.add(bookmark)	
 	add_tags(bookmark, data["tags"])
+	add_links(bookmark, data['links'])
 	db.session.commit()
 	return bookmark.id
 
@@ -111,8 +112,9 @@ def add_tags(bookmark, tags):
 def add_links(bookmark, links):
 	for link in links:
 		existing = list([link['link'] for x in bookmark.links if x.link == link['link']])
-		if existing[0]['text'] == link['text']:
-			continue
-		bookmark.links.remove(existing)
+		if len(existing) > 0:
+			if existing[0]['text'] == link['text']:
+				continue
+			bookmark.links.remove(existing)
 		bookmark.links.append(BookmarkLink(text=link['text'], link=link['link']))
 	return bookmark.links

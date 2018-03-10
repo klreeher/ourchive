@@ -10,7 +10,7 @@ import json
 
 class TestBookmark(BaseTestCase):
     def test_add_bookmark(self):
-        data = self.build_data(True, False, False)
+        data = self.build_data(True, False, True)
         work_data = self.build_dummary_work_data(True, True)
         work_id = work.add_work(work_data, 1)
         bookmark.add_bookmark(data, 1)
@@ -18,7 +18,7 @@ class TestBookmark(BaseTestCase):
         self.assertTrue(new_bookmark.description == "This was fine I guess...")
 
     def test_update_bookmark(self):
-        data = self.build_data(True, False, False)
+        data = self.build_data(True, False, True)
         work_data = self.build_dummary_work_data(True, True)
         work_id = work.add_work(work_data, 1)
         bookmark_id = bookmark.add_bookmark(data, 1)
@@ -85,6 +85,16 @@ class TestBookmark(BaseTestCase):
         data["rating"] = 3
         if build_links == False:
             data["links"] = []
+        else:
+            link_one = {}
+            link_one["link"] = "google.com",
+            link_one["text"] = "Goog"
+
+            link_two = {}
+            link_two["link"] = "uber.com",
+            link_two["text"] = "Eat The Rich"
+
+            data["links"] = [link_one, link_two]
 
         self.add_user()
 
