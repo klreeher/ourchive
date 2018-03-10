@@ -175,9 +175,10 @@ export default class NewWork extends React.Component {
       });
   }
   create_work_tag(val, oldItem, tags, tag_category) {
+    console.log(val)
     var original = tags;
     var filtered = original.filter(tag => tag == val)
-    if (filtered.length > 0) return
+    if (filtered.length > 0 || val == undefined) return
     original.push(val);
     var copy = this.state.work_tags;
     var tags = copy.filter(tag => tag.label == tag_category)[0]
