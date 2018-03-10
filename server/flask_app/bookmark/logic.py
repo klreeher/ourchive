@@ -33,6 +33,14 @@ def get_bookmarks_by_curator(curator_id):
 	else:
 		return None
 
+def delete_bookmark(bookmark_id):
+	try:
+		Bookmark.query.filter_by(id=bookmark_id).delete()
+		db.session.commit()
+	except:
+		#todo log
+		return
+
 def build_bookmark(bookmark):
 	built = {}
 	built["curator_title"] = bookmark.curator_title

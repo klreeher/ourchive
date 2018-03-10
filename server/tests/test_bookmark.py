@@ -16,6 +16,14 @@ class TestBookmark(BaseTestCase):
         bookmark.add_bookmark(data, 1)
         new_bookmark = Bookmark.query.filter_by(id=1).first()
         self.assertTrue(new_bookmark.description, "This was fine I guess...")
+
+    def test_delete_bookmark(self):
+        bookmarkObj = Bookmark()
+        db.session.add(bookmarkObj)
+        db.session.commit()
+        bookmark.delete_bookmark(1)
+        bookmarks = Bookmark.query.all()
+        self.assertTrue(len(bookmarks) == 0)
     
     def test_get_bookmark(self):  
         data = self.build_data(True, False, False)      
