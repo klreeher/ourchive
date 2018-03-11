@@ -24,6 +24,18 @@ def delete_message(message_id):
 		#todo log
 		return
 
+def delete_all_messages(user_id):
+	try:
+		inbox = User.query.filter_by(id=user_id).received_messages
+		outbox = User.query.filter_by(id=user_id).sent_messages
+		for message in inbox:
+			delete_message(message.id)
+		for message in outbox:
+			delete_message(message.id)
+	except:
+		#todo log
+		return
+
 def update_read_status(message_id, status):
 	message = Message.query.filter_by(id=message_id).first()
 	if message is not None:
@@ -46,8 +58,8 @@ def get_message(message_id):
 	else:
 		return None
 
-def get_messages_by_sender(sender_id):
-	messages = Message.query.filter_by(from_user_id=sender_id)
+def get_outbox(user_id):
+	messages = Message.query.filter_by(from_user_id=user_id)
 	if messages is not None:
 		messages_json = []
 		for message in messages:
@@ -56,8 +68,8 @@ def get_messages_by_sender(sender_id):
 	else:
 		return None
 
-def get_messages_by_sendee(sendee_id):
-	messages = Message.query.filter_by(to_user_id=sendee_id)
+def get_inbox(user_id):
+	messages = Message.query.filter_by(to_user_id=user_id)
 	if messages is not None:
 		messages_json = []
 		for message in messages:

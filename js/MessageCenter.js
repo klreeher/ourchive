@@ -21,7 +21,7 @@ export default class MessageCenter extends React.Component {
 
 	getMessages()
 	{
-		axios.get('/api/message/to/1')
+		axios.get('/api/user/'+this.state.user.id+'/messages/inbox')
 	      .then(function (response) {
 	        this.setState({
 	          messages: response.data,
@@ -34,7 +34,7 @@ export default class MessageCenter extends React.Component {
 	}
 	getOutbox()
 	{
-		axios.get('/api/message/from/1')
+		axios.get('/api/user/'+this.state.user.id+'/messages/outbox')
 	      .then(function (response) {
 	        this.setState({
 	          outbox: response.data,

@@ -4,6 +4,7 @@ from flask import render_template, request
 from . import api
 from server.flask_app.work import views as work
 from server.flask_app.bookmark import logic as bookmark
+from server.flask_app.message import logic as message
 
 @api.route('/<path:path>')
 def unknown_path(path):
@@ -82,71 +83,37 @@ def login():
   return request.json["userName"] + request.json["password"]
 
 
-@api.route('/api/message/to/<int:userId>')
+@api.route('/api/user/<int:userId>/messages/inbox')
 def get_inbox(userId):
-  messages = json.dumps(
-    [
-      {
-        "id": 1,
-        "to_user": 2,
-        "from_user": {
-          "username": "molly",
-          "userId": 3
-        },
-        "parent_id": 5,
-        "read": False,
-        "message_subject": "Your writing",
-        "message_content": "it's so good but have you thought about including more entymology. bugs are good i like them. beetles especially."
-      },
-      {
-        "id": 5,
-        "to_user": 2,
-        "read": True,
-        "from_user": {
-          "username": "joy",
-          "userId": 4
-        },
-        "message_subject": "Please let me archive this",
-        "message_content": "i'd like to put this on my webring, called Stuck in 2006, please let me know what you think. it's a good webring, we are obsessed with dolphins there, it's our favorite topic."
-      }  
-  ])
-  return messages
+  return json.dumps(message.get_inbox(userId))
 
-@api.route('/api/message/from/<int:userId>')
+@api.route('/api/user/<int:userId>/messages/outbox')
 def get_outbox(userId):
-  messages = json.dumps(
-    [
-      {
-        "id": 2,
-        "from_user": {
-          "username": "elena",
-          "userId": 2
-        },
-        "read": True,
-        "to_user": {
-          "username": "molly",
-          "userId": 3
-        },
-        "parent_id": 5,
-        "message_subject": "re: Your writing",
-        "message_content": "bugs are gross; no thanks."
-      },
-      {
-        "id": 7,
-        "from_user": {
-          "username": "elena",
-          "userId": 2
-        },
-        "read": True,
-        "to_user": {
-          "username": "joy",
-          "userId": 4
-        },
-        "message_subject": "re: Please let me archive this",
-        "message_content": "Hi, thank you so much! go ahead! I'd appreciate a link back to my profile once it's done. Let me know if you have any issues!"
-      }  
-  ])
-  return messages
+  return json.dumps(message.get_outbox(userId))
+
+@api.route('/api/message/<int:messageId>', methods=['GET'])
+def get_message(messageId):
+  return json.dumps(message.get_message(messageId))
+
+@api.route('/api/message/<int:messageId>', methods=['DELETE'])
+def delete_message(messageId):
+  return json.dumps(message.delete_message(messageId))
+
+@api.route('/api/user/<int:userId>/messages/delete', methods=['DELETE'])
+def delete_all(userId):
+  return json.dumps(message.delete_all_messages(userId))
+
+@api.route('/api/message/', methods=['POST'])
+def add_message():
+  return json.dumps(message.add_message(response.json))
+
+@api.route('/api/message/<int:messageId>/read', methods=['POST'])
+def mark_message_read(messageId):
+  return json.dumps(message.update_read_status(messageId, True))
+
+@api.route('/api/message/<int:messageId>/unread', methods=['POST'])
+def mark_message_unread(messageId):
+  return json.dumps(message.update_read_status(messageId, False))
 
 @api.route('/api/work/', methods=['POST'])
 def post_work():
