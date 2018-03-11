@@ -54,16 +54,16 @@ export default class BookmarkForm extends React.Component {
     }
 
     create_bookmark_tag(val, oldItem, tags, tag_category) {
-    var original = tags;
-    var filtered = original.filter(tag => tag == val)
-    if (filtered.length > 0 || val == undefined) return
-    original.push(val);
-    var copy = this.state.bookmark_tags;
-    var tags = copy.filter(tag => tag.label == tag_category)[0]
-    tags.tags = original
-    this.setState({
-      bookmark_tags: copy
-    })
+	    var original = tags;
+	    var filtered = original.filter(tag => tag == val)
+	    if (filtered.length > 0 || val == undefined) return
+	    original.push(val);
+	    var copy = this.state.bookmark_tags;
+	    var tags = copy.filter(tag => tag.label == tag_category)[0]
+	    tags.tags = original
+	    this.setState({
+	      bookmark_tags: copy
+	    })
   }
 
     setDescription(e) {

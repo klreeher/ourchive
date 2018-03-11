@@ -55,6 +55,15 @@ export default class BookmarkItem extends React.Component {
               safe_summary: cleaned_work_summary,
               safe_description: cleaned_description
             })
+            var queryParams = new URLSearchParams(this.props.location.search);            
+        	var commentId = queryParams.get('commentId');
+        	var bookmarkId = queryParams.get('bookmarkId');
+        	if (commentId != null)
+        	{
+        		var comment = "comment_"+commentId;
+                var bookmark = "bookmark_"+bookmarkId;
+                this.refs[bookmark].toggleComments(null, commentId);
+        	}
           });
 
         }.bind(this))

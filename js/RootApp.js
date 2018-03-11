@@ -62,7 +62,7 @@ export default class RootApp extends React.Component {
           <Route exact path="/" component={(props, state, params) => <Home user={user} {...props}/>}/>
           <Route path="/works" component={Work}/>
           <Route path="/work/:workId" component={(props, state, params) => <SingleWork user={user} {...props}/>}/>
-          <Route path="/bookmark/curator/:curatorId" component={(props, state, params) => <BookmarkList user={user} {...props}/>}/>
+          <Route exact path="/user/:curatorId/bookmarks" component={(props, state, params) => <BookmarkList user={user} {...props}/>}/>
           <Route path="/bookmark/:bookmarkId" component={(props, state, params) => <BookmarkItem user={user} {...props}/>}/>
           <Route path="/create/work" is_edit="false" component={(props, state, params) => <NewWork user={user} {...props}/>}/>
           <Route path="/bookmarks/new" component={(props, state, params) => <BookmarkForm user={user} {...props}/>}/>
