@@ -22,6 +22,11 @@ comment_to_comment = db.Table("comment_to_comment",
     db.Column("child_comment_id", db.Integer, db.ForeignKey("comments.id"), primary_key=True)
 )
 
+message_to_message = db.Table("message_to_message", 
+    db.Column("parent_message_id", db.Integer, db.ForeignKey("messages.id"), primary_key=True),
+    db.Column("child_message_id", db.Integer, db.ForeignKey("messages.id"), primary_key=True)
+)
+
 
 class User(db.Model):
     """ User Model for storing user related details """
@@ -38,6 +43,12 @@ class User(db.Model):
     works = db.relationship('Work', backref='work_user',
                                 lazy='dynamic')
     bookmarks = db.relationship('Bookmark', backref='bookmark_user',
+                                lazy='dynamic')
+
+    received_messages = db.relationship('Message', foreign_keys="[Message.to_user_id]",
+                                lazy='dynamic')
+
+    sent_messages = db.relationship('Message', foreign_keys="[Message.from_user_id]",
                                 lazy='dynamic')
 
     def __init__(self, email, password, admin=False):
@@ -220,3 +231,29 @@ class BookmarkLink(db.Model):
     def __repr__(self):
         return '<BookmarkLink: {}>'.format(self.id)
 
+
+class Message(db.Model):
+
+    __tablename__ = 'messages'
+
+    id = db.Column(db.Integer, primary_key=True)
+    message_subject = db.Column(db.String(200))
+    message_content = db.Column(db.String)
+    message_read = db.Column(db.Boolean, default=False)
+
+    to_user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    to_user = db.relationship('User', back_populates='received_messages', foreign_keys=[to_user_id])
+
+    from_user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    from_user = db.relationship('User', back_populates='sent_messages',foreign_keys=[from_user_id])
+
+    replies = db.relationship("Message",
+                        secondary=message_to_message,
+                        primaryjoin=id==message_to_message.c.parent_message_id,
+                        secondaryjoin=id==message_to_message.c.child_message_id,
+                        backref="parent_message"
+                )
+
+
+def __repr__(self):
+    return '<Message: {}>'.format(self.id)

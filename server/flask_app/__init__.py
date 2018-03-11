@@ -27,6 +27,9 @@ app.register_blueprint(work_blueprint)
 from .bookmark import bookmark as bookmark_blueprint
 app.register_blueprint(bookmark_blueprint)
 
+from .message import message as message_blueprint
+app.register_blueprint(message_blueprint)
+
 from .api import api as api_blueprint
 app.register_blueprint(api_blueprint)
 
@@ -116,72 +119,6 @@ def login():
 @app.route('/audio/<string:audio_file>')
 def audio(audio_file):
   return send_from_directory(filename=audio_file, directory='audio')
-
-@app.route('/api/message/to/<int:userId>')
-def get_inbox(userId):
-  messages = json.dumps(
-    [
-      {
-        "id": 1,
-        "to_user": 2,
-        "from_user": {
-          "username": "molly",
-          "userId": 3
-        },
-        "parent_id": 5,
-        "read": False,
-        "message_subject": "Your writing",
-        "message_content": "it's so good but have you thought about including more entymology. bugs are good i like them. beetles especially."
-      },
-      {
-        "id": 5,
-        "to_user": 2,
-        "read": True,
-        "from_user": {
-          "username": "joy",
-          "userId": 4
-        },
-        "message_subject": "Please let me archive this",
-        "message_content": "i'd like to put this on my webring, called Stuck in 2006, please let me know what you think. it's a good webring, we are obsessed with dolphins there, it's our favorite topic."
-      }  
-  ])
-  return messages
-
-@app.route('/api/message/from/<int:userId>')
-def get_outbox(userId):
-  messages = json.dumps(
-    [
-      {
-        "id": 2,
-        "from_user": {
-          "username": "elena",
-          "userId": 2
-        },
-        "read": True,
-        "to_user": {
-          "username": "molly",
-          "userId": 3
-        },
-        "parent_id": 5,
-        "message_subject": "re: Your writing",
-        "message_content": "bugs are gross; no thanks."
-      },
-      {
-        "id": 7,
-        "from_user": {
-          "username": "elena",
-          "userId": 2
-        },
-        "read": True,
-        "to_user": {
-          "username": "joy",
-          "userId": 4
-        },
-        "message_subject": "re: Please let me archive this",
-        "message_content": "Hi, thank you so much! go ahead! I'd appreciate a link back to my profile once it's done. Let me know if you have any issues!"
-      }  
-  ])
-  return messages
 
 @app.route('/api/user/<int:userId>')
 def get_user(userId):
