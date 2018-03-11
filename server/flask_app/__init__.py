@@ -183,20 +183,6 @@ def get_outbox(userId):
   ])
   return messages
 
-@app.route('/api/work/', methods=['POST'])
-def post_work():
-  work.views.add_work(request.json)
-  return "Work added."
-
-@app.route('/api/work/<int:workId>', methods=['POST'])
-def update_work():
-  work.views.update_work(request.json)
-  return "Work updated."
-
-@app.route('/api/work/<int:workId>', methods=['GET'])
-def get_work(workId):
-  return work.views.get_work(workId)
-
 @app.route('/api/user/<int:userId>')
 def get_user(userId):
   user = json.dumps(
@@ -221,23 +207,6 @@ def get_user(userId):
         "bookmarks": []
       })
   return user
-
-@app.route('/api/work/creator/<int:creatorId>')
-def get_works_by_creator(creatorId):
-  works = json.dumps(
-    {"works": [
-        {
-          "key": "1",
-          "title": "a series of unfortunate dev choices",
-          "name": "ianastasia",
-          "creator_id": 2,
-          "chapter_count": 3,
-          "is_complete": "false",
-          "word_count": 100500,
-          "work_summary": "some stuff happens"
-        }]
-    })
-  return works
 
 if __name__ == '__main__':
   app.run(debug=True)
