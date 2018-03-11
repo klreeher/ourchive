@@ -16,6 +16,7 @@ import NewWork from './NewWork';
 import BookmarkList from './BookmarkList';
 
 import BookmarkForm from './BookmarkForm';
+import BookmarkItem from './BookmarkItem';
 import UserProfile from './UserProfile';
 import MyProfile from './MyProfile';
 import UserForm from './UserForm';
@@ -61,9 +62,10 @@ export default class RootApp extends React.Component {
           <Route exact path="/" component={(props, state, params) => <Home user={user} {...props}/>}/>
           <Route path="/works" component={Work}/>
           <Route path="/work/:workId" component={(props, state, params) => <SingleWork user={user} {...props}/>}/>
-          <Route path="/bookmark/:curatorId" component={(props, state, params) => <BookmarkList user={user} {...props}/>}/>
+          <Route path="/bookmark/curator/:curatorId" component={(props, state, params) => <BookmarkList user={user} {...props}/>}/>
+          <Route path="/bookmark/:bookmarkId" component={(props, state, params) => <BookmarkItem user={user} {...props}/>}/>
           <Route path="/create/work" is_edit="false" component={(props, state, params) => <NewWork user={user} {...props}/>}/>
-          <Route path="/bookmarks/new" component={BookmarkForm}/>
+          <Route path="/bookmarks/new" component={(props, state, params) => <BookmarkForm user={user} {...props}/>}/>
           <Route path="/my-profile" component={MyProfile}/>
           <Route path="/user/:userId/show" component={(props, state, params) => <UserProfile user={user} {...props}/>}/>
           <Route path="/user/:userId/edit" component={UserForm}/>

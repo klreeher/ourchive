@@ -1,41 +1,70 @@
 import React from 'react';
 import axios from 'axios';
-import Link from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import TagList from './TagList';
 import {FormGroup, Checkbox, ControlLabel, HelpBlock, FormControl, Button, Radio} from 'react-bootstrap';
 
 export default class BookmarkForm extends React.Component {
 
-	addBookmark(evt)
+	addBookmark(evt, history)
 	{
 		evt.preventDefault()
-		console.log(this.state)
+	    axios.post("/api/bookmark/", {
+	      curator_title: this.state.title, 
+	      rating: this.state.rating, 
+	      description: this.state.description, 
+	      is_private: this.state.is_private, 
+	      tags: this.state.bookmark_tags, 
+	      is_queued: this.state.is_queued,
+	      work_id: this.state.work.id,
+	      links: []
+	    })
+	    .then(function (response) {
+	      history.push({
+	        pathname: '/bookmark/'+response.data.bookmark_id
+	      })
+	    })
+	    .catch(function (error) {
+	      console.log(error);
+	    });
 	}
 
 	constructor(props) {
-
-		var json = {
-		
-		  "key": "1",
-	      "chapter_image": "butts.png",
-	      "title": "bleh bleh bleh",
-	      "creator": "impertinence",
-	      "summary": "someBODY once told me the world is gonna roll me",
-	      "links": [1, 2],
-	      "tags": [
-	        {"fandom": ["buffy", "xena"]},
-	        {"primary pairing": ["buffy/faith"]}
-	      ]
-	  	};
 	    super(props);
-	    this.state = this.state = {bookmark: json, value: ""};
+	    this.state = this.state = {bookmark: {}, value: "", bookmark_tags: [], work: this.props.location.state.work};
 	    this.setDescription = this.setDescription.bind(this);
 	    this.setRating = this.setRating.bind(this);
 	    this.setTitle = this.setTitle.bind(this);
 	    this.updatePrivateCheckbox = this.updatePrivateCheckbox.bind(this);
 	    this.updateAddToQueue = this.updateAddToQueue.bind(this);
-
+	    this.create_bookmark_tag = this.create_bookmark_tag.bind(this);
+	    this.getTagCategories();
 	}
+
+	getTagCategories()
+    {
+      axios.get('/api/tag/categories')
+          .then(function (response) {
+            this.setState({bookmark_tags: response.data});  
+
+          }.bind(this))
+          .catch(function (error) {
+            console.log(error);
+        });
+    }
+
+    create_bookmark_tag(val, oldItem, tags, tag_category) {
+    var original = tags;
+    var filtered = original.filter(tag => tag == val)
+    if (filtered.length > 0 || val == undefined) return
+    original.push(val);
+    var copy = this.state.bookmark_tags;
+    var tags = copy.filter(tag => tag.label == tag_category)[0]
+    tags.tags = original
+    this.setState({
+      bookmark_tags: copy
+    })
+  }
 
     setDescription(e) {
     	this.setState({ description: e.target.value });
@@ -62,8 +91,17 @@ export default class BookmarkForm extends React.Component {
   	}
 
   	render() {
+  		const AddOrUpdate = withRouter(({ history }) => (
+	    <div> <button onMouseDown={evt => this.addBookmark(evt, history)} className="btn btn-default">Submit</button>
+	    </div>
+	    ))
 	    return (
 	    	<div className="container">
+	    		<div className="row">
+	    			<div className="col-xs-1">Work:</div>
+	    			<div className="col-xs-10">{this.state.work.title}</div>
+	    		</div>
+	    		<br/>
 			    	<form>
 			    		<FormGroup controlId="formControlsTitle">
 					      <ControlLabel>Title</ControlLabel>
@@ -103,9 +141,9 @@ export default class BookmarkForm extends React.Component {
 
 					    <FormGroup>
 					     <div className="row">
-				          {this.state.bookmark.tags.map(tag => 
-				              <div key={Object.keys(tag)}>
-				                  <TagList tag_category={Object.keys(tag)} tags={Object.values(tag)} underEdit={true}/>
+				          {this.state.bookmark_tags.map(tag => 
+				              <div key={tag.id}>
+				                  <TagList tag_category={tag.label} tags={tag.tags} underEdit={true} createWorkTags={this.create_bookmark_tag}/>
 				              </div>
 				          )}
 				          </div>
@@ -127,9 +165,7 @@ export default class BookmarkForm extends React.Component {
 
 				        </form>
 
-					    <div className="form-group">
-				          <button onMouseDown={evt => this.addBookmark(evt)} className="btn btn-default">Submit</button>
-				        </div>
+					    <AddOrUpdate/>
 			</div>
 	    );
   }

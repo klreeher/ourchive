@@ -3,6 +3,7 @@ from flask import render_template, request
 
 from . import api
 from server.flask_app.work import views as work
+from server.flask_app.bookmark import logic as bookmark
 
 @api.route('/<path:path>')
 def unknown_path(path):
@@ -176,6 +177,16 @@ def get_work(workId):
     return val
   else:
     return '404 Not Found'
+
+@api.route('/api/bookmark/', methods=['POST'])
+def post_bookmark():
+  #todo login route
+  bookmark_id = bookmark.add_bookmark(request.json, 1)
+  return json.dumps({"bookmark_id": bookmark_id})
+
+@api.route('/api/bookmark/<int:bookmarkId>', methods=['GET'])
+def get_bookmark(bookmarkId):
+  return json.dumps(bookmark.get_bookmark(bookmarkId))
 
 @api.route('/api/user/<int:userId>')
 def get_user(userId):

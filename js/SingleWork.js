@@ -9,6 +9,16 @@ import {
 
 export default class SingleWork extends React.Component {
 
+
+  bookmarkItem(evt, history)
+  {
+    evt.target.blur();
+    history.push({
+      pathname: '/bookmarks/new',
+      state: { work: this.state.work }
+    })
+  }
+
   setWork(work)
   {
     this.state.work = work;
@@ -136,6 +146,10 @@ export default class SingleWork extends React.Component {
     <button onMouseDown={evt => this.updateWork(evt, this.state.work.id, history)} className="btn btn-link">Update</button>
     ))
 
+    const Bookmark = withRouter(({ history }) => (
+    <button onMouseDown={evt => this.bookmarkItem(evt, history)} className="btn btn-link">Bookmark Work</button>
+    ))
+
     return (
 
     <div className="container-fluid text-padding">
@@ -145,6 +159,7 @@ export default class SingleWork extends React.Component {
             <div className="col-md-3 col-xs-1">
               <Update/>
               <button onClick={evt => this.deleteWork(evt, this.state.work.id)} className="btn btn-link">Delete</button>
+              <Bookmark/>
             </div>
           </div>
         

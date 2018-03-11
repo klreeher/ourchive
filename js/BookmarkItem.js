@@ -12,13 +12,55 @@ export default class BookmarkItem extends React.Component {
 
 	constructor(props) {
 	    super(props);
-	    this.state = {bookmark: props.bookmark, curator: props.curator, viewer_is_creator: true, newCommentText: "",
-    		toggleCommentsText: "Show Comments", showComments: false,
+	    if (props.bookmark === undefined)
+	    {
+	    	this.state = {bookmark: {"work": {}, "tags": [], "links": [],
+	    	"id": props.match.params.bookmarkId}, curator: [], viewer_is_creator: true, newCommentText: "",
+			toggleCommentsText: "Show Comments", showComments: false,
+	    	user: props.user, needsLoad: true};
+	    }
+	    else
+	    {
+	    	this.state = {bookmark: props.bookmark, curator: props.curator, viewer_is_creator: true, newCommentText: "",
+			toggleCommentsText: "Show Comments", showComments: false,
 	    	user: props.user};
-    	this.addComment = this.addComment.bind(this)
-    	this.toggleComments = this.toggleComments.bind(this)
-    	this.updateNewCommentText = this.updateNewCommentText.bind(this)
+	    }
+		this.addComment = this.addComment.bind(this)
+		this.toggleComments = this.toggleComments.bind(this)
+		this.updateNewCommentText = this.updateNewCommentText.bind(this)
+		this.getBookmark = this.getBookmark.bind(this)
+	}
+
+  componentDidMount()
+  {
+    if (this.state.needsLoad){
+
+    	this.getBookmark(this.state.bookmark.id); 
     }
+  }
+
+  getBookmark(bookmarkId)
+  {
+    axios.get('/api/bookmark/'+bookmarkId)
+        .then(function (response) {
+          this.setState({
+            bookmark: response.data,
+            viewer_is_creator: true,
+            curator: response.data["curator"]
+          }, () => {
+            var cleaned_description = DOMPurify.sanitize(this.state.bookmark.description);
+            var cleaned_work_summary = DOMPurify.sanitize(this.state.bookmark.work.work_summary);
+            this.setState({
+              safe_summary: cleaned_work_summary,
+              safe_description: cleaned_description
+            })
+          });
+
+        }.bind(this))
+        .catch(function (error) {
+          console.log(error);
+      });
+  }
 
   toggleComments(event, commentId)
   {
@@ -76,7 +118,7 @@ export default class BookmarkItem extends React.Component {
 		      		<div className="col-md-12">
 		        		<blockquote>
 			        		<div className="row">
-			        			<div className="col-md-12">{this.state.bookmark.work.title} by {this.state.bookmark.work.creator}</div>
+			        			<div className="col-md-12">{this.state.bookmark.work.title} by {this.state.bookmark.work.name}</div>
 			        		</div>
 			        		<div className="row">
 			        			<div className="col-md-4">Complete? {this.state.bookmark.work.is_complete ? "True" : "False"}</div>
@@ -95,7 +137,7 @@ export default class BookmarkItem extends React.Component {
 		        </div>			        
 		        <div className="row">
 		            <div className="col-xs-11 col-xs-offset-1">
-		                {this.state.bookmark.description}
+		                {this.state.safe_description}
 		            </div>
 		        </div>	
 				<div className="row">
@@ -116,14 +158,14 @@ export default class BookmarkItem extends React.Component {
 			    </div> : <div/>}
 		        <div className="row">
 		             {this.state.bookmark.tags.map(tag => 
-				        <div className="row" key={Math.random()}>
-				        <div className="col-md-12">
-				            <ul className="list-inline">
-				              <TagList tag_category={Object.keys(tag)} tags={Object.values(tag)} underEdit={false}/>
-				            </ul>
-				        </div> 
-				        </div>
-				      )}		            
+			          <div className="row" key={tag.id}>
+			          <div className="col-xs-9 col-md-12">
+			              <ul className="list-inline">
+			                <TagList tag_category={tag.label} tags={tag.tags}/>
+			              </ul>
+			          </div> 
+			          </div>
+			        )}	            
 		        </div>
 
 		        <div className="row">

@@ -180,7 +180,6 @@ export default class NewWork extends React.Component {
       });
   }
   create_work_tag(val, oldItem, tags, tag_category) {
-    console.log(val)
     var original = tags;
     var filtered = original.filter(tag => tag == val)
     if (filtered.length > 0 || val == undefined) return

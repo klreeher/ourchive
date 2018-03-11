@@ -7,7 +7,9 @@ from ..models import Work, Chapter, Tag, User, TagType, Bookmark, BookmarkLink
 
 
 def add_bookmark(data, user_id):
-	bookmark = Bookmark(curator_title=data["curator_title"],rating=data["rating"],description=data["description"],work_id=data["work_id"])
+	bookmark = Bookmark(curator_title=data["curator_title"],rating=data["rating"],work_id=data["work_id"])
+	if "description" in data:
+		bookmark.description = data["description"]
 	user = User.query.filter_by(id=user_id).first()
 	bookmark.user = user
 	db.session.add(bookmark)	
@@ -54,11 +56,16 @@ def delete_bookmark(bookmark_id):
 		return
 
 def build_bookmark(bookmark):
+	user = User.query.filter_by(id=bookmark.user_id).first()
+	curator = {}
+	curator["curator_name"] = user.username
+	curator["curator_id"] = user.id
 	built = {}
+	built["curator"] = curator
 	built["curator_title"] = bookmark.curator_title
 	built["rating"] = bookmark.rating
 	built["description"] = bookmark.description
-	built["work"] = json.dumps(views.build_work_stub(bookmark.work))
+	built["work"] = views.build_work_stub(bookmark.work)
 	built["comments"] = list(build_bookmark_comments(bookmark.comments))
 	built["tags"] = list(build_bookmark_tags(bookmark.tags))
 	built["links"] = list(build_bookmark_links(bookmark.links))
