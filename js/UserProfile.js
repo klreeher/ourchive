@@ -93,10 +93,14 @@ export default class UserProfile extends React.Component {
     {
         axios.get('/api/bookmark/curator/'+userId)
           .then(function (response) {
+            var curator = {}
+            if (response.data.length > 0) {
+              curator = response.data[0].curator
+            }
             this.setState({                
-              bookmarks: response.data.bookmarks,
-              curator: response.data.curator
-            });  
+              bookmarks: response.data,
+              curator: curator
+            });    
 
           }.bind(this))
           .catch(function (error) {

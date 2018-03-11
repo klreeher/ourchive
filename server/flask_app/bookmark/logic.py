@@ -7,9 +7,11 @@ from ..models import Work, Chapter, Tag, User, TagType, Bookmark, BookmarkLink
 
 
 def add_bookmark(data, user_id):
-	bookmark = Bookmark(curator_title=data["curator_title"],rating=data["rating"],work_id=data["work_id"])
+	bookmark = Bookmark(curator_title=data["curator_title"],work_id=data["work_id"])
 	if "description" in data:
 		bookmark.description = data["description"]
+	if "rating" in data:
+		bookmark.rating = data["rating"]
 	user = User.query.filter_by(id=user_id).first()
 	bookmark.user = user
 	db.session.add(bookmark)	

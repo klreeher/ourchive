@@ -32,7 +32,7 @@ export default class BookmarkForm extends React.Component {
 
 	constructor(props) {
 	    super(props);
-	    if (this.props.location.state.bookmark)
+	    if (this.props.location.state && this.props.location.state.bookmark)
 	    {
 	        this.state = {bookmark: this.props.location.state.bookmark, title: this.props.location.state.bookmark.curator_title,
 	        	rating: this.props.location.state.bookmark.rating, description: this.props.location.state.bookmark.description,

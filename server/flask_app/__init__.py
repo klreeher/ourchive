@@ -222,14 +222,6 @@ def get_user(userId):
       })
   return user
 
-@app.route('/api/bookmark/curator/<int:curatorId>')
-def get_bookmarks(curatorId):
-  return bookmark.logic.get_bookmarks_by_curator(curatorId)
-
-@app.route('/api/bookmark/<int:bookmarkId>')
-def get_bookmark(bookmarkId):
-  return bookmark.logic.get_bookmark(bookmarkId)
-
 @app.route('/api/work/creator/<int:creatorId>')
 def get_works_by_creator(creatorId):
   works = json.dumps(
