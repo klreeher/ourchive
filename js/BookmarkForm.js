@@ -9,7 +9,7 @@ export default class BookmarkForm extends React.Component {
 	addBookmark(evt, history)
 	{
 		evt.preventDefault()
-	    axios.post("/api/bookmark/", {
+	    axios.post(this.state.post_url, {
 	      curator_title: this.state.title, 
 	      rating: this.state.rating, 
 	      description: this.state.description, 
@@ -17,7 +17,8 @@ export default class BookmarkForm extends React.Component {
 	      tags: this.state.bookmark_tags, 
 	      is_queued: this.state.is_queued,
 	      work_id: this.state.work.id,
-	      links: []
+	      links: [],
+	      id: this.state.id
 	    })
 	    .then(function (response) {
 	      history.push({
@@ -31,7 +32,21 @@ export default class BookmarkForm extends React.Component {
 
 	constructor(props) {
 	    super(props);
-	    this.state = this.state = {bookmark: {}, value: "", bookmark_tags: [], work: this.props.location.state.work};
+	    if (this.props.location.state.bookmark)
+	    {
+	        this.state = {bookmark: this.props.location.state.bookmark, title: this.props.location.state.bookmark.curator_title,
+	        	rating: this.props.location.state.bookmark.rating, description: this.props.location.state.bookmark.description,
+	        	is_private: this.props.location.state.bookmark.is_private, is_queued: this.props.location.state.bookmark.is_queued,
+	        	work: this.props.location.state.bookmark.work, links: this.props.location.state.bookmark.links,
+	        	bookmark_tags: this.props.location.state.bookmark.tags, id: this.props.location.state.bookmark.id,
+	        	post_url: "/api/bookmark/"+this.props.location.state.bookmark.id};
+	    }
+	    else
+	    {
+	    	this.state = this.state = {bookmark: {}, value: "", bookmark_tags: [], 
+	    	work: this.props.location.state.work, post_url: "/api/bookmark/"};
+
+	    }
 	    this.setDescription = this.setDescription.bind(this);
 	    this.setRating = this.setRating.bind(this);
 	    this.setTitle = this.setTitle.bind(this);
@@ -99,7 +114,7 @@ export default class BookmarkForm extends React.Component {
 	    	<div className="container">
 	    		<div className="row">
 	    			<div className="col-xs-1">Work:</div>
-	    			<div className="col-xs-10">{this.state.work.title}</div>
+	    			<div className="col-xs-10">{this.state.work ? this.state.work.title : this.state.bookmark.work.title}</div>
 	    		</div>
 	    		<br/>
 			    	<form>

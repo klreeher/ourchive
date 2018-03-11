@@ -5,6 +5,7 @@ import TagList from './TagList';
 import NewComment from './NewComment';
 import Comment from './Comment';
 import ReactDOM from 'react-dom';
+import { withRouter } from 'react-router-dom';
 
 export default class BookmarkItem extends React.Component {
 
@@ -29,6 +30,15 @@ export default class BookmarkItem extends React.Component {
 		this.toggleComments = this.toggleComments.bind(this)
 		this.updateNewCommentText = this.updateNewCommentText.bind(this)
 		this.getBookmark = this.getBookmark.bind(this)
+	}
+
+	editBookmark(evt, history)
+	{
+		evt.target.blur();
+		history.push({
+		  pathname: '/bookmarks/new',
+		  state: { bookmark: this.state.bookmark }
+		})
 	}
 
   componentDidMount()
@@ -126,6 +136,9 @@ export default class BookmarkItem extends React.Component {
       });
   }
   render() {
+  	const Update = withRouter(({ history }) => (
+    <button onMouseDown={evt => this.editBookmark(evt, history)} className="btn btn-link">Update</button>
+    ))
     return (
     	<div>
     	  <div className="panel panel-default">
@@ -133,7 +146,7 @@ export default class BookmarkItem extends React.Component {
 	      		{this.state.bookmark.curator_title}
 	      		{this.state.viewer_is_creator && 
 		            		<div className="pull-right"> 
-		            			<button className="btn btn-link">Edit</button> | 
+		            			<Update/> | 
 	     			              <button onClick={evt => this.deleteBookmark(evt, this.state.id)} className="btn btn-link">Delete</button>
 
 		            		</div>

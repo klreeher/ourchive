@@ -194,6 +194,11 @@ def delete_bookmark(bookmarkId):
   bookmark.delete_bookmark(bookmarkId)
   return 'Deleted: ' + str(bookmarkId)
 
+@api.route('/api/bookmark/<int:bookmarkId>', methods=['POST'])
+def update_bookmark(bookmarkId):
+    bookmark_id = bookmark.update_bookmark(request.json)
+    return json.dumps({"bookmark_id": bookmark_id})
+
 @api.route('/api/user/<int:userId>')
 def get_user(userId):
   user = json.dumps(
