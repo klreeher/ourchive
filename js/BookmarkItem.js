@@ -46,7 +46,8 @@ export default class BookmarkItem extends React.Component {
           this.setState({
             bookmark: response.data,
             viewer_is_creator: true,
-            curator: response.data["curator"]
+            curator: response.data["curator"],
+            id: bookmarkId
           }, () => {
             var cleaned_description = DOMPurify.sanitize(this.state.bookmark.description);
             var cleaned_work_summary = DOMPurify.sanitize(this.state.bookmark.work.work_summary);
@@ -101,6 +102,20 @@ export default class BookmarkItem extends React.Component {
       newCommentText: event.target.value
     })
   }
+  deleteBookmark(evt, bookmarkId)
+  {
+  	evt.target.blur()
+    axios.delete('/api/bookmark/'+bookmarkId)
+        .then(function (response) {
+          this.setState({
+            bookmark: {"work": {}, "tags": [], "links": [],
+	    	"id": -1}
+          }); 
+        }.bind(this))
+        .catch(function (error) {
+          console.log(error);
+      });
+  }
   render() {
     return (
     	<div>
@@ -109,7 +124,9 @@ export default class BookmarkItem extends React.Component {
 	      		{this.state.bookmark.curator_title}
 	      		{this.state.viewer_is_creator && 
 		            		<div className="pull-right"> 
-		            			<button className="btn btn-link">Edit</button> | <button className="btn btn-link">Delete</button>
+		            			<button className="btn btn-link">Edit</button> | 
+	     			              <button onClick={evt => this.deleteBookmark(evt, this.state.id)} className="btn btn-link">Delete</button>
+
 		            		</div>
 		            	}
 	      	</div>

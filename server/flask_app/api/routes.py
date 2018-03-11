@@ -188,6 +188,12 @@ def post_bookmark():
 def get_bookmark(bookmarkId):
   return json.dumps(bookmark.get_bookmark(bookmarkId))
 
+@api.route('/api/bookmark/<int:bookmarkId>', methods=['DELETE'])
+def delete_bookmark(bookmarkId):
+  #todo login route
+  bookmark.delete_bookmark(bookmarkId)
+  return 'Deleted: ' + str(bookmarkId)
+
 @api.route('/api/user/<int:userId>')
 def get_user(userId):
   user = json.dumps(

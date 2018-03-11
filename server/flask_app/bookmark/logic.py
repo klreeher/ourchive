@@ -62,6 +62,7 @@ def build_bookmark(bookmark):
 	curator["curator_id"] = user.id
 	built = {}
 	built["curator"] = curator
+	built["id"] = bookmark.id
 	built["curator_title"] = bookmark.curator_title
 	built["rating"] = bookmark.rating
 	built["description"] = bookmark.description
