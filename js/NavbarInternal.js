@@ -23,8 +23,10 @@ export default class NavbarInternal extends React.Component {
 
   componentWillMount() {
     var state = localStorage.getItem('jwt');
+    var id = localStorage.getItem('user_id');
     this.setState({
-      loggedIn: state != null
+      loggedIn: state != null,
+      userId: id
     })
   }
   constructor(props)
@@ -79,12 +81,14 @@ export default class NavbarInternal extends React.Component {
       })
       .then((response) => {
         localStorage.setItem('jwt', response.data);
+        localStorage.setItem('user_id', 1)
         this.props.updateUser();
         this.setState({ 
           userName: "",
           password: "",
           loggedIn: true,
-          showModal: false
+          showModal: false,
+          userId: 1
         });
 
       })
@@ -128,7 +132,7 @@ export default class NavbarInternal extends React.Component {
           <IndexLinkContainer to="/my-profile">
             <NavItem>My Profile</NavItem>
           </IndexLinkContainer>
-          <IndexLinkContainer to="/messages">
+          <IndexLinkContainer to={"/user/"+this.state.userId+"/messages"}>
             <NavItem>Messages</NavItem>
           </IndexLinkContainer>
           <IndexLinkContainer to="/notifications">

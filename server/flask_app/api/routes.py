@@ -105,7 +105,7 @@ def delete_all(userId):
 
 @api.route('/api/message/', methods=['POST'])
 def add_message():
-  return json.dumps(message.add_message(response.json))
+  return json.dumps(message.add_message(request.json))
 
 @api.route('/api/message/<int:messageId>/read', methods=['POST'])
 def mark_message_read(messageId):

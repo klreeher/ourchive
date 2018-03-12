@@ -3,6 +3,7 @@ import axios from 'axios';
 import Link from 'react-router-dom';
 import {Tabs, Tab} from 'react-bootstrap';
 import Message from './Message';
+import NewComment from './NewComment';
 
 export default class MessageCenter extends React.Component {
 
@@ -10,22 +11,28 @@ export default class MessageCenter extends React.Component {
 
 	constructor(props) {
 	    super(props);
-	    this.state = {user: this.props.user, messages: [], outbox: []};
+	    this.state = {user: this.props.user, messages: [], outbox: [], user_id: props.match.params.userId};
 		this.sendMessage = this.sendMessage.bind(this)
 		this.markAsRead = this.markAsRead.bind(this)
 		this.deleteMessage = this.deleteMessage.bind(this)
 		this.showInbox = this.showInbox.bind(this)
 		this.markAllRead = this.markAllRead.bind(this)
 		this.deleteAll = this.deleteAll.bind(this)
+		this.showNewMessage = this.showNewMessage.bind(this)
+		this.updateNewMessageText = this.updateNewMessageText.bind(this)
 	}
 
 	getMessages()
 	{
-		axios.get('/api/user/'+this.state.user.id+'/messages/inbox')
+		axios.get('/api/user/'+this.state.user_id+'/messages/inbox')
 	      .then(function (response) {
-	        this.setState({
-	          messages: response.data,
-	        });  
+	      	if (response.data.length > 0)
+	      	{
+	      		this.setState({
+		          messages: response.data,
+		        });  
+	      	}
+	        
 
 	      }.bind(this))
 	      .catch(function (error) {
@@ -34,7 +41,7 @@ export default class MessageCenter extends React.Component {
 	}
 	getOutbox()
 	{
-		axios.get('/api/user/'+this.state.user.id+'/messages/outbox')
+		axios.get('/api/user/'+this.state.user_id+'/messages/outbox')
 	      .then(function (response) {
 	        this.setState({
 	          outbox: response.data,
@@ -50,10 +57,38 @@ export default class MessageCenter extends React.Component {
 		this.getMessages();
 		this.getOutbox();
 	}
-	sendMessage(id, parentId)
+	sendMessage(evt)
 	{
-		console.log(id)
-		console.log(parentId)
+		this.setState(
+	    {
+	      showNewMessage: false
+	    })
+		axios.post('/api/message/')
+	      .then(function (response) {
+	        this.getMessages()
+	        this.setState(
+		    {
+		      newMessageText: ""
+		    })
+
+	      }.bind(this))
+	      .catch(function (error) {
+	        console.log(error);
+	    });
+	    
+	}
+	updateNewMessageText(event)
+	{
+	    this.setState(
+	    {
+	      newMessageText: event.target.value
+	    })
+	}
+	showNewMessage(evt){
+		evt.target.blur()
+		this.setState({
+			showNewMessage: true
+		})
 	}
 	markAsRead(id, parentId)
 	{
@@ -107,9 +142,18 @@ export default class MessageCenter extends React.Component {
 			    <Tab eventKey={1} title="Inbox">
 			    	<br/>
 			    	<button className="btn btn-link" onClick={this.markAllRead}>Mark all as read</button> | 
-	                <button className="btn btn-link" onClick={this.deleteAll}>Delete all</button>
+	                <button className="btn btn-link" onClick={this.deleteAll}>Delete all</button> | 
+	                <button className="btn btn-link" onClick={evt => this.showNewMessage(evt)}>New Message</button>
 	                <br/>
 	                <br/>
+	                {this.state.showNewMessage && 
+	                <div>
+	                	
+	                	<NewComment comment={null} user={this.props.user} 
+	                  addComment={this.sendMessage} updateNewCommentText={this.updateNewMessageText}
+	                  newCommentText={this.state.newMessageText}/> 
+	                </div>}
+		            <br/>
 			    	{this.state.messages.map(message => 
 		                <div key={message.id}>
 		                  <Message sendMessage={this.sendMessage} deleteMessage={this.deleteMessage} 
