@@ -12,6 +12,7 @@ export default class UserProfile extends React.Component {
 	    this.state = this.state = {profile_user: {}, works: [], bookmarks: [], curator: []};
       this.setMessageTitle = this.setMessageTitle.bind(this)
       this.setMessageText = this.setMessageText.bind(this)
+      this.handleSendMessage = this.handleSendMessage.bind(this)
     }
 
     showMessageModal(event)
@@ -23,20 +24,26 @@ export default class UserProfile extends React.Component {
     }
     handleSendMessage(event)
     {
-      //todo send message
-      var message = {
-        "message_title": this.state.messageTitle,
-        "message_text": this.state.messageText,
-        "from_user": this.props.user,
-        "to_user": this.state.profile_user.userId
-      }
-      console.log(message);
-      this.setState(
-      {
-        showMessageModal: false,
-        messageTitle: "",
-        messageText: ""
+      var user = {}
+      user["user_id"] = 1
+      axios.post('/api/message/', {
+        message_subject: this.state.messageTitle,
+        message_content: this.state.messageText,
+        from_user: user,
+        to_user: this.state.profile_user.userId, 
       })
+      .then(function (response) {
+        //todo add success message
+        this.setState(
+        {
+          showMessageModal: false,
+          messageTitle: "",
+          messageText: ""
+        })
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
       event.target.blur()
     }
 
