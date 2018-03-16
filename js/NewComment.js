@@ -30,7 +30,7 @@ export default class NewComment extends React.Component {
         <br/>
         <div className="row">
           <div className="col-xs-10">
-            <button onClick={this.props.addComment}>Add Reply</button>
+            <button onClick={this.props.addComment}>Send</button>
           </div>
         </div>
         <br/> 

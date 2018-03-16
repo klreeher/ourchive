@@ -24,6 +24,7 @@ export default class UserProfile extends React.Component {
     }
     handleSendMessage(event)
     {
+      event.target.blur()
       var user = {}
       user["user_id"] = 1
       axios.post('/api/message/', {
@@ -40,11 +41,11 @@ export default class UserProfile extends React.Component {
           messageTitle: "",
           messageText: ""
         })
-      })
+      }.bind(this))
       .catch(function (error) {
         console.log(error);
       });
-      event.target.blur()
+      
     }
 
     setMessageTitle(event)

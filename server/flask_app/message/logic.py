@@ -17,24 +17,22 @@ def add_message(json):
 	return message.id
 
 def delete_message(message_id):
-	try:
-		Message.query.filter_by(id=message_id).delete()
-		db.session.commit()
-	except:
-		#todo log
-		return
+	message = Message.query.filter_by(id=message_id).first()
+	if message.parent_message != []:
+		parent = message.parent_message
+		message.parent_message[0].replies.remove(message)
+	else:
+		message.replies = []
+	Message.query.filter_by(id=message_id).delete()
+	db.session.commit()
 
 def delete_all_messages(user_id):
-	try:
-		inbox = User.query.filter_by(id=user_id).received_messages
-		outbox = User.query.filter_by(id=user_id).sent_messages
-		for message in inbox:
-			delete_message(message.id)
-		for message in outbox:
-			delete_message(message.id)
-	except:
-		#todo log
-		return
+	inbox = User.query.filter_by(id=user_id).first().received_messages.all()
+	outbox = User.query.filter_by(id=user_id).first().sent_messages.all()
+	for message in inbox:
+		delete_message(message.id)
+	for message in outbox:
+		delete_message(message.id)
 
 def update_read_status(message_id, status):
 	message = Message.query.filter_by(id=message_id).first()
@@ -54,7 +52,7 @@ def mark_all_read(user_id):
 def get_message(message_id):
 	message = Message.query.filter_by(id=message_id).first()
 	if message is not None:
-		return build_message(json)
+		return build_message(json, None)
 	else:
 		return None
 
@@ -63,7 +61,7 @@ def get_outbox(user_id):
 	if messages is not None:
 		messages_json = []
 		for message in messages:
-			messages_json.append(build_message(message))
+			messages_json.append(build_message(message, None))
 		return messages_json
 	else:
 		return None
@@ -73,25 +71,28 @@ def get_inbox(user_id):
 	if messages is not None:
 		messages_json = []
 		for message in messages:
-			messages_json.append(build_message(message))
+			messages_json.append(build_message(message, None))
 		return messages_json
 	else:
 		return None
 
-def build_message(message):
+def build_message(message, parent):
 	from_user = User.query.filter_by(id=message.from_user_id).first()
 	built = {}
 	built["to_user"] = message.to_user_id
 	built["from_user"] = {"user_id": message.from_user_id, "name": from_user.username}
 	built["message_subject"] = message.message_subject
 	built["message_content"] = message.message_content
-	built["replies"] = list(build_replies(message.replies))
-	built["parent_id"] = message.parent_message
+	built["replies"] = build_replies(message.replies, message)
+	if parent is not None:
+		built["parent_id"] = parent.id
+	built["read"] = message.message_read == True
+	built["id"] = message.id
 	return built
 
-def build_replies(replies):
+def build_replies(replies, message):
 	json = []
 	for reply in replies:
-		built = build_message(reply)
+		built = build_message(reply, message)
 		json.append(built)
 	return json

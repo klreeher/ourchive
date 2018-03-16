@@ -57,24 +57,31 @@ export default class MessageCenter extends React.Component {
 		this.getMessages();
 		this.getOutbox();
 	}
-	sendMessage(evt)
+	sendMessage(parent_id, new_message_text, parent_message_to_id, parent_message_subject)
 	{
-		this.setState(
+	  this.setState(
+	  {
+	    showNewMessage: false
+	  })
+	  var user = {}
+      user["user_id"] = 1
+      axios.post('/api/message/', {
+        message_subject: parent_message_subject,
+        message_content: new_message_text,
+        from_user: user,
+        to_user: parent_message_to_id, 
+        parent_id: parent_id
+      })
+      .then(function (response) {
+        this.getMessages()
+        this.setState(
 	    {
-	      showNewMessage: false
+	      newMessageText: ""
 	    })
-		axios.post('/api/message/')
-	      .then(function (response) {
-	        this.getMessages()
-	        this.setState(
-		    {
-		      newMessageText: ""
-		    })
-
-	      }.bind(this))
-	      .catch(function (error) {
-	        console.log(error);
-	    });
+      }.bind(this))
+      .catch(function (error) {
+        console.log(error);
+      });
 	    
 	}
 	updateNewMessageText(event)
@@ -92,42 +99,67 @@ export default class MessageCenter extends React.Component {
 	}
 	markAsRead(id, parentId)
 	{
-		console.log(id)
-		console.log(parentId)
+		axios.post('/api/message/'+id+'/read')
+	      .then(function (response) {
+	      }.bind(this))
+	      .catch(function (error) {
+	        console.log(error);
+	      });
 	}
 	deleteMessage(id)
 	{
-		console.log(id)
-		var messagesFiltered = this.state.messages.filter(function( obj ) {
-		    return obj.id !== id;
-		});
-		this.setState(
-		{
-			messages: messagesFiltered
-		})
+		axios.delete('/api/message/'+id)
+	      .then(function (response) {
+	      	var messagesFiltered = this.state.messages.filter(function( obj ) {
+		    	return obj.id !== id;
+			});
+			this.setState(
+			{
+				messages: messagesFiltered
+			})
+	      }.bind(this))
+	      .catch(function (error) {
+	        console.log(error);
+	      });
+		
+
 	}
 	markAllRead(event)
 	{
 		//todo the UI for this is - send mark all read - mark all read locally
 		event.target.blur()
-		console.log("mark all read")
-		var oldMessages = this.state.messages;
-		for (var i = 0; i < oldMessages.length; i++) { 
-		    oldMessages[i].read = true;
-		}
-		this.setState(
-		{
-			messages: oldMessages
-		})
+		axios.post('/api/user/'+1+'/messages/read')
+		      .then(function (response) {
+		        var oldMessages = this.state.messages;
+				for (var i = 0; i < oldMessages.length; i++) { 
+				    oldMessages[i].read = true;
+				}
+				this.setState(
+				{
+					messages: oldMessages
+				})
+		      }.bind(this))
+		      .catch(function (error) {
+		        console.log(error);
+		      });
+		
 	}
 	deleteAll(event)
 	{
 		event.target.blur()
 		if (confirm("Are you sure you want to delete ALL messages? This cannot be reversed!")) {
-		    console.log("delete all");
-		    this.setState({
-		    	messages: []
-		    })
+		    
+		      axios.delete('/api/user/'+1+'/messages/delete')
+		      .then(function (response) {
+		        //todo add success message
+		        this.setState(
+		        {
+		          messages: []
+		        })
+		      }.bind(this))
+		      .catch(function (error) {
+		        console.log(error);
+		      });
 		} else {
 		    console.log("cancel delete all");
 		}
@@ -142,17 +174,9 @@ export default class MessageCenter extends React.Component {
 			    <Tab eventKey={1} title="Inbox">
 			    	<br/>
 			    	<button className="btn btn-link" onClick={this.markAllRead}>Mark all as read</button> | 
-	                <button className="btn btn-link" onClick={this.deleteAll}>Delete all</button> | 
-	                <button className="btn btn-link" onClick={evt => this.showNewMessage(evt)}>New Message</button>
+	                <button className="btn btn-link" onClick={this.deleteAll}>Delete all</button>
 	                <br/>
-	                <br/>
-	                {this.state.showNewMessage && 
-	                <div>
-	                	
-	                	<NewComment comment={null} user={this.props.user} 
-	                  addComment={this.sendMessage} updateNewCommentText={this.updateNewMessageText}
-	                  newCommentText={this.state.newMessageText}/> 
-	                </div>}
+	               
 		            <br/>
 			    	{this.state.messages.map(message => 
 		                <div key={message.id}>

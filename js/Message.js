@@ -21,7 +21,7 @@ export default class MessageCenter extends React.Component {
   sendMessage(event)
   {
     event.target.blur()
-    this.props.sendMessage(this.state.message.id, this.state.newMessageText);
+    this.props.sendMessage(this.state.message.id, this.state.newMessageText, this.state.message.to_user, this.state.message.message_subject);
     var oldMessage = this.state.message;
     oldMessage.read = true;
     this.setState(
@@ -68,8 +68,8 @@ export default class MessageCenter extends React.Component {
 		    <div className="panel panel-default">
 	        <div className="panel-heading">
               {!this.state.message.read ?
-                <b> {this.state.message.message_subject} from {this.state.message.from_user.username}</b>
-                : <div>{this.state.message.message_subject} from {this.state.message.from_user.username}</div>
+                <b> {this.state.message.message_subject} from {this.state.message.from_user.name}</b>
+                : <div>{this.state.message.message_subject} from {this.state.message.from_user.name}</div>
               }
               
               
@@ -80,8 +80,8 @@ export default class MessageCenter extends React.Component {
           {this.props.allowReply &&              
               <div className="panel-footer">
                 <button className="btn btn-link" onClick={this.showReply}>Reply</button> | 
-                <button className="btn btn-link" onClick={this.deleteMessage}>Delete</button> | 
-                <button className="btn btn-link" onClick={this.markAsRead}>Mark read</button>                
+                <button className="btn btn-link" onClick={this.deleteMessage}>Delete</button> |
+                {!this.state.message.read && <button className="btn btn-link" onClick={this.markAsRead}>Mark read</button>}              
                 <div className={this.state.showReply ? "viewer-creator" : "viewer"}>
                   <br/>
                   <NewComment comment={null} user={this.props.user} 

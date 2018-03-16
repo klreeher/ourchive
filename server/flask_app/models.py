@@ -251,7 +251,7 @@ class Message(db.Model):
                         secondary=message_to_message,
                         primaryjoin=id==message_to_message.c.parent_message_id,
                         secondaryjoin=id==message_to_message.c.child_message_id,
-                        backref="parent_message"
+                        backref="parent_message", lazy='dynamic'
                 )
 
 
