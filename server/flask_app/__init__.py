@@ -5,6 +5,7 @@ from flask_cors import CORS
 from flask_bcrypt import Bcrypt
 from flask_sqlalchemy import SQLAlchemy
 import os
+import redis
 
 app = Flask(__name__)
 CORS(app)
@@ -14,6 +15,7 @@ tm = tus_manager(app, upload_url='/uploads', upload_folder=upload_folder)
 
 bcrypt = Bcrypt(app)
 db = SQLAlchemy(app)
+redis_db = redis.StrictRedis(host="localhost", port=6379, db=0)
 
 app_settings = os.getenv(
     'APP_SETTINGS',

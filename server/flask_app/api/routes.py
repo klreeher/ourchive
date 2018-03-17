@@ -5,6 +5,7 @@ from . import api
 from server.flask_app.work import views as work
 from server.flask_app.bookmark import logic as bookmark
 from server.flask_app.message import logic as message
+from server.flask_app.tag import logic as tag
 
 @api.route('/<path:path>')
 def unknown_path(path):
@@ -81,7 +82,6 @@ def login():
   if request.json["password"] is None:
     abort(400)
   return request.json["userName"] + request.json["password"]
-
 
 @api.route('/api/user/<int:userId>/messages/inbox')
 def get_inbox(userId):
@@ -202,3 +202,7 @@ def get_bookmarks(curatorId):
 @api.route('/api/work/creator/<int:creatorId>')
 def get_works_by_creator(creatorId):
   return work.get_by_user(creatorId)
+
+@api.route('/api/tag/<int:type_id>/suggestions/<string:term>')
+def get_tag_suggestions(term, type_id):
+  return tag.get_suggestions(term, type_id)
