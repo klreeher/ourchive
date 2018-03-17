@@ -187,7 +187,6 @@ export default class NewWork extends React.Component {
     var copy = this.state.work_tags;
     var tags = copy.filter(tag => tag.label == tag_category)[0]
     tags.tags = original
-    if (copy == undefined) return
     this.setState({
       work_tags: copy
     })

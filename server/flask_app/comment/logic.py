@@ -1,0 +1,33 @@
+from flask import render_template
+import re
+import json
+from .. import db
+from ..work import views
+from ..models import Comment
+
+
+def add_comment(json):
+	comment = Comment(text=json['text'])
+	if 'chapter_id' in json:
+		comment.chapter_id = json['chapter_id']
+	elif 'bookmark_id' in json:
+		comment.bookmark_id = json['bookmark_id']
+	if 'user_id' in json:
+		comment.user_id = json['user_id']
+	if 'parent_id' in json:
+		parent_comment = Comment.query.filter_by(id = json['parent_id']).first()
+		parent_comment.comments.append(comment)
+		db.session.add(parent_comment)
+	db.session.add(comment)
+	db.session.commit()
+	return comment.id
+
+def delete_comment(comment_id):
+	comment = Comment.query.filter_by(id=comment_id).first()
+	if comment is not None and comment.parent_comment != []:
+		parent = comment.parent_comment
+		comment.parent_comment[0].replies.remove(comment)
+	elif comment is not None:
+		comment.replies = []
+	Comment.query.filter_by(id=comment_id).delete()
+	db.session.commit()

@@ -18,10 +18,10 @@ def add_message(json):
 
 def delete_message(message_id):
 	message = Message.query.filter_by(id=message_id).first()
-	if message.parent_message != []:
+	if message is not None and message.parent_message != []:
 		parent = message.parent_message
 		message.parent_message[0].replies.remove(message)
-	else:
+	elif message is not None:
 		message.replies = []
 	Message.query.filter_by(id=message_id).delete()
 	db.session.commit()
