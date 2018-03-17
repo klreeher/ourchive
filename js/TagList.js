@@ -4,43 +4,14 @@ import {
 } from 'react-router-dom';
 import TagItem from './TagItem';
 import Autosuggest from 'react-autosuggest';
+import axios from 'axios';
 
 
-// Imagine you have a list of languages that you'd like to autosuggest.
-const languages = [
-  {
-    name: 'C',
-    year: 1972
-  },
-  {
-    name: 'C++',
-    year: 1990
-  },
-  {
-    name: 'Elm',
-    year: 2012
-  }
-];
+const getSuggestionValue = suggestion => suggestion;
 
-// Teach Autosuggest how to calculate suggestions for any given input value.
-const getSuggestions = value => {
-  const inputValue = value["value"].trim().toLowerCase();
-  const inputLength = inputValue.length;
-
-  return inputLength === 0 ? [] : languages.filter(lang =>
-    lang.name.toLowerCase().slice(0, inputLength) === inputValue
-  );
-};
-
-// When suggestion is clicked, Autosuggest needs to populate the input
-// based on the clicked suggestion. Teach Autosuggest how to calculate the
-// input value for every given suggestion.
-const getSuggestionValue = suggestion => suggestion.name;
-
-// Use your imagination to render suggestions.
 const renderSuggestion = suggestion => (
   <div>
-    {suggestion.name}
+    {suggestion}
   </div>
 );
 
@@ -50,7 +21,7 @@ export default class TagList extends React.Component {
   constructor(props) {
     super(props);
     if (props.tags != null) {
-      this.state = {tags: props.tags, tag_category: props.tag_category, oldItem: '', value: '', suggestions: [],
+      this.state = {tags: props.tags, tag_category: props.tag_category, category_id: props.category_id, oldItem: '', value: '', suggestions: [],
       underEdit: props.underEdit};
     }
     else
@@ -98,15 +69,20 @@ export default class TagList extends React.Component {
       })  
   }
 
-  // Autosuggest will call this function every time you need to update suggestions.
-  // You already implemented this logic above, so just use it.
   onSuggestionsFetchRequested(value) {
-    this.setState({
-      suggestions: getSuggestions(value)
-    })
+    axios.get('/api/tag/'+this.state.category_id+'/suggestions/'+value.value)
+        .then(function (response) {
+          this.setState({
+            suggestions: response.data["results"]
+          })
+
+        }.bind(this))
+        .catch(function (error) {
+          console.log(error);
+      });
+    
   }
 
-  // Autosuggest will call this function every time you need to clear suggestions.
   onSuggestionsClearRequested() {
     this.setState({
       suggestions: []
@@ -147,8 +123,7 @@ export default class TagList extends React.Component {
     this.props.createWorkTags(suggestion.suggestionValue, '', this.state.tags, this.state.tag_category);
     event.preventDefault();
     this.setState({
-      value: "",
-      oldItem: oldVal
+      value: ""
     })
   }
   render() {

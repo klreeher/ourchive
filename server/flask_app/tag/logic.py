@@ -7,7 +7,13 @@ from ..work import views
 from ..models import Tag
 
 def get_suggestions(term, type_id):
-    redis_db.zrevrange("tag-suggestions:#"+str(type_id)+":#"+term.lower(), 0, 9)
+	data = {}
+	data['results'] = []
+	results = redis_db.zrevrange("tag-suggestions:#"+str(type_id)+":#"+term.lower(), 0, 9)
+	for item in results:
+		data['results'].append(item.decode("utf-8"))
+	print(data)
+	return data
 
 def add_tag(tag_text, type_id):
 	for i in range(2,len(tag_text),1):

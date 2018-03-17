@@ -158,7 +158,8 @@ export default class BookmarkForm extends React.Component {
 					     <div className="row">
 				          {this.state.bookmark_tags.map(tag => 
 				              <div key={tag.id}>
-				                  <TagList tag_category={tag.label} tags={tag.tags} underEdit={true} createWorkTags={this.create_bookmark_tag}/>
+				                  <TagList tag_category={tag.label} tags={tag.tags} category_id={tag.id}
+				                  underEdit={true} createWorkTags={this.create_bookmark_tag}/>
 				              </div>
 				          )}
 				          </div>

@@ -205,4 +205,4 @@ def get_works_by_creator(creatorId):
 
 @api.route('/api/tag/<int:type_id>/suggestions/<string:term>')
 def get_tag_suggestions(term, type_id):
-  return tag.get_suggestions(term, type_id)
+  return json.dumps(tag.get_suggestions(term, type_id))

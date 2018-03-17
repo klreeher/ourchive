@@ -187,6 +187,7 @@ export default class NewWork extends React.Component {
     var copy = this.state.work_tags;
     var tags = copy.filter(tag => tag.label == tag_category)[0]
     tags.tags = original
+    if (copy == undefined) return
     this.setState({
       work_tags: copy
     })
@@ -259,7 +260,7 @@ export default class NewWork extends React.Component {
           <div className="form-group">
           {this.state.work_tags.map(tag => 
               <div key={tag.id}>
-                  <TagList tag_category={tag.label} tags={tag.tags} underEdit={true} createWorkTags={this.create_work_tag}/>
+                  <TagList tag_category={tag.label} category_id={tag.id} tags={tag.tags} underEdit={true} createWorkTags={this.create_work_tag}/>
               </div>
           )}
           </div>

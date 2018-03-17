@@ -195,7 +195,7 @@ export default class SingleWork extends React.Component {
           <div className="row" key={tag.id}>
           <div className="col-xs-9 col-md-12">
               <ul className="list-inline">
-                <TagList tag_category={tag.label} tags={tag.tags}/>
+                <TagList tag_category={tag.label} category_id={tag.id} tags={tag.tags}/>
               </ul>
           </div> 
           </div>
