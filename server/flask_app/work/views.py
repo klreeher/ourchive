@@ -3,6 +3,7 @@ import re
 import json
 from . import work
 from .. import db
+from .. import tag as tag_blueprint
 from ..models import Work, Chapter, Tag, User, TagType
 
 @work.route('/')
@@ -115,6 +116,8 @@ def add_tags(work, tags):
 					work.tags.append(existing)			
 			else:
 				work.tags.append(Tag(text=tag, tag_type_id=tag_item['id']))
+				tag_blueprint.logic.add_tag(tag, tag_item['id'])
+
 	return work.tags
 
 def count_words(text):

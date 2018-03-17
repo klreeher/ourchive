@@ -35,6 +35,9 @@ app.register_blueprint(message_blueprint)
 from .api import api as api_blueprint
 app.register_blueprint(api_blueprint)
 
+from .tag import tag as tag_blueprint
+app.register_blueprint(tag_blueprint)
+
 @tm.upload_file_handler
 @app.route('/uploads', methods=['POST'])
 def upload_file_hander( upload_file_path, filename ):
