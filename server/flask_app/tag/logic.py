@@ -5,7 +5,7 @@ from .. import db
 from .. import redis_db
 from ..work import views
 from ..bookmark import logic as bookmark_logic
-from ..models import Tag, Bookmark, Work
+from ..models import Tag, Bookmark, Work, TagType
 
 def get_suggestions(term, type_id):
 	data = {}
@@ -21,8 +21,11 @@ def add_tag(tag_text, type_id):
 		prefix = tag_text[:i]
 		redis_db.zadd("tag-suggestions:#"+str(type_id)+":#"+prefix.lower(), 1, tag_text.lower())
 
-def get_tagged_data(tag_id):
-	tag = Tag.query.filter_by(id=tag_id).first()
+def get_tagged_data(tag_id, tag_text):
+	tag_text = tag_text.replace('%2F', '/')
+	tag = Tag.query.filter_by(tag_type_id=tag_id, text=tag_text).first()
+	if tag is None:
+		return {}
 	results = {}
 	results['works'] = []
 	works = tag.work_tags

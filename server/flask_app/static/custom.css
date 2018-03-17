@@ -39,6 +39,7 @@
     display: block;
     float: left;
     margin: 2px 5px 2px 0;
+    cursor: pointer;
 }
 
 .tag_category {

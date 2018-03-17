@@ -9,7 +9,7 @@ export default class TagResults extends React.Component {
 
 	getData()
 	{
-	  axios.get('/api/tag/'+this.state.tag_id)
+	  axios.get('/api/tag/'+this.state.tag_id+'/'+this.state.tag_text)
 	      .then(function (response) {
 	        this.setState({	        	
 	          results: response.data
@@ -22,7 +22,7 @@ export default class TagResults extends React.Component {
 
 	constructor(props) {
 	    super(props);
-	    this.state = {tag_id: props.match.params.tagId, current_page: 0};
+	    this.state = {tag_id: props.match.params.tagId, tag_text: props.match.params.tagText, current_page: 0};
     
     }
 

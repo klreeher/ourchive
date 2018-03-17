@@ -220,6 +220,6 @@ def add_bookmark_comment():
 def add_comment_reply():
   return json.dumps({"id": comment.add_reply(request.json)})
 
-@api.route('/api/tag/<int:tag_id>', methods=['GET'])
-def get_tagged_data(tag_id):
-  return json.dumps(tag.get_tagged_data(tag_id))
+@api.route('/api/tag/<int:tag_id>/<path:tag_text>', methods=['GET'])
+def get_tagged_data(tag_id, tag_text):
+  return json.dumps(tag.get_tagged_data(tag_id, tag_text))

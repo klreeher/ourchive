@@ -146,7 +146,7 @@ export default class TagList extends React.Component {
               <ul className="list-inline" id={"tags_ul"+this.state.tag_category}>
                   {this.state.tags && this.state.tags.map(tag => 
                     <div key={tag}>
-                      <TagItem tag={tag} removeTag={this.removeTag} underEdit={this.state.underEdit}/>
+                      <TagItem tag={tag} removeTag={this.removeTag} underEdit={this.state.underEdit} category={this.state.category_id}/>
                     </div>
                   )}
               </ul>
