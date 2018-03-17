@@ -29,22 +29,11 @@ export default class Comment extends React.Component {
     var commentUser = this.state.user != null && this.state.user != "" ? this.state.user : "Anonymous";
     var newComment = {text: this.state.newCommentText, userName: commentUser, comments: [],
       parentCommentId: this.state.comment.id};
-    var apiRoute = "";
-    if (this.state.chapterId != null)
-    {
-      apiRoute = "/api/chapter/comment/";
-      newComment.chapterId = this.state.chapterId
-    }
-    if (this.state.bookmarkId != null)
-    {
-      apiRoute = "/api/bookmark/comment/"
-      newComment.bookmarkId = this.state.bookmarkId
-    }
+    var apiRoute = "/api/comment/reply/";    
     axios.post(apiRoute, {
       text: this.state.newCommentText, 
       user_id: 1, 
-      chapter_id: this.state.chapterId,
-      bookmark_id: this.state.bookmarkId
+      parent_id: this.state.comment.id
     })
     .then(function (response) {
       newComment.id = response.data["id"]
@@ -55,7 +44,7 @@ export default class Comment extends React.Component {
         newCommentText: "",
         showReply: false
       });
-    })
+    }.bind(this))
     .catch(function (error) {
       console.log(error);
     });

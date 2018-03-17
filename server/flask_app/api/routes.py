@@ -214,5 +214,8 @@ def add_chapter_comment():
 
 @api.route('/api/bookmark/comment/', methods=['POST'])
 def add_bookmark_comment():
-  print(request.json)
   return json.dumps({"id": comment.add_comment_to_bookmark(request.json)})
+
+@api.route('/api/comment/reply/', methods=['POST'])
+def add_comment_reply():
+  return json.dumps({"id": comment.add_reply(request.json)})

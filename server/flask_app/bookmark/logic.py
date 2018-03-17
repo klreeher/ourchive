@@ -83,7 +83,7 @@ def build_bookmark_comments(comments):
 		comment_json['userName'] = comment.user.username
 		comment_json['userId'] = comment.user.id
 		comment_json['text'] = comment.text
-		comment_json['bookmarkId'] = comment.chapter_id
+		comment_json['bookmarkId'] = comment.bookmark_id
 		comment_json['comments'] = build_bookmark_comments(comment.comments)
 		comments_list.append(comment_json)
 	return comments_list
