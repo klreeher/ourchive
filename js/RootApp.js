@@ -23,6 +23,7 @@ import UserForm from './UserForm';
 import Home from './Home';
 import MessageCenter from './MessageCenter';
 import Notifications from './Notifications';
+import TagResults from './TagResults';
 
 export default class RootApp extends React.Component {
 
@@ -71,6 +72,7 @@ export default class RootApp extends React.Component {
           <Route path="/user/:userId/edit" component={UserForm}/>
           <Route path="/user/:userId/messages" component={(props, state, params) => <MessageCenter user={user} {...props}/>}/>
           <Route path="/notifications" component={(props, state, params) => <Notifications user={user} {...props}/>}/>
+          <Route path="/tag/:tagId" component={(props, state, params) => <TagResults user={user} {...props}/>}/>
         </div>
       </Router>
     );

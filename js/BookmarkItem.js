@@ -102,7 +102,6 @@ export default class BookmarkItem extends React.Component {
   }
   addComment(event)
   {
-
   	event.preventDefault()
     if (this.state.newCommentText == null || this.state.newCommentText == "") return;
     var commentUser = this.state.user != null && this.state.user != "" ? this.state.user : "Anonymous";

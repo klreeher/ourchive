@@ -147,7 +147,8 @@ def build_work_stub(work):
 	work_json = {}
 	work_json['id'] = work.id
 	work_json['creator_id'] = work.user_id
-	work_json['name'] = creator.username
+	if creator is not None:
+		work_json['name'] = creator.username
 	work_json['title'] = work.title
 	if work.is_complete == 1:
 		work_json['is_complete'] = 'True'
@@ -155,6 +156,7 @@ def build_work_stub(work):
 		work_json['is_complete'] = 'False'
 	work_json['word_count'] = work.word_count
 	work_json['work_summary'] = work.work_summary
+	work_json['chapter_count'] = len(work.chapters.all())
 	return work_json
 
 def build_work_chapters(work):
