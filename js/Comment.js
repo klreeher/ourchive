@@ -3,13 +3,14 @@ import {
   Link
 } from 'react-router-dom';
 import NewComment from './NewComment';
+import axios from 'axios';
 
 export default class Comment extends React.Component {
 
 
   constructor(props) {
     super(props);
-    this.state = {comment: props.comment, user: props.user};
+    this.state = {comment: props.comment, user: props.user, chapterId: props.chapterId, bookmarkId: props.bookmarkId};
     this.showReply = this.showReply.bind(this);
     this.addComment = this.addComment.bind(this);
     this.updateNewCommentText = this.updateNewCommentText.bind(this);
@@ -22,19 +23,44 @@ export default class Comment extends React.Component {
   }
   addComment(event)
   {
+    event.preventDefault()
     var originalId = this.state.comment.id != null ? this.state.comment.id : 0;
-    //todo stub getting this from the db with db generated id
     if (this.state.newCommentText == null || this.state.newCommentText == "") return;
     var commentUser = this.state.user != null && this.state.user != "" ? this.state.user : "Anonymous";
-    var newComment = {text: this.state.newCommentText, id: Math.floor(Math.random() * 100) + originalId, userName: commentUser, comments: [],
-      parentCommentId: this.state.comment.id, chapterId: this.state.comment.chapterId};
-    var original = this.state.comment;
-    original.comments.push(newComment);
-    this.setState({
-      comment: original,
-      newCommentText: "",
-      showReply: false
+    var newComment = {text: this.state.newCommentText, userName: commentUser, comments: [],
+      parentCommentId: this.state.comment.id};
+    var apiRoute = "";
+    if (this.state.chapterId != null)
+    {
+      apiRoute = "/api/chapter/comment/";
+      newComment.chapterId = this.state.chapterId
+    }
+    if (this.state.bookmarkId != null)
+    {
+      apiRoute = "/api/bookmark/comment/"
+      newComment.bookmarkId = this.state.bookmarkId
+    }
+    axios.post(apiRoute, {
+      text: this.state.newCommentText, 
+      user_id: 1, 
+      chapter_id: this.state.chapterId,
+      bookmark_id: this.state.bookmarkId
+    })
+    .then(function (response) {
+      newComment.id = response.data["id"]
+      var original = this.state.comment;
+      original.comments.push(newComment);
+      this.setState({
+        comment: original,
+        newCommentText: "",
+        showReply: false
+      });
+    })
+    .catch(function (error) {
+      console.log(error);
     });
+    
+    
   }
   updateNewCommentText(event)
   {

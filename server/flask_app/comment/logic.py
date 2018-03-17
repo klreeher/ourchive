@@ -5,13 +5,7 @@ from .. import db
 from ..work import views
 from ..models import Comment
 
-
-def add_comment(json):
-	comment = Comment(text=json['text'])
-	if 'chapter_id' in json:
-		comment.chapter_id = json['chapter_id']
-	elif 'bookmark_id' in json:
-		comment.bookmark_id = json['bookmark_id']
+def add_comment(json, comment):	
 	if 'user_id' in json:
 		comment.user_id = json['user_id']
 	if 'parent_id' in json:
@@ -21,6 +15,16 @@ def add_comment(json):
 	db.session.add(comment)
 	db.session.commit()
 	return comment.id
+
+def add_comment_to_bookmark(json):
+	comment = Comment(text=json['text'])
+	comment.bookmark_id = json['bookmark_id']
+	return add_comment(json, comment)
+
+def add_comment_to_chapter(json):
+	comment = Comment(text=json['text'])
+	comment.chapter_id = json['chapter_id']
+	return add_comment(json, comment)
 
 def delete_comment(comment_id):
 	comment = Comment.query.filter_by(id=comment_id).first()

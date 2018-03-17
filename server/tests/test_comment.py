@@ -9,19 +9,14 @@ import json
 
 
 class TestComment(BaseTestCase):
-    def test_add_comment(self):
-        self.add_user()
-        data = self.build_data(False, False, False)
-        new_id = comment.add_comment(data)
-        new_comment = Comment.query.filter_by(id=new_id).first()
-        self.assertTrue(new_comment.text == "Testing 1234. Comment one here we go. a comment was made")
 
     def test_add_reply(self):
         self.add_user()
-        data = self.build_data(False, False, False)
-        comment.add_comment(data)
-        data = self.build_data(True, False, False)
-        new_id = comment.add_comment(data)
+        self.add_bookmark()
+        data = self.build_data(False, True, False)
+        comment.add_comment_to_bookmark(data)
+        data = self.build_data(True, True, False)
+        new_id = comment.add_comment_to_bookmark(data)
         new_comment = Comment.query.filter_by(id=1).first()
         self.assertTrue(new_comment.comments[0].text == "This is a reply...")
 
@@ -29,7 +24,7 @@ class TestComment(BaseTestCase):
         self.add_user()
         self.add_bookmark()
         data = self.build_data(False, True, False)
-        new_id = comment.add_comment(data)
+        new_id = comment.add_comment_to_bookmark(data)
         new_comment = Comment.query.filter_by(id=1).first()
         new_bookmark = Bookmark.query.filter_by(id=new_comment.bookmark_id).first()
         self.assertTrue(new_bookmark.comments[0].text == "Testing 1234. Comment one here we go. a comment was made")
@@ -38,15 +33,16 @@ class TestComment(BaseTestCase):
         self.add_user()
         self.add_chapter()
         data = self.build_data(False, False, True)
-        new_id = comment.add_comment(data)
+        new_id = comment.add_comment_to_chapter(data)
         new_comment = Comment.query.filter_by(id=1).first()
         new_chapter = Chapter.query.filter_by(id=new_comment.chapter_id).first()
         self.assertTrue(new_chapter.comments[0].text == "Testing 1234. Comment one here we go. a comment was made")
 
     def test_delete_comment(self):
         self.add_user()
-        data = self.build_data(False, False, False)
-        new_id = comment.add_comment(data)
+        self.add_bookmark()
+        data = self.build_data(False, True, False)
+        new_id = comment.add_comment_to_bookmark(data)
         comment.delete_comment(new_id)
         self.assertTrue(len( Comment.query.all()) == 0)
 

@@ -6,6 +6,7 @@ from server.flask_app.work import views as work
 from server.flask_app.bookmark import logic as bookmark
 from server.flask_app.message import logic as message
 from server.flask_app.tag import logic as tag
+from server.flask_app.comment import logic as comment
 
 @api.route('/<path:path>')
 def unknown_path(path):
@@ -206,3 +207,12 @@ def get_works_by_creator(creatorId):
 @api.route('/api/tag/<int:type_id>/suggestions/<string:term>')
 def get_tag_suggestions(term, type_id):
   return json.dumps(tag.get_suggestions(term, type_id))
+
+@api.route('/api/chapter/comment/', methods=['POST'])
+def add_chapter_comment():
+  return json.dumps({"id": comment.add_comment_to_chapter(request.json)})
+
+@api.route('/api/bookmark/comment/', methods=['POST'])
+def add_bookmark_comment():
+  print(request.json)
+  return json.dumps({"id": comment.add_comment_to_bookmark(request.json)})

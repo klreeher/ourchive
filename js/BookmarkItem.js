@@ -102,17 +102,30 @@ export default class BookmarkItem extends React.Component {
   }
   addComment(event)
   {
-    //TODO replace with db id
+
+  	event.preventDefault()
     if (this.state.newCommentText == null || this.state.newCommentText == "") return;
-    var bookmarkUser = this.state.user != null && this.state.user != "" ? this.state.user : "Anonymous";
-    var newComment = {text: this.state.newCommentText, id: Math.floor(Math.random() * 100) + this.state.bookmark.id, userName: bookmarkUser, comments: [],
-      parentId: null, bookmarkId: this.state.bookmark.id};
-    var original = this.state.bookmark;
-    original.comments.push(newComment);
-    this.setState({
-      bookmark: original,
-      newCommentText: ""
+    var commentUser = this.state.user != null && this.state.user != "" ? this.state.user : "Anonymous";
+    var newComment = {text: this.state.newCommentText, userName: commentUser, comments: [], bookmarkId: this.state.bookmark.id};
+    var apiRoute = "/api/bookmark/comment/";
+    axios.post(apiRoute, {
+      text: this.state.newCommentText, 
+      user_id: 1, 
+      bookmark_id: this.state.bookmark.id
+    })
+    .then(function (response) {
+      	newComment.id = response.data["id"]
+      	var original = this.state.bookmark;
+	    original.comments.push(newComment);
+	    this.setState({
+	      bookmark: original,
+	      newCommentText: ""
+	    });
+    }.bind(this))
+    .catch(function (error) {
+      console.log(error);
     });
+    
   }
   updateNewCommentText(event)
   {
@@ -228,7 +241,7 @@ export default class BookmarkItem extends React.Component {
 		            {this.state.bookmark.comments ? <div className="row">
 		              {this.state.bookmark.comments.map(comment => 
 		                <div key={comment.id} className="col-md-12" ref={"comment_"+comment.id}>
-		                  <Comment comment={comment} user={this.props.user} chapterId={this.state.bookmark.id}/>
+		                  <Comment comment={comment} user={this.props.user} bookmarkId={this.state.bookmark.id}/>
 		                </div>
 		                  
 		                )}

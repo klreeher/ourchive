@@ -76,7 +76,7 @@ def build_bookmark(bookmark):
 
 #todo horribly non DRY, need to clean up these little json building functions
 def build_bookmark_comments(comments):
-	comments = []
+	comments_list = []
 	for comment in comments:
 		comment_json = {}
 		comment_json['id'] = comment.id
@@ -85,8 +85,8 @@ def build_bookmark_comments(comments):
 		comment_json['text'] = comment.text
 		comment_json['bookmarkId'] = comment.chapter_id
 		comment_json['comments'] = build_bookmark_comments(comment.comments)
-		comments.append(comment_json)
-	return comments
+		comments_list.append(comment_json)
+	return comments_list
 
 def build_bookmark_tags(bookmark_tags):
 	tags = []
