@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 import {
   Link
 } from 'react-router-dom';
@@ -49,16 +50,28 @@ export default class Chapter extends React.Component {
   }
   addComment(event)
   {
-    //TODO replace with db id
+    event.preventDefault()
     if (this.state.newCommentText == null || this.state.newCommentText == "") return;
     var commentUser = this.state.user != null && this.state.user != "" ? this.state.user : "Anonymous";
-    var newComment = {text: this.state.newCommentText, id: Math.floor(Math.random() * 100) + this.state.chapter.id, userName: commentUser, comments: [],
-      parentId: null, chapterId: this.state.chapter.id};
-    var original = this.state.chapter;
-    original.comments.push(newComment);
-    this.setState({
-      chapter: original,
-      newCommentText: ""
+    var newComment = {text: this.state.newCommentText, userName: commentUser, 
+      comments: [], chapterId: this.state.chapter.id};
+    var apiRoute = "/api/chapter/comment/";
+    axios.post(apiRoute, {
+      text: this.state.newCommentText, 
+      user_id: 1, 
+      chapter_id: this.state.chapter.id
+    })
+    .then(function (response) {
+        newComment.id = response.data["id"]
+        var original = this.state.chapter;
+        original.comments.push(newComment);
+        this.setState({
+          chapter: original,
+          newCommentText: ""
+        });
+    }.bind(this))
+    .catch(function (error) {
+      console.log(error);
     });
   }
   updateNewCommentText(event)
@@ -67,7 +80,6 @@ export default class Chapter extends React.Component {
     {
       newCommentText: event.target.value
     })
-    console.log(event.target.value);
   }
   render() {
     return (

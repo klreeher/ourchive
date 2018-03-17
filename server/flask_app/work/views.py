@@ -173,7 +173,7 @@ def build_work_chapters(work):
 	return chapters
 
 def build_chapter_comments(comments):
-	comments = []
+	comments_list = []
 	for comment in comments:
 		comment_json = {}
 		comment_json['id'] = comment.id
@@ -182,8 +182,8 @@ def build_chapter_comments(comments):
 		comment_json['text'] = comment.text
 		comment_json['chapterId'] = comment.chapter_id
 		comment_json['comments'] = build_chapter_comments(comment.comments)
-		comments.append(comment_json)
-	return comments
+		comments_list.append(comment_json)
+	return comments_list
 
 def build_work_tags(work):
 	tags = []
