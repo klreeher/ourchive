@@ -37,8 +37,13 @@ export default class ChapterForm extends React.Component {
               {this.props.showUpload && <div><h5>{this.props.uploadStatus}</h5></div>}
               <div className="form-group">
                 <label htmlFor="chapter_image">Chapter Image</label>
-                <input className='input-file' type='file' id="image_url" className="form-control"
+                <input className='input-file' type='file' id="image_url"
                 name="chapter_image" onChange={this.props.handlerImage}></input>
+              </div>
+              <div className="form-group">
+                <label htmlFor="image_alt_text">Chapter Image Alt Text</label>
+                <input className="form-control" id={"image_alt_text_" + this.state.number}
+                name="image_alt_text" onChange={this.props.handler}></input>
               </div>
               <div className="form-group">
                 <label htmlFor="chapter_audio">Chapter Audio</label>

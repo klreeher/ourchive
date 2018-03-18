@@ -12,7 +12,9 @@ export default class TagResults extends React.Component {
 	  axios.get('/api/tag/'+this.state.tag_id+'/'+this.state.tag_text)
 	      .then(function (response) {
 	        this.setState({	        	
-	          results: response.data
+	          works: response.data.works,
+	          bookmarks: response.data.bookmarks,
+	          results: true
 	        });
 	      }.bind(this))
 	      .catch(function (error) {
@@ -22,19 +24,23 @@ export default class TagResults extends React.Component {
 
 	constructor(props) {
 	    super(props);
-	    this.state = {tag_id: props.match.params.tagId, tag_text: props.match.params.tagText, current_page: 0};
-    
-    }
+	    this.state = {tag_id: props.match.params.tagId, tag_text: props.match.params.tagText};
 
-  componentDidMount() { 
+	}
 
-    this.getData();
-  }
+	getNextWorkPage() {
+
+	}
+
+	componentDidMount() { 
+
+	this.getData();
+	}
 
   render() {
     return (
     	<div className="container-fluid">
-    		{this.state.results ? <SearchResults results={this.state.results}/> : <div/>}
+    		{this.state.results ? <SearchResults bookmarks={this.state.bookmarks} works={this.state.works}/> : <div/>}
     	</div>
       
     );

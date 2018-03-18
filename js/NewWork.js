@@ -55,6 +55,7 @@ export default class NewWork extends React.Component {
     
     var original = this.state.chapters
     original[e.target.parentElement.parentElement.id-1][e.target.name] = e.target.value
+    console.log(original)
     this.setState({
       chapters: original
     })
@@ -142,7 +143,7 @@ export default class NewWork extends React.Component {
   addChapter()
   {
     var newChapter = {title: '', summary: '', chapter_notes: '', image_url: '',
-      audio_url: '', text: '', number: 1};
+      audio_url: '', text: '', number: 1, image_alt_text: ''};
     this.state.chapters.push(newChapter);
   }
   appendChapter(evt)
@@ -150,7 +151,7 @@ export default class NewWork extends React.Component {
     evt.preventDefault()
     var key = this.state.chapters.length+1;
     var newChapter = {title: '', summary: '', chapter_notes: '', image_url: '',
-      audio_url: '', text: '', number: key};
+      audio_url: '', text: '', number: key, image_alt_text: ''};
     var original = this.state.chapters;
     original.push(newChapter);
     this.setState({

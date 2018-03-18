@@ -84,7 +84,7 @@ def add_chapters(work, chapters):
 	count = 0
 	for chapter_item in chapters:
 		chapter = Chapter(title=chapter_item['title'], number=chapter_item['number'], text=chapter_item['text'], audio_url=chapter_item['audio_url'],image_url=chapter_item['image_url'],
-			summary=chapter_item['summary'])
+			summary=chapter_item['summary'], image_alt_text=chapter_item['image_alt_text'])
 		work.chapters.append(chapter)
 		count = count + count_words(chapter_item['text'])
 	return count
@@ -103,6 +103,7 @@ def update_chapters(work, chapters):
 			chapter.text = chapter_item['text']
 			chapter.audio_url = chapter_item['audio_url']
 			chapter.image_url = chapter_item['image_url']
+			chapter.image_alt_text = chapter_item['image_alt_text']
 			db.session.add(chapter)
 		count = count + count_words(chapter_item['text'])
 	return count
@@ -169,6 +170,7 @@ def build_work_chapters(work):
 		chapter_json['text'] = chapter.text
 		chapter_json['audio_url'] = chapter.audio_url
 		chapter_json['image_url'] = chapter.image_url
+		chapter_json['image_alt_text'] = chapter.image_alt_text
 		chapter_json['summary'] = chapter.summary
 		chapter_json['comments'] = build_chapter_comments(chapter.comments)
 		chapters.append(chapter_json)

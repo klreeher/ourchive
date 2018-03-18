@@ -127,6 +127,7 @@ class Chapter(db.Model):
     text = db.Column(db.String)
     audio_url = db.Column(db.String)
     image_url = db.Column(db.String)
+    image_alt_text = db.Column(db.String)
     summary = db.Column(db.String)
     comments = db.relationship('Comment', backref='comment_chapter',
                                 lazy='dynamic')
