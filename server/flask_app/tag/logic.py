@@ -22,17 +22,44 @@ def add_tag(tag_text, type_id):
 		redis_db.zadd("tag-suggestions:#"+str(type_id)+":#"+prefix.lower(), 1, tag_text.lower())
 
 def get_tagged_data(tag_id, tag_text):
-	tag_text = tag_text.replace('%2F', '/')
-	tag = Tag.query.filter_by(tag_type_id=tag_id, text=tag_text).first()
+	tag = get_tag(tag_id, tag_text)
 	if tag is None:
 		return {}
 	results = {}
+	results = get_work_results(tag, results, 1)
+	results = get_bookmark_results(tag, results, 1)
+	return results
+
+def get_tag(tag_id, tag_text):
+	tag_text = tag_text.replace('%2F', '/')
+	tag = Tag.query.filter_by(tag_type_id=tag_id, text=tag_text).first()
+	return tag
+
+def get_tagged_works(tag_id, tag_text, page):
+	tag = get_tag(tag_id, tag_text)
+	if tag is None:
+		return {}
+	results = {}
+	return get_work_results(tag, results, page)
+
+def get_work_results(tag, results, page):
 	results['works'] = []
-	works = tag.work_tags
+	works = tag.work_tags.paginate(page, 5).items
 	for work in works:
 		results['works'].append(views.build_work_stub(work))
+	return results
+
+def get_bookmark_results(tag, results, page):
 	results['bookmarks'] = []
-	bookmarks = tag.bookmark_tags
+	bookmarks = tag.bookmark_tags.paginate(page, 20).items
 	for bookmark in bookmarks:
 		results['bookmarks'].append(bookmark_logic.build_bookmark(bookmark))
 	return results
+
+def get_tagged_bookmarks(tag_id, tag_text, page):
+	tag = get_tag(tag_id, tag_text)
+	if tag is None:
+		return {}
+	results = {}
+	return get_bookmark_results(tag, results, page)
+

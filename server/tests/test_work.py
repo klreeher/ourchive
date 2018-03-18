@@ -174,7 +174,8 @@ class TestWorkView(BaseTestCase):
             chapter['text'] = "Plot plot plot plot plot"
             chapter['audio_url'] = ""
             chapter['image_url'] = ""     
-            chapter['summary'] = ""       
+            chapter['summary'] = ""  
+            chapter['image_alt_text'] = ""     
             data["chapters"] = [chapter]
 
         self.add_user()

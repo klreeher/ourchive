@@ -13,16 +13,6 @@ export default class SearchResults extends React.Component {
       this.state = {}
     }
 
-  previousPage(evt, key) {
-    alert(key)
-    //todo call to props.getpage with key
-
-  }
-
-  nextPage(evt, key) {
-    alert(key)
-  }
-
   render() {
     return ( 
 
@@ -46,8 +36,8 @@ export default class SearchResults extends React.Component {
                     )}
                     </div>
                     <div className="row">
-                        <button className="btn btn-link" onMouseDown={evt => this.previousPage(evt, 2)} disabled={this.state.previousBookmarkDisabled}>Previous Page</button>
-                        <button className="btn btn-link" onMouseDown={evt => this.nextPage(evt, 2)} disabled={this.state.nextBookmarkDisabled}>Next Page</button>
+                        <button className="btn btn-link" name="bookmark" onMouseDown={this.props.previousPage} disabled={this.state.previousBookmarkDisabled}>Previous Page</button>
+                        <button className="btn btn-link" name="bookmark" onMouseDown={this.props.nextPage} disabled={this.state.nextBookmarkDisabled}>Next Page</button>
                     </div>
                   </div> : <div/>}
                 </Tab.Pane>
@@ -62,8 +52,8 @@ export default class SearchResults extends React.Component {
                     )}
                     </div>
                     <div className="row">
-                        <button className="btn btn-link" onMouseDown={evt => this.previousPage(evt, 1)} disabled={this.state.previousWorkDisabled}>Previous Page</button>
-                        <button className="btn btn-link" onMouseDown={evt => this.nextPage(evt, 1)} disabled={this.state.nextWorkDisabled}>Next Page</button>
+                        <button className="btn btn-link" name="work" onMouseDown={this.props.previousPage} disabled={this.state.previousWorkDisabled}>Previous Page</button>
+                        <button className="btn btn-link" name="work" onMouseDown={this.props.nextPage} disabled={this.state.nextWorkDisabled}>Next Page</button>
                     </div>
                   </div> : <div/>}
                 </Tab.Pane>

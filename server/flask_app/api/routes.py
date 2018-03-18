@@ -223,3 +223,11 @@ def add_comment_reply():
 @api.route('/api/tag/<int:tag_id>/<path:tag_text>', methods=['GET'])
 def get_tagged_data(tag_id, tag_text):
   return json.dumps(tag.get_tagged_data(tag_id, tag_text))
+
+@api.route('/api/tag/work/<int:tag_id>/<path:tag_text>/<int:page>', methods=['GET'])
+def get_tagged_works(tag_id, tag_text, page):
+  return json.dumps(tag.get_tagged_works(tag_id, tag_text, page))
+
+@api.route('/api/tag/bookmark/<int:tag_id>/<path:tag_text>/<int:page>', methods=['GET'])
+def get_tagged_bookmarks(tag_id, tag_text, page):
+  return json.dumps(tag.get_tagged_bookmarks(tag_id, tag_text, page))

@@ -25,7 +25,7 @@ class TestTag(BaseTestCase):
         db.session.add(workObj)
 
         db.session.commit()
-        tag.get_tagged_data(1)
+        tag.get_tagged_data(1, 'one')
 
 if __name__ == '__main__':
     unittest.main()

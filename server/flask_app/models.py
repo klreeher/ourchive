@@ -111,8 +111,8 @@ class Work(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     user = db.relationship('User', back_populates='works')
 
-    tags = db.relationship('Tag', secondary=work_tag_table, lazy='subquery',
-        backref=db.backref('work_tags', lazy=True))
+    tags = db.relationship('Tag', secondary=work_tag_table,
+        backref=db.backref('work_tags', lazy='dynamic'), lazy='dynamic')
 
     def __repr__(self):
         return '<Work: {}>'.format(self.id)
@@ -204,8 +204,8 @@ class Bookmark(db.Model):
     work_id = db.Column(db.Integer, db.ForeignKey('works.id'))
     work = db.relationship('Work', back_populates='bookmarks')
 
-    tags = db.relationship('Tag', secondary=bookmark_tag_table, lazy='subquery',
-        backref=db.backref('bookmark_tags', lazy=True))
+    tags = db.relationship('Tag', secondary=bookmark_tag_table,
+        backref=db.backref('bookmark_tags', lazy='dynamic'), lazy='dynamic')
 
     comments = db.relationship('Comment', backref='comment_bookmark',
                                 lazy='dynamic')
