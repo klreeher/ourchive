@@ -10,7 +10,6 @@ Ourchive is a configurable, multi-media archive app. It grew out of a need for a
 - [contributor guidelines](#contributor-guidelines)
     - [ways to contribute](#ways-to-contribute)
 - [code of conduct](#code-of-conduct)
-- [swagger spec](#swagger-spec)
 
 <!-- /MarkdownTOC -->
 
