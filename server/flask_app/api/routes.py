@@ -197,8 +197,9 @@ def get_user(userId):
   return user
 
 @api.route('/api/bookmark/curator/<int:curatorId>')
-def get_bookmarks(curatorId):
-  return json.dumps(bookmark.get_bookmarks_by_curator(curatorId))
+@api.route('/api/bookmark/curator/<int:curatorId>/<int:page>')
+def get_bookmarks(curatorId, page=1):
+  return json.dumps(bookmark.get_bookmarks_by_curator(curatorId, page))
 
 @api.route('/api/work/creator/<int:creatorId>')
 @api.route('/api/work/creator/<int:creatorId>/<int:page>')

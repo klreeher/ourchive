@@ -11,6 +11,7 @@ export default class TagResults extends React.Component {
 	{
 	  axios.get('/api/tag/'+this.state.tag_id+'/'+this.state.tag_text)
 	      .then(function (response) {
+	      	console.log(response.data.bookmark_pages)
 	        this.setState({	        	
 	          works: response.data.works,
 	          bookmarks: response.data.bookmarks,

@@ -52,7 +52,7 @@ class TestBookmark(BaseTestCase):
         work_fetched = Work.query.filter_by(id=work_id).first()
         bookmark_id = bookmark.add_bookmark(data, 1)
         fetched_bookmark = bookmark.get_bookmarks_by_curator(1)
-        self.assertTrue(fetched_bookmark[0]["rating"] == 3)
+        self.assertTrue(fetched_bookmark['bookmarks'][0]["rating"] == 3)
 
 
     def build_data(self, build_tags, build_comments, build_links):

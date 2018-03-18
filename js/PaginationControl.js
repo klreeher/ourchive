@@ -8,7 +8,7 @@ export default class PaginationControl extends React.Component {
 	    super(props);
 	    this.doNextPage = this.doNextPage.bind(this)
 	    this.doPreviousPage = this.doPreviousPage.bind(this)
-	    var noNext = this.props.totalPages === 1
+	    var noNext = this.props.totalPages <= 1
 	    this.state = {previousDisabled: true, nextDisabled: noNext}
 	}
 

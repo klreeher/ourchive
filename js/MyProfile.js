@@ -131,7 +131,8 @@ export default class MyProfile extends React.Component {
             }
             this.setState({                
               bookmarks: response.data,
-              curator: curator
+              curator: curator,
+              bookmark_pages: response.data.pages
             });  
 
           }.bind(this))
@@ -150,8 +151,8 @@ export default class MyProfile extends React.Component {
     		<br/>
     		<br/>
       		<UserContainer user={this.state.user} works={this.state.works} bookmarks={this.state.bookmarks} 
-            curator={this.state.curator} totalWorkPages={this.state.work_pages} 
-            currentWorkPage={this.state.work_page} previousPage={this.previousPage} nextPage={this.nextPage}/>
+            curator={this.state.curator} totalWorkPages={this.state.work_pages} totalBookmarkPages={this.state.bookmark_pages}
+            currentWorkPage={this.state.work_page} currentBookmarkPage={this.state.bookmark_page} previousPage={this.previousPage} nextPage={this.nextPage}/>
       	</div>
     );
   }

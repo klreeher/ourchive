@@ -3,6 +3,7 @@ import re
 import json
 from .. import db
 from ..work import views
+from flask import current_app as app
 from ..models import Work, Chapter, Tag, User, TagType, Bookmark, BookmarkLink
 
 
@@ -39,13 +40,16 @@ def get_bookmark(bookmark_id):
 	else:
 		return None
 
-def get_bookmarks_by_curator(curator_id):
-	bookmarks = Bookmark.query.filter_by(user_id=curator_id)
+def get_bookmarks_by_curator(curator_id, page=1):
+	paginated = Bookmark.query.filter_by(user_id=curator_id).paginate(page, app.config['RESULT_PAGES'])
+	bookmarks = paginated.items
+	result = {}
 	if bookmarks is not None:
-		return_json = []
+		result['bookmarks'] = []
 		for bookmark in bookmarks:
-			return_json.append(build_bookmark(bookmark))
-		return return_json
+			result['bookmarks'].append(build_bookmark(bookmark))
+		result['pages'] = paginated.pages
+		return result
 	else:
 		return None
 
