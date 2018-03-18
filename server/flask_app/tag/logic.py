@@ -44,16 +44,18 @@ def get_tagged_works(tag_id, tag_text, page):
 
 def get_work_results(tag, results, page):
 	results['works'] = []
-	works = tag.work_tags.paginate(page, 5).items
+	works = tag.work_tags.paginate(page, 25).items
 	for work in works:
 		results['works'].append(views.build_work_stub(work))
+	results['work_pages'] = tag.work_tags.paginate(page, 25).pages
 	return results
 
 def get_bookmark_results(tag, results, page):
 	results['bookmarks'] = []
-	bookmarks = tag.bookmark_tags.paginate(page, 20).items
+	bookmarks = tag.bookmark_tags.paginate(page, 25).items
 	for bookmark in bookmarks:
 		results['bookmarks'].append(bookmark_logic.build_bookmark(bookmark))
+	results['bookmark_pages'] = tag.bookmark_tags.paginate(page, 25).pages
 	return results
 
 def get_tagged_bookmarks(tag_id, tag_text, page):

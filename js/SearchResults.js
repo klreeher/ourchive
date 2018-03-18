@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import BookmarkStub from './BookmarkStub';
 import WorkStub from './WorkStub';
+import PaginationControl from './PaginationControl';
 import {Tabs, Tab, Row, Nav, Col, NavItem} from 'react-bootstrap';
 
 export default class SearchResults extends React.Component {
@@ -35,10 +36,8 @@ export default class SearchResults extends React.Component {
                       </div>
                     )}
                     </div>
-                    <div className="row">
-                        <button className="btn btn-link" name="bookmark" onMouseDown={this.props.previousPage} disabled={this.state.previousBookmarkDisabled}>Previous Page</button>
-                        <button className="btn btn-link" name="bookmark" onMouseDown={this.props.nextPage} disabled={this.state.nextBookmarkDisabled}>Next Page</button>
-                    </div>
+                    <PaginationControl paginationName="bookmark" previousPage={this.props.previousPage} nextPage={this.props.nextPage}
+                      totalPages={this.props.totalBookmarkPages} currentPage={this.props.currentBookmarkPage}/>
                   </div> : <div/>}
                 </Tab.Pane>
                 <Tab.Pane eventKey="second">
@@ -51,10 +50,8 @@ export default class SearchResults extends React.Component {
 
                     )}
                     </div>
-                    <div className="row">
-                        <button className="btn btn-link" name="work" onMouseDown={this.props.previousPage} disabled={this.state.previousWorkDisabled}>Previous Page</button>
-                        <button className="btn btn-link" name="work" onMouseDown={this.props.nextPage} disabled={this.state.nextWorkDisabled}>Next Page</button>
-                    </div>
+                    <PaginationControl paginationName="work" previousPage={this.props.previousPage} nextPage={this.props.nextPage}
+                      totalPages={this.props.totalWorkPages} currentPage={this.props.currentWorkPage}/>
                   </div> : <div/>}
                 </Tab.Pane>
               </Tab.Content>

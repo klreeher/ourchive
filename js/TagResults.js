@@ -25,7 +25,7 @@ export default class TagResults extends React.Component {
 	constructor(props) {
 	    super(props);
 	    this.state = {tag_id: props.match.params.tagId, tag_text: props.match.params.tagText, 
-	    	bookmark_page: 1, work_page: 1};
+	    	bookmark_page: 1, work_page: 1, previousWorkDisabled: true, previousBookmarkDisabled: true};
 	    this.previousPage = this.previousPage.bind(this)
 	    this.nextPage = this.nextPage.bind(this)
 	    this.getWorkPage = this.getWorkPage.bind(this)
@@ -33,9 +33,8 @@ export default class TagResults extends React.Component {
 	}
 
 	
-  previousPage(evt) {
-  	evt.preventDefault()
-    switch (evt.target.name) {
+  previousPage(name) {
+    switch (name) {
     	case "work":
     		this.getWorkPage(this.state.work_page - 1)
     		break
@@ -45,9 +44,8 @@ export default class TagResults extends React.Component {
     }
   }
 
-  nextPage(evt) {
-  	evt.preventDefault()
-    switch (evt.target.name) {
+  nextPage(name) {
+    switch (name) {
     	case "work":
     		this.getWorkPage(this.state.work_page + 1)
     		break
@@ -62,7 +60,8 @@ export default class TagResults extends React.Component {
 	      .then(function (response) {
 	        this.setState({	        	
 	          works: response.data.works,
-	          work_page: page
+	          work_page: page,
+	          work_pages: response.data.work_pages
 	        });
 	      }.bind(this))
 	      .catch(function (error) {
@@ -71,11 +70,12 @@ export default class TagResults extends React.Component {
   }
 
   getBookmarkPage(page) {
-  	axios.get('/api/tag/bookmark/'+this.state.tag_id+'/'+this.state.tag_text)
+  	axios.get('/api/tag/bookmark/'+this.state.tag_id+'/'+this.state.tag_text+'/'+page)
 	      .then(function (response) {
 	        this.setState({	        	
-	          bookmarks: response.data.works,
-	          bookmark_page: page
+	          bookmarks: response.data.bookmarks,
+	          bookmark_page: page,
+	          bookmark_pages: response.data.bookmark_pages
 	        });
 	      }.bind(this))
 	      .catch(function (error) {
@@ -92,7 +92,9 @@ export default class TagResults extends React.Component {
     return (
     	<div className="container-fluid">
     		{this.state.results ? <SearchResults bookmarks={this.state.bookmarks} works={this.state.works}
-    		previousPage={this.previousPage} nextPage={this.nextPage}/> : <div/>}
+    		previousPage={this.previousPage} nextPage={this.nextPage} totalWorkPages={this.state.work_pages}
+    		currentWorkPage={this.state.work_page} totalBookmarkPages={this.state.bookmark_pages}
+    		currentBookmarkPage={this.state.bookmark_page}/> : <div/>}
     	</div>
       
     );
