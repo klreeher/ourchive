@@ -14,7 +14,9 @@ export default class TagResults extends React.Component {
 	        this.setState({	        	
 	          works: response.data.works,
 	          bookmarks: response.data.bookmarks,
-	          results: true
+	          results: true,
+	          work_pages: response.data.work_pages,
+	          bookmark_pages: response.data.bookmark_pages
 	        });
 	      }.bind(this))
 	      .catch(function (error) {

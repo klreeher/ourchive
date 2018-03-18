@@ -201,8 +201,9 @@ def get_bookmarks(curatorId):
   return json.dumps(bookmark.get_bookmarks_by_curator(curatorId))
 
 @api.route('/api/work/creator/<int:creatorId>')
-def get_works_by_creator(creatorId):
-  return work.get_by_user(creatorId)
+@api.route('/api/work/creator/<int:creatorId>/<int:page>')
+def get_works_by_creator(creatorId, page=1):
+  return work.get_by_user(creatorId, page)
 
 @api.route('/api/tag/<int:type_id>/suggestions/<string:term>')
 def get_tag_suggestions(term, type_id):

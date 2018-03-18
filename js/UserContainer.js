@@ -4,6 +4,7 @@ import Link from 'react-router-dom';
 import {Tabs, Tab} from 'react-bootstrap';
 import WorkStub from './WorkStub';
 import BookmarkItem from './BookmarkItem';
+import PaginationControl from './PaginationControl';
 
 export default class UserContainer extends React.Component {
 	constructor(props) {    
@@ -79,6 +80,10 @@ export default class UserContainer extends React.Component {
 			    		</div>
 			    		)}
 			  	</div>
+			  	<div className="row">
+	        		<PaginationControl paginationName="work" previousPage={this.props.previousPage} nextPage={this.props.nextPage}
+                      totalPages={this.props.totalWorkPages} currentPage={this.props.currentWorkPage}/>
+	        	</div>
 	    	</div>
 	    </Tab>
     	<Tab eventKey={3} title="Bookmarks">

@@ -141,7 +141,7 @@ class TestWorkView(BaseTestCase):
         db.session.commit()
         work.add_work(data, 1)   
         selected_work = json.loads(work.get_by_user(1))
-        self.assertTrue(selected_work[0]['title'] == "A Tale of Two Poor Students")
+        self.assertTrue(selected_work['works'][0]['title'] == "A Tale of Two Poor Students")
 
 
     def build_data(self, build_tags, build_chapters):

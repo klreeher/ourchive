@@ -8,27 +8,26 @@ export default class PaginationControl extends React.Component {
 	    super(props);
 	    this.doNextPage = this.doNextPage.bind(this)
 	    this.doPreviousPage = this.doPreviousPage.bind(this)
-	    this.state = {previousDisabled: true, nextDisabled: false}
+	    var noNext = this.props.totalPages === 1
+	    this.state = {previousDisabled: true, nextDisabled: noNext}
 	}
 
 	doNextPage(evt) {
 		evt.preventDefault()
 		var disableNext = this.props.totalPages <= this.props.currentPage + 1
-		var disablePrevious = this.props.currentPage - 1 === 1
 		this.setState({
 			nextDisabled: disableNext,
-			previousDisabled: disablePrevious
+			previousDisabled: false
 		})
 		this.props.nextPage(this.props.paginationName)
 	}
 
 	doPreviousPage(evt) {
 		evt.preventDefault()
-		var disableNext = this.props.totalPages <= this.props.currentPage + 1
 		var disablePrevious = this.props.currentPage - 1 === 1
 		this.setState({
 			previousDisabled: disablePrevious,
-			nextDisabled: disableNext
+			nextDisabled: false
 		})
 		this.props.previousPage(this.props.paginationName)
 	}

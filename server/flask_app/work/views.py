@@ -4,6 +4,7 @@ import json
 from . import work
 from .. import db
 from .. import tag as tag_blueprint
+from flask import current_app as app
 from ..models import Work, Chapter, Tag, User, TagType
 
 @work.route('/')
@@ -27,13 +28,16 @@ def get_work(work_id):
 	else:
 		return None
 
-def get_by_user(user_id):
-	works = Work.query.filter_by(user_id=user_id)
+def get_by_user(user_id, page=1):
+	paginated = Work.query.filter_by(user_id=user_id).paginate(page, app.config['RESULT_PAGES'])
+	works = paginated.items
+	result = {}
 	if works is not None:
-		return_json = []
+		result['works'] = []
 		for work in works:
-			return_json.append(build_work(work))
-		return json.dumps(return_json)
+			result['works'].append(build_work_stub(work))
+		result['pages'] = paginated.pages
+		return json.dumps(result)
 	else:
 		return None
 

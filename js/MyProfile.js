@@ -10,10 +10,14 @@ import EditDeleteButtons from './EditDeleteButtons';
 export default class MyProfile extends React.Component {
 	constructor(props) {    
 	  	super(props);	  	
-	    this.state = this.state = {user: {}, works: [], bookmarks: [], curator: []};
+	    this.state = this.state = {user: {}, works: [], bookmarks: [], curator: [], work_page: 1, bookmark_page: 1};
         this.getUser = this.getUser.bind(this);
         this.getWorks = this.getWorks.bind(this);
         this.getBookmarks = this.getBookmarks.bind(this);
+        this.nextPage = this.nextPage.bind(this);
+        this.previousPage = this.previousPage.bind(this);
+        this.getWorkPage = this.getWorkPage.bind(this);
+        this.getBookmarkPage = this.getBookmarkPage.bind(this);
     }
 
     fetchUser(userId)
@@ -53,12 +57,63 @@ export default class MyProfile extends React.Component {
     	}
     }
 
+    previousPage(name) {
+    switch (name) {
+      case "work":
+        this.getWorkPage(this.state.work_page - 1)
+        break
+      case "bookmark":
+        this.getBookmarkPage(this.state.bookmark_page - 1)
+        break
+    }
+  }
+
+  nextPage(name) {
+    switch (name) {
+      case "work":
+        this.getWorkPage(this.state.work_page + 1)
+        break
+      case "bookmark":
+        this.getBookmarkPage(this.state.bookmark_page + 1)
+        break
+    }
+  }
+
+  getWorkPage(page) {   
+    axios.get('/api/work/creator/1/'+page)
+        .then(function (response) {
+          this.setState({           
+            works: response.data.works,
+            work_page: page,
+            work_pages: response.data.pages
+          });
+        }.bind(this))
+        .catch(function (error) {
+          console.log(error);
+        });
+  }
+
+  getBookmarkPage(page) {
+    axios.get('/api/bookmark/curator/'+this.state.curator.curator_id+'/'+page)
+        .then(function (response) {
+          this.setState({           
+            bookmarks: response.data.bookmarks,
+            bookmark_page: page,
+            bookmark_pages: response.data.pages
+          });
+        }.bind(this))
+        .catch(function (error) {
+          console.log(error);
+        });
+  }
+
     getWorks(index, userId)
     {
     	axios.get('/api/work/creator/'+userId)
           .then(function (response) {
             this.setState({
-              works: response.data
+              works: response.data.works,
+              work_pages: response.data.pages
             });  
 
           }.bind(this))
@@ -90,11 +145,13 @@ export default class MyProfile extends React.Component {
 
     render() {
     return (
-    	<div>
+    	<div className="container-fluid">
     		<EditDeleteButtons viewer_is_creator={true} editHref={"/user/"+this.state.user.userId+"/edit"}/>
     		<br/>
     		<br/>
-      		<UserContainer user={this.state.user} works={this.state.works} bookmarks={this.state.bookmarks} curator={this.state.curator}/>
+      		<UserContainer user={this.state.user} works={this.state.works} bookmarks={this.state.bookmarks} 
+            curator={this.state.curator} totalWorkPages={this.state.work_pages} 
+            currentWorkPage={this.state.work_page} previousPage={this.previousPage} nextPage={this.nextPage}/>
       	</div>
     );
   }
