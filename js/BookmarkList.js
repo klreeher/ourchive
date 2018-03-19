@@ -3,6 +3,7 @@ import axios from 'axios';
 import Link from 'react-router-dom';
 import BookmarkItem from './BookmarkItem';
 import ReactDOM from 'react-dom';
+import PaginationControl from './PaginationControl';
 
 
 export default class BookmarkList extends React.Component {
@@ -12,11 +13,11 @@ export default class BookmarkList extends React.Component {
 	  axios.get('/api/bookmark/curator/'+curatorId)
 	      .then(function (response) {
 	      	var curator = {}
-	      	if (response.data.length > 0) {
-	      		curator = response.data[0].curator
+	      	if (response.data.bookmarks.length > 0) {
+	      		curator = response.data.bookmarks[0].curator
 	      	}
 	        this.setState({	        	
-	          bookmarks: response.data,
+	          bookmarks: response.data.bookmarks,
 	          curator: curator
 
 	        }, () => {
@@ -37,20 +38,45 @@ export default class BookmarkList extends React.Component {
 	    });
 	}
 
-	constructor(props) {
-	    super(props);
-	    this.state = {curatorId: props.match.params.curatorId, bookmarks: [], current_page: 0, curator: []};
-    
+	previousPage(name) {
+       this.getBookmarkPage(this.state.bookmark_page - 1)
     }
 
-  componentWillMount() { 
+  nextPage(name) {
+       this.getBookmarkPage(this.state.bookmark_page + 1)
+  }
+
+  getBookmarkPage(page) {
+    axios.get('/api/bookmark/curator/'+this.state.curator.curator_id+'/'+page)
+        .then(function (response) {
+          this.setState({           
+            bookmarks: response.data.bookmarks,
+            bookmark_page: page,
+            bookmark_pages: response.data.pages
+          });
+        }.bind(this))
+        .catch(function (error) {
+          console.log(error);
+        });
+  }
+
+	constructor(props) {
+	    super(props);
+	    this.state = {curatorId: props.match.params.curatorId, bookmarks: [], current_page: 0, curator: [],
+	    	bookmark_page: 1, bookmark_pages: 1};
+    	this.nextPage = this.nextPage.bind(this);
+        this.previousPage = this.previousPage.bind(this);
+        this.getBookmarkPage = this.getBookmarkPage.bind(this);
+    }
+
+  componentDidMount() { 
 
     this.getBookmarks(this.state.curatorId); 
   }
 
   render() {
     return (
-    	<div className="container-fluid">
+    	<div className="container">
     		<div className="row">
     			<div className="col-md-12"><h3>{this.state.curator.curator_name}'s bookmarks</h3></div>
     		</div>
@@ -59,6 +85,10 @@ export default class BookmarkList extends React.Component {
 	            <BookmarkItem bookmark={bookmark} user={this.props.user} curator={this.state.curator} ref={"bookmark_"+bookmark.id}/>
 	          </div>
 	        )}
+	        <div className="row">
+	        	{this.state.bookmarks.length > 0 && <PaginationControl paginationName="bookmark" previousPage={this.previousPage} nextPage={this.nextPage}
+                      totalPages={this.state.bookmark_pages} currentPage={this.state.bookmark_page}/>}
+            </div>
     	</div>
       
     );

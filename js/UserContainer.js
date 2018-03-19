@@ -81,8 +81,8 @@ export default class UserContainer extends React.Component {
 			    		)}
 			  	</div>
 			  	<div className="row">
-	        		<PaginationControl paginationName="work" previousPage={this.props.previousPage} nextPage={this.props.nextPage}
-                      totalPages={this.props.totalWorkPages} currentPage={this.props.currentWorkPage}/>
+	        		{this.state.works.length > 0 && <PaginationControl paginationName="work" previousPage={this.props.previousPage} nextPage={this.props.nextPage}
+                      totalPages={this.props.totalWorkPages} currentPage={this.props.currentWorkPage}/>}
 	        	</div>
 	    	</div>
 	    </Tab>
@@ -90,12 +90,16 @@ export default class UserContainer extends React.Component {
     		<div className="col-md-12">
     		<br/>
     			<div className="list">
-			        {this.state.bookmarks.map(bookmark => 
+			        {this.state.bookmarks && this.state.bookmarks.map(bookmark => 
 			          <div key={bookmark.key}>
 			            <BookmarkItem bookmark={bookmark} curator={this.state.curator}/>
 			          </div>
 			        )}
 			    </div>
+			    <div className="row">
+	        		{this.state.bookmarks.length > 0 && <PaginationControl paginationName="bookmark" previousPage={this.props.previousPage} nextPage={this.props.nextPage}
+                      totalPages={this.props.totalBookmarkPages} currentPage={this.props.currentBookmarkPage}/>}
+	        	</div>
 	        </div>
     	</Tab>
   	  </Tabs>

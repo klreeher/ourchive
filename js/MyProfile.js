@@ -10,7 +10,8 @@ import EditDeleteButtons from './EditDeleteButtons';
 export default class MyProfile extends React.Component {
 	constructor(props) {    
 	  	super(props);	  	
-	    this.state = this.state = {user: {}, works: [], bookmarks: [], curator: [], work_page: 1, bookmark_page: 1};
+	    this.state = this.state = {user: {}, works: [], bookmarks: [], curator: [], work_page: 1, bookmark_page: 1,
+      work_pages: 1, bookmark_pages: 1};
         this.getUser = this.getUser.bind(this);
         this.getWorks = this.getWorks.bind(this);
         this.getBookmarks = this.getBookmarks.bind(this);
@@ -126,11 +127,11 @@ export default class MyProfile extends React.Component {
     	axios.get('/api/bookmark/curator/'+userId)
           .then(function (response) {
             var curator = {}
-            if (response.data.length > 0) {
-              curator = response.data[0].curator
+            if (response.data.bookmarks.length > 0) {
+              curator = response.data.bookmarks[0].curator
             }
             this.setState({                
-              bookmarks: response.data,
+              bookmarks: response.data.bookmarks,
               curator: curator,
               bookmark_pages: response.data.pages
             });  
@@ -140,7 +141,7 @@ export default class MyProfile extends React.Component {
             console.log(error);
         });
     }
-    componentWillMount() { 
+    componentDidMount() { 
     	this.getUser();
   	}
 
