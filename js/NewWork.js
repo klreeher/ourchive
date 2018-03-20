@@ -55,7 +55,6 @@ export default class NewWork extends React.Component {
     
     var original = this.state.chapters
     original[e.target.parentElement.parentElement.id-1][e.target.name] = e.target.value
-    console.log(original)
     this.setState({
       chapters: original
     })
