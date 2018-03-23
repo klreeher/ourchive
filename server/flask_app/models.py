@@ -111,11 +111,25 @@ class Work(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     user = db.relationship('User', back_populates='works')
 
+    type_id = db.Column(db.Integer, db.ForeignKey('work_types.id') )
+    work_type = db.relationship('WorkType', back_populates='type_works')
+
     tags = db.relationship('Tag', secondary=work_tag_table,
         backref=db.backref('work_tags', lazy='dynamic'), lazy='dynamic')
 
     def __repr__(self):
         return '<Work: {}>'.format(self.id)
+
+class WorkType(db.Model):
+
+    __tablename__ = 'work_types'
+
+    id = db.Column(db.Integer, primary_key=True)
+    type_name = db.Column(db.String(200))
+    
+
+    def __repr__(self):
+        return '<WorkType: {}>'.format(self.id)
 
 class Chapter(db.Model):
 
