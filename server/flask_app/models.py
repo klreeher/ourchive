@@ -112,7 +112,7 @@ class Work(db.Model):
     user = db.relationship('User', back_populates='works')
 
     type_id = db.Column(db.Integer, db.ForeignKey('work_types.id') )
-    work_type = db.relationship('WorkType', back_populates='type_works')
+    work_type = db.relationship('WorkType', backref='type_works')
 
     tags = db.relationship('Tag', secondary=work_tag_table,
         backref=db.backref('work_tags', lazy='dynamic'), lazy='dynamic')
