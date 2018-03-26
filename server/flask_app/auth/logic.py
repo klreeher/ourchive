@@ -24,7 +24,7 @@ def register(post_data):
 				'message': 'Successfully registered.',
 				'auth_token': auth_token.decode()
 			}
-			return jsonify(responseObject)
+			return make_response(jsonify(responseObject), 201)
 		except Exception as e:
 			print(e)
 			responseObject = {
@@ -32,18 +32,18 @@ def register(post_data):
 				'message': 'Some error occurred. Please try again.',
 				'status_int': 500
 			}
-			return jsonify(responseObject)
+			return make_response(jsonify(responseObject), 500)
 	else:
 		responseObject = {
 			'status': 'fail',
 			'message': 'User already exists. Please log in.',
 		}
-		return jsonify(responseObject)
+		return make_response(jsonify(responseObject), 401)
 
 def login(post_data):
 	try:
 		user = User.query.filter_by(
-		email=post_data.get('email')
+		username=post_data.get('username')
 		).first()
 		if user is not None and bcrypt.checkpw(post_data.get('password').encode('utf8'), user.password.encode('utf8')):
 			auth_token = user.encode_auth_token(user.id)
@@ -53,22 +53,21 @@ def login(post_data):
 					'message': 'Successfully logged in.',
 					'auth_token': auth_token.decode()
 				}
-			return jsonify(responseObject)
+			return make_response(jsonify(responseObject), 201)
 		else:
 			responseObject = {
 				'status': 'fail',
 				'message': 'User does not exist.',
 				'status_int': 404
 			}
-			return jsonify(responseObject)
+			return make_response(jsonify(responseObject), 404)
 	except Exception as e:
-		print(e)
 		responseObject = {
 			'status': 'fail',
 			'message': 'Try again',
 			'status_int': 500
 		}
-		return jsonify(responseObject)
+		return make_response(jsonify(responseObject), 500)
 
 
 def authorize(request):
@@ -82,7 +81,7 @@ def authorize(request):
 				'message': 'Bearer token malformed.',
 				'status_int': 401
 			}
-			return jsonify(responseObject)
+			return make_response(jsonify(responseObject), 401)
 	else:
 		auth_token = ''
 	if auth_token:
@@ -98,20 +97,20 @@ def authorize(request):
 				'registered_on': user.registered_on
 				}
 			}
-			return jsonify(responseObject)
+			return make_response(jsonify(responseObject), 201)
 		responseObject = {
 			'status': 'fail',
 			'message': resp,
 			'status_int': 401
 		}
-		return jsonify(responseObject)
+		return make_response(jsonify(responseObject), 401)
 	else:
 		responseObject = {
 			'status': 'fail',
 			'message': 'Provide a valid auth token.',
 			'status_int': 401
 		}
-		return jsonify(responseObject)
+		return make_response(jsonify(responseObject), 401)
 
 def logout(request):
 	auth_header = request.get('Authorization')
@@ -130,25 +129,25 @@ def logout(request):
 					'status': 'success',
 					'message': 'Successfully logged out.'
 				}
-				return jsonify(responseObject)
+				return make_response(jsonify(responseObject), 201)
 			except Exception as e:
 				responseObject = {
 					'status': 'fail',
 					'message': e,
 					'status_int': 401
 				}
-			return jsonify(responseObject)
+			return make_response(jsonify(responseObject), 401)
 		else:
 			responseObject = {
 				'status': 'fail',
 				'message': resp,
 				'status_int': 401
 			}
-			return jsonify(responseObject)
+			return make_response(jsonify(responseObject), 401)
 	else:
 		responseObject = {
 			'status': 'fail',
 			'message': 'Provide a valid auth token.',
 			'status_int': 401
 		}
-	return jsonify(responseObject)
+	return make_response(jsonify(responseObject), 401)

@@ -39,7 +39,7 @@ export default class NavbarInternal extends React.Component {
 
   logout(evt)
   {
-    axios.post('/api/logout/', {      
+    axios.post('/api/user/logout/', {      
       jwt: localStorage.getItem('jwt')
     })
     .then((response) => {
@@ -75,8 +75,8 @@ export default class NavbarInternal extends React.Component {
     if (this.state.userName != "" && this.state.userName != null 
       && this.state.password != "" && this.state.password != null)
     {
-      axios.post('/api/login/', {
-      userName: this.state.userName, 
+      axios.post('/api/user/login/', {
+      username: this.state.userName, 
       password: this.state.password
       })
       .then((response) => {

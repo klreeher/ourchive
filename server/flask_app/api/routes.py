@@ -1,5 +1,5 @@
 import json
-from flask import render_template, request
+from flask import render_template, request, make_response
 
 from . import api
 from server.flask_app.work import views as work
@@ -73,17 +73,18 @@ def get_results(searchTerm):
 def logout():
   if not request.json:
     abort(400)
-  return auth.logout(request)
+  result = auth.logout(request.json)
+  return result
 
 @api.route('/api/user/login/', methods=['POST'])
 def login():
   if not request.json:
     abort(400)
-  if request.json["email"] is None:
+  if request.json["username"] is None:
     abort(400)
   if request.json["password"] is None:
     abort(400)
-  return auth.login(request)
+  return auth.login(request.json)
 
 @api.route('/api/user/authorize/', methods=['POST'])
 def authorize():
