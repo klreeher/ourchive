@@ -7,7 +7,6 @@ from flask import current_app as app
 from ..models import User, BlacklistToken
 
 def register(post_data):
-	post_data = json.loads(post_data)
 	# check if user already exists
 	user = User.query.filter_by(email=post_data.get('email')).first()
 	if not user:
@@ -46,7 +45,6 @@ def register(post_data):
 
 def login(post_data):
 	try:
-		post_data = json.loads(post_data)
 		user = User.query.filter_by(
 		email=post_data.get('email')
 		).first()
@@ -77,11 +75,18 @@ def login(post_data):
 
 
 def authorize(request):
-	request = json.loads(request)
 	# get the auth token
 	auth_header = request.get('Authorization')
 	if auth_header:
-		auth_token = auth_header.split(" ")[1]
+		try:
+			auth_token = auth_header.split(" ")[1]
+		except IndexError:
+			responseObject = {
+				'status': 'fail',
+				'message': 'Bearer token malformed.',
+				'status_int': 401
+			}
+			return jsonify(responseObject)
 	else:
 		auth_token = ''
 	if auth_token:
