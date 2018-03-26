@@ -7,7 +7,6 @@ from flask import current_app as app
 from ..models import User, BlacklistToken
 
 def register(post_data):
-	# check if user already exists
 	user = User.query.filter_by(email=post_data.get('email')).first()
 	if not user:
 		try:
@@ -17,10 +16,8 @@ def register(post_data):
 				password=password_data
 			)
 
-			# insert the user
 			db.session.add(user)
 			db.session.commit()
-			# generate the auth token
 			auth_token = user.encode_auth_token(user.id)
 			responseObject = {
 				'status': 'success',
@@ -75,7 +72,6 @@ def login(post_data):
 
 
 def authorize(request):
-	# get the auth token
 	auth_header = request.get('Authorization')
 	if auth_header:
 		try:
@@ -126,10 +122,8 @@ def logout(request):
 	if auth_token:
 		resp = User.decode_auth_token(auth_token)
 		if not isinstance(resp, str):
-			# mark the token as blacklisted
 			blacklist_token = BlacklistToken(token=auth_token)
 			try:
-				# insert the token
 				db.session.add(blacklist_token)
 				db.session.commit()
 				responseObject = {

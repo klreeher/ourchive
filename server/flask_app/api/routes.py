@@ -7,6 +7,7 @@ from server.flask_app.bookmark import logic as bookmark
 from server.flask_app.message import logic as message
 from server.flask_app.tag import logic as tag
 from server.flask_app.comment import logic as comment
+from server.flask_app.auth import logic as auth
 
 @api.route('/<path:path>')
 def unknown_path(path):
@@ -68,21 +69,37 @@ def get_results(searchTerm):
   return results
 
 
-@api.route('/api/logout/', methods=['POST'])
+@api.route('/api/user/logout/', methods=['POST'])
 def logout():
   if not request.json:
     abort(400)
-  return request.json["jwt"]
+  return auth.logout(request)
 
-@api.route('/api/login/', methods=['POST'])
+@api.route('/api/user/login/', methods=['POST'])
 def login():
   if not request.json:
     abort(400)
-  if request.json["userName"] is None:
+  if request.json["email"] is None:
     abort(400)
   if request.json["password"] is None:
     abort(400)
-  return request.json["userName"] + request.json["password"]
+  return auth.login(request)
+
+@api.route('/api/user/authorize/', methods=['POST'])
+def authorize():
+  if not request.json:
+    abort(400)
+  return auth.authorize(request)
+
+@api.route('/api/user/register/', methods=['POST'])
+def register():
+  if not request.json:
+    abort(400)
+  if request.json["email"] is None:
+    abort(400)
+  if request.json["password"] is None:
+    abort(400)
+  return auth.register(request)
 
 @api.route('/api/user/<int:userId>/messages/inbox')
 def get_inbox(userId):
