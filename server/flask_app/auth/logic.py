@@ -15,7 +15,7 @@ def register(post_data):
 				email=post_data.get('email'),
 				password=password_data
 			)
-
+			user.username = post_data.get('username')
 			db.session.add(user)
 			db.session.commit()
 			auth_token = user.encode_auth_token(user.id)

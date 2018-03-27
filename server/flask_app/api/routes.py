@@ -100,7 +100,7 @@ def register():
     abort(400)
   if request.json["password"] is None:
     abort(400)
-  return auth.register(request)
+  return auth.register(request.json)
 
 @api.route('/api/user/<int:userId>/messages/inbox')
 def get_inbox(userId):

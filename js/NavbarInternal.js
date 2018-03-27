@@ -35,12 +35,13 @@ export default class NavbarInternal extends React.Component {
     this.state = {showModal: false};
     this.setUserName = this.setUserName.bind(this);
     this.setPassword = this.setPassword.bind(this);
+    this.setEmail = this.setEmail.bind(this);
   }
 
   logout(evt)
   {
     axios.post('/api/user/logout/', {      
-      jwt: localStorage.getItem('jwt')
+      Authorization: 'Bearer ' + localStorage.getItem('jwt')
     })
     .then((response) => {
       localStorage.removeItem('jwt');
@@ -60,6 +61,11 @@ export default class NavbarInternal extends React.Component {
       userName: evt.target.value
     });
   }
+  setEmail(evt) {
+    this.setState({
+      email: evt.target.value
+    });
+  }
   setPassword(evt) {
     this.setState({
       password: evt.target.value
@@ -70,6 +76,14 @@ export default class NavbarInternal extends React.Component {
   {
     this.setState({ showModal: true });
   }
+  showRegister(evt)
+  {
+    this.setState({ showRegisterModal: true });
+  }
+
+  resetPassword(evt) {
+    console.log("not implemented");
+  }
 
   handleLogin(evt) {
     if (this.state.userName != "" && this.state.userName != null 
@@ -78,6 +92,39 @@ export default class NavbarInternal extends React.Component {
       axios.post('/api/user/login/', {
       username: this.state.userName, 
       password: this.state.password
+      })
+      .then((response) => {
+        localStorage.setItem('jwt', response.data['auth_token']);
+        this.props.updateUser();
+        this.setState({ 
+          userName: "",
+          password: "",
+          email: "",
+          loggedIn: true,
+          showModal: false,
+          userId: 1
+        });
+
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    }
+    else
+    {
+        this.setState({ showModal: false });
+    }
+    
+  }
+
+  handleRegister(evt) {
+    if (this.state.userName != "" && this.state.userName != null 
+      && this.state.password != "" && this.state.password != null)
+    {
+      axios.post('/api/user/register/', {
+      username: this.state.userName, 
+      password: this.state.password,
+      email: this.state.email
       })
       .then((response) => {
         localStorage.setItem('jwt', response.data);
@@ -98,7 +145,7 @@ export default class NavbarInternal extends React.Component {
     }
     else
     {
-        this.setState({ showModal: false });
+        this.setState({ showRegisterModal: false });
     }
     
   }
@@ -168,6 +215,7 @@ export default class NavbarInternal extends React.Component {
           <NavItem>User Profile</NavItem>
         </IndexLinkContainer>
         <NavItem onClick={evt => this.showLogin(evt)}>Login</NavItem>
+        <NavItem onClick={evt => this.showRegister(evt)}>Register</NavItem>
         </Nav>
       </Navbar>
 
@@ -189,8 +237,42 @@ export default class NavbarInternal extends React.Component {
                       <input id="password" className="form-control" type="password"
                       onChange={this.setPassword}></input>
                     </div>
+                    <button className="btn btn-link" onClick={evt => this.resetPassword(evt)}>Forgot password?</button>
                     <div className="form-group">
                       <button onClick={evt => this.handleLogin(evt)} className="btn btn-default">Submit</button>
+                    </div>
+                </div>
+              </div>
+          </div>
+
+          </Modal.Body>
+        </Modal>
+
+        <Modal show={this.state.showRegisterModal} onHide={evt => this.handleRegister(evt)}>
+          <Modal.Header closeButton>
+            <Modal.Title>Register</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <div>
+              <div className="panel panel-default">
+                <div className="panel-body">
+                    <div className="form-group">
+                      <label htmlFor="userName">Email</label>
+                      <input id="email" 
+                        name="emailInput" onChange={this.setEmail} className="form-control"></input>
+                    </div>  
+                    <div className="form-group">
+                      <label htmlFor="userName">Username</label>
+                      <input id="userName" 
+                        name="userNameInput" onChange={this.setUserName} className="form-control"></input>
+                    </div>              
+                    <div className="form-group">
+                      <label htmlFor="password">Password</label>
+                      <input id="password" className="form-control" type="password"
+                      onChange={this.setPassword}></input>
+                    </div>
+                    <div className="form-group">
+                      <button onClick={evt => this.handleRegister(evt)} className="btn btn-default">Submit</button>
                     </div>
                 </div>
               </div>
