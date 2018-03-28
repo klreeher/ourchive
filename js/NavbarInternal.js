@@ -40,9 +40,9 @@ export default class NavbarInternal extends React.Component {
 
   logout(evt)
   {
-    axios.post('/api/user/logout/', {      
-      Authorization: 'Bearer ' + localStorage.getItem('jwt')
-    })
+    axios.post('/api/user/logout/', {empty: "empty"}, {   
+      headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json'
+    }})
     .then((response) => {
       localStorage.removeItem('jwt');
       this.setState({

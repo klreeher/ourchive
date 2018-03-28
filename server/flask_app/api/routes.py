@@ -73,7 +73,7 @@ def get_results(searchTerm):
 def logout():
   if not request.json:
     abort(400)
-  result = auth.logout(request.json)
+  result = auth.logout(request)
   return result
 
 @api.route('/api/user/login/', methods=['POST'])

@@ -3,6 +3,7 @@ import unittest
 from server.flask_app import db
 from server.flask_app.models import User, BlacklistToken
 from server.flask_app.auth import logic as auth
+from server.flask_app.api import routes as routes
 from server.tests.base import BaseTestCase
 import json
 import time
@@ -57,8 +58,15 @@ class TestAuthBlueprint(BaseTestCase):
 
 	def test_user_status(self):
 		response = self.do_register('elena@gmail.com', '123456789')
-		response = auth.authorize(dict(
-		Authorization='Bearer ' + response.json['auth_token']))
+		response = self.client.post(
+            '/api/user/authorize/',
+            headers=dict(Authorization='Bearer ' + 
+				response.json['auth_token']),
+            content_type='application/json',
+            data=json.dumps(dict(
+                empty='empty'
+            ))
+        )
 		data = response.json
 		self.assertTrue(data['status'] == 'success')
 		self.assertTrue(data['data'] is not None)
@@ -71,9 +79,15 @@ class TestAuthBlueprint(BaseTestCase):
 		data_register = resp_register.json
 		resp_login = auth.login(dict(email='elena@gmail.com',password='123456789'))
 		data_login = resp_login.json
-
-		response = auth.logout(dict(Authorization='Bearer ' + 
-			data_login['auth_token']))
+		response = self.client.post(
+            '/api/user/logout/',
+            headers=dict(Authorization='Bearer ' + 
+				data_login['auth_token']),
+            content_type='application/json',
+            data=json.dumps(dict(
+                empty='empty'
+            ))
+        )
 		data = response.json
 		self.assertTrue(data['status'] == 'success')
 		self.assertTrue(data['message'] == 'Successfully logged out.')
@@ -84,14 +98,19 @@ class TestAuthBlueprint(BaseTestCase):
 		data_register = resp_register.json
 		resp_login = auth.login(dict(email='joe@gmail.com',password='123456'))
 		data_login = resp_login.json
-	
-		time.sleep(6)
-		response = auth.logout(dict(Authorization='Bearer ' + 
-				resp_login.json['auth_token']))
-		data = response.json
+		response = self.client.post(
+            '/api/user/logout/',
+            headers=dict(Authorization='Bearer ' + 
+				'sdflksjdflds'),
+            content_type='application/json',
+            data=json.dumps(dict(
+                empty='empty'
+            ))
+        )
+		data = json.loads(response.data.decode())
 		self.assertTrue(data['status'] == 'fail')
 		self.assertTrue(
-		data['message'] == 'Signature expired. Please log in again.')
+		data['message'] == 'Invalid token. Please log in again.')
 		self.assertEqual(response.status_code, 401)
 
 	def test_valid_blacklisted_token_logout(self):
@@ -104,7 +123,15 @@ class TestAuthBlueprint(BaseTestCase):
 		db.session.add(blacklist_token)
 		db.session.commit()
 		# blacklisted valid token logout
-		response = auth.logout(dict(Authorization='Bearer ' + data_login['auth_token']))
+		response = self.client.post(
+            '/api/user/logout/',
+            headers=dict(Authorization='Bearer ' + 
+				data_login['auth_token']),
+            content_type='application/json',
+            data=json.dumps(dict(
+                empty='empty'
+            ))
+        )
 		data = response.json
 		self.assertTrue(data['status'] == 'fail')
 		self.assertTrue(data['message'] == 'Token blacklisted. Please log in again.')
@@ -118,7 +145,15 @@ class TestAuthBlueprint(BaseTestCase):
 		blacklist_token = BlacklistToken(token=data_register['auth_token'])
 		db.session.add(blacklist_token)
 		db.session.commit()
-		response = auth.authorize(dict(Authorization='Bearer ' + data_register['auth_token']))
+		response = self.client.post(
+            '/api/user/logout/',
+            headers=dict(Authorization='Bearer ' + 
+				data_register['auth_token']),
+            content_type='application/json',
+            data=json.dumps(dict(
+                empty='empty'
+            ))
+        )
 		data = response.json
 		self.assertTrue(data['status'] == 'fail')
 		self.assertTrue(data['message'] == 'Token blacklisted. Please log in again.')
@@ -126,7 +161,15 @@ class TestAuthBlueprint(BaseTestCase):
 
 	def test_user_status_malformed_bearer_token(self):
 		response = self.do_register('elena@gmail.com', '123456789')
-		response = auth.authorize(dict(Authorization='Bearer' + response.json['auth_token']))
+		response = self.client.post(
+            '/api/user/authorize/',
+            headers=dict(Authorization='Bearer' + 
+				response.json['auth_token']),
+            content_type='application/json',
+            data=json.dumps(dict(
+                empty='empty'
+            ))
+        )
 		data = response.json
 		self.assertTrue(data['status'] == 'fail')
 		self.assertTrue(data['message'] == 'Bearer token malformed.')

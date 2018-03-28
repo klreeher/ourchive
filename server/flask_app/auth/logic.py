@@ -71,7 +71,7 @@ def login(post_data):
 
 
 def authorize(request):
-	auth_header = request.get('Authorization')
+	auth_header = request.headers.get('Authorization')
 	if auth_header:
 		try:
 			auth_token = auth_header.split(" ")[1]
@@ -113,7 +113,7 @@ def authorize(request):
 		return make_response(jsonify(responseObject), 401)
 
 def logout(request):
-	auth_header = request.get('Authorization')
+	auth_header = request.headers.get('Authorization')
 	if auth_header:
 		auth_token = auth_header.split(" ")[1]
 	else:
@@ -136,7 +136,7 @@ def logout(request):
 					'message': e,
 					'status_int': 401
 				}
-			return make_response(jsonify(responseObject), 401)
+				return make_response(jsonify(responseObject), 401)
 		else:
 			responseObject = {
 				'status': 'fail',
@@ -150,4 +150,4 @@ def logout(request):
 			'message': 'Provide a valid auth token.',
 			'status_int': 401
 		}
-	return make_response(jsonify(responseObject), 401)
+		return make_response(jsonify(responseObject), 401)
