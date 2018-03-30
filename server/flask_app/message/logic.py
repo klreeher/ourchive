@@ -3,10 +3,11 @@ import re
 import json
 from .. import db
 from ..work import views
+from ..auth import logic as auth
 from ..models import Work, Chapter, Tag, User, TagType, Bookmark, BookmarkLink, Message
 
 def add_message(json):
-	message = Message(to_user_id = json["to_user"], from_user_id = json["from_user"]["user_id"],
+	message = Message(to_user_id = json["to_user"], from_user_id = json["from_user"],
 		message_subject=json["message_subject"],message_content=json["message_content"])
 	if "parent_id" in json:
 		parent_message = Message.query.filter_by(id = json["parent_id"]).first()
@@ -16,8 +17,10 @@ def add_message(json):
 	db.session.commit()
 	return message.id
 
-def delete_message(message_id):
+def delete_message(message_id, user_id):
 	message = Message.query.filter_by(id=message_id).first()
+	if message is not None and message.to_user_id != user_id:
+		return None
 	if message is not None and message.parent_message != []:
 		parent = message.parent_message
 		message.parent_message[0].replies.remove(message)
@@ -25,6 +28,7 @@ def delete_message(message_id):
 		message.replies = []
 	Message.query.filter_by(id=message_id).delete()
 	db.session.commit()
+	return "Deleted"
 
 def delete_all_messages(user_id):
 	inbox = User.query.filter_by(id=user_id).first().received_messages.all()
@@ -34,24 +38,27 @@ def delete_all_messages(user_id):
 	for message in outbox:
 		delete_message(message.id)
 
-def update_read_status(message_id, status):
+def update_read_status(message_id, status, user_id):
 	message = Message.query.filter_by(id=message_id).first()
 	if message is not None:
-		message.message_read = status
-		db.session.add(message)
-		db.session.commit()
-		return "Success"
+		if message.to_user_id == user_id:
+			message.message_read = status
+			db.session.add(message)
+			db.session.commit()
+			return "Success"
+		else:
+			return None
 	else:
 		return None
 
 def mark_all_read(user_id):
 	user = User.query.filter_by(id=user_id).first()
 	for message in user.received_messages:
-		update_read_status(message.id, True)
+		update_read_status(message.id, True, user_id)
 
-def get_message(message_id):
+def get_message(message_id, user_id):
 	message = Message.query.filter_by(id=message_id).first()
-	if message is not None:
+	if message is not None and (message.to_user_id == user_id or message.from_user_id == user_id):
 		return build_message(json, None)
 	else:
 		return None

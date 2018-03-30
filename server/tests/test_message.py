@@ -17,14 +17,14 @@ class TestMessage(BaseTestCase):
     def test_delete_message(self):
         data = self.build_data()
         new_id = message.add_message(data)
-        message.delete_message(new_id)
+        message.delete_message(new_id, 1)
         self.assertTrue(len( Message.query.all()) == 0)
 
     def test_mark_read_message(self):
         data = self.build_data()
         new_id = message.add_message(data)    
         second_id = message.add_message(data)    
-        message.update_read_status(new_id, True)
+        message.update_read_status(new_id, True, 1)
         new_message = Message.query.filter_by(id=new_id).first()
         second_message = Message.query.filter_by(id=second_id).first()
         self.assertTrue(new_message.message_read == True)
@@ -52,7 +52,7 @@ class TestMessage(BaseTestCase):
     def build_data(self):
         built = {}
         built["to_user"] = 1
-        built["from_user"] = {"user_id": 1, "name": "elena"}
+        built["from_user"] = 1
         built["message_subject"] = "test"
         built["message_content"] = "this is just a test message, calm down"
         built["replies"] = []

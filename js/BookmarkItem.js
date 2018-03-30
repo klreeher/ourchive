@@ -111,7 +111,9 @@ export default class BookmarkItem extends React.Component {
       text: this.state.newCommentText, 
       user_id: 1, 
       bookmark_id: this.state.bookmark.id
-    })
+    }, {   
+      headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json'
+    }})
     .then(function (response) {
       	newComment.id = response.data["id"]
       	var original = this.state.bookmark;

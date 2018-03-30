@@ -19,7 +19,9 @@ export default class NewWork extends React.Component {
       work_tags: this.state.work_tags, 
       chapters: this.state.chapters,
       work_id: this.state.work_id
-    })
+    }, {   
+      headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json'
+    }})
     .then(function (response) {
       history.push({
         pathname: '/work/'+response.data.work_id
@@ -156,17 +158,6 @@ export default class NewWork extends React.Component {
     this.setState({
       chapters: original
     });    
-  }
-  saveWork()
-  {
-    axios.post('/api/work/new')
-      .then(function (response) {
-        this.setState({work: response.data[0]});  
-
-      }.bind(this))
-      .catch(function (error) {
-        console.log(error);
-    });
   }
   getTagCategories()
   {

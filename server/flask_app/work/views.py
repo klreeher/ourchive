@@ -41,15 +41,23 @@ def get_by_user(user_id, page=1):
 	else:
 		return None
 
-def delete_work(work_id):
+def delete_work(work_id, user_id):
 	try:
-		Work.query.filter_by(id=work_id).delete()
-		db.session.commit()
+		work = Work.query.filter_by(id=work_id).first()
+		if work is not None:
+			if work.user.id == user_id:
+				Work.query.filter_by(id=work_id).delete()
+				db.session.commit()
+				return work_id
+		return None
 	except:
 		#todo log
-		return
-def update_work(json):
+		return None
+
+def update_work(json, user_id):
 	work = Work.query.filter_by(id = json['work_id']).first()
+	if (work.user.id != user_id):
+		return None
 	work.title = json['title']
 	work.work_summary = json['work_summary']
 	work.work_notes = json['work_notes']

@@ -29,10 +29,12 @@ class TestBookmark(BaseTestCase):
         self.assertTrue(updated_bookmark.description == "This was bad actually!!!")
 
     def test_delete_bookmark(self):
+        self.add_user()
         bookmarkObj = Bookmark()
+        bookmarkObj.user_id = 1
         db.session.add(bookmarkObj)
         db.session.commit()
-        bookmark.delete_bookmark(1)
+        bookmark.delete_bookmark(1, 1)
         bookmarks = Bookmark.query.all()
         self.assertTrue(len(bookmarks) == 0)
     

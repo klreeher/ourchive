@@ -58,9 +58,10 @@ export default class Chapter extends React.Component {
     var apiRoute = "/api/chapter/comment/";
     axios.post(apiRoute, {
       text: this.state.newCommentText, 
-      user_id: 1, 
       chapter_id: this.state.chapter.id
-    })
+    }, {   
+      headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json'
+    }})
     .then(function (response) {
         newComment.id = response.data["id"]
         var original = this.state.chapter;

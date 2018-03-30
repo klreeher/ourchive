@@ -53,13 +53,18 @@ def get_bookmarks_by_curator(curator_id, page=1):
 	else:
 		return None
 
-def delete_bookmark(bookmark_id):
+def delete_bookmark(bookmark_id, user_id):
 	try:
-		Bookmark.query.filter_by(id=bookmark_id).delete()
-		db.session.commit()
+		bookmark = Bookmark.query.filter_by(id=bookmark_id).first()
+		if bookmark is not None:
+			if bookmark.user_id == user_id:
+				Bookmark.query.filter_by(id=bookmark_id).delete()
+				db.session.commit()
+				return bookmark_id
+		return None
 	except:
 		#todo log
-		return
+		return None
 
 def build_bookmark(bookmark):
 	user = User.query.filter_by(id=bookmark.user_id).first()

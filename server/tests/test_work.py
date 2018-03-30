@@ -54,10 +54,11 @@ class TestWorkView(BaseTestCase):
         self.build_data(False, False)
         
         workObj = Work()
+        workObj.user_id = 1
         db.session.add(workObj)
         db.session.commit()
 
-        work.delete_work(1)
+        work.delete_work(1, 1)
         works = Work.query.all()
         self.assertTrue(len(works) == 0)
 
@@ -117,6 +118,7 @@ class TestWorkView(BaseTestCase):
 
         workObj = Work()
         workObj.title = "Beginning Title"
+        workObj.user_id = 1
         db.session.add(workObj)
         
 
@@ -125,7 +127,7 @@ class TestWorkView(BaseTestCase):
 
         data['work_id'] = workObj.id
         data['chapters'][0]['id'] = workObj.chapters[0].id
-        work.update_work(data)
+        work.update_work(data, 1)
         workObj = Work.query.filter_by(id=workObj.id).first()
         self.assertTrue(workObj.title == "A Tale of Two Poor Students")
 

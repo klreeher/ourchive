@@ -31,10 +31,11 @@ export default class Comment extends React.Component {
       parentCommentId: this.state.comment.id};
     var apiRoute = "/api/comment/reply/";    
     axios.post(apiRoute, {
-      text: this.state.newCommentText, 
-      user_id: 1, 
+      text: this.state.newCommentText,
       parent_id: this.state.comment.id
-    })
+    }, {   
+      headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json'
+    }})
     .then(function (response) {
       newComment.id = response.data["id"]
       var original = this.state.comment;

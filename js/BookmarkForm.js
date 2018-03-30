@@ -19,7 +19,9 @@ export default class BookmarkForm extends React.Component {
 	      work_id: this.state.work.id,
 	      links: [],
 	      id: this.state.id
-	    })
+	    }, {   
+      headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json'
+    }})
 	    .then(function (response) {
 	      history.push({
 	        pathname: '/bookmark/'+response.data.bookmark_id

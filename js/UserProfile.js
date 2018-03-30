@@ -25,14 +25,13 @@ export default class UserProfile extends React.Component {
     handleSendMessage(event)
     {
       event.target.blur()
-      var user = {}
-      user["user_id"] = 1
       axios.post('/api/message/', {
         message_subject: this.state.messageTitle,
         message_content: this.state.messageText,
-        from_user: user,
         to_user: this.state.profile_user.userId, 
-      })
+      }, {   
+        headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json'
+      }})
       .then(function (response) {
         //todo add success message
         this.setState(
@@ -68,9 +67,7 @@ export default class UserProfile extends React.Component {
 	  	axios.get('/api/user/'+userId)
 	      .then(function (response) {
 	        this.setState({
-	            profile_user: response.data,
-              bookmarks: response.data.bookmarks,
-              works: response.data.works
+	            profile_user: response.data
 	        });  
 
 	      }.bind(this))
@@ -89,7 +86,7 @@ export default class UserProfile extends React.Component {
         axios.get('/api/work/creator/'+userId)
           .then(function (response) {
             this.setState({
-              works: response.data
+              works: response.data.works
             });  
 
           }.bind(this))
@@ -106,7 +103,7 @@ export default class UserProfile extends React.Component {
               curator = response.data[0].curator
             }
             this.setState({                
-              bookmarks: response.data,
+              bookmarks: response.data.bookmarks,
               curator: curator
             });    
 
@@ -116,7 +113,7 @@ export default class UserProfile extends React.Component {
         });
     }
 
-    componentWillMount() { 
+    componentDidMount() { 
     	this.getUser();
     	this.getWorks(0, this.props.match.params.userId);
     	this.getBookmarks(0, this.props.match.params.userId);

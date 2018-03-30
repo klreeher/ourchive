@@ -24,7 +24,9 @@ export default class MessageCenter extends React.Component {
 
 	getMessages()
 	{
-		axios.get('/api/user/'+this.state.user_id+'/messages/inbox')
+		axios.get('/api/user/'+this.state.user_id+'/messages/inbox', {   
+        	headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json'
+      		}})
 	      .then(function (response) {
 	      	if (response.data.length > 0)
 	      	{
@@ -41,7 +43,9 @@ export default class MessageCenter extends React.Component {
 	}
 	getOutbox()
 	{
-		axios.get('/api/user/'+this.state.user_id+'/messages/outbox')
+		axios.get('/api/user/'+this.state.user_id+'/messages/outbox',  {   
+        	headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json'
+      		}})
 	      .then(function (response) {
 	        this.setState({
 	          outbox: response.data,
@@ -63,15 +67,14 @@ export default class MessageCenter extends React.Component {
 	  {
 	    showNewMessage: false
 	  })
-	  var user = {}
-      user["user_id"] = 1
       axios.post('/api/message/', {
         message_subject: parent_message_subject,
         message_content: new_message_text,
-        from_user: user,
         to_user: parent_message_to_id, 
         parent_id: parent_id
-      })
+      }, {   
+        	headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json'
+      		}})
       .then(function (response) {
         this.getMessages()
         this.setState(
@@ -99,7 +102,9 @@ export default class MessageCenter extends React.Component {
 	}
 	markAsRead(id, parentId)
 	{
-		axios.post('/api/message/'+id+'/read')
+		axios.post('/api/message/'+id+'/read', {"empty":"empty"}, {   
+        	headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json'
+      		}})
 	      .then(function (response) {
 	      }.bind(this))
 	      .catch(function (error) {
@@ -108,7 +113,9 @@ export default class MessageCenter extends React.Component {
 	}
 	deleteMessage(id)
 	{
-		axios.delete('/api/message/'+id)
+		axios.delete('/api/message/'+id, {"empty":"empty"}, {   
+        	headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json'
+      		}})
 	      .then(function (response) {
 	      	var messagesFiltered = this.state.messages.filter(function( obj ) {
 		    	return obj.id !== id;
@@ -128,7 +135,9 @@ export default class MessageCenter extends React.Component {
 	{
 		//todo the UI for this is - send mark all read - mark all read locally
 		event.target.blur()
-		axios.post('/api/user/'+1+'/messages/read')
+		axios.post('/api/user/'+1+'/messages/read'), {"empty":"empty"}, {   
+        	headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json'
+      		}}
 		      .then(function (response) {
 		        var oldMessages = this.state.messages;
 				for (var i = 0; i < oldMessages.length; i++) { 
@@ -149,7 +158,9 @@ export default class MessageCenter extends React.Component {
 		event.target.blur()
 		if (confirm("Are you sure you want to delete ALL messages? This cannot be reversed!")) {
 		    
-		      axios.delete('/api/user/'+1+'/messages/delete')
+		      axios.delete('/api/user/'+this.state.user_id+'/messages/delete', {"empty":"empty"}, {   
+        	headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json'
+      		}})
 		      .then(function (response) {
 		        //todo add success message
 		        this.setState(

@@ -1,5 +1,5 @@
 import json
-from flask import render_template, request, make_response
+from flask import render_template, request, make_response, abort, jsonify
 
 from . import api
 from server.flask_app.work import views as work
@@ -104,56 +104,169 @@ def register():
 
 @api.route('/api/user/<int:userId>/messages/inbox')
 def get_inbox(userId):
-  return json.dumps(message.get_inbox(userId))
+  user_id = auth.auth_from_data(request)
+  print(request.headers)
+  if user_id > 0 and user_id == userId:
+    result = message.get_inbox(user_id)
+    if result is not None:
+      return make_response(jsonify(result), 201)
+    else:
+      abort(400)
+  else:
+    abort(400)
 
 @api.route('/api/user/<int:userId>/messages/outbox')
 def get_outbox(userId):
-  return json.dumps(message.get_outbox(userId))
+  user_id = auth.auth_from_data(request)
+  if user_id > 0 and user_id == userId:
+    result = message.get_outbox(user_id)
+    if result is not None:
+      return make_response(jsonify(result), 201)
+    else:
+      abort(400)
+  else:
+    abort(400)
 
 @api.route('/api/message/<int:messageId>', methods=['GET'])
 def get_message(messageId):
-  return json.dumps(message.get_message(messageId))
+  user_id = auth.auth_from_data(request)
+  if user_id > 0:
+    result = message.get_message(messageId, user_id)
+    if result is not None:
+      return make_response(result, 201)
+    else:
+      abort(400)
+  else:
+    abort(400)
 
 @api.route('/api/message/<int:messageId>', methods=['DELETE'])
 def delete_message(messageId):
-  return json.dumps(message.delete_message(messageId))
+  user_id = auth.auth_from_data(request)
+  if user_id > 0:
+    result = message.delete_message(messageId, user_id)
+    if result is not None:
+      responseObject = {
+          'status': 'success',
+          'message': 'Message deleted.'
+        }
+      return make_response(jsonify(responseObject), 201)
+    else:
+      abort(400)
+  else:
+    abort(400)
 
 @api.route('/api/user/<int:userId>/messages/delete', methods=['DELETE'])
 def delete_all(userId):
-  return json.dumps(message.delete_all_messages(userId))
+  user_id = auth.auth_from_data(request)
+  if user_id > 0 and user_id == userId:
+    result = message.delete_all_messages(user_id)
+    if result is not None:
+      responseObject = {
+          'status': 'success',
+          'message': 'Messages deleted.'
+        }
+      return make_response(jsonify(responseObject), 201)
+    else:
+      abort(400)
+  else:
+    abort(400)
 
 @api.route('/api/user/<int:userId>/messages/read', methods=['POST'])
 def mark_all_read(userId):
-  return json.dumps(message.mark_all_read(userId))
+  user_id = auth.auth_from_data(request)
+  if user_id > 0 and user_id == userId:
+    result = message.mark_all_read(user_id)
+    if result is not None:
+      responseObject = {
+          'status': 'success',
+          'message': 'Messages marked as read.'
+        }
+      return make_response(jsonify(responseObject), 201)
+    else:
+      abort(400)
+  else:
+    abort(400)
 
 @api.route('/api/message/', methods=['POST'])
 def add_message():
-  return json.dumps(message.add_message(request.json))
+  user_id = auth.auth_from_data(request)
+  if user_id > 0:
+    request.json['from_user'] = user_id
+    return json.dumps(message.add_message(request.json))
+  else:
+    abort(400)
 
 @api.route('/api/message/<int:messageId>/read', methods=['POST'])
 def mark_message_read(messageId):
-  return json.dumps(message.update_read_status(messageId, True))
+  user_id = auth.auth_from_data(request)
+  if user_id > 0:
+    result = message.update_read_status(messageId, True, user_id)
+    if result is not None:
+      responseObject = {
+          'status': 'success',
+          'message': 'Message marked as read.'
+        }
+      return make_response(jsonify(responseObject), 201)
+    else:
+      abort(400)
+  else:
+    abort(400)
 
 @api.route('/api/message/<int:messageId>/unread', methods=['POST'])
 def mark_message_unread(messageId):
-  return json.dumps(message.update_read_status(messageId, False))
+  user_id = auth.auth_from_data(request)
+  if user_id > 0:
+    result = message.update_read_status(messageId, False, user_id)
+    if result is not None:
+      responseObject = {
+          'status': 'success',
+          'message': 'Message marked as unread.'
+        }
+      return make_response(jsonify(responseObject), 201)
+    else:
+      abort(400)
+  else:
+    abort(400)
 
 @api.route('/api/work/', methods=['POST'])
 def post_work():
-  #todo login route
-  work_id = work.add_work(request.json, 1)
-  return json.dumps({"work_id": work_id})
+  user_id = auth.auth_from_data(request)
+  if user_id > 0:
+    work_id = work.add_work(request.json, user_id)
+    return json.dumps({"work_id": work_id})
+  else:
+    abort(400)
 
 @api.route('/api/work/<int:workId>', methods=['POST'])
 def update_work(workId):
-    work_id = work.update_work(request.json)
-    return json.dumps({"work_id": work_id})
+  user_id = auth.auth_from_data(request)
+  if user_id > 0:
+    result = work.update_work(request.json)
+    if result is not None:
+      responseObject = {
+          'work_id': result
+        }
+      return make_response(jsonify(responseObject), 201)
+    else:
+      abort(400)
+  else:
+    abort(400)
 
 @api.route('/api/work/<int:workId>', methods=['DELETE'])
 def delete_work(workId):
-  #todo login route
-  work.delete_work(workId)
-  return 'Deleted: ' + str(workId)
+  user_id = auth.auth_from_data(request)
+  if user_id > 0:
+    result = work.delete_work(workId, user_id)
+    if result is not None:
+      responseObject = {
+          'Deleted': workId
+        }
+      return make_response(jsonify(responseObject), 201)
+    else:
+      abort(400)
+  else:
+    abort(400)
+
 
 @api.route('/api/tag/categories', methods=['GET'])
 def get_tag_categories():
@@ -170,9 +283,19 @@ def get_work(workId):
 
 @api.route('/api/bookmark/', methods=['POST'])
 def post_bookmark():
-  #todo login route
-  bookmark_id = bookmark.add_bookmark(request.json, 1)
-  return json.dumps({"bookmark_id": bookmark_id})
+  user_id = auth.auth_from_data(request)
+  if user_id > 0:
+    request.json['user_id'] = user_id
+    result = bookmark.add_bookmark(request.json, user_id)
+    if result is not None:
+      responseObject = {
+          'bookmark_id': result
+        }
+      return make_response(jsonify(responseObject), 201)
+    else:
+      abort(400)
+  else:
+    abort(400)
 
 @api.route('/api/bookmark/<int:bookmarkId>', methods=['GET'])
 def get_bookmark(bookmarkId):
@@ -180,9 +303,19 @@ def get_bookmark(bookmarkId):
 
 @api.route('/api/bookmark/<int:bookmarkId>', methods=['DELETE'])
 def delete_bookmark(bookmarkId):
-  #todo login route
-  bookmark.delete_bookmark(bookmarkId)
-  return 'Deleted: ' + str(bookmarkId)
+  user_id = auth.auth_from_data(request)
+  if user_id > 0:
+    request.json['user_id'] = user_id
+    result = bookmark.delete_bookmark(bookmarkId)
+    if result is not None:
+      responseObject = {
+          'Deleted': result
+        }
+      return make_response(jsonify(responseObject), 201)
+    else:
+      abort(400)
+  else:
+    abort(400)
 
 @api.route('/api/bookmark/<int:bookmarkId>', methods=['POST'])
 def update_bookmark(bookmarkId):
@@ -230,15 +363,51 @@ def get_tag_suggestions(term, type_id):
 
 @api.route('/api/chapter/comment/', methods=['POST'])
 def add_chapter_comment():
-  return json.dumps({"id": comment.add_comment_to_chapter(request.json)})
+  user_id = auth.auth_from_data(request)
+  if user_id > 0:
+    request.json['user_id'] = user_id
+    result = comment.add_comment_to_chapter(request.json)
+    if result is not None:
+      responseObject = {
+          'id': result
+        }
+      return make_response(jsonify(responseObject), 201)
+    else:
+      abort(400)
+  else:
+    abort(400)
 
 @api.route('/api/bookmark/comment/', methods=['POST'])
 def add_bookmark_comment():
-  return json.dumps({"id": comment.add_comment_to_bookmark(request.json)})
+  user_id = auth.auth_from_data(request)
+  if user_id > 0:
+    request.json['user_id'] = user_id
+    result = comment.add_comment_to_bookmark(request.json)
+    if result is not None:
+      responseObject = {
+          'id': result
+        }
+      return make_response(jsonify(responseObject), 201)
+    else:
+      abort(400)
+  else:
+    abort(400)
 
 @api.route('/api/comment/reply/', methods=['POST'])
 def add_comment_reply():
-  return json.dumps({"id": comment.add_reply(request.json)})
+  user_id = auth.auth_from_data(request)
+  if user_id > 0:
+    request.json['user_id'] = user_id
+    result = comment.add_reply(request.json)
+    if result is not None:
+      responseObject = {
+          'id': result
+        }
+      return make_response(jsonify(responseObject), 201)
+    else:
+      abort(400)
+  else:
+    abort(400)
 
 @api.route('/api/tag/<int:tag_id>/<path:tag_text>', methods=['GET'])
 def get_tagged_data(tag_id, tag_text):
@@ -251,3 +420,4 @@ def get_tagged_works(tag_id, tag_text, page):
 @api.route('/api/tag/bookmark/<int:tag_id>/<path:tag_text>/<int:page>', methods=['GET'])
 def get_tagged_bookmarks(tag_id, tag_text, page):
   return json.dumps(tag.get_tagged_bookmarks(tag_id, tag_text, page))
+

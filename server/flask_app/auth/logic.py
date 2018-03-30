@@ -151,3 +151,10 @@ def logout(request):
 			'status_int': 401
 		}
 		return make_response(jsonify(responseObject), 401)
+
+def auth_from_data(request):
+  status = authorize(request)
+  if status.status_code == 201:
+    return json.loads(status.data.decode())['data']['user_id']
+  else:
+    return -1
