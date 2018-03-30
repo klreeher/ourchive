@@ -284,6 +284,7 @@ def get_work(workId):
 @api.route('/api/bookmark/', methods=['POST'])
 def post_bookmark():
   user_id = auth.auth_from_data(request)
+  print(user_id)
   if user_id > 0:
     request.json['user_id'] = user_id
     result = bookmark.add_bookmark(request.json, user_id)

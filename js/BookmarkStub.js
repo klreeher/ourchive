@@ -56,12 +56,12 @@ export default class BookmarkStub extends React.Component {
 		        </div>	
 		         <div className="row">
 		             {this.state.bookmark.tags.map(tag => 
-				        <div className="row" key={Math.random()}>
-				        <div className="col-md-12">
-				            <ul className="list-inline">
-				              <TagList tag_category={Object.keys(tag)} tags={Object.values(tag)} underEdit={false}/>
-				            </ul>
-				        </div> 
+				        <div className="row" key={tag.id}>
+					      <div className="col-xs-9 col-md-12">
+				              <ul className="list-inline">
+				                <TagList tag_category={tag.label} category_id={tag.id} tags={tag.tags}/>
+				              </ul>
+				          </div> 
 				        </div>
 				      )}		            
 		        </div>
