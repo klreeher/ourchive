@@ -103,6 +103,16 @@ def register():
     abort(400)
   return auth.register(request.json)
 
+@api.route('/api/user/<int:userId>/reset/<string:token>', methods=['POST'])
+def reset(userId, token):
+  if not request.json:
+    abort(400)
+  if request.json["email"] is None:
+    abort(400)
+  if request.json["password"] is None:
+    abort(400)
+  return auth.reset_password(request.json, userId, token)
+
 @api.route('/api/user/<int:userId>/messages/inbox')
 def get_inbox(userId):
   user_id = auth.auth_from_data(request)

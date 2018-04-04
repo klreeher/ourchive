@@ -5,6 +5,7 @@ import json
 from .. import db
 from flask import current_app as app
 from ..models import User, BlacklistToken
+from server.flask_app.user import logic as user_logic
 
 def register(post_data):
 	user = User.query.filter_by(email=post_data.get('email')).first()
@@ -111,6 +112,25 @@ def authorize(request):
 			'status_int': 401
 		}
 		return make_response(jsonify(responseObject), 401)
+
+def reset_password(request, user_id, token):
+	token_valid = user_logic.validate_reset_token(user_id, token)
+	if token_valid is not True:
+		responseObject = {
+			'status': 'failure',
+			'message': 'Token invalid. Please try again.'
+		}
+		return make_response(jsonify(responseObject), 401)
+	password = user_logic.encrypt_password(request.get('password'))
+	user = User.query.filter_by(username=request.get('username')).first()
+	user.password = password
+	db.session.add(user)
+	db.session.commit()
+	responseObject = {
+		'status': 'success',
+		'message': 'Password Updated.'
+	}
+	return make_response(jsonify(responseObject), 201)
 
 def logout(request):
 	auth_header = request.headers.get('Authorization')

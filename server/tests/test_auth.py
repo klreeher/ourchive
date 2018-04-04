@@ -4,6 +4,7 @@ from server.flask_app import db
 from server.flask_app.models import User, BlacklistToken
 from server.flask_app.auth import logic as auth
 from server.flask_app.api import routes as routes
+from server.flask_app.user import logic as user_logic
 from server.tests.base import BaseTestCase
 import json
 import time
@@ -54,7 +55,6 @@ class TestAuthBlueprint(BaseTestCase):
 		self.assertTrue(data['message'] == 'User does not exist.')
 		self.assertTrue(response.content_type == 'application/json')
 		self.assertEqual(response.status_code, 404)
-
 
 	def test_user_status(self):
 		response = self.do_register('elena@gmail.com', '123456789')
@@ -173,6 +173,30 @@ class TestAuthBlueprint(BaseTestCase):
 		data = response.json
 		self.assertTrue(data['status'] == 'fail')
 		self.assertTrue(data['message'] == 'Bearer token malformed.')
+		self.assertEqual(response.status_code, 401)
+
+	def test_password_reset(self):
+		response = self.do_register('elena@gmail.com', '123456789')
+		token = user_logic.add_reset(1)
+		response = self.client.post(
+            '/api/user/1/reset/'+token.decode("utf-8"),
+            content_type='application/json',
+            data=json.dumps(dict(
+                email='elena@gmail.com',password='1234567810'
+            ))
+        )
+		self.assertEqual(response.status_code, 201)
+
+	def test_invalid_password_reset(self):
+		response = self.do_register('elena@gmail.com', '123456789')
+		token = user_logic.add_reset(1)
+		response = self.client.post(
+            '/api/user/1/reset/'+"badvalbadval",
+            content_type='application/json',
+            data=json.dumps(dict(
+                email='elena@gmail.com',password='1234567810'
+            ))
+        )
 		self.assertEqual(response.status_code, 401)
 
 if __name__ == '__main__':
