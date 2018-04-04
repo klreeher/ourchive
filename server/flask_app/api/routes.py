@@ -8,6 +8,7 @@ from server.flask_app.message import logic as message
 from server.flask_app.tag import logic as tag
 from server.flask_app.comment import logic as comment
 from server.flask_app.auth import logic as auth
+from server.flask_app.user import logic as user_logic
 
 @api.route('/<path:path>')
 def unknown_path(path):
@@ -191,6 +192,12 @@ def mark_all_read(userId):
 def add_message():
   user_id = auth.auth_from_data(request)
   if user_id > 0:
+    if user_logic.in_blocklist(user_id, request.json['to_user']):
+      responseObject = {
+          'status': 'failure',
+          'message': 'Cannot message user who has you blocked.'
+        }
+      return make_response(jsonify(responseObject), 403)
     request.json['from_user'] = user_id
     return json.dumps(message.add_message(request.json))
   else:

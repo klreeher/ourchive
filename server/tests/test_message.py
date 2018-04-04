@@ -3,6 +3,8 @@ import unittest
 from server.flask_app import db
 from server.flask_app.models import User, Message
 from server.flask_app.message import logic as message
+from server.flask_app.user import logic as user_logic
+from server.flask_app.auth import logic as auth
 from server.tests.base import BaseTestCase
 import json
 
@@ -48,11 +50,25 @@ class TestMessage(BaseTestCase):
         new_message = Message.query.filter_by(id=new_id).first()
         self.assertTrue(new_message.replies[0].id == second_id)
 
+    def test_send_to_user_who_blocked_me(self):
+        data = self.build_data()
+        user_logic.add_blocklist(2, 1)
+        resp_login = auth.login(dict(email='test@test.com',password='test'))
+        response = self.client.post(
+            '/api/message/',
+            headers=dict(Authorization='Bearer ' + 
+                resp_login.json['auth_token']),
+            content_type='application/json',
+            data=json.dumps(data)
+        )
+        self.assertTrue(response.status_code == 403)
+        self.assertTrue(response.json['message'] == 'Cannot message user who has you blocked.')
+
 
     def build_data(self):
         built = {}
         built["to_user"] = 1
-        built["from_user"] = 1
+        built["from_user"] = 2
         built["message_subject"] = "test"
         built["message_content"] = "this is just a test message, calm down"
         built["replies"] = []
