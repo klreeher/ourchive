@@ -22,8 +22,12 @@ def add_reset(reset_user):
 def validate_reset_token(reset_user, token):
 	s = TimestampSigner('secret-key')
 	try:
-		token = s.unsign(token, max_age=43200)
-		return True
+		new_token = s.unsign(token, max_age=43200)
+		redis_val = redis_db.get("password-reset:#"+str(reset_user))
+		if (token == redis_val.decode("utf8")):
+			return True
+		else:
+			return False
 	except Exception as e:
 		return False
 
