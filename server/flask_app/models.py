@@ -288,6 +288,26 @@ class Message(db.Model):
                         backref="parent_message", lazy='dynamic'
                 )
 
+class Notification(db.Model):
+
+    __tablename__ = 'notifications'
+
+    id = db.Column(db.Integer, primary_key=True)
+    content = db.Column(db.String(200))
+    date_created = db.Column(db.DateTime)
+    route = db.Column(db.String)
+
+    notification_type_id = db.Column(db.Integer, db.ForeignKey('notification_types.id'))
+    notification_type = db.relationship('NotificationType')
+
+class NotificationType(db.Model):
+    __tablename__ = 'notification_types'
+
+    id = db.Column(db.Integer, primary_key=True)
+    type_label = db.Column(db.String(200))
+    send_email = db.Column(db.Boolean)
+
+
 
 def __repr__(self):
     return '<Message: {}>'.format(self.id)
