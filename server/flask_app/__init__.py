@@ -6,12 +6,13 @@ from flask_bcrypt import Bcrypt
 from flask_sqlalchemy import SQLAlchemy
 import os
 import redis
+from file_storage import FileStorage
 
 app = Flask(__name__)
 CORS(app)
 
 upload_folder = '/home/imp/projects/ourchive/server/flask_app/uploads'
-tm = tus_manager(app, upload_url='/uploads', upload_folder=upload_folder)
+tm = tus_manager(app, upload_url='/uploads', upload_folder=upload_folder, overwrite=True, upload_finish_cb=None, storage=FileStorage(upload_folder))
 
 bcrypt = Bcrypt(app)
 db = SQLAlchemy(app)
