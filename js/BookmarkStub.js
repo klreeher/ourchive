@@ -18,16 +18,16 @@ export default class BookmarkStub extends React.Component {
   render() {
     return (
     	<div>
-    	  <div className="panel panel-default">
-	      	<div className="panel-heading">
-	      		{this.state.bookmark.curator_title}
-	      		{this.state.viewer_is_creator && 
+    	  <div className="panel-body">
+	      	<div className="row">
+	      		<div className="col-sm-5">{this.state.bookmark.curator_title}</div>
+	      		<div className="col-sm-5">{this.props.user.id === this.state.bookmark.user_id && 
 		            		<div className="pull-right"> 
 		            			<button className="btn btn-link">Edit</button> | <button className="btn btn-link">Delete</button>
 		            		</div>
 		            	}
-	      	</div>
-	      	<div className="panel-body">
+		        </div>
+		    </div>
 		      	<div className="row">
 		      		<div className="col-md-12">
 		        		<blockquote>
@@ -67,7 +67,6 @@ export default class BookmarkStub extends React.Component {
 		        </div>
 	          </div> 
 	  		</div>
-    	</div>
       
     );
   }

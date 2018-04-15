@@ -43,10 +43,7 @@ export default class BookmarkItem extends React.Component {
 
   componentDidMount()
   {
-    if (this.state.needsLoad){
-
-    	this.getBookmark(this.state.bookmark.id); 
-    }
+    this.getBookmark(this.state.bookmark.id); 
   }
 
   getBookmark(bookmarkId)
@@ -157,18 +154,16 @@ export default class BookmarkItem extends React.Component {
     ))
     return (
     	<div>
-    	  <div className="panel panel-default">
-	      	<div className="panel-heading">
-	      		{this.state.bookmark.curator_title}
-	      		{this.state.viewer_is_creator && 
+    	  <div className="panel-body">
+	      	<div className="row">
+	      		<div className="col-sm-5">{this.state.bookmark.curator_title}</div>
+	      		<div className="col-sm-5">{this.props.user.id === this.state.bookmark.user_id && 
 		            		<div className="pull-right"> 
-		            			<Update/> | 
-	     			              <button onClick={evt => this.deleteBookmark(evt, this.state.id)} className="btn btn-link">Delete</button>
-
+		            			<button className="btn btn-link">Edit</button> | <button className="btn btn-link">Delete</button>
 		            		</div>
 		            	}
-	      	</div>
-	      	<div className="panel-body">
+		        </div>
+		    </div>
 		      	<div className="row">
 		      		<div className="col-md-12">
 		        		<blockquote>
@@ -253,7 +248,6 @@ export default class BookmarkItem extends React.Component {
 		          </div>  
 	          </div> 
 	  		</div>
-    	</div>
       
     );
   }

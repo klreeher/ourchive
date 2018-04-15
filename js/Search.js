@@ -264,7 +264,7 @@ export default class Search extends React.Component {
         <br/>
         <br/>       
 
-        {this.state.results ? <SearchResults bookmarks={this.state.results.bookmarks} works={this.state.results.works}/> : <div/>}
+        {this.state.results ? <SearchResults bookmarks={this.state.results.bookmarks} works={this.state.results.works} user={this.props.user}/> : <div/>}
       </div>
     );
   }
