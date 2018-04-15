@@ -58,7 +58,8 @@ def login(post_data):
 				responseObject = {
 					'status': 'success',
 					'message': 'Successfully logged in.',
-					'auth_token': auth_token.decode()
+					'auth_token': auth_token.decode(),
+					'admin': user.admin
 				}
 			return make_response(jsonify(responseObject), 201)
 		else:

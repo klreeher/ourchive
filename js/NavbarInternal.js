@@ -23,9 +23,11 @@ export default class NavbarInternal extends React.Component {
 
   componentWillMount() {
     var state = localStorage.getItem('jwt');
+    var admin = localStorage.getItem('admin');
     var id = localStorage.getItem('user_id');
     this.setState({
       loggedIn: state != null,
+      admin: admin != null && admin === true,
       userId: id
     })
   }
@@ -95,6 +97,7 @@ export default class NavbarInternal extends React.Component {
       })
       .then((response) => {
         localStorage.setItem('jwt', response.data['auth_token']);
+        localStorage.setItem('admin', response.data['admin'])
         this.props.updateUser();
         this.setState({ 
           userName: "",
@@ -102,6 +105,7 @@ export default class NavbarInternal extends React.Component {
           email: "",
           loggedIn: true,
           showModal: false,
+          admin: response.data['admin'],
           userId: 1
         });
 
@@ -171,6 +175,12 @@ export default class NavbarInternal extends React.Component {
         <IndexLinkContainer to="/bookmark/1">
             <NavItem>Bookmarks</NavItem>
           </IndexLinkContainer>  
+
+        {this.state.admin &&
+          <IndexLinkContainer to="/admin">
+            <NavItem>Admin</NavItem>
+          </IndexLinkContainer>
+        }
 
         <NavDropdown eventKey={3} title="User" id="user-nav-dropdown">          
           <IndexLinkContainer to="/bookmarks/new">

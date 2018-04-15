@@ -23,6 +23,7 @@ import Home from './Home';
 import MessageCenter from './MessageCenter';
 import Notifications from './Notifications';
 import TagResults from './TagResults';
+import Admin from './Admin';
 
 export default class RootApp extends React.Component {
 
@@ -61,6 +62,7 @@ export default class RootApp extends React.Component {
 
           <Route exact path="/" component={(props, state, params) => <Home user={user} {...props}/>}/>
           <Route path="/works" component={Work}/>
+          <Route path="/admin" component={(props, state, params) => <Admin user={user} {...props}/>}/>
           <Route path="/work/:workId" component={(props, state, params) => <SingleWork user={user} {...props}/>}/>
           <Route exact path="/user/:curatorId/bookmarks" component={(props, state, params) => <BookmarkList user={user} {...props}/>}/>
           <Route path="/bookmark/:bookmarkId" component={(props, state, params) => <BookmarkItem user={user} {...props}/>}/>

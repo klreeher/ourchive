@@ -190,7 +190,7 @@ def get_work_types():
 def get_notification_types():
   user_id = auth.auth_as_admin(request)
   if user_id > 0:
-    types = user_logic.get_notification_types(request.json['types'])
+    types = user_logic.get_notification_types()
     return make_response(jsonify(types), 201)
   else:
     abort(400)
@@ -199,7 +199,7 @@ def get_notification_types():
 def get_tag_types():
   user_id = auth.auth_as_admin(request)
   if user_id > 0:
-    types = user_logic.get_tag_types(request.json['types'])
+    types = user_logic.get_tag_types()
     return make_response(jsonify(types), 201)
   else:
     abort(400)
