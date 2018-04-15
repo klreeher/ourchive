@@ -138,7 +138,9 @@ export default class BookmarkItem extends React.Component {
   deleteBookmark(evt, bookmarkId)
   {
   	evt.target.blur()
-    axios.delete('/api/bookmark/'+bookmarkId)
+    axios.delete('/api/bookmark/'+bookmarkId, {   
+          headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json'
+          }})
         .then(function (response) {
           this.setState({
             bookmark: {"work": {}, "tags": [], "links": [],

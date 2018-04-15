@@ -70,7 +70,10 @@ export default class SingleWork extends React.Component {
 
   deleteWork(evt, workId)
   {
-    axios.delete('/api/work/'+workId)
+    evt.preventDefault()
+    axios.delete('/api/work/'+workId, {   
+          headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json'
+          }})
         .then(function (response) {
           this.setState({
             work: [],

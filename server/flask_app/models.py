@@ -123,10 +123,10 @@ class Work(db.Model):
     is_complete = db.Column(db.Integer)
     word_count = db.Column(db.Integer)
     chapters = db.relationship('Chapter', backref='chapter_work',
-                                lazy='dynamic')
+                                lazy='dynamic', cascade='all,delete')
 
     bookmarks = db.relationship('Bookmark', backref='bookmark_work',
-                                lazy='dynamic')
+                                lazy='dynamic', cascade='all,delete')
 
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     user = db.relationship('User', back_populates='works')
@@ -168,7 +168,7 @@ class Chapter(db.Model):
     comments = db.relationship('Comment', backref='comment_chapter',
                                 lazy='dynamic')
 
-    work_id = db.Column(db.Integer, db.ForeignKey('works.id'))
+    work_id = db.Column(db.Integer, db.ForeignKey('works.id', ondelete='CASCADE'))
     work = db.relationship('Work', back_populates='chapters')
 
     def __repr__(self):
@@ -181,13 +181,13 @@ class Comment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     text = db.Column(db.String)
 
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'))
     user = db.relationship('User', back_populates='comments')
 
-    chapter_id = db.Column(db.Integer, db.ForeignKey('chapters.id'))
+    chapter_id = db.Column(db.Integer, db.ForeignKey('chapters.id', ondelete='CASCADE'))
     chapter = db.relationship('Chapter', back_populates='comments')
 
-    bookmark_id = db.Column(db.Integer, db.ForeignKey('bookmarks.id'))
+    bookmark_id = db.Column(db.Integer, db.ForeignKey('bookmarks.id', ondelete='CASCADE'))
     bookmark = db.relationship('Bookmark', back_populates='comments')
 
 
@@ -207,7 +207,7 @@ class Tag(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     text = db.Column(db.String(120))
-    tag_type_id = db.Column(db.Integer, db.ForeignKey('tag_types.id'))
+    tag_type_id = db.Column(db.Integer, db.ForeignKey('tag_types.id', ondelete='CASCADE'))
     tag_type = db.relationship('TagType', back_populates='tags')
 
     def __repr__(self):
@@ -237,10 +237,10 @@ class Bookmark(db.Model):
     description = db.Column(db.String)
 
 
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'))
     user = db.relationship('User')
 
-    work_id = db.Column(db.Integer, db.ForeignKey('works.id'))
+    work_id = db.Column(db.Integer, db.ForeignKey('works.id', ondelete='CASCADE'))
     work = db.relationship('Work', back_populates='bookmarks')
 
     tags = db.relationship('Tag', secondary=bookmark_tag_table,
@@ -264,7 +264,7 @@ class BookmarkLink(db.Model):
     text = db.Column(db.String(200))
 
 
-    bookmark_id = db.Column(db.Integer, db.ForeignKey('bookmarks.id'))
+    bookmark_id = db.Column(db.Integer, db.ForeignKey('bookmarks.id', ondelete='CASCADE'))
     bookmark = db.relationship('Bookmark', back_populates='links')
 
 
@@ -281,10 +281,10 @@ class Message(db.Model):
     message_content = db.Column(db.String)
     message_read = db.Column(db.Boolean, default=False)
 
-    to_user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    to_user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'))
     to_user = db.relationship('User', back_populates='received_messages', foreign_keys=[to_user_id])
 
-    from_user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    from_user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'))
     from_user = db.relationship('User', back_populates='sent_messages',foreign_keys=[from_user_id])
 
     replies = db.relationship("Message",
@@ -303,7 +303,7 @@ class Notification(db.Model):
     date_created = db.Column(db.DateTime)
     route = db.Column(db.String)
 
-    notification_type_id = db.Column(db.Integer, db.ForeignKey('notification_types.id'))
+    notification_type_id = db.Column(db.Integer, db.ForeignKey('notification_types.id', ondelete='CASCADE'))
     notification_type = db.relationship('NotificationType')
 
 class NotificationType(db.Model):

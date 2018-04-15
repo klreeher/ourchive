@@ -449,7 +449,6 @@ def get_bookmark(bookmarkId):
 def delete_bookmark(bookmarkId):
   user_id = auth.auth_from_data(request)
   if user_id > 0:
-    request.json['user_id'] = user_id
     result = bookmark.delete_bookmark(bookmarkId, user_id)
     if result is not None:
       responseObject = {

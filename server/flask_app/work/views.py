@@ -42,17 +42,12 @@ def get_by_user(user_id, page=1):
 		return None
 
 def delete_work(work_id, user_id, admin_override=False):
-	try:
-		work = Work.query.filter_by(id=work_id).first()
-		if work is not None:
-			if work.user.id == user_id or admin_override:
-				Work.query.filter_by(id=work_id).delete()
-				db.session.commit()
-				return work_id
-		return None
-	except:
-		#todo log
-		return None
+	work = Work.query.filter_by(id=work_id).first()
+	if work is not None:
+		if work.user.id == user_id or admin_override:
+			Work.query.filter_by(id=work_id).delete()
+			db.session.commit()
+			return work_id
 
 def update_work(json, user_id):
 	work = Work.query.filter_by(id = json['work_id']).first()
