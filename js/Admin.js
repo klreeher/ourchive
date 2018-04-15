@@ -168,7 +168,7 @@ export default class Admin extends React.Component {
   
   render() {
     return (
-      <Tab.Container id="left-tabs" defaultActiveKey="first" className="container">
+      <Tab.Container id="left-tabs" defaultActiveKey="first">
           <Row className="clearfix">
             <Col sm={2}>
               <Nav bsStyle="pills" stacked>

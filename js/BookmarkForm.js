@@ -113,7 +113,7 @@ export default class BookmarkForm extends React.Component {
 	    </div>
 	    ))
 	    return (
-	    	<div className="container">
+	    	<div>
 	    		<div className="row">
 	    			<div className="col-xs-1">Work:</div>
 	    			<div className="col-xs-10">{this.state.work ? this.state.work.title : this.state.bookmark.work.title}</div>

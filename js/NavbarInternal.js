@@ -163,13 +163,10 @@ export default class NavbarInternal extends React.Component {
       <Navbar>
         <Navbar.Header>
           <Navbar.Brand>
-            <a href="/">Ourchive</a>
+            <a href="/">ourchive</a>
           </Navbar.Brand>
         </Navbar.Header>
         <Nav>
-        <IndexLinkContainer to="/works">
-          <NavItem>Works</NavItem>
-        </IndexLinkContainer>
             
         <IndexLinkContainer to="/create/work">
             <NavItem>New Work</NavItem>
@@ -214,13 +211,10 @@ export default class NavbarInternal extends React.Component {
       <Navbar>
         <Navbar.Header>
           <Navbar.Brand>
-            <a href="/">Ourchive</a>
+            <a href="/">ourchive</a>
           </Navbar.Brand>
         </Navbar.Header>
-        <Nav>
-        <IndexLinkContainer to="/works">
-          <NavItem>Works</NavItem>
-        </IndexLinkContainer>      
+        <Nav>  
         <IndexLinkContainer to="/bookmark/1">
           <NavItem>Bookmarks</NavItem>
         </IndexLinkContainer>

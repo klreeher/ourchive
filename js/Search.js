@@ -163,7 +163,7 @@ export default class Search extends React.Component {
 
   render() {
     return (
-      <div className="container">
+      <div>
 		    <div className="row">
           <div className="col-md-6">
             <div className="input-group">

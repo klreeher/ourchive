@@ -224,7 +224,7 @@ export default class NewWork extends React.Component {
     </div>
     ))
     return (
-      <div className="container">
+      <div>
         <form>
           <div className="form-group">
             <label htmlFor="work_title">Title</label>
