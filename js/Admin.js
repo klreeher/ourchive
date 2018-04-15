@@ -251,8 +251,8 @@ export default class Admin extends React.Component {
                   </div>
                   <br/>
                   <div className="row">
-                    <div className="col-sm-6"><strong>Email</strong></div>
-                    <div className="col-sm-4"><strong>Username</strong></div>
+                    <div className="col-sm-5"><strong>Email</strong></div>
+                    <div className="col-sm-5"><strong>Username</strong></div>
                   </div>
                   <br/>
                   <div className="row">
