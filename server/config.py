@@ -11,6 +11,9 @@ class BaseConfig:
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     RESULT_PAGES = 25
     UPLOAD_ROOT = 'https://s3.us-east-2.amazonaws.com/ourchive-test-bucket/'
+    UPLOAD_FOLDER = '/home/imp/projects/ourchive/server/flask_app/uploads'
+    AWS_BUCKET = 'ourchive-test-bucket'
+    UPLOAD_TYPE = 'aws'
 
 
 class DevelopmentConfig(BaseConfig):

@@ -12,19 +12,25 @@ from s3_storage import S3Storage
 app = Flask(__name__)
 CORS(app)
 
-upload_folder = '/home/imp/projects/ourchive/server/flask_app/uploads'
-tm = tus_manager(app, upload_url='/uploads', upload_folder=upload_folder, overwrite=True, 
-  upload_finish_cb=None, storage=S3Storage('ourchive-test-bucket'))
-
-bcrypt = Bcrypt(app)
-db = SQLAlchemy(app)
-redis_db = redis.StrictRedis(host="localhost", port=6379, db=0)
-
 app_settings = os.getenv(
     'APP_SETTINGS',
     'server.config.DevelopmentConfig'
 )
 app.config.from_object(app_settings)
+
+if app.config.get('UPLOAD_TYPE') == 'file':
+  storage = FileStorage(app.config.get('UPLOAD_FOLDER'))
+elif app.config.get('UPLOAD_TYPE') == 'aws':
+  storage = S3Storage(app.config.get('AWS_BUCKET'))
+  
+tm = tus_manager(app, upload_url='/uploads', upload_folder=app.config.get('UPLOAD_FOLDER'), overwrite=True, 
+  upload_finish_cb=None, storage=storage)
+
+bcrypt = Bcrypt(app)
+db = SQLAlchemy(app)
+redis_db = redis.StrictRedis(host="localhost", port=6379, db=0)
+
+
 
 from .work import work as work_blueprint
 app.register_blueprint(work_blueprint)
