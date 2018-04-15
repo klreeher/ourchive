@@ -217,7 +217,7 @@ class TagType(db.Model):
 
     __tablename__ = 'tag_types'
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     label = db.Column(db.String(200))
     tags = db.relationship('Tag', back_populates='tag_type')
 

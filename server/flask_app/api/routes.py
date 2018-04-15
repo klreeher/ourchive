@@ -146,10 +146,11 @@ def get_outbox(userId):
 def add_work_types():
   user_id = auth.auth_as_admin(request)
   if user_id > 0:
-    user_logic.add_work_types(request.json['types'])
+    type_id = user_logic.add_work_type(request.json['types'])
     responseObject = {
         'status': 'success',
-        'message': 'Work types added.'
+        'message': 'Work type added.',
+        'type_id': type_id
       }
     return make_response(jsonify(responseObject), 201)
   else:
@@ -172,10 +173,11 @@ def add_notification_types():
 def add_tag_types():
   user_id = auth.auth_as_admin(request)
   if user_id > 0:
-    user_logic.add_tag_types(request.json['types'])
+    type_id = user_logic.add_tag_type(request.json['types'])
     responseObject = {
         'status': 'success',
-        'message': 'Tag types added.'
+        'message': 'Tag types added.',
+        'type_id': type_id
       }
     return make_response(jsonify(responseObject), 201)
   else:
@@ -247,13 +249,25 @@ def delete_comment_as_admin(commentId):
   else:
     abort(400)
 
-@api.route('/api/admin/users/banned', methods=['POST'])
+@api.route('/api/admin/users/<int:userId>/banned', methods=['POST'])
 def ban_user(userId):
   user_id = auth.auth_as_admin(request)
   if user_id > 0:
-    user_logic.ban_users(request.json['banned_users'])
+    user_logic.ban_user(userId)
     responseObject = {
         'Banned:': userId
+      }
+    return make_response(jsonify(responseObject), 201)
+  else:
+    abort(400)
+
+@api.route('/api/admin/users/<int:userId>/banned', methods=['DELETE'])
+def unban_user(userId):
+  user_id = auth.auth_as_admin(request)
+  if user_id > 0:
+    user_logic.unban_user(userId)
+    responseObject = {
+        'Unbanned:': userId
       }
     return make_response(jsonify(responseObject), 201)
   else:

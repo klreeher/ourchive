@@ -37,20 +37,14 @@ def encrypt_password(password):
         ).decode()
 	return new_password
 
-def add_work_types(types):
-	for work_type in types:
-		if work_type['id'] > 0:
-			continue
-		new_type = WorkType(work_type['type_name'])
-		db.session.add(new_type)
+def add_work_type(work_type):
+	new_type = WorkType(work_type['type_name'])
+	db.session.add(new_type)
 	db.session.commit()
 
-def add_tag_types(types):
-	for tag_type in types:
-		if tag_type['id'] > 0:
-			continue
-		new_type = TagType(tag_type['label'])
-		db.session.add(new_type)
+def add_tag_type(tag_type):
+	new_type = TagType(tag_type['label'])
+	db.session.add(new_type)
 	db.session.commit()
 
 def add_notification_types(types):
@@ -100,6 +94,11 @@ def get_banned_users():
 def ban_user(user_id):
 	user = User.query.filter_by(id=user_id).first()
 	user.banned = True
+	db.session.commit()
+
+def unban_user(user_id):
+	user = User.query.filter_by(id=user_id).first()
+	user.banned = False
 	db.session.commit()
 
 def ban_users(users):
