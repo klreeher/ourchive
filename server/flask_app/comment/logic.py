@@ -18,7 +18,7 @@ def add_comment(json, comment):
 
 def add_reply(json):	
 	comment = Comment(text=json['text'])
-	add_comment(json, comment)
+	return add_comment(json, comment)
 
 def add_comment_to_bookmark(json):
 	comment = Comment(text=json['text'])

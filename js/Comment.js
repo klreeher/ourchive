@@ -26,7 +26,7 @@ export default class Comment extends React.Component {
     event.preventDefault()
     var originalId = this.state.comment.id != null ? this.state.comment.id : 0;
     if (this.state.newCommentText == null || this.state.newCommentText == "") return;
-    var commentUser = this.state.user != null && this.state.user != "" ? this.state.user : "Anonymous";
+    var commentUser = localStorage.getItem('friendly_name') != null && localStorage.getItem('friendly_name') != "" ? localStorage.getItem('friendly_name') : "Anonymous";
     var newComment = {text: this.state.newCommentText, userName: commentUser, comments: [],
       parentCommentId: this.state.comment.id};
     var apiRoute = "/api/comment/reply/";    

@@ -32,7 +32,7 @@ export default class BookmarkStub extends React.Component {
 		      		<div className="col-md-12">
 		        		<blockquote>
 			        		<div className="row">
-			        			<div className="col-md-12">{this.state.bookmark.work.title} by {this.state.bookmark.work.creator}</div>
+			        			<div className="col-md-12">{this.state.bookmark.work.title} by {this.state.bookmark.work.name}</div>
 			        		</div>
 			        		<div className="row">
 			        			<div className="col-md-4">Complete? {this.state.bookmark.work.is_complete ? "True" : "False"}</div>

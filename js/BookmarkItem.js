@@ -101,7 +101,7 @@ export default class BookmarkItem extends React.Component {
   {
   	event.preventDefault()
     if (this.state.newCommentText == null || this.state.newCommentText == "") return;
-    var commentUser = this.state.user != null && this.state.user != "" ? this.state.user : "Anonymous";
+    var commentUser = localStorage.getItem('friendly_name') != null && localStorage.getItem('friendly_name') != "" ? localStorage.getItem('friendly_name') : "Anonymous";
     var newComment = {text: this.state.newCommentText, userName: commentUser, comments: [], bookmarkId: this.state.bookmark.id};
     var apiRoute = "/api/bookmark/comment/";
     axios.post(apiRoute, {
@@ -157,7 +157,7 @@ export default class BookmarkItem extends React.Component {
     	  <div className="panel-body">
 	      	<div className="row">
 	      		<div className="col-sm-5">{this.state.bookmark.curator_title}</div>
-	      		<div className="col-sm-5">{this.props.user.id === this.state.bookmark.user_id && 
+	      		<div className="col-sm-5">{this.props.user && this.props.user.id === this.state.bookmark.user_id && 
 		            		<div className="pull-right"> 
 		            			<button className="btn btn-link">Edit</button> | <button className="btn btn-link">Delete</button>
 		            		</div>

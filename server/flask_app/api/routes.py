@@ -560,6 +560,7 @@ def add_comment_reply():
   if user_id > 0:
     request.json['user_id'] = user_id
     result = comment.add_reply(request.json)
+    print(result)
     if result is not None:
       responseObject = {
           'id': result

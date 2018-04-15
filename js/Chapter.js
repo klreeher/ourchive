@@ -52,7 +52,7 @@ export default class Chapter extends React.Component {
   {
     event.preventDefault()
     if (this.state.newCommentText == null || this.state.newCommentText == "") return;
-    var commentUser = this.state.user != null && this.state.user != "" ? this.state.user : "Anonymous";
+    var commentUser = localStorage.getItem('friendly_name') != null && localStorage.getItem('friendly_name') != "" ? localStorage.getItem('friendly_name') : "Anonymous";
     var newComment = {text: this.state.newCommentText, userName: commentUser, 
       comments: [], chapterId: this.state.chapter.id};
     var apiRoute = "/api/chapter/comment/";
