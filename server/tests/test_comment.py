@@ -43,7 +43,7 @@ class TestComment(BaseTestCase):
         self.add_bookmark()
         data = self.build_data(False, True, False)
         new_id = comment.add_comment_to_bookmark(data)
-        comment.delete_comment(new_id)
+        comment.delete_comment(new_id, 1)
         self.assertTrue(len( Comment.query.all()) == 0)
 
     def build_data(self, build_parent, build_bookmark, build_chapter):

@@ -37,6 +37,7 @@ class User(db.Model):
     password = db.Column(db.String(255), nullable=False)
     registered_on = db.Column(db.DateTime, nullable=False)
     admin = db.Column(db.Boolean, nullable=False, default=False)
+    banned = db.Column(db.Boolean, nullable=True, default=False)
     comments = db.relationship('Comment', backref='comment_user',
                                 lazy='dynamic')
     works = db.relationship('Work', backref='work_user',
@@ -145,7 +146,9 @@ class WorkType(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     type_name = db.Column(db.String(200))
-    
+
+    def __init__(self, type_name):
+        self.type_name = type_name    
 
     def __repr__(self):
         return '<WorkType: {}>'.format(self.id)
@@ -217,6 +220,9 @@ class TagType(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     label = db.Column(db.String(200))
     tags = db.relationship('Tag', back_populates='tag_type')
+
+    def __init__(self, label=None):
+        self.label = label
 
     def __repr__(self):
         return '<TagType: {}>'.format(self.id)
@@ -307,6 +313,9 @@ class NotificationType(db.Model):
     type_label = db.Column(db.String(200))
     send_email = db.Column(db.Boolean)
 
+    def __init__(self, type_label, send_email):
+        self.type_label = type_label
+        self.send_email = send_email
 
 
 def __repr__(self):

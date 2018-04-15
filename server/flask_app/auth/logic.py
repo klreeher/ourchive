@@ -46,7 +46,13 @@ def login(post_data):
 		user = User.query.filter_by(
 		username=post_data.get('username')
 		).first()
-		if user is not None and bcrypt.checkpw(post_data.get('password').encode('utf8'), user.password.encode('utf8')):
+		if user is not None and user.banned == True:
+			responseObject = {
+				'status': 'fail',
+				'message': 'User is banned.'
+			}
+			return make_response(jsonify(responseObject), 403)
+		elif user is not None and bcrypt.checkpw(post_data.get('password').encode('utf8'), user.password.encode('utf8')):
 			auth_token = user.encode_auth_token(user.id)
 			if auth_token:
 				responseObject = {
@@ -175,6 +181,13 @@ def logout(request):
 def auth_from_data(request):
   status = authorize(request)
   if status.status_code == 201:
+    return json.loads(status.data.decode())['data']['user_id']
+  else:
+    return -1
+
+def auth_as_admin(request):
+  status = authorize(request)
+  if status.status_code == 201 and json.loads(status.data.decode())['data']['admin']:
     return json.loads(status.data.decode())['data']['user_id']
   else:
     return -1

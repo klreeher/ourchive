@@ -138,6 +138,132 @@ def get_outbox(userId):
   else:
     abort(400)
 
+@api.route('/api/admin/works/types', methods=['POST'])
+def add_work_types():
+  user_id = auth.auth_as_admin(request)
+  if user_id > 0:
+    user_logic.add_work_types(request.json['types'])
+    responseObject = {
+        'status': 'success',
+        'message': 'Work types added.'
+      }
+    return make_response(jsonify(responseObject), 201)
+  else:
+    abort(400)
+
+@api.route('/api/admin/notifications/types', methods=['POST'])
+def add_notification_types():
+  user_id = auth.auth_as_admin(request)
+  if user_id > 0:
+    user_logic.add_notification_types(request.json['types'])
+    responseObject = {
+        'status': 'success',
+        'message': 'Notification types added.'
+      }
+    return make_response(jsonify(responseObject), 201)
+  else:
+    abort(400)
+
+@api.route('/api/admin/tags/types', methods=['POST'])
+def add_tag_types():
+  user_id = auth.auth_as_admin(request)
+  if user_id > 0:
+    user_logic.add_tag_types(request.json['types'])
+    responseObject = {
+        'status': 'success',
+        'message': 'Tag types added.'
+      }
+    return make_response(jsonify(responseObject), 201)
+  else:
+    abort(400)
+
+@api.route('/api/admin/works/types', methods=['GET'])
+def get_work_types():
+  user_id = auth.auth_as_admin(request)
+  if user_id > 0:
+    types = user_logic.get_work_types()
+    return make_response(jsonify(types), 201)
+  else:
+    abort(400)
+
+@api.route('/api/admin/notifications/types', methods=['GET'])
+def get_notification_types():
+  user_id = auth.auth_as_admin(request)
+  if user_id > 0:
+    types = user_logic.get_notification_types(request.json['types'])
+    return make_response(jsonify(types), 201)
+  else:
+    abort(400)
+
+@api.route('/api/admin/tags/types', methods=['GET'])
+def get_tag_types():
+  user_id = auth.auth_as_admin(request)
+  if user_id > 0:
+    types = user_logic.get_tag_types(request.json['types'])
+    return make_response(jsonify(types), 201)
+  else:
+    abort(400)
+
+@api.route('/api/admin/works/<int:workId>', methods=['DELETE'])
+def delete_work_as_admin(workId):
+  user_id = auth.auth_as_admin(request)
+  if user_id > 0:
+    result = work.delete_work(workId, user_id, True)
+    if result is not None:
+      responseObject = {
+          'Deleted': workId
+        }
+      return make_response(jsonify(responseObject), 201)
+  else:
+    abort(400)
+
+@api.route('/api/admin/bookmarks/<int:bookmarkId>', methods=['DELETE'])
+def delete_bookmark_as_admin(bookmarkId):
+  user_id = auth.auth_as_admin(request)
+  if user_id > 0:
+    result = bookmark.delete_bookmark(bookmarkId, user_id, True)
+    if result is not None:
+      responseObject = {
+          'Deleted': bookmarkId
+        }
+      return make_response(jsonify(responseObject), 201)
+  else:
+    abort(400)
+
+@api.route('/api/admin/comments/<int:commentId>', methods=['DELETE'])
+def delete_comment_as_admin(commentId):
+  user_id = auth.auth_as_admin(request)
+  if user_id > 0:
+    result = comment.delete_comment(commentId, user_id, True)
+    if result is not None:
+      responseObject = {
+          'Deleted': commentId
+        }
+      return make_response(jsonify(responseObject), 201)
+  else:
+    abort(400)
+
+@api.route('/api/admin/users/banned', methods=['POST'])
+def ban_user(userId):
+  user_id = auth.auth_as_admin(request)
+  if user_id > 0:
+    user_logic.ban_user(request.json['banned_user'])
+    responseObject = {
+        'Banned:': userId
+      }
+    return make_response(jsonify(responseObject), 201)
+  else:
+    abort(400)
+
+@api.route('/api/admin/users/banned', methods=['GET'])
+def get_banned_users():
+  user_id = auth.auth_as_admin(request)
+  if user_id > 0:
+    response = user_logic.get_banned_users()
+    return make_response(jsonify(response), 201)
+  else:
+    abort(400)
+
 @api.route('/api/message/<int:messageId>', methods=['GET'])
 def get_message(messageId):
   user_id = auth.auth_from_data(request)
@@ -324,7 +450,7 @@ def delete_bookmark(bookmarkId):
   user_id = auth.auth_from_data(request)
   if user_id > 0:
     request.json['user_id'] = user_id
-    result = bookmark.delete_bookmark(bookmarkId)
+    result = bookmark.delete_bookmark(bookmarkId, user_id)
     if result is not None:
       responseObject = {
           'Deleted': result

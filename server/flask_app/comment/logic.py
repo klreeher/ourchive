@@ -30,8 +30,10 @@ def add_comment_to_chapter(json):
 	comment.chapter_id = json['chapter_id']
 	return add_comment(json, comment)
 
-def delete_comment(comment_id):
+def delete_comment(comment_id, user_id, admin_override=False):
 	comment = Comment.query.filter_by(id=comment_id).first()
+	if comment.user_id != user_id and admin_override == False:
+		return
 	if comment is not None and comment.parent_comment != []:
 		parent = comment.parent_comment
 		comment.parent_comment[0].replies.remove(comment)

@@ -41,11 +41,11 @@ def get_by_user(user_id, page=1):
 	else:
 		return None
 
-def delete_work(work_id, user_id):
+def delete_work(work_id, user_id, admin_override=False):
 	try:
 		work = Work.query.filter_by(id=work_id).first()
 		if work is not None:
-			if work.user.id == user_id:
+			if work.user.id == user_id or admin_override:
 				Work.query.filter_by(id=work_id).delete()
 				db.session.commit()
 				return work_id

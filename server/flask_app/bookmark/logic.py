@@ -53,11 +53,11 @@ def get_bookmarks_by_curator(curator_id, page=1):
 	else:
 		return None
 
-def delete_bookmark(bookmark_id, user_id):
+def delete_bookmark(bookmark_id, user_id, admin_override=False):
 	try:
 		bookmark = Bookmark.query.filter_by(id=bookmark_id).first()
 		if bookmark is not None:
-			if bookmark.user_id == user_id:
+			if bookmark.user_id == user_id or admin_override:
 				Bookmark.query.filter_by(id=bookmark_id).delete()
 				db.session.commit()
 				return bookmark_id
