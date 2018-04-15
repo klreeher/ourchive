@@ -98,7 +98,7 @@ class TestAuthBlueprint(BaseTestCase):
 				response.json['auth_token']),
             content_type='application/json',
             data=json.dumps(dict(
-                types=['one', 'two']
+                types=[{'id': 1, 'type_name': 'one'}, {'id': 2, 'type_name': 'two'}]
             ))
         )
 		data = response.json

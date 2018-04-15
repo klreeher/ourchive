@@ -39,13 +39,17 @@ def encrypt_password(password):
 
 def add_work_types(types):
 	for work_type in types:
-		new_type = WorkType(work_type)
+		if work_type['id'] > 0:
+			continue
+		new_type = WorkType(work_type['type_name'])
 		db.session.add(new_type)
 	db.session.commit()
 
 def add_tag_types(types):
 	for tag_type in types:
-		new_type = TagType(tag_type)
+		if tag_type['id'] > 0:
+			continue
+		new_type = TagType(tag_type['label'])
 		db.session.add(new_type)
 	db.session.commit()
 

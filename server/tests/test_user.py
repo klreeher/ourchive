@@ -45,13 +45,14 @@ class TestUserModel(BaseTestCase):
         self.assertTrue(banned_users[0]['email'] == 'test@test.com')
 
     def test_add_tag_types(self):
-        user_logic.add_tag_types(['one', 'two', 'three'])
+        user_logic.add_tag_types([{'id': -1, 'label': 'one'}])
+        user_logic.add_tag_types([{'id': 1, 'label': 'one'}, {'id': -2, 'label': 'two'}, {'id': -3, 'label': 'three'}])
         types = TagType.query.all()
         self.assertEqual(3, len(types))
         self.assertEqual('one', types[0].label)
 
     def test_add_work_types(self):
-        user_logic.add_work_types(['fiction', 'audio'])
+        user_logic.add_work_types([{'id': -1, 'type_name': 'fiction'}, {'id': -2, 'type_name': 'audio'}])
         types = WorkType.query.all()
         self.assertEqual(2, len(types))
         self.assertEqual('fiction', types[0].type_name)
@@ -86,7 +87,7 @@ class TestUserModel(BaseTestCase):
         user = User.query.first()
         user.admin = True 
         db.session.commit()
-        user_logic.add_work_types(['Fiction', 'Criticism'])
+        user_logic.add_work_types([{'id': -1, 'type_name': 'Fiction'}, {'id': -2, 'type_name': 'Criticism'}])
         response = self.client.get(
             '/api/admin/works/types',
             headers=dict(Authorization='Bearer ' + 
