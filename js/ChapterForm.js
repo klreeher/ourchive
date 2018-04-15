@@ -38,7 +38,7 @@ export default class ChapterForm extends React.Component {
               <div className="form-group">
                 <label htmlFor="chapter_image">Chapter Image</label>
                 <input className='input-file' type='file' id="image_url"
-                name="chapter_image" onChange={this.props.handlerImage}></input>
+                name="image_url" onChange={this.props.handlerImage}></input>
               </div>
               <div className="form-group">
                 <label htmlFor="image_alt_text">Chapter Image Alt Text</label>

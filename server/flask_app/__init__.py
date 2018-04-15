@@ -7,12 +7,14 @@ from flask_sqlalchemy import SQLAlchemy
 import os
 import redis
 from file_storage import FileStorage
+from s3_storage import S3Storage
 
 app = Flask(__name__)
 CORS(app)
 
 upload_folder = '/home/imp/projects/ourchive/server/flask_app/uploads'
-tm = tus_manager(app, upload_url='/uploads', upload_folder=upload_folder, overwrite=True, upload_finish_cb=None, storage=FileStorage(upload_folder))
+tm = tus_manager(app, upload_url='/uploads', upload_folder=upload_folder, overwrite=True, 
+  upload_finish_cb=None, storage=S3Storage('ourchive-test-bucket'))
 
 bcrypt = Bcrypt(app)
 db = SQLAlchemy(app)

@@ -10,6 +10,7 @@ class BaseConfig:
     BCRYPT_LOG_ROUNDS = 13
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     RESULT_PAGES = 25
+    UPLOAD_ROOT = 'https://s3.us-east-2.amazonaws.com/ourchive-test-bucket/'
 
 
 class DevelopmentConfig(BaseConfig):

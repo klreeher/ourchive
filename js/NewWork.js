@@ -100,6 +100,7 @@ export default class NewWork extends React.Component {
     })
   }
   finishUpload(fileName, url, id, name){
+    console.log(url)
     this.setState({
       uploadStatus: "File uploaded: " + fileName
     })
@@ -122,9 +123,10 @@ export default class NewWork extends React.Component {
     var file = e.target.files[0]
     // Create a new tus upload
     var upload = new tus.Upload(file, {
-        endpoint: "http://127.0.0.1:5000/file-upload",
+        endpoint: "http://127.0.0.1:5000/uploads",
         chunkSize: 5*1024*1024,
         retryDelays: [0, 1000, 3000, 5000],
+        metadata: {filename: file.name},
         onError: function(error) {
             console.log("Failed because: " + error)
         },

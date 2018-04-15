@@ -95,7 +95,7 @@ def add_work(json, user_id):
 def add_chapters(work, chapters):
 	count = 0
 	for chapter_item in chapters:
-		chapter = Chapter(title=chapter_item['title'], number=chapter_item['number'], text=chapter_item['text'], audio_url=chapter_item['audio_url'],image_url=chapter_item['image_url'],
+		chapter = Chapter(title=chapter_item['title'], number=chapter_item['number'], text=chapter_item['text'], audio_url=get_file_url(chapter_item['audio_url']),image_url=get_file_url(chapter_item['image_url']),
 			summary=chapter_item['summary'], image_alt_text=chapter_item['image_alt_text'])
 		work.chapters.append(chapter)
 		count = count + count_words(chapter_item['text'])
@@ -105,7 +105,7 @@ def update_chapters(work, chapters):
 	count = 0
 	for chapter_item in chapters:		
 		if 'id' not in chapter_item:
-			chapter = Chapter(title=chapter_item['title'], number=chapter_item['number'], text=chapter_item['text'], audio_url=chapter_item['audio_url'],image_url=chapter_item['image_url'])
+			chapter = Chapter(title=chapter_item['title'], number=chapter_item['number'], text=chapter_item['text'], audio_url=get_file_url(chapter_item['audio_url']),image_url=get_file_url(chapter_item['image_url']))
 			work.chapters.append(chapter)
 		else:
 			chapter = Chapter.query.filter_by(id=chapter_item['id']).first()
@@ -113,8 +113,8 @@ def update_chapters(work, chapters):
 			chapter.summary = chapter_item['summary']
 			chapter.number = chapter_item['number']
 			chapter.text = chapter_item['text']
-			chapter.audio_url = chapter_item['audio_url']
-			chapter.image_url = chapter_item['image_url']
+			chapter.audio_url = get_file_url(chapter_item['audio_url'])
+			chapter.image_url = get_file_url(chapter_item['image_url'])
 			chapter.image_alt_text = chapter_item['image_alt_text']
 			db.session.add(chapter)
 		count = count + count_words(chapter_item['text'])
@@ -210,3 +210,10 @@ def build_work_tags(work):
 		tag['tags'] = list([x.text for x in work.tags if x.tag_type_id == tag_type.id])
 		tags.append(tag)
 	return tags
+
+def get_file_url(url):
+	if url == '':
+		return ''
+	url_root = app.config.get('UPLOAD_ROOT')
+	identifier = url.rsplit('/', 1)[-1]
+	return url_root + identifier

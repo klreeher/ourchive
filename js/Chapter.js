@@ -107,7 +107,7 @@ export default class Chapter extends React.Component {
           </div>
           <div className="row">
             <div className="col-xs-9 col-md-12">
-              <Image file={this.state.chapter.image_url} alt='{this.state.chapter.image_alt_text}'/>
+              {this.state.chapter.image_url && <img src={this.state.chapter.image_url} alt='{this.state.chapter.image_alt_text}'/>}
             </div>
           </div>
           <br/>
