@@ -69,6 +69,10 @@ def get_results(searchTerm):
   )
   return results
 
+@api.route('/api/user/username/<string:username>', methods=['GET'])
+def get_user_by_username(username):
+  result = user_logic.get_by_username(username)
+  return make_response(jsonify(result), 201)
 
 @api.route('/api/user/logout/', methods=['POST'])
 def logout():
@@ -247,7 +251,7 @@ def delete_comment_as_admin(commentId):
 def ban_user(userId):
   user_id = auth.auth_as_admin(request)
   if user_id > 0:
-    user_logic.ban_user(request.json['banned_user'])
+    user_logic.ban_users(request.json['banned_users'])
     responseObject = {
         'Banned:': userId
       }

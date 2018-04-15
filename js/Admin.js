@@ -6,12 +6,14 @@ import {Tabs, Tab} from 'react-bootstrap';
 
 export default class Admin extends React.Component {
 
-  matchUser()
+  addBannedUser(evt)
   {
-    axios.get('/api/user/email/'+this.state.banned_user_email)
+    evt.target.blur()
+    axios.get('/api/user/username/'+this.state.newBannedUser)
         .then(function (response) {
-          this.setState({user_to_ban: response.data});  
-
+          var oldBannedUsers = this.state.banned_users
+          oldBannedUsers.push(response.data)
+          this.setState({banned_users: oldBannedUsers, newBannedUser: ''});  
         }.bind(this))
         .catch(function (error) {
           console.log(error);
@@ -69,6 +71,12 @@ export default class Admin extends React.Component {
   {
   }
 
+  newBannedUser(evt) {
+    this.setState({
+      newBannedUser: evt.target.value
+    })
+  }
+
   newWorkType(evt) {
     this.setState({
       newWorkType: evt.target.value
@@ -120,7 +128,7 @@ export default class Admin extends React.Component {
         <Tabs defaultActiveKey={1} id="user-container-nav">
           <Tab eventKey={1} title="Configuration">
           <br/>
-            <div>
+            <div className="col-sm-12">
                 <div className="row">
                   <div className="col-sm-4"><strong>Notification Types</strong></div>
                 </div>
@@ -186,8 +194,8 @@ export default class Admin extends React.Component {
           </Tab>
           <Tab eventKey={2} title="User Administration">
           <br/>
-            <div className="col-md-12">
-              <div classname="row">
+            <div className="col-sm-12">
+              <div className="row">
                 <div className="col-sm-6"><h3>Banned Users</h3></div>
               </div>
               <div className="row">
@@ -198,7 +206,7 @@ export default class Admin extends React.Component {
               <div className="row">
                   <ul className="chapters_ul">
                     {this.state.banned_users.map(user => 
-                        <div key={user.id}>
+                        <div key={user.username}>
                           <li className="chapters_ul">
                             <div className="col-sm-6">{user.email}</div>
                             <div className="col-sm-4">{user.username}</div>
@@ -206,6 +214,11 @@ export default class Admin extends React.Component {
                         </div>
                     )}
                   </ul>
+                </div>
+                <div className="row">
+                  <div className="col-sm-4">
+                    <input id="new_banned_user" value={this.state.newBannedUser} onChange={evt => this.newBannedUser(evt)} placeholder="Enter a username to ban."></input> <button className="btn btn-link" onClick={evt => this.addBannedUser(evt)}>Ban</button>
+                  </div>
                 </div>
             </div>
           </Tab>

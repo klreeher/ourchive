@@ -102,9 +102,21 @@ def ban_user(user_id):
 	user.banned = True
 	db.session.commit()
 
+def ban_users(users):
+	for user_obj in users:
+		user = User.query.filter_by(id=user_obj['id']).first()
+		user.banned = True
+		db.session.add(user)
+	db.session.commit()
+
+def get_by_username(username):
+	user = User.query.filter_by(username=username).first()
+	return build_user(user)
+
 def build_user(user_obj):
 	user = {}
 	user['email'] = user_obj.email
 	user['username'] = user_obj.username
 	user['registered_on'] = user_obj.registered_on
+	user['id'] = user_obj.id
 	return user
