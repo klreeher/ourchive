@@ -8,7 +8,7 @@ class TestSearch(BaseTestCase):
 	def test_search_on_term(self):
 		searcher = WorkSearch()
 		results = searcher.search_text_on_term("ta")
-		self.assertEqual(len(results), 1)
+		self.assertEqual(len(results), 2)
 
 	def test_search_chapter(self):
 		searcher = WorkSearch()
@@ -17,10 +17,10 @@ class TestSearch(BaseTestCase):
 
 	def test_search_phrase(self):
 		searcher = WorkSearch()
-		results = searcher.search_text_on_term("Chapter One")
-		self.assertEqual(len(results), 1)
+		results = searcher.search_text_on_term("i")
+		self.assertEqual(len(results), 2)
 
 	def test_generic_search(self):
 		searcher = WorkSearch()
-		results = searcher.search_text_on_term("plot plot")
-		self.assertEqual(len(results), 1)
+		results = searcher.search_text_on_term("horse")
+		self.assertEqual(len(results), 2)
