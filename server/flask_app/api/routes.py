@@ -393,7 +393,8 @@ def mark_message_unread(messageId):
 def post_work():
   user_id = auth.auth_from_data(request)
   if user_id > 0:
-    work_id = work.add_work(request.json, user_id)
+    request.json['user_id'] = user_id
+    work_id = work.add_work(request.json)
     return json.dumps({"work_id": work_id})
   else:
     abort(400)

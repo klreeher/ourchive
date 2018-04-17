@@ -10,7 +10,8 @@ import json
 class TestWorkView(BaseTestCase):
     def test_add_work(self):
         data = self.build_data(False, False)
-        new_id = work.add_work(data, 1)   
+        data['user_id'] = 1
+        new_id = work.add_work(data)  
         selected_work = Work.query.filter_by(id=1).first()
         self.assertTrue(new_id==1)
         self.assertTrue(selected_work.is_complete == 0)
@@ -141,7 +142,8 @@ class TestWorkView(BaseTestCase):
         db.session.add(tagType)
 
         db.session.commit()
-        work.add_work(data, 1)   
+        data['user_id'] = 1
+        work.add_work(data)   
         selected_work = json.loads(work.get_by_user(1))
         self.assertTrue(selected_work['works'][0]['title'] == "A Tale of Two Poor Students")
 

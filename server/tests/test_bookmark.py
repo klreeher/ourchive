@@ -12,7 +12,8 @@ class TestBookmark(BaseTestCase):
     def test_add_bookmark(self):
         data = self.build_data(True, False, True)
         work_data = self.build_dummary_work_data(True, True)
-        work_id = work.add_work(work_data, 1)
+        work_data['user_id'] = 1
+        work_id = work.add_work(work_data)
         bookmark.add_bookmark(data, 1)
         new_bookmark = Bookmark.query.filter_by(id=1).first()
         self.assertTrue(new_bookmark.description == "This was fine I guess...")
@@ -20,7 +21,8 @@ class TestBookmark(BaseTestCase):
     def test_update_bookmark(self):
         data = self.build_data(True, False, True)
         work_data = self.build_dummary_work_data(True, True)
-        work_id = work.add_work(work_data, 1)
+        work_data['user_id'] = 1
+        work_id = work.add_work(work_data)
         bookmark_id = bookmark.add_bookmark(data, 1)
         data["id"] = bookmark_id
         data["description"] = "This was bad actually!!!"
@@ -41,7 +43,8 @@ class TestBookmark(BaseTestCase):
     def test_get_bookmark(self):  
         data = self.build_data(True, False, False)      
         work_data = self.build_dummary_work_data(True, True)
-        work_id = work.add_work(work_data, 1)
+        work_data['user_id'] = 1
+        work_id = work.add_work(work_data)
         work_fetched = Work.query.filter_by(id=work_id).first()
         bookmark_id = bookmark.add_bookmark(data, 1)
         new_bookmark = bookmark.get_bookmark(1)
@@ -50,7 +53,8 @@ class TestBookmark(BaseTestCase):
     def test_get_bookmarks_by_curator(self):
         data = self.build_data(True, False, False)      
         work_data = self.build_dummary_work_data(True, True)
-        work_id = work.add_work(work_data, 1)
+        work_data['user_id'] = 1
+        work_id = work.add_work(work_data)
         work_fetched = Work.query.filter_by(id=work_id).first()
         bookmark_id = bookmark.add_bookmark(data, 1)
         fetched_bookmark = bookmark.get_bookmarks_by_curator(1)

@@ -6,6 +6,7 @@ from .. import db
 from .. import tag as tag_blueprint
 from flask import current_app as app
 from ..models import Work, Chapter, Tag, User, TagType
+from .search_wrapper import WorkSearch
 
 @work.route('/')
 def homepage():
@@ -68,7 +69,8 @@ def update_work(json, user_id):
 	add_tags(work, work_tags)
 	db.session.commit()
 	return work.id
-def add_work(json, user_id):
+
+def add_work(json):
 	title = json['title']
 	work_summary = json['work_summary']
 	work_notes = json['work_notes']
@@ -79,12 +81,16 @@ def add_work(json, user_id):
 	else:
 		is_complete = 0
 	#todo we are committing too many times here!
-	work = Work(title=title,work_summary=work_summary,is_complete=is_complete,word_count=0,user_id=user_id,work_notes=work_notes)
+	work = Work(title=title,work_summary=work_summary,is_complete=is_complete,word_count=0,user_id=json['user_id'],work_notes=work_notes)
 	db.session.add(work)
 	word_count = add_chapters(work, chapters)
 	work.word_count = word_count		
 	add_tags(work, work_tags)
 	db.session.commit()
+	if app.config.get('USE_ES'):
+		json['id'] = work.id
+		search_obj = WorkSearch()
+		search_obj.create_from_json(json)
 	return work.id
 
 def add_chapters(work, chapters):

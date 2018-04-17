@@ -14,6 +14,7 @@ class BaseConfig:
     UPLOAD_FOLDER = '/home/imp/projects/ourchive/server/flask_app/uploads'
     AWS_BUCKET = 'ourchive-test-bucket'
     UPLOAD_TYPE = 'aws'
+    USE_ES = True
 
 
 class DevelopmentConfig(BaseConfig):
@@ -28,6 +29,7 @@ class TestingConfig(BaseConfig):
     BCRYPT_LOG_ROUNDS = 4
     SQLALCHEMY_DATABASE_URI = postgres_local_base + database_name + '_test'
     PRESERVE_CONTEXT_ON_EXCEPTION = False
+    USE_ES = False
 
 
 class ProductionConfig(BaseConfig):

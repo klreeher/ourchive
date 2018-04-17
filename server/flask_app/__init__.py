@@ -9,6 +9,7 @@ import redis
 from file_storage import FileStorage
 from s3_storage import S3Storage
 from elasticsearch import Elasticsearch
+from elasticsearch_dsl import connections
 
 app = Flask(__name__)
 CORS(app)
@@ -30,7 +31,8 @@ tm = tus_manager(app, upload_url='/uploads', upload_folder=app.config.get('UPLOA
 bcrypt = Bcrypt(app)
 db = SQLAlchemy(app)
 redis_db = redis.StrictRedis(host="localhost", port=6379, db=0)
-client = Elasticsearch()
+es_client = Elasticsearch()
+connections.create_connection(hosts=['localhost'])
 
 
 
