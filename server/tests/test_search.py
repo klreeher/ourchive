@@ -14,3 +14,13 @@ class TestSearch(BaseTestCase):
 		searcher = WorkSearch()
 		results = searcher.search_text_on_term("nothing nothing nothing")
 		self.assertEqual(len(results), 0)
+
+	def test_search_phrase(self):
+		searcher = WorkSearch()
+		results = searcher.search_text_on_term("Chapter One")
+		self.assertEqual(len(results), 1)
+
+	def test_generic_search(self):
+		searcher = WorkSearch()
+		results = searcher.search_text_on_term("plot plot")
+		self.assertEqual(len(results), 1)

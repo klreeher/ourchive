@@ -3,7 +3,7 @@ from elasticsearch_dsl import DocType, Date, Nested, Boolean, \
 	analyzer, InnerDoc, Completion, Keyword, Text, Index, FacetedSearch, TermsFacet
 from elasticsearch_dsl.query import MultiMatch, Match
 
-class ChapterSearch(DocType):
+class ChapterSearch(InnerDoc):
 	title = Text()
 	text = Text()
 	image_alt_text = Text()
@@ -13,37 +13,18 @@ class ChapterSearch(DocType):
 
 	#comments = Nested(Comment)
 
-	class Meta:
-		index = 'chapter'
-
-	#def add_comment(self, author, content):
-	#    self.comments.append(
-	#      Comment(author=author, content=content, created_at=datetime.now()))
-
-	def save(self, ** kwargs):
-		self.created_at = datetime.now()
-		return super().save(** kwargs)
-
-	@staticmethod
-	def create_from_json(chapter_json, identifier):
-		chapter = ChapterSearch(number=chapter_json['number'],
-		title=chapter_json['title'], text=chapter_json['text'],
-		image_alt_text=chapter_json['image_alt_text'],
-		summary=chapter_json['summary'])
-		chapter.meta.id = identifier
-		return chapter
+	def create_from_json(self, chapter_json, identifier):
+		self.number=chapter_json['number']
+		self.title=chapter_json['title']
+		self.text=chapter_json['text']
+		self.image_alt_text=chapter_json['image_alt_text']
+		self.summary=chapter_json['summary']
 
 	def save_from_json(self, chapter_json):
 		ChapterSearch.init()
 		chapter = self.create_from_json(chapter_json)
 		chapter.save()
 
-	def search_text_on_term(self, term):
-		search = ChapterSearch.search()
-		query = MultiMatch(query=term, fields=['title', 'summary', 'image_alt_text', 'number'], fuzziness=2)
-		search = search.query(query)
-		results = search.execute()
-		return results
 
 class WorkSearch(DocType):
 	title = Text()
@@ -64,8 +45,10 @@ class WorkSearch(DocType):
 	def add_chapters(self, chapter_json, work_id):
 		chapter_count = 1
 		for chapter in chapter_json:
+			chapter_search = ChapterSearch()
+			chapter_search.create_from_json(chapter, work_id + ": " + str(chapter_count))
 			self.chapters.append(
-				ChapterSearch.create_from_json(chapter, work_id + ": " + str(chapter_count)))
+				chapter_search)
 			chapter_count += 1
 
 	def save(self, ** kwargs):
@@ -89,7 +72,7 @@ class WorkSearch(DocType):
 
 	def search_text_on_term(self, term):
 		search = WorkSearch.search()
-		query = MultiMatch(query=term, fields=['title', 'work_summary', 'work_notes', 'word_count', 'user_id'], 
+		query = MultiMatch(query=term, fields=['title', 'work_summary', 'work_notes', 'word_count', 'user_id', 'chapter.summary'], 
 			fuzziness=2)
 		search = search.query(query)		
 		results = search.execute()
