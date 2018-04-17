@@ -122,6 +122,8 @@ class Work(db.Model):
     work_notes = db.Column(db.String)
     is_complete = db.Column(db.Integer)
     word_count = db.Column(db.Integer)
+    created_on = db.Column(db.DateTime, server_default=db.func.now())
+    updated_on = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now())
     chapters = db.relationship('Chapter', backref='chapter_work',
                                 lazy='dynamic', cascade='all,delete')
 
@@ -158,6 +160,8 @@ class Chapter(db.Model):
     __tablename__ = 'chapters'
 
     id = db.Column(db.Integer, primary_key=True)
+    created_on = db.Column(db.DateTime, server_default=db.func.now())
+    updated_on = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now())
     title = db.Column(db.String(200))
     number = db.Column(db.Integer)
     text = db.Column(db.String)
