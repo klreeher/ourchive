@@ -370,6 +370,7 @@ def post_work():
 def update_work(workId):
   user_id = auth.auth_from_data(request)
   if user_id > 0:
+    request.json['user_id'] = user_id
     result = work.update_work(request.json)
     if result is not None:
       responseObject = {

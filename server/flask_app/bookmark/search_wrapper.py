@@ -14,8 +14,6 @@ class BookmarkSearch(DocType):
 	description = Text()
 	user_id = Text()
 
-	chapters = Nested(ChapterSearch)
-
 	class Meta:
 		index = 'bookmark'
 

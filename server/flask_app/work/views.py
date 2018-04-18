@@ -50,9 +50,9 @@ def delete_work(work_id, user_id, admin_override=False):
 			db.session.commit()
 			return work_id
 
-def update_work(json, user_id):
+def update_work(json):
 	work = Work.query.filter_by(id = json['work_id']).first()
-	if (work.user.id != user_id):
+	if (work.user.id != json['user_id']):
 		return None
 	work.title = json['title']
 	work.work_summary = json['work_summary']
@@ -68,6 +68,10 @@ def update_work(json, user_id):
 	work.word_count = word_count		
 	add_tags(work, work_tags)
 	db.session.commit()
+	if app.config.get('USE_ES'):
+		json['id'] = work.id
+		search_obj = WorkSearch()
+		search_obj.create_from_json(json)
 	return work.id
 
 def add_work(json):

@@ -128,7 +128,7 @@ class TestWorkView(BaseTestCase):
 
         data['work_id'] = workObj.id
         data['chapters'][0]['id'] = workObj.chapters[0].id
-        work.update_work(data, 1)
+        work.update_work(data)
         workObj = Work.query.filter_by(id=workObj.id).first()
         self.assertTrue(workObj.title == "A Tale of Two Poor Students")
 
@@ -155,6 +155,7 @@ class TestWorkView(BaseTestCase):
         data["word_count"] = "4000"
         data["work_summary"] = "some stuff happens"
         data["work_notes"] = "a note here"
+        data['user_id'] = 1
         if build_tags == False:
             data["work_tags"] = []
         else:

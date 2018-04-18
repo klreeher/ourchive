@@ -12,18 +12,16 @@ class TestBookmark(BaseTestCase):
     def test_add_bookmark(self):
         data = self.build_data(True, False, True)
         work_data = self.build_dummary_work_data(True, True)
-        work_data['user_id'] = 1
         work_id = work.add_work(work_data)
-        bookmark.add_bookmark(data, 1)
+        bookmark.add_bookmark(data)
         new_bookmark = Bookmark.query.filter_by(id=1).first()
         self.assertTrue(new_bookmark.description == "This was fine I guess...")
 
     def test_update_bookmark(self):
         data = self.build_data(True, False, True)
         work_data = self.build_dummary_work_data(True, True)
-        work_data['user_id'] = 1
         work_id = work.add_work(work_data)
-        bookmark_id = bookmark.add_bookmark(data, 1)
+        bookmark_id = bookmark.add_bookmark(data)
         data["id"] = bookmark_id
         data["description"] = "This was bad actually!!!"
         bookmark.update_bookmark(data)
@@ -43,20 +41,18 @@ class TestBookmark(BaseTestCase):
     def test_get_bookmark(self):  
         data = self.build_data(True, False, False)      
         work_data = self.build_dummary_work_data(True, True)
-        work_data['user_id'] = 1
         work_id = work.add_work(work_data)
         work_fetched = Work.query.filter_by(id=work_id).first()
-        bookmark_id = bookmark.add_bookmark(data, 1)
+        bookmark_id = bookmark.add_bookmark(data)
         new_bookmark = bookmark.get_bookmark(1)
         self.assertTrue(new_bookmark["curator_title"] == "A Fic I Read")
 
     def test_get_bookmarks_by_curator(self):
         data = self.build_data(True, False, False)      
         work_data = self.build_dummary_work_data(True, True)
-        work_data['user_id'] = 1
         work_id = work.add_work(work_data)
         work_fetched = Work.query.filter_by(id=work_id).first()
-        bookmark_id = bookmark.add_bookmark(data, 1)
+        bookmark_id = bookmark.add_bookmark(data)
         fetched_bookmark = bookmark.get_bookmarks_by_curator(1)
         self.assertTrue(fetched_bookmark['bookmarks'][0]["rating"] == 3)
 
@@ -89,6 +85,7 @@ class TestBookmark(BaseTestCase):
         data["curator_title"] = "A Fic I Read"
         data["description"] = "This was fine I guess..."
         data["rating"] = 3
+        data['user_id'] = 1
         if build_links == False:
             data["links"] = []
         else:
@@ -113,6 +110,7 @@ class TestBookmark(BaseTestCase):
         data["word_count"] = "4000"
         data["work_summary"] = "some stuff happens"
         data["work_notes"] = "a note here"
+        data['user_id'] = 1
         if build_tags == False:
             data["work_tags"] = []
         else:
