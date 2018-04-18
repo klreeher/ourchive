@@ -12,8 +12,7 @@ export default class Search extends React.Component {
 	constructor(props) {
 	    super(props);
 	    this.state = {user: this.props.user,  searchTerm: "", advancedText: "Show Advanced Search", searchBookmarks: true,
-      searchWorks: true, searchTitle: true, searchSummary: true, searchCreator: true, searchTags: true, searchText: true,
-      searchCurator: true, searchDescription: true, searchRating: true};
+      searchWorks: true};
       this.doSearch = this.doSearch.bind(this);
       this.toggleAdvanced = this.toggleAdvanced.bind(this);
     }
@@ -53,96 +52,16 @@ export default class Search extends React.Component {
       }
   }  
 
-  updateSearchTerm(event)
+  updateSearchTerm(event, key)
   {
     this.setState({
       searchTerm: event.target.value
     })
   }
 
-  updateSearchType(event, key)
+  updateUserSearch(event, key)
   {
-    console.log(key)
-  }
-
-  updateWorkFields(event, key)
-  {
-    if (key===1) {
-      var oldVal = this.state.searchTitle;
-      this.setState({
-        searchTitle: !oldVal
-      })
-    }
-    else if (key ===2) {
-      var oldVal = this.state.searchCreator;
-      this.setState({
-        searchCreator: !oldVal
-      })
-    }
-    else if (key === 4) {
-      var oldVal = this.state.searchTags;
-      this.setState({
-        searchTags: !oldVal
-      })
-    }
-    else if (key === 3) {
-      var oldVal = this.state.searchSummary;
-      this.setState({
-        searchSummary: !oldVal
-      })
-    }
-    else if (key === 5) {
-      var oldVal = this.state.searchText;
-      this.setState({
-        searchText: !oldVal
-      })
-    }
-  }
-
-  updateBookmarkFields(event, key)
-  {
-    if (key===1) {
-      var oldVal = this.state.searchTitle;
-      this.setState({
-        searchTitle: !oldVal
-      })
-    }
-    else if (key ===2) {
-      var oldVal = this.state.searchCreator;
-      this.setState({
-        searchCreator: !oldVal
-      })
-    }
-    else if (key === 3) {
-      var oldVal = this.state.searchCurator;
-      this.setState({
-        searchCurator: !oldVal
-      })
-    }
-    else if (key === 4) {
-      var oldVal = this.state.searchSummary;
-      this.setState({
-        searchSummary: !oldVal
-      })
-    }
-    else if (key === 5) {
-      var oldVal = this.state.searchDescription;
-      this.setState({
-        searchDescription: !oldVal
-      })
-    }
-    else if (key === 6) {
-      var oldVal = this.state.searchTags;
-      this.setState({
-        searchTags: !oldVal
-      })
-    }
-    else if (key === 7) {
-      var oldVal = this.state.searchRating;
-      this.setState({
-        searchRating: !oldVal
-      })
-    }
+    console.log(event.target.value)
   }
 
   updateSearchWorks(event)
@@ -164,12 +83,15 @@ export default class Search extends React.Component {
   render() {
     return (
       <div>
+        <div className="row">
+          <div className="col-sm-4 h3">Basic Search</div>
+        </div>
 		    <div className="row">
           <div className="col-md-6">
             <div className="input-group">
-              <input className="form-control" value={this.state.searchTerm} onChange={evt => this.updateSearchTerm(evt)} placeholder="Search..."></input>
+              <input className="form-control" value={this.state.searchTerm} onChange={evt => this.updateSearchTerm(evt)} placeholder="Find me something great!"></input>
               <span className="input-group-btn">
-                <button className="btn btn-default" type="button" onClick={this.doSearch}>Search</button>
+                <button className="btn btn-primary" type="button" onClick={this.doSearch}>Search</button>
               </span>
             </div>            
           </div>
@@ -180,84 +102,67 @@ export default class Search extends React.Component {
         <br/>
         {this.state.showAdvancedSearch ?
           <div>
-            <div className="panel panel-default">
-              <div className="panel-heading">General Search</div>
-                <div className="panel-body">
-                  <div className="row">
-                    <div className="col-sm-2">
-                      <input type="checkbox" id="searchTypeOne" onChange={evt => this.updateSearchType(evt, 1)}/>  Search work type 1?
-                    </div>
-                    <div className="col-sm-2">
-                      <input type="checkbox" id="searchTypeTwo" onChange={evt => this.updateSearchType(evt, 2)}/>  Search work type 2?
-                    </div>
-                    <div className="col-sm-2">
-                      <input type="checkbox" id="searchTypeThree" onChange={evt => this.updateSearchType(evt, 3)}/>  Search work type 3?
-                    </div>
-                    <div className="col-sm-2">
-                        <input type="checkbox" id="searchWorks" checked={this.state.searchWorks} onChange={evt => this.updateSearchWorks(evt)}/>  Search works?
-                    </div>
-                    <div className="col-sm-4">
-                      <input type="checkbox" id="searchBookmarks" checked={this.state.searchBookmarks} onChange={evt => this.updateSearchBookmarks(evt)}/>  Search bookmarks?
-                    </div>          
-                  </div>
+            <div className="row">
+              <div className="col-sm-4 h3">Advanced Search</div>
+            </div>
+            <hr/>   
+            <div className="row">
+              <div className="col-sm-4 h3">Words</div>
+            </div>         
+            <div className="row text-padding">
+              <div className="col-sm-4">Any of these words</div>
+              <div className="col-sm-6">
+                  <input id="searchTerm" type="text" className="form-control" onChange={evt => this.updateSearchTerm(evt, 1)} value={this.state.searchAny}/>
+              </div>
+            </div>
+            <div className="row text-padding">
+              <div className="col-sm-4">None of these words</div>
+              <div className="col-sm-6">
+                  <input id="excludeTerms" type="text" className="form-control" onChange={evt => this.updateSearchTerm(evt, 2)} value={this.state.searchNone}/>
+              </div>
+            </div>
+            <div className="row text-padding">
+              <div className="col-sm-4">Exactly matching</div>
+              <div className="col-sm-6">
+                  <input id="matchTerm" type="text" className="form-control" onChange={evt => this.updateSearchTerm(evt, 2)} value={this.state.searchMatch}/>
+              </div>
+            </div>
+            <div className="row">
+              <div className="col-sm-4 h3">Users</div>
+            </div>         
+            <div className="row text-padding">
+              <div className="col-sm-4">Curator username(s)</div>
+              <div className="col-sm-6">
+                  <input id="curatorUsernames" type="text" className="form-control" onChange={evt => this.updateUserSearch(evt, 1)} value={this.state.searchCurator}/> 
+              </div>
+            </div>
+            <div className="row text-padding">
+              <div className="col-sm-4">Creator username(s)</div>
+              <div className="col-sm-6">
+                  <input id="creatorUsernames" type="text" className="form-control" onChange={evt => this.updateUserSearch(evt, 2)} value={this.state.searchCreator}/> 
+              </div>
+            </div>
+            <div className="row">
+              <div className="col-sm-4 h3">Types</div>
+            </div>
+            <div className="row text-padding">
+              <div className="col-sm-3">
+                  <input type="checkbox" id="searchWorks" onChange={evt => this.updateSearchWorks(evt)} checked={this.state.searchWorks}/>  Works
+              </div>
+            </div>
+            <div className="row text-padding">
+              <div className="col-sm-3">
+                  <input type="checkbox" id="searchBookmarks" onChange={evt => this.updateSearchBookmarks(evt)} checked={this.state.searchBookmarks}/>  Bookmarks
+              </div>
+            </div>
+            <br/>
+            <div className="row text-padding">
+              <div className="col-xs-1">
+                <button className="btn btn-primary" type="button" onClick={this.doSearch}>Search</button>
               </div>
             </div>
             
-
-            <div className="panel panel-default">
-              <div className="panel-heading">Work Search</div>
-                <div className="panel-body">
-                  <div className="row">
-                    <div className="col-sm-2">   
-                      <input type="checkbox" id="searchTitle" onChange={evt => this.updateWorkFields(evt, 1)} checked={this.state.searchTitle}/>  Search title? 
-                    </div>
-                    <div className="col-sm-2">  
-                      <input type="checkbox" id="searchCreator" onChange={evt => this.updateWorkFields(evt, 2)} checked={this.state.searchCreator}/>  Search creator?
-                    </div>                    
-                    <div className="col-sm-2">  
-                      <input type="checkbox" id="searchTags" onChange={evt => this.updateWorkFields(evt, 4)} checked={this.state.searchTags}/>  Search tags?
-                    </div>
-                    <div className="col-sm-2"> 
-                      <input type="checkbox" id="searchText" onChange={evt => this.updateWorkFields(evt, 5)} checked={this.state.searchText}/>  Search text?
-                    </div>   
-                    <div className="col-sm-4">  
-                      <input type="checkbox" id="searchSummary" onChange={evt => this.updateWorkFields(evt, 3)} checked={this.state.searchSummary}/>  Search summary?
-                    </div>           
-                  </div>
-                </div>
-            </div>
-            <div className="panel panel-default">
-              <div className="panel-heading">Bookmark Search</div>
-                <div className="panel-body">
-                  <div className="row">
-                    <div className="col-sm-2">
-                        <input type="checkbox" id="searchTitle" onChange={evt => this.updateBookmarkFields(evt, 1)} checked={this.state.searchTitle}/>  Search title?
-                    </div>
-                    <div className="col-sm-3">
-                        <input type="checkbox" id="searchCreator" onChange={evt => this.updateBookmarkFields(evt, 2)} checked={this.state.searchCreator}/>  Search creator?
-                    </div>
-                    <div className="col-sm-3">
-                        <input type="checkbox" id="searchCurator" onChange={evt => this.updateBookmarkFields(evt, 3)} checked={this.state.searchCurator}/>  Search curator?
-                    </div>
-                    <div className="col-sm-4">
-                        <input type="checkbox" id="searchSummary" onChange={evt => this.updateBookmarkFields(evt, 4)} checked={this.state.searchSummary}/>  Search summary?
-                    </div>                    
-                  </div>
-                  <div className="row">                      
-                    <div className="col-sm-2">
-                        <input type="checkbox" id="searchTags" onChange={evt => this.updateBookmarkFields(evt, 6)} checked={this.state.searchTags}/>  Search tags?
-                    </div>
-                    <div className="col-sm-2">
-                      <input type="checkbox" id="searchRating" onChange={evt => this.updateBookmarkFields(evt, 7)} checked={this.state.searchRating}/>  Search rating?
-                    </div>
-                    <div className="col-sm-4">
-                      <input type="checkbox" id="searchDescription" onChange={evt => this.updateBookmarkFields(evt, 5)} checked={this.state.searchDescription}/>  Search description?
-                    </div>
-                  </div>
-                </div>
-            </div>
-            
-            
+          
           </div>
 
           : <div/>}

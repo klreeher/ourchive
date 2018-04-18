@@ -21,7 +21,9 @@ export default class Home extends React.Component {
   render() {
     return (
       <div>
-        <h2>Home - Hello World</h2>
+        <div className="row">
+          <div className="col-xs-12"><h1>Ourchive. <small>A multi-media archive for everyone.</small></h1></div>
+        </div>
         <Search user={this.props.user}/>
       </div>
 
