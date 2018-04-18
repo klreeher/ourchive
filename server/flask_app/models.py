@@ -1,7 +1,7 @@
 import datetime
 import jwt
-
-from server.flask_app import app, db, bcrypt
+import bcrypt
+from server.flask_app import app, db
 from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
@@ -53,7 +53,7 @@ class User(db.Model):
 
     def __init__(self, email, password, admin=False, username=None):
         self.email = email
-        self.password = bcrypt.generate_password_hash(
+        self.password = bcrypt.hashpw(
             password, app.config.get('BCRYPT_LOG_ROUNDS')
         ).decode()
         self.registered_on = datetime.datetime.now()

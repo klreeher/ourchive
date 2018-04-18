@@ -67,7 +67,8 @@ class WorkSearch(DocType):
 		self.work_summary=work_json['work_summary']
 		self.work_notes=work_json['work_notes']
 		self.is_complete=complete 
-		self.word_count=work_json['word_count']
+		if 'word_count' in work_json:
+			self.word_count=work_json['word_count']
 		self.user_id=work_json['user_id']
 		self.meta.id = work_json['id']
 		self.add_chapters(work_json['chapters'], str(self.meta.id))

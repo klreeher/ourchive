@@ -2,7 +2,7 @@ from flask import Flask, render_template, send_file, send_from_directory, reques
 import json
 from flask_tus import tus_manager
 from flask_cors import CORS
-from flask_bcrypt import Bcrypt
+import bcrypt
 from flask_sqlalchemy import SQLAlchemy
 import os
 import redis
@@ -28,7 +28,6 @@ elif app.config.get('UPLOAD_TYPE') == 'aws':
 tm = tus_manager(app, upload_url='/uploads', upload_folder=app.config.get('UPLOAD_FOLDER'), overwrite=True, 
   upload_finish_cb=None, storage=storage)
 
-bcrypt = Bcrypt(app)
 db = SQLAlchemy(app)
 redis_db = redis.StrictRedis(host="localhost", port=6379, db=0)
 es_client = Elasticsearch()
