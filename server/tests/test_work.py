@@ -189,7 +189,8 @@ class TestWorkView(BaseTestCase):
     def add_user(self):
         user = User(
             email='test@test.com',
-            password='test'
+            password='test',
+            username='elenaimp'
         )
         db.session.add(user)
         db.session.commit()

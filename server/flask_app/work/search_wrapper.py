@@ -2,6 +2,8 @@ from datetime import datetime
 from elasticsearch_dsl import DocType, Date, Nested, Boolean, \
 	analyzer, InnerDoc, Completion, Keyword, Text, Index, FacetedSearch, TermsFacet
 from elasticsearch_dsl.query import MultiMatch, Match
+from flask import current_app as app
+from ..models import User
 
 class ChapterSearch(InnerDoc):
 	title = Text()
@@ -69,12 +71,3 @@ class WorkSearch(DocType):
 		self.meta.id = work_json['id']
 		self.add_chapters(work_json['chapters'], str(self.meta.id))
 		self.save()
-
-	def search_text_on_term(self, term):
-		search = WorkSearch.search()
-		query = MultiMatch(query=term, fields=['title', 'work_summary', 'work_notes', 'word_count', 'user_id', 'chapter.summary'], 
-			fuzziness=2)
-		search = search.query(query)		
-		results = search.execute()
-		return results
-

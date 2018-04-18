@@ -9,65 +9,32 @@ from server.flask_app.tag import logic as tag
 from server.flask_app.comment import logic as comment
 from server.flask_app.auth import logic as auth
 from server.flask_app.user import logic as user_logic
+from server.flask_app.search import logic as search
 
 @api.route('/<path:path>')
 def unknown_path(path):
   return render_template('index.html')
 
 
-@api.route('/api/search/term/<string:searchTerm>')
-def get_results(searchTerm):
-  results = json.dumps(
-    {
-      "works" : [
-        {
-          "key": 1,
-          "title": "a series of unfortunate dev choices",
-          "name": "anastasia",
-          "creator_id": 2,
-          "chapter_count": 3,
-          "is_complete": "false",
-          "word_count": 100500,
-          "work_summary": "some stuff happens"
-        },
-        {
-          "key": 2,
-          "title": "a series of unfortunate dev choices part 2",
-          "name": "dimitri",
-          "creator_id": 3,
-          "chapter_count": 100,
-          "is_complete": "false",
-          "word_count": 500683,
-          "work_summary": "M U R D E R ON THE FRONT"
-        }
-      ],
-      "bookmarks" : [
-        {
-          "id": 5,
-          "curator": {
-            "curator_name": "sally",
-            "curator_id": 2
-          },
-          "work": {
-            "title": "sixteen guns in brixton",
-            "creator": "e l dragons",
-            "summary": "someBODY once told me the world is gonna roll me",
-            "word_count": 550000,
-            "is_complete": True,
-            "chapter_count": 15
-          },
-          "curator_title": "a bookmark i loved",
-          "rating": 4,
-          "description": "this touched my heart and also I'm at war with the author now",
-          "tags": [
-            {"fandom": ["buffy", "xena"]},
-            {"primary pairing": ["buffy/faith"]}
-          ]
-        }
-      ]
-    }
-  )
-  return results
+@api.route('/api/search/term/<string:searchTerm>', methods=['GET'])
+def search_by_term(searchTerm):
+  result = search.search_text_on_term(searchTerm)
+  return make_response(jsonify(result), 201)
+
+@api.route('/api/search/creator/<int:userId>', methods=['GET'])
+def search_by_creator(userId):
+  result = search.search_by_creator(userId)
+  return make_response(jsonify(result), 201)
+
+@api.route('/api/search/complete', methods=['GET'])
+def search_by_complete():
+  result = search.search_by_complete(True)
+  return make_response(jsonify(result), 201)
+
+@api.route('/api/search/incomplete', methods=['GET'])
+def search_by_incomplete():
+  result = search.search_by_complete(False)
+  return make_response(jsonify(result), 201)
 
 @api.route('/api/user/username/<string:username>', methods=['GET'])
 def get_user_by_username(username):

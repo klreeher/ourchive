@@ -51,13 +51,14 @@ class User(db.Model):
     sent_messages = db.relationship('Message', foreign_keys="[Message.from_user_id]",
                                 lazy='dynamic')
 
-    def __init__(self, email, password, admin=False):
+    def __init__(self, email, password, admin=False, username=None):
         self.email = email
         self.password = bcrypt.generate_password_hash(
             password, app.config.get('BCRYPT_LOG_ROUNDS')
         ).decode()
         self.registered_on = datetime.datetime.now()
         self.admin = admin
+        self.username = username
 
     def encode_auth_token(self, user_id):
         try:
