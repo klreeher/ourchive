@@ -21,9 +21,9 @@ def search_by_term(searchTerm):
   result = search.search_text_on_term(searchTerm)
   return make_response(jsonify(result), 201)
 
-@api.route('/api/search/creator/<int:userId>', methods=['GET'])
-def search_by_creator(userId):
-  result = search.search_by_creator(userId)
+@api.route('/api/search/creator/<string:username>', methods=['GET'])
+def search_by_creator(username):
+  result = search.search_by_creator(username)
   return make_response(jsonify(result), 201)
 
 @api.route('/api/search/complete', methods=['GET'])

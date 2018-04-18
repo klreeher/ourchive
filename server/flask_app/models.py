@@ -240,7 +240,8 @@ class Bookmark(db.Model):
     curator_title = db.Column(db.String(200))
     rating = db.Column(db.Integer)
     description = db.Column(db.String)
-
+    created_on = db.Column(db.DateTime, server_default=db.func.now())
+    updated_on = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now())
 
     user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'))
     user = db.relationship('User')

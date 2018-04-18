@@ -32,6 +32,7 @@ class WorkSearch(DocType):
 	title = Text()
 	title_suggest = Completion()
 	created_at = Date()
+	updated_on = Date()
 	work_summary = Text()
 	work_notes = Text()
 	is_complete = Boolean()
