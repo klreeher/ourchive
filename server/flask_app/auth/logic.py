@@ -111,7 +111,7 @@ def authorize(request):
 		responseObject = {
 			'status': 'fail',
 			'message': resp,
-			'status_int': 402
+			'status_int': 401
 		}
 		return make_response(jsonify(responseObject), 401)
 	else:
@@ -172,14 +172,14 @@ def logout(request):
 				'message': resp,
 				'status_int': 401
 			}
-			return make_response(jsonify(responseObject), 401)
+			return make_response(jsonify(responseObject), 403)
 	else:
 		responseObject = {
 			'status': 'fail',
 			'message': 'Provide a valid auth token.',
 			'status_int': 401
 		}
-		return make_response(jsonify(responseObject), 401)
+		return make_response(jsonify(responseObject), 402)
 
 def auth_from_data(request):
   status = authorize(request)
