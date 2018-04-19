@@ -134,8 +134,8 @@ export default class NavbarInternal extends React.Component {
       email: this.state.email
       })
       .then((response) => {
-        localStorage.setItem('jwt', response.data);
-        localStorage.setItem('user_id', 1)
+        localStorage.setItem('jwt', response.data['auth_token']);
+        localStorage.setItem('friendly_name', response.data['username'])
         this.props.updateUser();
         this.setState({ 
           userName: "",

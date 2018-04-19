@@ -23,7 +23,8 @@ def register(post_data):
 			responseObject = {
 				'status': 'success',
 				'message': 'Successfully registered.',
-				'auth_token': auth_token.decode()
+				'auth_token': auth_token.decode(),
+				'username': user.username
 			}
 			return make_response(jsonify(responseObject), 201)
 		except Exception as e:
