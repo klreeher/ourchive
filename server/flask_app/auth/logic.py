@@ -147,7 +147,7 @@ def logout(request):
 		auth_token = auth_header.split(" ")[1]
 	else:
 		auth_token = ''
-	if auth_token:
+	if auth_token != '':
 		resp = User.decode_auth_token(auth_token)
 		if not isinstance(resp, str):
 			blacklist_token = BlacklistToken(token=auth_token)
