@@ -111,7 +111,7 @@ def authorize(request):
 		responseObject = {
 			'status': 'fail',
 			'message': resp,
-			'status_int': 401
+			'status_int': 402
 		}
 		return make_response(jsonify(responseObject), 401)
 	else:
