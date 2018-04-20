@@ -7,6 +7,7 @@ from .. import tag as tag_blueprint
 from flask import current_app as app
 from ..models import Work, Chapter, Tag, User, TagType
 from .search_wrapper import WorkSearch
+from ..tag.search_wrapper import TagSearch
 
 @work.route('/')
 def homepage():
@@ -135,6 +136,9 @@ def add_tags(work, tags):
 			else:
 				work.tags.append(Tag(text=tag, tag_type_id=tag_item['id']))
 				tag_blueprint.logic.add_tag(tag, tag_item['id'])
+				if app.config.get('USE_ES'):
+					search_obj = TagSearch()
+					search_obj.create_from_item(tag, tag_item['id'])
 
 	return work.tags
 

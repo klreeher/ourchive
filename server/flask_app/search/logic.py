@@ -3,6 +3,7 @@ from elasticsearch_dsl.query import MultiMatch, Match
 from ..models import User
 from ..work.search_wrapper import WorkSearch
 from ..bookmark.search_wrapper import BookmarkSearch
+from ..tag.search_wrapper import TagSearch
 
 def search_text_on_term(term):
 	search = WorkSearch.search()
@@ -32,6 +33,13 @@ def search_bookmark_by_term(term):
 	search = BookmarkSearch.search()
 	query = MultiMatch(query=term, fields=['curator_title', 'rating', 'description'], 
 		fuzziness=2)
+	search = search.query(query)
+	results = search.execute()
+	return results
+
+def search_tag(tag):
+	search = TagSearch.search()
+	query = Match(text=tag)
 	search = search.query(query)
 	results = search.execute()
 	return results

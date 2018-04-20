@@ -52,14 +52,49 @@ export default class Search extends React.Component {
       }
   }  
 
-  updateSearchTerm(event, key)
+  updateSearchTerm(event)
   {
     this.setState({
       searchTerm: event.target.value
     })
   }
 
-  updateUserSearch(event, key)
+  updateCuratorSearch(event)
+  {
+    console.log(event.target.value)
+  }
+
+  updateCreatorSearch(event)
+  {
+    console.log(event.target.value)
+  }
+
+  updateAnyTerms(evt)
+  {
+    console.log(event.target.value)
+  }
+
+  updateNoneTerms(evt) 
+  {
+    console.log(event.target.value)
+  }
+
+  updateExactlyTerms(evt)
+  {
+    console.log(event.target.value)
+  }
+
+  updateAnyTags(evt) 
+  {
+    console.log(event.target.value)
+  }
+
+  updateNoneTags(evt)
+  {
+    console.log(event.target.value)
+  }
+
+  updateExactlyTags(evt)
   {
     console.log(event.target.value)
   }
@@ -112,19 +147,19 @@ export default class Search extends React.Component {
             <div className="row text-padding">
               <div className="col-sm-4">Any of these words</div>
               <div className="col-sm-6">
-                  <input id="searchTerm" type="text" className="form-control" onChange={evt => this.updateSearchTerm(evt, 1)} value={this.state.searchAny}/>
+                  <input id="searchTerm" type="text" className="form-control" onChange={evt => this.updateAnyTerms(evt)} value={this.state.searchAny}/>
               </div>
             </div>
             <div className="row text-padding">
               <div className="col-sm-4">None of these words</div>
               <div className="col-sm-6">
-                  <input id="excludeTerms" type="text" className="form-control" onChange={evt => this.updateSearchTerm(evt, 2)} value={this.state.searchNone}/>
+                  <input id="excludeTerms" type="text" className="form-control" onChange={evt => this.updateNoneTerms(evt)} value={this.state.searchNone}/>
               </div>
             </div>
             <div className="row text-padding">
               <div className="col-sm-4">Exactly matching</div>
               <div className="col-sm-6">
-                  <input id="matchTerm" type="text" className="form-control" onChange={evt => this.updateSearchTerm(evt, 2)} value={this.state.searchMatch}/>
+                  <input id="matchTerm" type="text" className="form-control" onChange={evt => this.updateExactlyTerms(evt)} value={this.state.searchExactly}/>
               </div>
             </div>
             <div className="row">
@@ -133,13 +168,34 @@ export default class Search extends React.Component {
             <div className="row text-padding">
               <div className="col-sm-4">Curator username(s)</div>
               <div className="col-sm-6">
-                  <input id="curatorUsernames" type="text" className="form-control" onChange={evt => this.updateUserSearch(evt, 1)} value={this.state.searchCurator}/> 
+                  <input id="curatorUsernames" type="text" className="form-control" onChange={evt => this.updateCuratorSearch(evt)} value={this.state.searchCurator}/> 
               </div>
             </div>
             <div className="row text-padding">
               <div className="col-sm-4">Creator username(s)</div>
               <div className="col-sm-6">
-                  <input id="creatorUsernames" type="text" className="form-control" onChange={evt => this.updateUserSearch(evt, 2)} value={this.state.searchCreator}/> 
+                  <input id="creatorUsernames" type="text" className="form-control" onChange={evt => this.updateCreatorSearch(evt)} value={this.state.searchCreator}/> 
+              </div>
+            </div>
+            <div className="row">
+              <div className="col-sm-4 h3">Tags</div>
+            </div>         
+            <div className="row text-padding">
+              <div className="col-sm-4">Any of these tags</div>
+              <div className="col-sm-6">
+                  <input id="anyTags" type="text" className="form-control" onChange={evt => this.updateAnyTags(evt)} value={this.state.searchAnyTags}/> 
+              </div>
+            </div>
+            <div className="row text-padding">
+              <div className="col-sm-4">None of these tags</div>
+              <div className="col-sm-6">
+                  <input id="noneTags" type="text" className="form-control" onChange={evt => this.updateNoneTags(evt)} value={this.state.searchExactlyTags}/> 
+              </div>
+            </div>
+            <div className="row text-padding">
+              <div className="col-sm-4">Exactly these tags</div>
+              <div className="col-sm-6">
+                  <input id="exactlyTags" type="text" className="form-control" onChange={evt => this.updateExactlyTags(evt)} value={this.state.searchNoneTags}/> 
               </div>
             </div>
             <div className="row">
