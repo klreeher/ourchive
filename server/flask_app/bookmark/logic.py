@@ -7,6 +7,13 @@ from flask import current_app as app
 from ..models import Work, Chapter, Tag, User, TagType, Bookmark, BookmarkLink
 from .search_wrapper import BookmarkSearch
 
+def get_work_from_bookmark(data):
+	work = Work.query.filter_by(id=data['work_id']).first()
+	data['work'] = {}
+	data['work']['title'] = work.title
+	data['work']['username'] = work.user.username
+	data['work']['user_id'] = work.user_id
+	return data
 
 def add_bookmark(data):
 	bookmark = Bookmark(curator_title=data["curator_title"],work_id=data["work_id"])
@@ -22,6 +29,7 @@ def add_bookmark(data):
 	db.session.commit()
 	if app.config.get('USE_ES'):
 		data['id'] = bookmark.id
+		data = get_work_from_bookmark(data)
 		search_obj = BookmarkSearch()
 		search_obj.create_from_json(data)
 	return bookmark.id
@@ -39,6 +47,7 @@ def update_bookmark(data):
 	if app.config.get('USE_ES'):
 		data['user_id'] = bookmark.user_id
 		data['id'] = bookmark.id
+		data = get_work_from_bookmark(data)
 		search_obj = BookmarkSearch()
 		search_obj.create_from_json(data)
 	return bookmark.id

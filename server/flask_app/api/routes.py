@@ -16,9 +16,9 @@ def unknown_path(path):
   return render_template('index.html')
 
 
-@api.route('/api/search/term/<string:searchTerm>', methods=['GET'])
+@api.route('/api/search/term/<string:searchTerm>', methods=['POST'])
 def search_by_term(searchTerm):
-  result = search.search_text_on_term(searchTerm)
+  result = search.search_on_term(searchTerm, request.json["search_works"], request.json["search_bookmarks"])
   return make_response(jsonify(result), 201)
 
 @api.route('/api/search/creator/<string:username>', methods=['GET'])

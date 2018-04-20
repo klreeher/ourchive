@@ -13,9 +13,7 @@ class ChapterSearch(InnerDoc):
 	summary = Text()
 	number = Text()
 
-	#comments = Nested(Comment)
-
-	def create_from_json(self, chapter_json, identifier):
+	def create_from_json(self, chapter_json):
 		self.number=chapter_json['number']
 		self.title=chapter_json['title']
 		self.text=chapter_json['text']
@@ -49,7 +47,7 @@ class WorkSearch(DocType):
 		chapter_count = 1
 		for chapter in chapter_json:
 			chapter_search = ChapterSearch()
-			chapter_search.create_from_json(chapter, work_id + ": " + str(chapter_count))
+			chapter_search.create_from_json(chapter)
 			self.chapters.append(
 				chapter_search)
 			chapter_count += 1

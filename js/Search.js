@@ -23,11 +23,13 @@ export default class Search extends React.Component {
   {
       event.target.blur()
       if (this.state.searchTerm === "") return;
-      axios.get('/api/search/term/'+this.state.searchTerm)
+      axios.post('/api/search/term/'+this.state.searchTerm, {"search_works": this.state.searchWorks,
+        "search_bookmarks": this.state.searchBookmarks})
         .then(function (response) {
           this.setState({           
-            works: response.data,
-            results: true
+            works: response.data.works,
+            results: true,
+            bookmarks: response.data.bookmarks
           });
         }.bind(this))
         .catch(function (error) {
