@@ -3,6 +3,7 @@ import axios from 'axios';
 import BookmarkStub from './BookmarkStub';
 import SearchResults from './SearchResults';
 import WorkStub from './WorkStub';
+import WorkTypeCheckbox from './WorkTypeCheckbox';
 import {Tabs, Tab, Row, Nav, Col, NavItem} from 'react-bootstrap';
 
 export default class Search extends React.Component {
@@ -12,8 +13,9 @@ export default class Search extends React.Component {
 	constructor(props) {
 	    super(props);
 	    this.state = {user: this.props.user,  searchTerm: "", advancedText: "Show Advanced Search", searchBookmarks: true,
-      searchWorks: true};
+      searchWorks: true, work_types: []};
       this.doSearch = this.doSearch.bind(this);
+      this.searchType = this.searchType.bind(this);
       this.toggleAdvanced = this.toggleAdvanced.bind(this);
     }
 
@@ -24,8 +26,8 @@ export default class Search extends React.Component {
       axios.get('/api/search/term/'+this.state.searchTerm)
         .then(function (response) {
           this.setState({           
-            results: response.data
-
+            works: response.data,
+            results: true
           });
         }.bind(this))
         .catch(function (error) {
@@ -97,6 +99,11 @@ export default class Search extends React.Component {
   updateExactlyTags(evt)
   {
     console.log(event.target.value)
+  }
+
+  searchType(type_id)
+  {
+    console.log(type_id)
   }
 
   updateSearchWorks(event)
@@ -206,6 +213,12 @@ export default class Search extends React.Component {
                   <input type="checkbox" id="searchWorks" onChange={evt => this.updateSearchWorks(evt)} checked={this.state.searchWorks}/>  Works
               </div>
             </div>
+            {this.state.work_types.map(type => 
+              <div className="row text-padding" key={type.id}>
+                <WorkTypeCheckbox type={type} searchType={this.searchType}/>
+              </div>
+            )}
+           
             <div className="row text-padding">
               <div className="col-sm-3">
                   <input type="checkbox" id="searchBookmarks" onChange={evt => this.updateSearchBookmarks(evt)} checked={this.state.searchBookmarks}/>  Bookmarks
@@ -225,7 +238,7 @@ export default class Search extends React.Component {
         <br/>
         <br/>       
 
-        {this.state.results ? <SearchResults bookmarks={this.state.results.bookmarks} works={this.state.results.works} user={this.props.user}/> : <div/>}
+        {this.state.results ? <SearchResults bookmarks={this.state.bookmarks} works={this.state.works} user={this.props.user}/> : <div/>}
       </div>
     );
   }

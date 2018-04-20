@@ -12,10 +12,25 @@ def search_text_on_term(term):
 		fuzziness=2)
 	search = search.query(query)		
 	results = search.execute()
-	return results
+	results_json = []
+	for item in results:
+		results_json.append(build_work_search_results(item))
+	return results_json
+
+def build_work_search_results(item):
+	work = {}
+	work['title'] = item.title
+	work['work_summary'] = item.work_summary
+	work['work_notes'] = item.work_notes
+	work['word_count'] = item.word_count
+	work['user_id'] = item.user_id
+	work['username'] = User.query.filter_by(id=item.user_id).first().username
+	work['chapter_count'] = len(item.chapters)
+	work['id'] = item.meta.id
+	return work
 
 def search_by_creator(creator_name):
-	user = User.query.filter_by(id=1).first()
+	user = User.query.filter_by(username=creator_name).first()
 	search = WorkSearch.search()
 	query = Match(user_id=str(user.id))
 	search = search.query(query)		
