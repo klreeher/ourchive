@@ -1,5 +1,5 @@
 from datetime import datetime
-from elasticsearch_dsl.query import MultiMatch, Match
+from elasticsearch_dsl.query import MultiMatch, Match, Nested, Q
 from ..models import User
 from ..work.search_wrapper import WorkSearch
 from ..bookmark.search_wrapper import BookmarkSearch
@@ -17,9 +17,20 @@ def search_text_on_term(term):
 	WorkSearch.init()
 	search = WorkSearch.search()
 	query = MultiMatch(query=term, fields=['title', 'work_summary', 'work_notes', 'word_count', 
-		'user_id', 'chapters.summary', 'chapters.text', 'chapters.image_alt_text', 'chapters.title'], 
+		'user_id'], 
 		fuzziness=2)
-	search = search.query(query)		
+	chapter_query = Q({"nested": {
+		"path" : "chapters",
+            "query" : {
+                "multi_match" : {
+                    "query" : term,
+                    "fields" : ["chapters.title", "chapters.text", "chapters.summary", "chapters.image_alt_text"]
+                    
+                }
+            }
+        }})
+	combined = chapter_query | query
+	search = search.query(combined)
 	results = search.execute()
 	results_json = []
 	for item in results:
