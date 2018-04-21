@@ -14,6 +14,7 @@ def search_on_term(term, search_works, search_bookmarks):
 	return results
 
 def search_text_on_term(term):
+	WorkSearch.init()
 	search = WorkSearch.search()
 	query = MultiMatch(query=term, fields=['title', 'work_summary', 'work_notes', 'word_count', 
 		'user_id', 'chapter.summary', 'chapter.text', 'chapter.image_alt_text', 'chapter.title'], 
@@ -55,6 +56,7 @@ def search_by_complete(complete):
 	return results
 
 def search_bookmark_by_term(term):
+	BookmarkSearch.init()
 	search = BookmarkSearch.search()
 	query = MultiMatch(query=term, fields=['curator_title', 'rating', 'description'], 
 		fuzziness=2)
