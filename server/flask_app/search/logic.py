@@ -17,7 +17,7 @@ def search_text_on_term(term):
 	WorkSearch.init()
 	search = WorkSearch.search()
 	query = MultiMatch(query=term, fields=['title', 'work_summary', 'work_notes', 'word_count', 
-		'user_id', 'chapter.summary', 'chapter.text', 'chapter.image_alt_text', 'chapter.title'], 
+		'user_id', 'chapters.summary', 'chapters.text', 'chapters.image_alt_text', 'chapters.title'], 
 		fuzziness=2)
 	search = search.query(query)		
 	results = search.execute()
