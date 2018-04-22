@@ -5,16 +5,39 @@ from ..work.search_wrapper import WorkSearch
 from ..bookmark.search_wrapper import BookmarkSearch
 from ..tag.search_wrapper import TagSearch
 
-def do_advanced_search(include_terms, exclude_terms, basic_term,
+def do_advanced_search(include_terms, exclude_terms, 
 	curator_usernames, creator_usernames, search_works, search_bookmarks):
 	results = {}
+	final_query = None
 	if search_works:
-		results["works"] = search_works_on_query(include_work_terms(include_terms) & 
-			exclude_work_terms(exclude_terms) & search_by_creators_query(creator_usernames))
+		if include_terms != "":
+			final_query = include_work_terms(include_terms.split())
+		if exclude_terms != "":
+			if final_query is not None:
+				final_query = final_query & exclude_work_terms(exclude_terms.split())
+			else:
+				final_query = exclude_work_terms(exclude_terms.split())
+		if creator_usernames != "":
+			if final_query is not None:
+				final_query = final_query & search_by_creators_query(creator_usernames.split())
+			else:
+				final_query = search_by_creators_query(creator_usernames.split())
+		results["works"] = search_works_on_query(final_query)
+	final_query = None
 	if search_bookmarks:
-		results["bookmarks"] = search_bookmarks_on_query(include_bookmark_terms(include_terms) &
-			exclude_bookmark_terms(exclude_terms) &
-			search_by_curators_query(curator_usernames))
+		if include_terms != "":
+			final_query = include_bookmark_terms(include_terms.split())
+		if exclude_terms != "":
+			if final_query is not None:
+				final_query = final_query & exclude_bookmark_terms(exclude_terms.split())
+			else:
+				final_query = exclude_bookmark_terms(exclude_terms.split())
+		if creator_usernames != "":
+			if final_query is not None:
+				final_query = final_query & search_by_curators_query(curator_usernames.split())
+			else:
+				final_query = search_by_curators_query(curator_usernames.split())
+		results["bookmarks"] = search_bookmarks_on_query(final_query)
 	return results
 
 def search_works_on_query(query):

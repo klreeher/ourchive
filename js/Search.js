@@ -13,10 +13,11 @@ export default class Search extends React.Component {
 	constructor(props) {
 	    super(props);
 	    this.state = {user: this.props.user,  searchTerm: "", advancedText: "Show Advanced Search", searchBookmarks: true,
-      searchWorks: true, work_types: []};
+      searchWorks: true, work_types: [], searchCurator: "", searchCreator: ""};
       this.doSearch = this.doSearch.bind(this);
       this.searchType = this.searchType.bind(this);
       this.toggleAdvanced = this.toggleAdvanced.bind(this);
+      this.doAdvancedSearch = this.doAdvancedSearch.bind(this);
     }
 
   doSearch(event)
@@ -35,7 +36,26 @@ export default class Search extends React.Component {
         .catch(function (error) {
           console.log(error);
       });
-  }  
+  } 
+
+  doAdvancedSearch(event)
+  {
+    event.target.blur()
+    axios.post('/api/search/advanced', {"search_works": this.state.searchWorks,
+        "search_bookmarks": this.state.searchBookmarks, "include_terms": this.state.searchAny,
+        "exclude_terms": this.state.searchNone, "curator_usernames": this.state.searchCurator,
+        "creator_usernames": this.state.searchCreator})
+        .then(function (response) {
+          this.setState({           
+            works: response.data.works,
+            results: true,
+            bookmarks: response.data.bookmarks
+          });
+        }.bind(this))
+        .catch(function (error) {
+          console.log(error);
+      });
+  } 
 
   toggleAdvanced(event)
   {
@@ -65,22 +85,30 @@ export default class Search extends React.Component {
 
   updateCuratorSearch(event)
   {
-    console.log(event.target.value)
+    this.setState({
+      searchCurator: event.target.value
+    })
   }
 
   updateCreatorSearch(event)
   {
-    console.log(event.target.value)
+    this.setState({
+      searchCreator: event.target.value
+    })
   }
 
   updateAnyTerms(evt)
   {
-    console.log(event.target.value)
+    this.setState({
+      searchAny: event.target.value
+    })
   }
 
   updateNoneTerms(evt) 
   {
-    console.log(event.target.value)
+    this.setState({
+      searchNone: event.target.value
+    })
   }
 
   updateExactlyTerms(evt)
@@ -127,6 +155,8 @@ export default class Search extends React.Component {
   render() {
     return (
       <div>
+
+        { !this.state.showAdvancedSearch  && <div>
         <div className="row">
           <div className="col-sm-4 h3">Basic Search</div>
         </div>
@@ -138,12 +168,13 @@ export default class Search extends React.Component {
                 <button className="btn btn-primary" type="button" onClick={this.doSearch}>Search</button>
               </span>
             </div>            
-          </div>
+          </div></div></div>}
+        <div className="row">
           <div className="col-md-3">
               <button className="btn btn-link" type="button" onClick={this.toggleAdvanced}>{this.state.advancedText}</button>
             </div>
         </div>
-        <br/>
+        <br/> 
         {this.state.showAdvancedSearch ?
           <div>
             <div className="row">
@@ -229,7 +260,7 @@ export default class Search extends React.Component {
             <br/>
             <div className="row text-padding">
               <div className="col-xs-1">
-                <button className="btn btn-primary" type="button" onClick={this.doSearch}>Search</button>
+                <button className="btn btn-primary" type="button" onClick={this.doAdvancedSearch}>Search</button>
               </div>
             </div>
             

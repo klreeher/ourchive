@@ -36,6 +36,13 @@ def search_by_incomplete():
   result = search.search_by_complete(False)
   return make_response(jsonify(result), 201)
 
+@api.route('/api/search/advanced', methods=['POST'])
+def do_advanced_search():
+  result = search.do_advanced_search(request.json['include_terms'], request.json['exclude_terms'],
+    request.json['curator_usernames'], request.json['creator_usernames'],
+    request.json['search_works'], request.json['search_bookmarks'])
+  return make_response(jsonify(result), 201)
+
 @api.route('/api/user/username/<string:username>', methods=['GET'])
 def get_user_by_username(username):
   result = user_logic.get_by_username(username)

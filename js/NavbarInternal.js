@@ -27,7 +27,7 @@ export default class NavbarInternal extends React.Component {
     var id = localStorage.getItem('user_id');
     this.setState({
       loggedIn: state != null,
-      admin: admin != null && admin,
+      admin: admin != null && admin.toLowerCase() === "true",
       userId: id
     })
   }
