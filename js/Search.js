@@ -13,7 +13,7 @@ export default class Search extends React.Component {
 	constructor(props) {
 	    super(props);
 	    this.state = {user: this.props.user,  searchTerm: "", advancedText: "Show Advanced Search", searchBookmarks: true,
-      searchWorks: true, work_types: [], searchCurator: "", searchCreator: "", 
+      searchWorks: true, work_types: [], searchCurator: "", searchCreator: "", searchAny: "", searchNone: "",
       bookmark_page: 1, work_page: 1};
       this.doSearch = this.doSearch.bind(this);
       this.searchType = this.searchType.bind(this);
@@ -44,6 +44,10 @@ export default class Search extends React.Component {
         .then(function (response) {
           this.setState({           
             works: response.data.works,
+            work_page: 1,
+            work_pages: response.data.work_pages,
+            bookmark_pages: response.data.bookmark_pages,
+            bookmark_page: 1,
             results: true,
             bookmarks: response.data.bookmarks
           });
@@ -63,6 +67,10 @@ export default class Search extends React.Component {
         .then(function (response) {
           this.setState({           
             works: response.data.works,
+            work_page: 1,
+            work_pages: response.data.work_pages,
+            bookmark_pages: response.data.bookmark_pages,
+            bookmark_page: 1,
             results: true,
             bookmarks: response.data.bookmarks
           });
@@ -189,8 +197,27 @@ export default class Search extends React.Component {
     }
   }
 
-  getWorkPage(page) {   
-    axios.post('/api/search/term/'+this.state.searchTerm+'/page/'+page, {"search_works": true,
+  getWorkPage(page) {
+    if (this.state.showAdvancedSearch)
+    {
+      axios.post('/api/search/advanced/page/'+ page, {"search_works": true,
+        "search_bookmarks": false, "include_terms": this.state.searchAny,
+        "exclude_terms": this.state.searchNone, "curator_usernames": this.state.searchCurator,
+        "creator_usernames": this.state.searchCreator})
+        .then(function (response) {
+          this.setState({           
+            works: response.data.works,
+            work_page: page,
+            work_pages: response.data.work_pages
+          });
+        }.bind(this))
+        .catch(function (error) {
+          console.log(error);
+      });
+    }
+    else
+    {
+      axios.post('/api/search/term/'+this.state.searchTerm+'/page/'+page, {"search_works": true,
         "search_bookmarks": false})
         .then(function (response) {
           this.setState({           
@@ -202,10 +229,44 @@ export default class Search extends React.Component {
         .catch(function (error) {
           console.log(error);
         });
+    }
+    
   }
 
   getBookmarkPage(page) {
-    console.log("not implemented")
+    if (this.state.showAdvancedSearch) 
+    {
+      axios.post('/api/search/advanced/page/'+page, {"search_works": false,
+        "search_bookmarks": true, "include_terms": this.state.searchAny,
+        "exclude_terms": this.state.searchNone, "curator_usernames": this.state.searchCurator,
+        "creator_usernames": this.state.searchCreator})
+        .then(function (response) {
+          this.setState({           
+            bookmark_pages: response.data.bookmark_pages,
+            bookmark_page: 1,
+            bookmarks: response.data.bookmarks
+          });
+        }.bind(this))
+        .catch(function (error) {
+          console.log(error);
+      });
+    }
+    else
+    {
+      axios.post('/api/search/term/'+this.state.searchTerm+'/page/'+page, {"search_works": false,
+        "search_bookmarks": true})
+        .then(function (response) {
+          this.setState({           
+            bookmarks: response.data.bookmarks,
+            bookmark_page: page,
+            bookmark_pages: response.data.bookmark_pages
+          });
+        }.bind(this))
+        .catch(function (error) {
+          console.log(error);
+        });
+    }
+    
   }
 
   render() {

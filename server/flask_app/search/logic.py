@@ -6,7 +6,7 @@ from ..bookmark.search_wrapper import BookmarkSearch
 from ..tag.search_wrapper import TagSearch
 
 def do_advanced_search(include_terms, exclude_terms, 
-	curator_usernames, creator_usernames, search_works, search_bookmarks):
+	curator_usernames, creator_usernames, search_works, search_bookmarks, page_number):
 	results = {}
 	final_query = None
 	if search_works:
@@ -22,7 +22,9 @@ def do_advanced_search(include_terms, exclude_terms,
 				final_query = final_query & search_by_creators_query(creator_usernames.split())
 			else:
 				final_query = search_by_creators_query(creator_usernames.split())
-		results["works"] = search_works_on_query(final_query)
+		work_results = search_works_on_query(final_query, page_number)
+		results["works"] = work_results['works']
+		results['work_pages'] = work_results['pages']
 	final_query = None
 	if search_bookmarks:
 		if include_terms != "":
@@ -37,28 +39,38 @@ def do_advanced_search(include_terms, exclude_terms,
 				final_query = final_query & search_by_curators_query(curator_usernames.split())
 			else:
 				final_query = search_by_curators_query(curator_usernames.split())
-		results["bookmarks"] = search_bookmarks_on_query(final_query)
+		bookmark_results = search_bookmarks_on_query(final_query, page_number)
+		results["bookmarks"] = bookmark_results['bookmarks']
+		results['bookmark_pages'] = bookmark_results['pages']
 	return results
 
-def search_works_on_query(query):
+def search_works_on_query(query, page_number):
 	WorkSearch.init()
 	search = WorkSearch.search()
 	search = search.query(query)
+	search = search[(page_number-1) * 25:page_number*25]
 	results = search.execute()
+	work_results = {}
+	work_results['pages'] = results['hits']['total']/25
 	results_json = []
 	for item in results:
 		results_json.append(build_work_search_results(item))
-	return results_json
+	work_results['works'] = results_json
+	return work_results
 
-def search_bookmarks_on_query(query):
+def search_bookmarks_on_query(query, page_number):
 	BookmarkSearch.init()
 	search = BookmarkSearch.search()
 	search = search.query(query)
+	search = search[(page_number-1) * 25:page_number*25]
 	results = search.execute()
+	bookmark_results = {}
+	bookmark_results['pages'] = results['hits']['total']/25
 	results_json = []
 	for item in results:
 		results_json.append(build_bookmark_search_results(item))
-	return results_json
+	bookmark_results['bookmarks'] = results_json
+	return bookmark_results
 
 def search_by_creators_query(creator_usernames):
 	query = None
@@ -129,7 +141,9 @@ def search_on_term(term, search_works, search_bookmarks, page_number):
 		results["works"] = search_results["work_results"]
 		results["work_pages"] = search_results["count"]
 	if search_bookmarks:
-		results["bookmarks"] = search_bookmark_by_term(term)
+		search_results = search_bookmark_by_term(term, page_number)
+		results["bookmarks"] = search_results['bookmarks']
+		results["bookmark_pages"] = search_results['count']
 	return results
 
 def get_work_query(term):
@@ -161,7 +175,7 @@ def search_text_on_term(term, page_number):
 	query = get_work_query(term)
 	chapter_query = get_chapter_query(term)	
 	combined = chapter_query | query
-	search = search[(page_number-1) * 2:page_number*2]
+	search = search[(page_number-1) * 25:page_number*25]
 	search = search.query(combined)
 	results = search.execute()
 	results_json = {}
@@ -169,7 +183,7 @@ def search_text_on_term(term, page_number):
 	for item in results:
 		work_results.append(build_work_search_results(item))
 	results_json['work_results'] = work_results
-	results_json['count'] = results['hits']['total']/2
+	results_json['count'] = results['hits']['total']/25
 	return results_json
 
 def build_work_search_results(item):
@@ -203,16 +217,20 @@ def search_by_complete(complete):
 	results = search.execute()
 	return results
 
-def search_bookmark_by_term(term):
+def search_bookmark_by_term(term, page_number):
 	BookmarkSearch.init()
 	search = BookmarkSearch.search()
 	query = get_bookmark_query(term)
+	search = search[(page_number-1) * 25:page_number*25]
 	search = search.query(query)
 	results = search.execute()
+	return_json = {}
 	results_json = []
 	for bookmark in results:
 		results_json.append(build_bookmark_search_results(bookmark))
-	return results_json
+	return_json['count'] = results['hits']['total']/25
+	return_json['bookmarks'] = results_json
+	return return_json
 
 def build_bookmark_search_results(item):
 	bookmark = {}

@@ -47,7 +47,14 @@ def search_by_incomplete():
 def do_advanced_search():
   result = search.do_advanced_search(request.json['include_terms'], request.json['exclude_terms'],
     request.json['curator_usernames'], request.json['creator_usernames'],
-    request.json['search_works'], request.json['search_bookmarks'])
+    request.json['search_works'], request.json['search_bookmarks'], 1)
+  return make_response(jsonify(result), 201)
+
+@api.route('/api/search/advanced/page/<int:pageNumber>', methods=['POST'])
+def do_page_advanced_search(pageNumber):
+  result = search.do_advanced_search(request.json['include_terms'], request.json['exclude_terms'],
+    request.json['curator_usernames'], request.json['creator_usernames'],
+    request.json['search_works'], request.json['search_bookmarks'], pageNumber)
   return make_response(jsonify(result), 201)
 
 @api.route('/api/user/username/<string:username>', methods=['GET'])
