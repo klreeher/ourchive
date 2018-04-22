@@ -122,10 +122,12 @@ def include_bookmark_terms(terms):
 	return include
 
 
-def search_on_term(term, search_works, search_bookmarks):
+def search_on_term(term, search_works, search_bookmarks, page_number):
 	results = {}
 	if search_works:
-		results["works"] = search_text_on_term(term)
+		search_results = search_text_on_term(term, page_number)
+		results["works"] = search_results["work_results"]
+		results["work_pages"] = search_results["count"]
 	if search_bookmarks:
 		results["bookmarks"] = search_bookmark_by_term(term)
 	return results
@@ -153,17 +155,21 @@ def get_bookmark_query(term):
 	return MultiMatch(query=term, fields=['curator_title', 'rating', 'description'], 
 		fuzziness=2)
 
-def search_text_on_term(term):
+def search_text_on_term(term, page_number):
 	WorkSearch.init()
 	search = WorkSearch.search()
 	query = get_work_query(term)
 	chapter_query = get_chapter_query(term)	
 	combined = chapter_query | query
+	search = search[(page_number-1) * 2:page_number*2]
 	search = search.query(combined)
 	results = search.execute()
-	results_json = []
+	results_json = {}
+	work_results = []
 	for item in results:
-		results_json.append(build_work_search_results(item))
+		work_results.append(build_work_search_results(item))
+	results_json['work_results'] = work_results
+	results_json['count'] = results['hits']['total']/2
 	return results_json
 
 def build_work_search_results(item):

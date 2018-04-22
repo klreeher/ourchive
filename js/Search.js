@@ -190,7 +190,18 @@ export default class Search extends React.Component {
   }
 
   getWorkPage(page) {   
-    console.log("not implemented")
+    axios.post('/api/search/term/'+this.state.searchTerm+'/page/'+page, {"search_works": true,
+        "search_bookmarks": false})
+        .then(function (response) {
+          this.setState({           
+            works: response.data.works,
+            work_page: page,
+            work_pages: response.data.work_pages
+          });
+        }.bind(this))
+        .catch(function (error) {
+          console.log(error);
+        });
   }
 
   getBookmarkPage(page) {

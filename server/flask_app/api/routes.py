@@ -18,7 +18,14 @@ def unknown_path(path):
 
 @api.route('/api/search/term/<string:searchTerm>', methods=['POST'])
 def search_by_term(searchTerm):
-  result = search.search_on_term(searchTerm, request.json["search_works"], request.json["search_bookmarks"])
+  result = search.search_on_term(searchTerm, request.json["search_works"], 
+    request.json["search_bookmarks"], 1)
+  return make_response(jsonify(result), 201)
+
+@api.route('/api/search/term/<string:searchTerm>/page/<int:pageNumber>', methods=['POST'])
+def search_by_paginated_term(searchTerm, pageNumber):
+  result = search.search_on_term(searchTerm, request.json["search_works"], 
+    request.json["search_bookmarks"], pageNumber)
   return make_response(jsonify(result), 201)
 
 @api.route('/api/search/creator/<string:username>', methods=['GET'])
