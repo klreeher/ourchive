@@ -166,6 +166,11 @@ def get_work_types():
   else:
     abort(400)
 
+@api.route('/api/works/types', methods=['GET'])
+def get_general_work_types():
+  types = user_logic.get_work_types()
+  return make_response(jsonify(types), 201)
+
 @api.route('/api/admin/notifications/types', methods=['GET'])
 def get_notification_types():
   user_id = auth.auth_as_admin(request)

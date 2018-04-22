@@ -13,12 +13,27 @@ export default class Search extends React.Component {
 	constructor(props) {
 	    super(props);
 	    this.state = {user: this.props.user,  searchTerm: "", advancedText: "Show Advanced Search", searchBookmarks: true,
-      searchWorks: true, work_types: [], searchCurator: "", searchCreator: ""};
+      searchWorks: true, work_types: [], searchCurator: "", searchCreator: "", 
+      bookmark_page: 1, work_page: 1};
       this.doSearch = this.doSearch.bind(this);
       this.searchType = this.searchType.bind(this);
       this.toggleAdvanced = this.toggleAdvanced.bind(this);
       this.doAdvancedSearch = this.doAdvancedSearch.bind(this);
+      this.previousPage = this.previousPage.bind(this);
+      this.nextPage = this.nextPage.bind(this);
     }
+
+  componentDidMount()
+  {
+    axios.get('/api/works/types')
+        .then(function (response) {
+          this.setState({work_types: response.data});  
+
+        }.bind(this))
+        .catch(function (error) {
+          console.log(error);
+      });
+  }
 
   doSearch(event)
   {
@@ -152,6 +167,36 @@ export default class Search extends React.Component {
     })
   }
 
+  previousPage(name) {
+    switch (name) {
+      case "work":
+        this.getWorkPage(this.state.work_page - 1)
+        break
+      case "bookmark":
+        this.getBookmarkPage(this.state.bookmark_page - 1)
+        break
+    }
+  }
+
+  nextPage(name) {
+    switch (name) {
+      case "work":
+        this.getWorkPage(this.state.work_page + 1)
+        break
+      case "bookmark":
+        this.getBookmarkPage(this.state.bookmark_page + 1)
+        break
+    }
+  }
+
+  getWorkPage(page) {   
+    console.log("not implemented")
+  }
+
+  getBookmarkPage(page) {
+    console.log("not implemented")
+  }
+
   render() {
     return (
       <div>
@@ -271,7 +316,11 @@ export default class Search extends React.Component {
         <br/>
         <br/>       
 
-        {this.state.results ? <SearchResults bookmarks={this.state.bookmarks} works={this.state.works} user={this.props.user}/> : <div/>}
+        {this.state.results ? <SearchResults bookmarks={this.state.bookmarks} 
+        works={this.state.works} user={this.props.user} previousPage={this.previousPage} 
+        nextPage={this.nextPage} totalWorkPages={this.state.work_pages}
+        currentWorkPage={this.state.work_page} totalBookmarkPages={this.state.bookmark_pages}
+        currentBookmarkPage={this.state.bookmark_page}/> : <div/>}
       </div>
     );
   }

@@ -10,7 +10,7 @@ class TestSearch(BaseTestCase):
 
 	def test_search_work_on_term(self):
 		results = searcher.search_text_on_term("ta")
-		self.assertEqual(len(results), 3)
+		self.assertEqual(len(results), 4)
 
 	def test_search_work_chapter(self):
 		results = searcher.search_text_on_term("nothing nothing nothing")
@@ -18,21 +18,16 @@ class TestSearch(BaseTestCase):
 
 	def test_search_work_phrase(self):
 		results = searcher.search_text_on_term("i")
-		self.assertEqual(len(results), 3)
+		self.assertEqual(len(results), 4)
 
 	def test_generic_work_search(self):
 		results = searcher.search_text_on_term("horse")
 		self.assertEqual(len(results), 2)
 
-	def test_search_work_by_creator(self):
-		self.add_user()
-		results = searcher.search_by_creator("elenaimp")
-		self.assertEqual(len(results), 2)
-
 	def test_search_work_by_complete(self):
 		self.add_user()
 		results = searcher.search_by_complete(False)
-		self.assertEqual(len(results), 3)
+		self.assertEqual(len(results), 4)
 
 	def test_search_bookmark_by_title(self):
 		results = searcher.search_bookmark_by_term("A Fic I Read")
