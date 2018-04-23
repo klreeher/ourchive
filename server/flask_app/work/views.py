@@ -85,6 +85,7 @@ def add_work(json):
 		is_complete = 1
 	else:
 		is_complete = 0
+	print(is_complete)
 	#todo we are committing too many times here!
 	work = Work(title=title,work_summary=work_summary,is_complete=is_complete,word_count=0,user_id=json['user_id'],work_notes=work_notes)
 	db.session.add(work)

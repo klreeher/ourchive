@@ -188,8 +188,16 @@ export default class NewWork extends React.Component {
     super(props);
     if (this.props.location.state)
     {
+      if(this.props.location.state.work.is_complete == "False")
+      {
+        var parsedComplete = false;
+      }
+      else
+      {
+        var parsedComplete = true;
+      }
         this.state = {title: this.props.location.state.work.title, work_summary: this.props.location.state.work.work_summary, 
-          is_complete: this.props.location.state.work.is_complete, work_notes: this.props.location.state.work.work_notes, 
+          is_complete: parsedComplete, work_notes: this.props.location.state.work.work_notes, 
           work_tags: this.props.location.state.work.tags, chapters: this.props.location.state.work.chapters, is_edit: true,
           work_id: this.props.location.state.work.id, postUrl: '/api/work/'+this.props.location.state.work.id,
           user: this.props.user };
@@ -241,7 +249,7 @@ export default class NewWork extends React.Component {
           </div>
           <div className="checkbox">
             <label>
-              <input type="checkbox" id="complete" onChange={evt => this.updateCheckbox(evt)}/>Work is complete?
+              <input type="checkbox" id="complete" onChange={evt => this.updateCheckbox(evt)} checked={this.state.is_complete}/>Work is complete?
             </label>
           </div>
           <hr/>
