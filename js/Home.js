@@ -4,8 +4,9 @@ import {
 } from 'react-router-dom';
 import axios from 'axios';
 import Search from './Search';
+import { withAlert } from 'react-alert'
 
-export default class Home extends React.Component {
+class Home extends React.Component {
 
 
   constructor(props) {
@@ -25,9 +26,11 @@ export default class Home extends React.Component {
           <div className="col-xs-12"><h1>Ourchive. <small>A multi-media archive for everyone.</small></h1></div>
         </div>
         <Search user={this.props.user}/>
+        <br/>
       </div>
 
     );
   }
 }
 
+export default withAlert(Home)

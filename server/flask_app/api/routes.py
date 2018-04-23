@@ -443,7 +443,7 @@ def post_bookmark():
   print(user_id)
   if user_id > 0:
     request.json['user_id'] = user_id
-    result = bookmark.add_bookmark(request.json, user_id)
+    result = bookmark.add_bookmark(request.json)
     if result is not None:
       responseObject = {
           'bookmark_id': result

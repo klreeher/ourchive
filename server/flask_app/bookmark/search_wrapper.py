@@ -41,8 +41,10 @@ class BookmarkSearch(DocType):
 	def create_from_json(self, bookmark_json):
 		BookmarkSearch.init()
 		self.curator_title=bookmark_json['curator_title']
-		self.rating=bookmark_json['rating']
-		self.description=bookmark_json['description']
+		if "description" in bookmark_json:
+			self.description=bookmark_json['description']
+		if "rating" in bookmark_json:
+			self.rating=bookmark_json['rating']
 		self.user_id=bookmark_json['user_id']
 		self.meta.id = bookmark_json['id']
 		bookmark_work_search = BookmarkWorkSearch()

@@ -4,13 +4,22 @@ import Chapter from './Chapter';
 import TagList from './TagList';
 import ChapterForm from './ChapterForm';
 import { withRouter } from 'react-router-dom';
+import { withAlert } from 'react-alert'
 
 
-export default class NewWork extends React.Component {
+class NewWork extends React.Component {
 
   addWork(evt, history)
   {
     evt.preventDefault()
+    if (this.state.title == "")
+    {
+      this.props.alert.show('The title field is blank. Please add a title.', {
+            timeout: 6000,
+            type: 'error'
+          })
+      return
+    }
     axios.post(this.state.postUrl, {
       title: this.state.title, 
       work_summary: this.state.work_summary, 
@@ -186,6 +195,7 @@ export default class NewWork extends React.Component {
   }
   constructor(props) {
     super(props);
+    var friendlyName = localStorage.getItem('friendly_name')
     if (this.props.location.state)
     {
       if(this.props.location.state.work.is_complete == "False")
@@ -200,7 +210,7 @@ export default class NewWork extends React.Component {
           is_complete: parsedComplete, work_notes: this.props.location.state.work.work_notes, 
           work_tags: this.props.location.state.work.tags, chapters: this.props.location.state.work.chapters, is_edit: true,
           work_id: this.props.location.state.work.id, postUrl: '/api/work/'+this.props.location.state.work.id,
-          user: this.props.user };
+          user: this.props.user, username: friendlyName};
         this.handler = this.handler.bind(this);
         this.uploadAudio = this.uploadAudio.bind(this);
         this.uploadImage = this.uploadImage.bind(this);
@@ -208,7 +218,8 @@ export default class NewWork extends React.Component {
     else
     {
         this.state = {title: '', work_summary: '', is_complete: false, work_notes: '', 
-          work_tags: [], chapters: [], is_edit: false, postUrl: '/api/work/', user: this.props.user};
+          work_tags: [], chapters: [], is_edit: false, postUrl: '/api/work/', 
+          user: this.props.user, username: friendlyName};
         this.addChapter();
         this.handler = this.handler.bind(this);
         this.uploadAudio = this.uploadAudio.bind(this);
@@ -240,7 +251,7 @@ export default class NewWork extends React.Component {
           </div>
           <div className="form-group">
             <label htmlFor="work_author">Author</label>
-            <input id="work_author" className="form-control" value={this.state.user} disabled></input>
+            <input id="work_author" className="form-control" value={this.state.username} disabled></input>
           </div>
           <hr/>
           <div className="form-group">
@@ -288,3 +299,5 @@ export default class NewWork extends React.Component {
     );
   }
 }
+
+export default withAlert(NewWork)

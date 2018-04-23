@@ -2,13 +2,22 @@ import React from 'react';
 import axios from 'axios';
 import { withRouter, Link } from 'react-router-dom';
 import TagList from './TagList';
+import { withAlert } from 'react-alert';
 import {FormGroup, Checkbox, ControlLabel, HelpBlock, FormControl, Button, Radio} from 'react-bootstrap';
 
-export default class BookmarkForm extends React.Component {
+class BookmarkForm extends React.Component {
 
 	addBookmark(evt, history)
 	{
 		evt.preventDefault()
+		if (this.state.title == "")
+		{
+			this.props.alert.show('The title field is blank. Please add a title.', {
+            timeout: 6000,
+            type: 'error'
+          })
+			return
+		}
 	    axios.post(this.state.post_url, {
 	      curator_title: this.state.title, 
 	      rating: this.state.rating, 
@@ -46,7 +55,7 @@ export default class BookmarkForm extends React.Component {
 	    else
 	    {
 	    	this.state = this.state = {bookmark: {}, value: "", bookmark_tags: [], 
-	    	work: this.props.location.state.work, post_url: "/api/bookmark/"};
+	    	work: this.props.location.state.work, post_url: "/api/bookmark/", title: ""};
 
 	    }
 	    this.setDescription = this.setDescription.bind(this);
@@ -132,7 +141,7 @@ export default class BookmarkForm extends React.Component {
 					      <ControlLabel>Bookmark Description</ControlLabel>
 					      <FormControl  componentClass="textarea" 
 					      	value={this.state.description}
-					      	placeholder="Enter your review, description, or other curation notes here."
+					      	placeholder="Enter your review, description, or other curation notes here"
 					      	onChange={this.setDescription}
 					      />
 					    </FormGroup>
@@ -189,3 +198,5 @@ export default class BookmarkForm extends React.Component {
   }
 
 }
+
+export default withAlert(BookmarkForm)

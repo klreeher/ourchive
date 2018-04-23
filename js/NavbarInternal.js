@@ -13,8 +13,9 @@ import {
 } from 'react-bootstrap';
 import axios from 'axios';
 import { IndexLinkContainer } from 'react-router-bootstrap';
+import { withAlert } from 'react-alert';
 
-export default class NavbarInternal extends React.Component {
+class NavbarInternal extends React.Component {
 
   componentDidMount() {
     
@@ -119,14 +120,20 @@ export default class NavbarInternal extends React.Component {
     }
     else
     {
+        this.props.alert.show('Please verify that username and password are filled in.', {
+            timeout: 6000,
+            type: 'error'
+          })
         this.setState({ showModal: false });
+
     }
     
   }
 
   handleRegister(evt) {
     if (this.state.userName != "" && this.state.userName != null 
-      && this.state.password != "" && this.state.password != null)
+      && this.state.password != "" && this.state.password != null
+      && this.state.email != "" && this.state.email != null)
     {
       axios.post('/api/user/register/', {
       username: this.state.userName, 
@@ -152,6 +159,10 @@ export default class NavbarInternal extends React.Component {
     }
     else
     {
+        this.props.alert.show('Please verify that username, password, and email are all filled in.', {
+            timeout: 6000,
+            type: 'error'
+          })
         this.setState({ showRegisterModal: false });
     }
     
@@ -226,7 +237,7 @@ export default class NavbarInternal extends React.Component {
         </Nav>
       </Navbar>
 
-      <Modal show={this.state.showModal} onHide={evt => this.handleLogin(evt)}>
+      <Modal show={this.state.showModal}>
           <Modal.Header closeButton>
             <Modal.Title>Log In</Modal.Title>
           </Modal.Header>
@@ -255,7 +266,7 @@ export default class NavbarInternal extends React.Component {
           </Modal.Body>
         </Modal>
 
-        <Modal show={this.state.showRegisterModal} onHide={evt => this.handleRegister(evt)}>
+        <Modal show={this.state.showRegisterModal}>
           <Modal.Header closeButton>
             <Modal.Title>Register</Modal.Title>
           </Modal.Header>
@@ -300,3 +311,5 @@ export default class NavbarInternal extends React.Component {
     }
   }
 }
+
+export default withAlert(NavbarInternal)
