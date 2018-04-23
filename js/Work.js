@@ -4,11 +4,11 @@ import {
 } from 'react-router-dom';
 import WorkStub from './WorkStub';
 
-var Work = React.createClass({
+export default class Work extends React.Component {
 
-  componentDidMount: function () {
+  componentDidMount() {
     //do something here
-  },
+  }
   render() {
     return (
       <div className="list">
@@ -16,7 +16,5 @@ var Work = React.createClass({
   	  </div>
     );
   }
-});
-
-export default Work;
+}
 

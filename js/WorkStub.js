@@ -3,11 +3,12 @@ import {
   Link
 } from 'react-router-dom';
 
-var WorkStub = React.createClass({
 
-  componentDidMount: function () {
+export default class WorkStub extends React.Component {
+
+  componentDidMount() {
     //stuff
-  },
+  }
   render() {
     return (
       
@@ -25,8 +26,6 @@ var WorkStub = React.createClass({
 
     );
   }
-});
-
-export default WorkStub;
+}
 
 
