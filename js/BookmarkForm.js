@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import { withRouter, Link } from 'react-router-dom';
 import TagList from './TagList';
+import ErrorList from './ErrorList';
 import { withAlert } from 'react-alert';
 import {FormGroup, Checkbox, ControlLabel, HelpBlock, FormControl, Button, Radio} from 'react-bootstrap';
 
@@ -12,10 +13,11 @@ class BookmarkForm extends React.Component {
 		evt.preventDefault()
 		if (this.state.title == "")
 		{
-			this.props.alert.show('The title field is blank. Please add a title.', {
-            timeout: 6000,
-            type: 'error'
-          })
+			this.setState({
+				has_errors: true,
+				errors: ['The title field is blank. Please add a title.']
+			})
+			window.scrollTo(0, 0);          
 			return
 		}
 	    axios.post(this.state.post_url, {
@@ -101,7 +103,16 @@ class BookmarkForm extends React.Component {
   	}
 
   	setTitle(e) {
+  		if (this.state.has_errors && e.target.value != "") {
+  			this.setState({
+  				has_errors: false,
+  				errors: [],
+  				title: e.target.value 
+  			})
+  			return
+  		}
     	this.setState({ title: e.target.value });
+
   	}
 
   	updatePrivateCheckbox(evt) {
@@ -123,6 +134,9 @@ class BookmarkForm extends React.Component {
 	    ))
 	    return (
 	    	<div>
+	    		{this.state.has_errors && <div className="row">
+	    			<ErrorList errors={this.state.errors}/>
+	    		</div>}
 	    		<div className="row">
 	    			<div className="col-xs-1">Work:</div>
 	    			<div className="col-xs-10">{this.state.work ? this.state.work.title : this.state.bookmark.work.title}</div>

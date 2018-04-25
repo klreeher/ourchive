@@ -329,3 +329,9 @@ div {
 .render-linebreak {
   white-space: pre-line;
 }
+
+.error-box {
+  padding: 27px 27px 27px 27px;
+  margin: 27px 27px 27px 27px;
+  border:3px solid red;
+}
