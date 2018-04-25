@@ -79,10 +79,12 @@ class NavbarInternal extends React.Component {
 
   showLogin(evt)
   {
+    evt.target.blur()
     this.setState({ showModal: true });
   }
   showRegister(evt)
   {
+    evt.target.blur()
     this.setState({ showRegisterModal: true });
   }
 
@@ -115,12 +117,12 @@ class NavbarInternal extends React.Component {
 
       })
       .catch(function (error) {
-        this.props.alert.show('An error has occurred: '+ error, {
+        this.props.alert.show('An error has occurred. Please validate your username & password and try again.', {
             timeout: 6000,
             type: 'error'
           })
         this.setState({showModal: false});
-      });
+      }.bind(this));
     }
     else
     {
@@ -163,7 +165,7 @@ class NavbarInternal extends React.Component {
             type: 'error'
           })
         this.setState({showRegisterModal: false});
-      });
+      }.bind(this));
     }
     else
     {
@@ -174,6 +176,13 @@ class NavbarInternal extends React.Component {
         this.setState({ showRegisterModal: false });
     }
     
+  }
+
+  closeModals(evt) {
+    this.setState({
+      showModal: false,
+      showRegisterModal: false
+    })
   }
 
   render() {
@@ -245,7 +254,7 @@ class NavbarInternal extends React.Component {
         </Nav>
       </Navbar>
 
-      <Modal show={this.state.showModal}>
+      <Modal show={this.state.showModal} onHide={evt => this.closeModals(evt)}>
           <Modal.Header closeButton>
             <Modal.Title>Log In</Modal.Title>
           </Modal.Header>
@@ -274,7 +283,7 @@ class NavbarInternal extends React.Component {
           </Modal.Body>
         </Modal>
 
-        <Modal show={this.state.showRegisterModal}>
+        <Modal show={this.state.showRegisterModal} onHide={evt => this.closeModals(evt)}>
           <Modal.Header closeButton>
             <Modal.Title>Register</Modal.Title>
           </Modal.Header>

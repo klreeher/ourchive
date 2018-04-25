@@ -30,7 +30,6 @@ def register(post_data):
 			}
 			return make_response(jsonify(responseObject), 201)
 		except Exception as e:
-			print(e)
 			responseObject = {
 				'status': 'fail',
 				'message': 'Some error occurred. Please try again.',
@@ -55,17 +54,25 @@ def login(post_data):
 				'message': 'User is banned.'
 			}
 			return make_response(jsonify(responseObject), 403)
-		elif user is not None and bcrypt.checkpw(post_data.get('password').encode('utf8'), user.password.encode('utf8')):
-			auth_token = user.encode_auth_token(user.id)
-			if auth_token:
+		elif user is not None:
+			if bcrypt.checkpw(post_data.get('password').encode('utf8'), user.password.encode('utf8')):
+				auth_token = user.encode_auth_token(user.id)
+				if auth_token:
+					responseObject = {
+						'status': 'success',
+						'message': 'Successfully logged in.',
+						'auth_token': auth_token.decode(),
+						'admin': user.admin,
+						'username': user.username
+					}
+				return make_response(jsonify(responseObject), 201)
+			else:
 				responseObject = {
-					'status': 'success',
-					'message': 'Successfully logged in.',
-					'auth_token': auth_token.decode(),
-					'admin': user.admin,
-					'username': user.username
-				}
-			return make_response(jsonify(responseObject), 201)
+				'status': 'fail',
+				'message': 'Unauthorized user.',
+				'status_int': 404
+			}
+			return make_response(jsonify(responseObject), 404)
 		else:
 			responseObject = {
 				'status': 'fail',
