@@ -115,7 +115,11 @@ class NavbarInternal extends React.Component {
 
       })
       .catch(function (error) {
-        console.log(error);
+        this.props.alert.show('An error has occurred: '+ error, {
+            timeout: 6000,
+            type: 'error'
+          })
+        this.setState({showModal: false});
       });
     }
     else
@@ -148,13 +152,17 @@ class NavbarInternal extends React.Component {
           userName: "",
           password: "",
           loggedIn: true,
-          showModal: false,
+          showRegisterModal: false,
           userId: 1
         });
 
       })
       .catch(function (error) {
-        console.log(error);
+        this.props.alert.show('An error has occurred: '+ error, {
+            timeout: 6000,
+            type: 'error'
+          })
+        this.setState({showRegisterModal: false});
       });
     }
     else
