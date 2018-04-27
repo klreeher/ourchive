@@ -30,6 +30,7 @@ class TestingConfig(BaseConfig):
     SQLALCHEMY_DATABASE_URI = postgres_local_base + database_name + '_test'
     PRESERVE_CONTEXT_ON_EXCEPTION = False
     USE_ES = False
+    TEST_FILE_LOC = '/home/imp/projects/ourchive/server/tests/'
 
 
 class ProductionConfig(BaseConfig):

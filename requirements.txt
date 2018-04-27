@@ -32,3 +32,4 @@ six==1.11.0
 SQLAlchemy==1.2.7
 Werkzeug==0.14.1
 elasticsearch-dsl>=6.0.0,<7.0.0
+python-magic==0.4.15

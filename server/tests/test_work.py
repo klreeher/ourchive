@@ -1,8 +1,9 @@
 import unittest
 
-from server.flask_app import db
+from server.flask_app import db, app
 from server.flask_app.models import Work, User, TagType, Chapter, Tag, Comment
 from server.flask_app.work import views as work
+from server.flask_app.work import file_utils as file_utils
 from server.tests.base import BaseTestCase
 import json
 
@@ -186,6 +187,18 @@ class TestWorkView(BaseTestCase):
         self.add_user()
 
         return data
+
+    def test_audio_utils(self):
+        result = file_utils.file_is_audio(app.config['TEST_FILE_LOC']+'test_audio.mp3')
+        self.assertTrue(result)
+
+    def test_image_utils(self):
+        result = file_utils.file_is_image(app.config['TEST_FILE_LOC']+'test_image.jpg')
+        self.assertTrue(result)
+
+    def test_audio_utils_false(self):
+        result = file_utils.file_is_audio(app.config['TEST_FILE_LOC']+'test_fake.mp3')
+        self.assertFalse(result)
 
     def add_user(self):
         user = User(

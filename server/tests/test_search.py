@@ -10,7 +10,6 @@ class TestSearch(BaseTestCase):
 
 	def test_search_work_on_term(self):
 		results = searcher.search_text_on_term("ta")
-		print(results['work_results'])
 		self.assertEqual(len(results['work_results']), 13)
 
 	def test_search_work_chapter(self):
