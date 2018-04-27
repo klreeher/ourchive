@@ -169,7 +169,7 @@ def get_bookmark_query(term):
 	return MultiMatch(query=term, fields=['curator_title', 'rating', 'description'], 
 		fuzziness=2)
 
-def search_text_on_term(term, page_number):
+def search_text_on_term(term, page_number=1):
 	WorkSearch.init()
 	search = WorkSearch.search()
 	query = get_work_query(term)
@@ -217,7 +217,7 @@ def search_by_complete(complete):
 	results = search.execute()
 	return results
 
-def search_bookmark_by_term(term, page_number):
+def search_bookmark_by_term(term, page_number=1):
 	BookmarkSearch.init()
 	search = BookmarkSearch.search()
 	query = get_bookmark_query(term)

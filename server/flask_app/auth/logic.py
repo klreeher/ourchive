@@ -10,7 +10,7 @@ from server.flask_app.user import logic as user_logic
 def register(post_data):
 	user = User.query.filter_by(email=post_data.get('email')).first()
 	if not user:
-		user = User.query.filter_by(username=post_data.get['username']).first()
+		user = User.query.filter_by(username=post_data.get('username')).first()
 	if not user:
 		try:
 			password_data = post_data.get('password')
