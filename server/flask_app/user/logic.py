@@ -4,6 +4,8 @@ from .. import redis_db
 from ..models import User, WorkType, TagType, NotificationType
 from itsdangerous import TimestampSigner
 from server.flask_app import app, bcrypt, db
+from server.flask_app.work import views as work_logic
+from server.flask_app.bookmark import logic as bookmark_logic
 
 def add_blocklist(blocked_user, blocking_user):
 	results = redis_db.sadd("blocklist:#"+str(blocking_user), str(blocked_user))
@@ -112,6 +114,20 @@ def ban_users(users):
 def get_by_username(username):
 	user = User.query.filter_by(username=username).first()
 	return build_user(user)
+
+def get_user_summary(user_id):
+	user_data = {}
+	user = User.query.filter_by(id=user_id).first()
+	user_data['user'] = build_user(user)
+	works = []
+	for work in user.works:
+		works.append(work_logic.build_work(work))
+	user_data['works'] = works
+	bookmarks = []
+	for bookmark in user.bookmarks:
+		bookmarks.append(bookmark_logic.build_bookmark(bookmark))
+	user_data['bookmarks'] = bookmarks
+	return user_data
 
 def build_user(user_obj):
 	user = {}

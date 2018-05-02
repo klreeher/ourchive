@@ -45,6 +45,9 @@ class User(db.Model):
     bookmarks = db.relationship('Bookmark', backref='bookmark_user',
                                 lazy='dynamic')
 
+    notifications = db.relationship('Notification', backref='notification_user',
+                                lazy='dynamic')
+
     received_messages = db.relationship('Message', foreign_keys="[Message.to_user_id]",
                                 lazy='dynamic')
 
@@ -309,6 +312,9 @@ class Notification(db.Model):
     content = db.Column(db.String(200))
     date_created = db.Column(db.DateTime)
     route = db.Column(db.String)
+
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'))
+    user = db.relationship('User')
 
     notification_type_id = db.Column(db.Integer, db.ForeignKey('notification_types.id', ondelete='CASCADE'))
     notification_type = db.relationship('NotificationType')
