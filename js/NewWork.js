@@ -5,6 +5,7 @@ import TagList from './TagList';
 import ChapterForm from './ChapterForm';
 import { withRouter } from 'react-router-dom';
 import { withAlert } from 'react-alert'
+import ErrorList from './ErrorList';
 
 
 class NewWork extends React.Component {
@@ -14,10 +15,11 @@ class NewWork extends React.Component {
     evt.preventDefault()
     if (this.state.title == "")
     {
-      this.props.alert.show('The title field is blank. Please add a title.', {
-            timeout: 6000,
-            type: 'error'
-          })
+      this.setState({
+        has_errors: true,
+        errors: ['The title field is blank. Please add a title.']
+      })
+      window.scrollTo(0, 0);          
       return
     }
     axios.post(this.state.postUrl, {
@@ -27,7 +29,8 @@ class NewWork extends React.Component {
       work_notes: this.state.work_notes, 
       work_tags: this.state.work_tags, 
       chapters: this.state.chapters,
-      work_id: this.state.work_id
+      work_id: this.state.work_id,
+      work_type: this.state.selected_type
     }, {   
       headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json'
     }})
@@ -40,7 +43,15 @@ class NewWork extends React.Component {
       console.log(error);
     });
   }
-  updateTitle(evt) {  
+  updateTitle(evt) { 
+    if (this.state.has_errors && evt.target.value != "") {
+          this.setState({
+            has_errors: false,
+            errors: [],
+            title: evt.target.value 
+          })
+          return
+    } 
     this.setState({
       title: evt.target.value
     });
@@ -210,7 +221,7 @@ class NewWork extends React.Component {
           is_complete: parsedComplete, work_notes: this.props.location.state.work.work_notes, 
           work_tags: this.props.location.state.work.tags, chapters: this.props.location.state.work.chapters, is_edit: true,
           work_id: this.props.location.state.work.id, postUrl: '/api/work/'+this.props.location.state.work.id,
-          user: this.props.user, username: friendlyName};
+          user: this.props.user, username: friendlyName, work_types: [], selected_type: this.props.location.state.work.type_id};
         this.handler = this.handler.bind(this);
         this.uploadAudio = this.uploadAudio.bind(this);
         this.uploadImage = this.uploadImage.bind(this);
@@ -219,23 +230,37 @@ class NewWork extends React.Component {
     {
         this.state = {title: '', work_summary: '', is_complete: false, work_notes: '', 
           work_tags: [], chapters: [], is_edit: false, postUrl: '/api/work/', 
-          user: this.props.user, username: friendlyName};
+          user: this.props.user, username: friendlyName, work_types: [], selected_type: 1};
         this.addChapter();
         this.handler = this.handler.bind(this);
         this.uploadAudio = this.uploadAudio.bind(this);
         this.uploadImage = this.uploadImage.bind(this);
-        this.getTagCategories();
+        
     } 
     this.create_work_tag = this.create_work_tag.bind(this)   
     this.updateStatus = this.updateStatus.bind(this)
+    this.updateWorkType = this.updateWorkType.bind(this)
   }
   componentWillMount() { 
     //todo call get categories
+  }
+  componentDidMount() {
+      this.getTagCategories();
+      axios.get('/api/works/types')
+        .then(function (response) {
+          this.setState({work_types: response.data});  
+        }.bind(this))
+        .catch(function (error) {
+          console.log(error);
+      });
   }
   componentWillUpdate(nextProps, nextState)
   {
   }
 
+  updateWorkType(evt) {
+    this.setState({selected_type: evt.target.value})
+  }
   
   render() {
     const AddOrUpdate = withRouter(({ history }) => (
@@ -244,6 +269,9 @@ class NewWork extends React.Component {
     ))
     return (
       <div>
+        {this.state.has_errors && <div className="row">
+            <ErrorList errors={this.state.errors}/>
+          </div>}
         <form>
           <div className="form-group">
             <label htmlFor="work_title">Title</label>
@@ -254,6 +282,16 @@ class NewWork extends React.Component {
             <input id="work_author" className="form-control" value={this.state.username} disabled></input>
           </div>
           <hr/>
+          <div className="form-group">
+            <label htmlFor="work_type">Type</label>
+            <select className="form-control" onChange={evt => this.updateWorkType(evt)} value={this.state.selected_type}>
+              {this.state.work_types.map(type => 
+                  <option value={type.id}>
+                      {type.type_name}
+                  </option>
+              )}
+            </select>
+          </div>
           <div className="form-group">
             <label htmlFor="work_summary">Summary</label>
             <textarea id="work_summary" className="form-control" rows="3" value={this.state.work_summary} onChange={evt => this.updateWorkSummary(evt)}></textarea>

@@ -10,7 +10,7 @@ class TestSearch(BaseTestCase):
 
 	def test_search_work_on_term(self):
 		results = searcher.search_text_on_term("ta")
-		self.assertEqual(len(results['work_results']), 13)
+		self.assertTrue(len(results['work_results']) >= 13)
 
 	def test_search_work_chapter(self):
 		results = searcher.search_text_on_term("nothing nothing nothing")
@@ -18,7 +18,7 @@ class TestSearch(BaseTestCase):
 
 	def test_search_work_phrase(self):
 		results = searcher.search_text_on_term("i")
-		self.assertEqual(len(results['work_results']), 13)
+		self.assertTrue(len(results['work_results']) >= 13)
 
 	def test_generic_work_search(self):
 		results = searcher.search_text_on_term("horse")

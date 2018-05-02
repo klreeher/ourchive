@@ -64,6 +64,8 @@ def update_work(json):
 		work.is_complete = 1
 	else:
 		work.is_complete = 0
+	if 'work_type' in json:
+		work.type_id = json['work_type']
 	db.session.add(work)
 	word_count = update_chapters(work, chapters)
 	work.word_count = word_count		
@@ -85,8 +87,12 @@ def add_work(json):
 		is_complete = 1
 	else:
 		is_complete = 0
-	#todo we are committing too many times here!
-	work = Work(title=title,work_summary=work_summary,is_complete=is_complete,word_count=0,user_id=json['user_id'],work_notes=work_notes)
+	if 'work_type' in json:
+		type_id = json['work_type']
+	else:
+		type_id = None
+	work = Work(title=title,work_summary=work_summary,is_complete=is_complete,word_count=0,user_id=json['user_id'],work_notes=work_notes,
+		type_id=type_id)
 	db.session.add(work)
 	word_count = add_chapters(work, chapters)
 	work.word_count = word_count		
@@ -162,6 +168,9 @@ def build_work(work):
 	#todo i am sure there is a more elegant way to do all this de/serialization
 	work_json['chapters'] = list(build_work_chapters(work))
 	work_json['tags'] = build_work_tags(work)
+	if work.work_type is not None:
+		work_json['type_id'] = work.type_id
+		work_json['type_name'] = work.work_type.type_name
 	return work_json
 
 def build_work_stub(work):
@@ -179,6 +188,9 @@ def build_work_stub(work):
 	work_json['word_count'] = work.word_count
 	work_json['work_summary'] = work.work_summary
 	work_json['chapter_count'] = len(work.chapters.all())
+	if work.work_type is not None:
+		work_json['type_id'] = work.type_id
+		work_json['type_name'] = work.work_type.type_name
 	return work_json
 
 def build_work_chapters(work):

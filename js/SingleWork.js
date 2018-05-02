@@ -180,15 +180,16 @@ export default class SingleWork extends React.Component {
         </div>
         <hr/>
         <div className="row">
-          <div className="col-xs-1"><h5>Notes</h5></div>
+          <div className="col-xs-1"><h2>Notes</h2></div>
         </div>
         <div className="row">
-          <div className="col-xs-9 col-md-12 render-linebreak" dangerouslySetInnerHTML={{ __html: this.state.safe_notes }}></div>
+          <div className="col-xs-9 render-linebreak" dangerouslySetInnerHTML={{ __html: this.state.safe_notes }}></div>
         </div>
         <div className="row">
           <div className="col-xs-2"><h5>Chapters: {Object.keys(this.state.work.chapters).length}</h5></div>
           <div className="col-xs-2"><h5>Complete? {this.state.work.is_complete}</h5></div>
           <div className="col-xs-2"><h5>Word Count: {this.state.work.word_count}</h5></div>
+          <div className="col-md-2"><h5>Type: {this.state.work.type_name}</h5></div>
           <div className="col-xs-2"></div>
         </div>
         <br/>
