@@ -3,6 +3,7 @@ import unittest
 from server.flask_app import db, app
 from server.flask_app.models import Work, User, TagType, Chapter, Tag, Comment
 from server.flask_app.work import views as work
+from server.flask_app.work import work_export as work_export
 from server.flask_app.work import file_utils as file_utils
 from server.tests.base import BaseTestCase
 import json
@@ -16,6 +17,13 @@ class TestWorkView(BaseTestCase):
         selected_work = Work.query.filter_by(id=1).first()
         self.assertTrue(new_id==1)
         self.assertTrue(selected_work.is_complete == 0)
+
+    def test_export_work(self):
+        data = self.build_data(False, True)
+        data['user_id'] = 1
+        new_id = work.add_work(data)
+        selected_work = Work.query.filter_by(id=1).first()
+        work_export.create_epub(selected_work)
 
     def test_add_chapters(self):
 

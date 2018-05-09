@@ -12,7 +12,6 @@ from elasticsearch import Elasticsearch
 from elasticsearch_dsl import connections
 
 app = Flask(__name__)
-CORS(app)
 
 app_settings = os.getenv(
     'APP_SETTINGS',

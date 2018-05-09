@@ -155,11 +155,11 @@ export default class SingleWork extends React.Component {
 
     return (
 
-    <div className="container-fluid text-padding">
+    <div>
       {this.state.work.id != undefined && 
         <div>
           <div className={this.state.viewer_is_creator ? "viewer-creator row" : "viewer row"}>
-            <div className="col-md-3 col-xs-1">
+            <div className="col-md-3 col-xs-6">
               <Update/>
               <button onClick={evt => this.deleteWork(evt, this.state.work.id)} className="btn btn-link">Delete</button>
               <Bookmark/>
@@ -171,7 +171,7 @@ export default class SingleWork extends React.Component {
         </div>
         <div className="row">
           <div className="col-xs-9 col-md-12">
-            <center><Link to={"/user/"+this.state.work.creator_id}>{this.state.work.name}</Link></center>
+            <center><Link to={"/user/"+this.state.work.creator_id}>{this.state.work.username}</Link></center>
           </div>
         </div>
         <hr/>

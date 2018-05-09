@@ -34,7 +34,11 @@ export default class ChapterForm extends React.Component {
                 <textarea id="chapter_notes" className="form-control" name="chapter_notes" value={this.state.chapter.chapter_notes}
                 onChange={this.props.handler} rows="3"></textarea>
               </div>
-              {this.props.showUpload && <div><h5>{this.props.uploadStatus}</h5></div>}
+              <div className="form-group">
+                <div className="progressBar">
+                  <div className="progressBarInner" id={"image_bar_"+this.state.number}></div>
+                </div>                
+              </div>
               <div className="form-group">
                 <label htmlFor="chapter_image">Chapter Image</label>
                 <input className='input-file' type='file' id="image_url" className="form-control"
@@ -44,6 +48,11 @@ export default class ChapterForm extends React.Component {
                 <label htmlFor="image_alt_text">Chapter Image Alt Text</label>
                 <input className="form-control" id={"image_alt_text_" + this.state.number}
                 name="image_alt_text" onChange={this.props.handler}></input>
+              </div>
+              <div className="form-group">
+                <div className="progressBar">
+                  <div className="progressBarInner" id={"audio_bar_"+this.state.number}></div>
+                </div>                
               </div>
               <div className="form-group">
                 <label htmlFor="chapter_audio">Chapter Audio</label>

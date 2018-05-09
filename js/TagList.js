@@ -70,7 +70,8 @@ export default class TagList extends React.Component {
   }
 
   onSuggestionsFetchRequested(value) {
-    axios.get('/api/tag/'+this.state.category_id+'/suggestions/'+value.value)
+    var cleaned = value.value.replace('/', '_')
+    axios.get('/api/tag/'+this.state.category_id+'/suggestions/'+cleaned)
         .then(function (response) {
           this.setState({
             suggestions: response.data["results"]

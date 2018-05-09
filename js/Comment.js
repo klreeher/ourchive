@@ -70,26 +70,33 @@ export default class Comment extends React.Component {
 
   render() {
     return (
-      <div className="panel panel-default">
-        <div className="panel-heading">{this.state.comment.userName} says:</div>
-        <div className="panel-body render-linebreak">
+      <div>
+      <br/>
+        <div className="row comment-header"><strong>{this.state.comment.userName}</strong></div>
+        <div className="row comment-body">
+          <div className="col-xs-8 col-md-12 render-linebreak">
             {this.state.comment.text}
-          <div className="row">
-            <button className="btn btn-link" onClick={this.showReply}>Reply</button>
+            <br/>
+            <div className="row pull-right">
+              <button className="btn btn-link" onClick={this.showReply}>Reply</button>
+            </div>
           </div>
+        </div>
+          
           <div className={this.state.showReply ? "viewer-creator" : "viewer"}>
-            <NewComment comment={this.state.comment} user={this.props.user} 
-            addComment={this.addComment} updateNewCommentText={this.updateNewCommentText}
-            newCommentText={this.state.newCommentText}/>
+            <div className="row comment-body">
+              <NewComment comment={this.state.comment} user={this.props.user} 
+              addComment={this.addComment} updateNewCommentText={this.updateNewCommentText}
+              newCommentText={this.state.newCommentText}/>
+            </div>
           </div>
           <div className="row">
             {this.state.comment.comments.map(comment => 
-              <div key={comment.id} className="col-md-12">
+              <div key={comment.id} className="col-xs-10">
                 <Comment comment={comment} user={this.props.user}/>
               </div>              
               )}
           </div>
-        </div>
       </div>
     );
   }

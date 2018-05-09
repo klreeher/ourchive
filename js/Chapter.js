@@ -113,7 +113,7 @@ export default class Chapter extends React.Component {
           <br/>
           
           <div className="row">
-            <div className="col-xs-3">
+            <div className="col-xs-6">
                 Leave a comment:
             </div>
           </div>  

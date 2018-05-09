@@ -156,7 +156,7 @@ def build_work(work):
 	work_json = {}
 	work_json['id'] = work.id
 	work_json['creator_id'] = work.user_id
-	work_json['name'] = creator.username
+	work_json['username'] = creator.username
 	work_json['title'] = work.title
 	if work.is_complete == 1:
 		work_json['is_complete'] = 'True'
@@ -179,7 +179,7 @@ def build_work_stub(work):
 	work_json['id'] = work.id
 	work_json['creator_id'] = work.user_id
 	if creator is not None:
-		work_json['name'] = creator.username
+		work_json['username'] = creator.username
 	work_json['title'] = work.title
 	if work.is_complete == 1:
 		work_json['is_complete'] = 'True'

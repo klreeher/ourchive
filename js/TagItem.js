@@ -28,8 +28,8 @@ export default class TagItem extends React.Component {
   
   render() {
     const TagLink = withRouter(({ history }) => (
-      <li className="tag_li" id={this.state.tag} onMouseDown={evt => this.goToTag(evt, history)}>
-      {this.state.tag} {this.state.underEdit && 
+      <li className="tag_li" id={this.state.tag}>
+      <span onMouseDown={evt => this.goToTag(evt, history)}>{this.state.tag}</span> {this.state.underEdit && 
           <a className="close_icon_link" onClick={this.props.removeTag}><span className="close_icon">x</span></a>
         }</li>
     ))

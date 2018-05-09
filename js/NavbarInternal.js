@@ -188,12 +188,15 @@ class NavbarInternal extends React.Component {
   render() {
 
     const navbarLoggedIn = (
-      <Navbar>
+      <div className="col-xs-8 col-md-12">
+      <Navbar inverse collapseOnSelect>
         <Navbar.Header>
           <Navbar.Brand>
             <a href="/">ourchive</a>
           </Navbar.Brand>
+          <Navbar.Toggle />
         </Navbar.Header>
+        <Navbar.Collapse>
         <Nav>
             
         <IndexLinkContainer to="/create/work">
@@ -231,11 +234,13 @@ class NavbarInternal extends React.Component {
         </IndexLinkContainer>
         <NavItem onClick={evt => this.logout(evt)}>Logout</NavItem>
         </Nav>
+        </Navbar.Collapse>
       </Navbar>
+      </div>
     );
 
     const navbarLoggedOut = (
-    <div>
+    <div className="col-xs-8 col-md-12">
       <Navbar>
         <Navbar.Header>
           <Navbar.Brand>

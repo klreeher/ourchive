@@ -21,19 +21,18 @@ export default class NewComment extends React.Component {
     return (
       <div className="text-padding">
         <div className="row">
-          <div className="col-xs-10">
+          <div className="col-xs-8 col-md-12">
             <textarea value={this.props.newCommentText} rows="3"
-                onChange={this.props.updateNewCommentText} className="form-control"></textarea>
+                onChange={this.props.updateNewCommentText} className="form-control col-xs-6 col-md-12"></textarea>
             
           </div>
         </div>
         <br/>
-        <div className="row">
-          <div className="col-xs-10">
+        <div className="row pull-right">
+          <div className="col-xs-6 col-md-12">
             <button onClick={this.props.addComment}>Send</button>
           </div>
         </div>
-        <br/> 
       </div>
     );
   }

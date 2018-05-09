@@ -83,8 +83,13 @@ class NewWork extends React.Component {
   }
   uploadAudio(e)
   {
+    var elem = document.getElementById("audio_bar_"+e.target.parentElement.parentElement.id); 
+    elem.style.height = 25; 
+    var parent = elem.parentElement;
+    parent.style.height=25;
+    var chapterUploadId = e.target.parentElement.parentElement.id-1;
     this.setState({
-      chapterUploadId: e.target.parentElement.parentElement.id-1,
+      chapterUploadId: chapterUploadId,
       chapterUploadProperty: e.target.name 
     })
     e.preventDefault()
@@ -102,7 +107,7 @@ class NewWork extends React.Component {
         },
         onProgress: (function(bytesUploaded, bytesTotal) {
             var percentage = (bytesUploaded / bytesTotal * 100).toFixed(2)
-            this.updateStatus(percentage)
+            this.updateStatus(percentage, 2, chapterUploadId+1)
         }).bind(this),
         onSuccess: (function() {
             console.log("Download %s from %s", upload.file.name, upload.url)
@@ -113,11 +118,32 @@ class NewWork extends React.Component {
     // Start the upload
     upload.start()
   }
-  updateStatus(percentage){
-    this.setState({
-      showUpload: true,
-      uploadStatus: "Uploading: "+ percentage
-    })
+  updateStatus(percentage, key, id){
+    if (key == 1) {
+      this.setState({
+        showImageUpload: true
+      }, () => {
+        var divId = "image_bar_"+id;
+        this.updateStatusBar(divId, percentage);
+      })
+      
+    }
+    if (key == 2) {
+      this.setState({
+        showAudioUpload: true
+      }, () => {
+        var divId = "audio_bar_"+id;
+        this.updateStatusBar(divId, percentage);
+      })
+      
+    }   
+    
+  }
+
+  updateStatusBar(divId, percentage) {    
+    var elem = document.getElementById(divId); 
+    var width = percentage; 
+    elem.style.width = width + '%'; 
   }
   finishUpload(fileName, url, id, name){
     console.log(url)
@@ -133,8 +159,13 @@ class NewWork extends React.Component {
   }
   uploadImage(e)
   {
+    var elem = document.getElementById("image_bar_"+e.target.parentElement.parentElement.id); 
+    elem.style.height = 25; 
+    var parent = elem.parentElement;
+    parent.style.height=25;
+    var chapterUploadId = e.target.parentElement.parentElement.id-1;
     this.setState({
-      chapterUploadId: e.target.parentElement.parentElement.id-1,
+      chapterUploadId: chapterUploadId,
       chapterUploadProperty: e.target.name 
     })
     e.preventDefault()
@@ -152,7 +183,7 @@ class NewWork extends React.Component {
         },
         onProgress: (function(bytesUploaded, bytesTotal) {
             var percentage = (bytesUploaded / bytesTotal * 100).toFixed(2)
-            this.updateStatus(percentage)
+            this.updateStatus(percentage, 1, chapterUploadId+1)
         }).bind(this),
         onSuccess: (function() {
             console.log("Download %s from %s", upload.file.name, upload.url)
@@ -240,6 +271,7 @@ class NewWork extends React.Component {
     this.create_work_tag = this.create_work_tag.bind(this)   
     this.updateStatus = this.updateStatus.bind(this)
     this.updateWorkType = this.updateWorkType.bind(this)
+    this.updateStatusBar = this.updateStatusBar.bind(this)
   }
   componentWillMount() { 
     //todo call get categories
@@ -319,8 +351,8 @@ class NewWork extends React.Component {
           <div className="form-group">
           {this.state.chapters.map(chapter => (                        
                         <ChapterForm key={chapter.number} chapter_number={chapter.number} handler={this.handler} handlerAudio={this.uploadAudio}
-                        handlerImage={this.uploadImage} chapter={chapter} uploadStatus={this.state.uploadStatus}
-                        showUpload={this.state.showUpload}/>
+                        handlerImage={this.uploadImage} chapter={chapter} showImageUpload={this.state.showUpload}
+                        showAudioUpload={this.state.showUpload}/>
                     ))}
           </div>
         <div className="form-group">
