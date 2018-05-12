@@ -80,7 +80,7 @@ class NavbarInternal extends React.Component {
   showLogin(evt)
   {
     evt.target.blur()
-    this.setState({ showModal: true });
+    this.setState({ showModal: true })    
   }
   showRegister(evt)
   {
@@ -91,7 +91,11 @@ class NavbarInternal extends React.Component {
   resetPassword(evt) {
     console.log("not implemented");
   }
-
+  trySubmit(evt) {
+    if(evt.keyCode == 13){
+        this.handleLogin(evt)
+    }
+  }
   handleLogin(evt) {
     if (this.state.userName != "" && this.state.userName != null 
       && this.state.password != "" && this.state.password != null)
@@ -189,7 +193,7 @@ class NavbarInternal extends React.Component {
 
     const navbarLoggedIn = (
       <div className="col-xs-8 col-md-12">
-      <Navbar inverse collapseOnSelect>
+      <Navbar collapseOnSelect>
         <Navbar.Header>
           <Navbar.Brand>
             <a href="/">ourchive</a>
@@ -199,9 +203,9 @@ class NavbarInternal extends React.Component {
         <Navbar.Collapse>
         <Nav>
             
-        <IndexLinkContainer to="/create/work">
-            <NavItem>New Work</NavItem>
-        </IndexLinkContainer>   
+        <NavItem href="/create/work">
+            New Work
+        </NavItem>   
 
         <IndexLinkContainer to="/bookmark/1">
             <NavItem>Bookmarks</NavItem>
@@ -268,18 +272,18 @@ class NavbarInternal extends React.Component {
               <div className="panel panel-default">
                 <div className="panel-body">
                     <div className="form-group">
-                      <label htmlFor="userName">Username</label>
-                      <input id="userName" 
+                      <label htmlFor="login_userName">Username</label>
+                      <input id="login_userName" onKeyUp={evt => this.trySubmit(evt)} ref="userInput"
                         name="userNameInput" onChange={this.setUserName} className="form-control"></input>
                     </div>              
                     <div className="form-group">
                       <label htmlFor="password">Password</label>
-                      <input id="password" className="form-control" type="password"
-                      onChange={this.setPassword}></input>
+                      <input id="password" className="form-control" type="password" ref="pwInput"
+                      onChange={this.setPassword} onKeyUp={evt => this.trySubmit(evt)}></input>
                     </div>
                     <button className="btn btn-link" onClick={evt => this.resetPassword(evt)}>Forgot password?</button>
                     <div className="form-group">
-                      <button onClick={evt => this.handleLogin(evt)} className="btn btn-default">Submit</button>
+                      <button onClick={evt => this.handleLogin(evt)} className="btn btn-default" >Submit</button>
                     </div>
                 </div>
               </div>
