@@ -171,7 +171,7 @@ export default class SingleWork extends React.Component {
         </div>
         <div className="row">
           <div className="col-xs-9 col-md-12">
-            <center><Link to={"/user/"+this.state.work.creator_id}>{this.state.work.username}</Link></center>
+            <center><Link to={"/user/"+this.state.work.user_id+"/show"}>{this.state.work.username}</Link></center>
           </div>
         </div>
         <hr/>

@@ -9,10 +9,17 @@ import UserContainer from './UserContainer';
 export default class UserProfile extends React.Component {
 	constructor(props) {    
 	  	super(props);	  	
-	    this.state = this.state = {profile_user: {}, works: [], bookmarks: [], curator: []};
+	    this.state = this.state = {profile_user: {}, works: [], bookmarks: [], curator: [], work_page: 1, bookmark_page: 1,
+      work_pages: 1, bookmark_pages: 1};
       this.setMessageTitle = this.setMessageTitle.bind(this)
       this.setMessageText = this.setMessageText.bind(this)
       this.handleSendMessage = this.handleSendMessage.bind(this)
+      this.getWorks = this.getWorks.bind(this);
+      this.getBookmarks = this.getBookmarks.bind(this);
+      this.nextPage = this.nextPage.bind(this);
+      this.previousPage = this.previousPage.bind(this);
+      this.getWorkPage = this.getWorkPage.bind(this);
+      this.getBookmarkPage = this.getBookmarkPage.bind(this);
     }
 
     showMessageModal(event)
@@ -67,9 +74,7 @@ export default class UserProfile extends React.Component {
 	  	axios.get('/api/user/'+userId)
 	      .then(function (response) {
 	        this.setState({
-	            profile_user: response.data.user,
-              works: response.data.works,
-              bookmarks: response.data.bookmarks
+	            profile_user: response.data.user
 	        });  
 
 	      }.bind(this))
@@ -83,8 +88,94 @@ export default class UserProfile extends React.Component {
     	this.fetchUser(this.props.match.params.userId);
     }
 
+    previousPage(name) {
+    switch (name) {
+      case "work":
+        this.getWorkPage(this.state.work_page - 1)
+        break
+      case "bookmark":
+        this.getBookmarkPage(this.state.bookmark_page - 1)
+        break
+    }
+  }
+
+  nextPage(name) {
+    switch (name) {
+      case "work":
+        this.getWorkPage(this.state.work_page + 1)
+        break
+      case "bookmark":
+        this.getBookmarkPage(this.state.bookmark_page + 1)
+        break
+    }
+  }
+
+  getWorkPage(page) {   
+    axios.get('/api/work/creator/1/'+page)
+        .then(function (response) {
+          this.setState({           
+            works: response.data.works,
+            work_page: page,
+            work_pages: response.data.pages
+          });
+        }.bind(this))
+        .catch(function (error) {
+          console.log(error);
+        });
+  }
+
+  getBookmarkPage(page) {
+    axios.get('/api/bookmark/curator/'+this.state.curator.curator_id+'/'+page)
+        .then(function (response) {
+          this.setState({           
+            bookmarks: response.data.bookmarks,
+            bookmark_page: page,
+            bookmark_pages: response.data.pages
+          });
+        }.bind(this))
+        .catch(function (error) {
+          console.log(error);
+        });
+  }
+
+    getWorks(index, userId)
+    {
+      axios.get('/api/work/creator/'+userId)
+          .then(function (response) {
+            this.setState({
+              works: response.data.works,
+              work_pages: response.data.pages
+            });  
+
+          }.bind(this))
+          .catch(function (error) {
+            console.log(error);
+        });
+    }
+    getBookmarks(index, userId)
+    {
+      axios.get('/api/bookmark/curator/'+userId)
+          .then(function (response) {
+            var curator = {}
+            if (response.data.bookmarks.length > 0) {
+              curator = response.data.bookmarks[0].curator
+            }
+            this.setState({                
+              bookmarks: response.data.bookmarks,
+              curator: curator,
+              bookmark_pages: response.data.pages
+            });  
+
+          }.bind(this))
+          .catch(function (error) {
+            console.log(error);
+        });
+    }
+
     componentDidMount() { 
     	this.getUser();
+      this.getWorks(0, this.props.match.params.userId);
+      this.getBookmarks(0, this.props.match.params.userId)
   	}
 
     render() {
@@ -97,7 +188,10 @@ export default class UserProfile extends React.Component {
         }
         
         <div className="row">
-          <UserContainer user={this.state.profile_user} works={this.state.works} bookmarks={this.state.bookmarks} curator={this.state.curator}/>
+          <UserContainer user={this.state.profile_user} works={this.state.works} bookmarks={this.state.bookmarks} 
+          curator={this.state.curator} totalWorkPages={this.state.work_pages} totalBookmarkPages={this.state.bookmark_pages}
+            currentWorkPage={this.state.work_page} currentBookmarkPage={this.state.bookmark_page} 
+            previousPage={this.previousPage} nextPage={this.nextPage}/>
         </div>  
         <Modal show={this.state.showMessageModal} onHide={evt => this.handleSendMessage(evt)}>
           <Modal.Header closeButton>

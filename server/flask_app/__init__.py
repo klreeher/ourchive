@@ -60,106 +60,11 @@ def download(filename):
   uploads = os.path.join(app.root_path, tm.upload_folder)
   return send_from_directory(directory=uploads, filename=filename)
 
-
-@app.route('/api/search/term/<string:searchTerm>')
-def get_results(searchTerm):
-  results = json.dumps(
-    {
-      "works" : [
-        {
-          "key": 1,
-          "title": "a series of unfortunate dev choices",
-          "name": "anastasia",
-          "creator_id": 2,
-          "chapter_count": 3,
-          "is_complete": "false",
-          "word_count": 100500,
-          "work_summary": "some stuff happens"
-        },
-        {
-          "key": 2,
-          "title": "a series of unfortunate dev choices part 2",
-          "name": "dimitri",
-          "creator_id": 3,
-          "chapter_count": 100,
-          "is_complete": "false",
-          "word_count": 500683,
-          "work_summary": "M U R D E R ON THE FRONT"
-        }
-      ],
-      "bookmarks" : [
-        {
-          "id": 5,
-          "curator": {
-            "curator_name": "sally",
-            "curator_id": 2
-          },
-          "work": {
-            "title": "sixteen guns in brixton",
-            "creator": "e l dragons",
-            "summary": "someBODY once told me the world is gonna roll me",
-            "word_count": 550000,
-            "is_complete": True,
-            "chapter_count": 15
-          },
-          "curator_title": "a bookmark i loved",
-          "rating": 4,
-          "description": "this touched my heart and also I'm at war with the author now",
-          "tags": [
-            {"fandom": ["buffy", "xena"]},
-            {"primary pairing": ["buffy/faith"]}
-          ]
-        }
-      ]
-    }
-  )
-  return results
-
-@app.route('/api/logout/', methods=['POST'])
-def logout():
-  if not request.json:
-    abort(400)
-  return request.json["jwt"]
-
-@app.route('/api/login/', methods=['POST'])
-def login():
-  if not request.json:
-    abort(400)
-  if request.json["userName"] is None:
-    abort(400)
-  if request.json["password"] is None:
-    abort(400)
-  return request.json["userName"] + request.json["password"]
-
-
 @app.route('/audio/<string:audio_file>')
 def audio(audio_file):
   return send_from_directory(filename=audio_file, directory='audio')
 
-@app.route('/api/user/<int:userId>')
-def get_user(userId):
-  user = json.dumps(
-      {
-        "userName": "elena",
-        "aboutMe": "HUNDRED YARD HATER",
-        "lastLogin": "2017-07-04",
-        "works_count": 25,
-        "bookmarks_count": 30,
-        "userId": 1,
-        "works": [
-        {
-          "key": "1",
-          "title": "a series of unfortunate dev choices",
-          "name": "anastasia",
-          "creator_id": 2,
-          "chapter_count": 3,
-          "is_complete": "false",
-          "word_count": 100500,
-          "work_summary": "some stuff happens"
-        }],
-        "bookmarks": []
-      })
-  return user
+
 
 if __name__ == '__main__':
   app.run(debug=True)

@@ -119,14 +119,6 @@ def get_user_summary(user_id):
 	user_data = {}
 	user = User.query.filter_by(id=user_id).first()
 	user_data['user'] = build_user(user, False)
-	works = []
-	for work in user.works:
-		works.append(work_logic.build_work(work))
-	user_data['works'] = works
-	bookmarks = []
-	for bookmark in user.bookmarks:
-		bookmarks.append(bookmark_logic.build_bookmark(bookmark))
-	user_data['bookmarks'] = bookmarks
 	return user_data
 
 def build_user(user_obj, include_email=True):

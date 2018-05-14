@@ -22,7 +22,7 @@ class TestSearch(BaseTestCase):
 
 	def test_generic_work_search(self):
 		results = searcher.search_text_on_term("horse")
-		self.assertEqual(len(results['work_results']), 2)
+		self.assertEqual(len(results['work_results']), 3)
 
 	def test_search_work_by_complete(self):
 		self.add_user()

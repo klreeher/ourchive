@@ -13,7 +13,7 @@ export default class WorkStub extends React.Component {
     return (
       
         <div className="panel-body">
-            <div className="col-md-12"><h3><Link to={"/work/"+this.props.work.id}>{this.props.work.title}</Link> by <Link to={"/user/"+this.props.work.user_id}>{this.props.work.username}</Link></h3></div>
+            <div className="col-md-12"><h3><Link to={"/work/"+this.props.work.id}>{this.props.work.title}</Link> by <Link to={"/user/"+this.props.work.user_id+"/show"}>{this.props.work.username}</Link></h3></div>
             <div className="row">
               <div className="col-md-8 col-md-offset-1"><h5>{this.props.work.work_summary}</h5></div>
             </div>

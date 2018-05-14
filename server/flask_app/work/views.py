@@ -155,7 +155,7 @@ def build_work(work):
 	creator = User.query.filter_by(id=work.user_id).first()
 	work_json = {}
 	work_json['id'] = work.id
-	work_json['creator_id'] = work.user_id
+	work_json['user_id'] = work.user_id
 	work_json['username'] = creator.username
 	work_json['title'] = work.title
 	if work.is_complete == 1:
@@ -177,7 +177,7 @@ def build_work_stub(work):
 	creator = User.query.filter_by(id=work.user_id).first()
 	work_json = {}
 	work_json['id'] = work.id
-	work_json['creator_id'] = work.user_id
+	work_json['user_id'] = work.user_id
 	if creator is not None:
 		work_json['username'] = creator.username
 	work_json['title'] = work.title
