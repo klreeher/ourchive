@@ -67,7 +67,9 @@ export default class UserProfile extends React.Component {
 	  	axios.get('/api/user/'+userId)
 	      .then(function (response) {
 	        this.setState({
-	            profile_user: response.data
+	            profile_user: response.data.user,
+              works: response.data.works,
+              bookmarks: response.data.bookmarks
 	        });  
 
 	      }.bind(this))
@@ -81,42 +83,8 @@ export default class UserProfile extends React.Component {
     	this.fetchUser(this.props.match.params.userId);
     }
 
-    getWorks(index, userId)
-    {
-        axios.get('/api/work/creator/'+userId)
-          .then(function (response) {
-            this.setState({
-              works: response.data.works
-            });  
-
-          }.bind(this))
-          .catch(function (error) {
-            console.log(error);
-        });
-    }
-    getBookmarks(index, userId)
-    {
-        axios.get('/api/bookmark/curator/'+userId)
-          .then(function (response) {
-            var curator = {}
-            if (response.data.length > 0) {
-              curator = response.data[0].curator
-            }
-            this.setState({                
-              bookmarks: response.data.bookmarks,
-              curator: curator
-            });    
-
-          }.bind(this))
-          .catch(function (error) {
-            console.log(error);
-        });
-    }
-
     componentDidMount() { 
     	this.getUser();
-    	this.getWorks(0, this.props.match.params.userId);
-    	this.getBookmarks(0, this.props.match.params.userId);
   	}
 
     render() {

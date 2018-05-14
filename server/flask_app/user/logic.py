@@ -118,7 +118,7 @@ def get_by_username(username):
 def get_user_summary(user_id):
 	user_data = {}
 	user = User.query.filter_by(id=user_id).first()
-	user_data['user'] = build_user(user)
+	user_data['user'] = build_user(user, False)
 	works = []
 	for work in user.works:
 		works.append(work_logic.build_work(work))
@@ -129,10 +129,17 @@ def get_user_summary(user_id):
 	user_data['bookmarks'] = bookmarks
 	return user_data
 
-def build_user(user_obj):
+def build_user(user_obj, include_email=True):
 	user = {}
-	user['email'] = user_obj.email
+	if include_email:
+		user['email'] = user_obj.email
 	user['username'] = user_obj.username
 	user['registered_on'] = user_obj.registered_on
 	user['id'] = user_obj.id
+	if user_obj.bio is not None:
+		user['bio'] = user_obj.bio
+	else:
+		user['bio'] = ""
+	user['works_count'] = len(user_obj.works.all())
+	user['bookmarks_count'] = len(user_obj.bookmarks.all())
 	return user

@@ -33,7 +33,7 @@ export default class UserContainer extends React.Component {
 		    	<div className="col-md-12">
 			        	<div className="row">
 			        		<div className="col-md-4">
-			        			<h3>{this.state.user.userName}</h3>
+			        			<h3>{this.state.user.username}</h3>
 			        		</div>	        		
 			        	</div>
 			        	<div className="row">
@@ -41,15 +41,7 @@ export default class UserContainer extends React.Component {
 			        			About:
 			        		</div>
 			        		<div className="col-md-10">
-			        			{this.state.user.aboutMe}
-			        		</div>
-			        	</div>
-			        	<div className="row">
-			        		<div className="col-md-2">
-			        			Last Login:
-			        		</div>
-			        		<div className="col-md-10">
-			        			{this.state.user.lastLogin}
+			        			{this.state.user.bio}
 			        		</div>
 			        	</div>
 			        	<div className="row">

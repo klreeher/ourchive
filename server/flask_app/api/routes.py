@@ -479,7 +479,7 @@ def update_bookmark(bookmarkId):
     bookmark_id = bookmark.update_bookmark(request.json)
     return json.dumps({"bookmark_id": bookmark_id})
 
-@api.route('/api/user/<int:userId>')
+@api.route('/api/user/<int:userId>', methods=['GET'])
 def get_user(userId):
   user = user_logic.get_user_summary(userId)
   return make_response(jsonify(user), 201)

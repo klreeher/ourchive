@@ -45,7 +45,7 @@ export default class MyProfile extends React.Component {
     	if (userProfile == null)
     	{
     		//todo: this means user should log in probably?
-    		this.fetchUser(1);
+    		return;
     	} 
     	else
     	{
