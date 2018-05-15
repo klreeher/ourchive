@@ -68,8 +68,8 @@ export default class UserForm extends React.Component {
 
     render() {
         return (
-    	   <div className="panel panel-default">
-                <div className="panel-body">
+    	   <div className="row">
+                <div className="row">
                     <form>
                         
                         <FormGroup controlId="formControlsUserName">

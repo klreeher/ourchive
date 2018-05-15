@@ -5,6 +5,7 @@ import {Tabs, Tab} from 'react-bootstrap';
 import WorkStub from './WorkStub';
 import UserContainer from './UserContainer';
 import EditDeleteButtons from './EditDeleteButtons';
+import { withRouter } from "react-router-dom";
 
 
 export default class MyProfile extends React.Component {
@@ -21,15 +22,16 @@ export default class MyProfile extends React.Component {
         this.getBookmarkPage = this.getBookmarkPage.bind(this);
     }
 
-    fetchUser(userId)
+    fetchUser()
   	{
-	  	axios.get('/api/user/'+userId)
+	  	axios.get('/api/user', {   
+          headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json'
+          }})
 	      .then(function (response) {
-	      	localStorage.setItem('profile', JSON.stringify(response.data));
+          this.getWorks(0, response.data.user['id']);
+          this.getBookmarks(0, response.data.user['id']);
 	        this.setState({
-	          user: response.data,
-              bookmarks: response.data.bookmarks,
-              works: response.data.works
+	          user: response.data.user
 	        });  
 
 	      }.bind(this))
@@ -41,20 +43,15 @@ export default class MyProfile extends React.Component {
     getUser()
     {
     	
-    	var userProfile = localStorage.getItem('profile');
+    	var userProfile = localStorage.getItem('jwt');
     	if (userProfile == null)
     	{
-    		//todo: this means user should log in probably?
-    		return;
+    		  this.props.history.push("/");
+    		  return;
     	} 
     	else
     	{
-            var userData = JSON.parse(userProfile);
-            this.getWorks(0, userData.userId);
-            this.getBookmarks(0, userData.userId);
-    		this.setState({
-	          user: userData
-	        }); 
+        this.fetchUser();
     	}
     }
 
@@ -141,20 +138,33 @@ export default class MyProfile extends React.Component {
             console.log(error);
         });
     }
+
+    editMyAccount(evt) {
+      this.props.history.push("/user/"+this.state.user.id+"/edit");
+    }
+    deleteMyAccount(evt) {
+      this.props.history.push("/user/"+this.state.user.id+"/edit");
+    }
     componentDidMount() { 
     	this.getUser();
   	}
 
     render() {
     return (
-    	<div className="container-fluid">
-    		<EditDeleteButtons viewer_is_creator={true} editHref={"/user/"+this.state.user.userId+"/edit"}/>
-    		<br/>
-    		<br/>
-      		<UserContainer user={this.state.user} works={this.state.works} bookmarks={this.state.bookmarks} 
+    	<div>
+        <div className="row">
+          <div className="col-xs-8">
+      		  <EditDeleteButtons viewer_is_creator={true} editAction={evt => this.editMyAccount(evt)} deleteAction={evt => this.deleteMyAccount(evt)}/>
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-xs-12">
+      		  <UserContainer user={this.state.user} works={this.state.works} bookmarks={this.state.bookmarks} 
             curator={this.state.curator} totalWorkPages={this.state.work_pages} totalBookmarkPages={this.state.bookmark_pages}
             currentWorkPage={this.state.work_page} currentBookmarkPage={this.state.bookmark_page} previousPage={this.previousPage} nextPage={this.nextPage}/>
-      	</div>
+      	 </div>
+        </div>
+      </div>
     );
   }
 

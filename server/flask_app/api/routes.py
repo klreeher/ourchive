@@ -484,6 +484,16 @@ def get_user(userId):
   user = user_logic.get_user_summary(userId)
   return make_response(jsonify(user), 201)
 
+@api.route('/api/user', methods=['GET'])
+def get_user_from_token():
+  user_id = auth.auth_from_data(request)
+  if user_id > 0:
+    user = user_logic.get_user_summary(user_id)
+    return make_response(jsonify(user), 201)
+  else:
+    abort(400)
+  
+
 @api.route('/api/bookmark/curator/<int:curatorId>')
 @api.route('/api/bookmark/curator/<int:curatorId>/<int:page>')
 def get_bookmarks(curatorId, page=1):
