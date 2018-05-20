@@ -21,7 +21,7 @@ export default class BookmarkStub extends React.Component {
     	  <div className="panel-body">
 	      	<div className="row">
 	      		<div className="col-sm-5">{this.state.bookmark.curator_title}</div>
-	      		<div className="col-sm-5">{this.props.user.id === this.state.bookmark.user_id && 
+	      		<div className="col-sm-5">{this.props.user && this.props.user.id === this.state.bookmark.user_id && 
 		            		<div className="pull-right"> 
 		            			<button className="btn btn-link">Edit</button> | <button className="btn btn-link">Delete</button>
 		            		</div>
