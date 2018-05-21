@@ -488,8 +488,17 @@ def get_user(userId):
 def get_user_from_token():
   user_id = auth.auth_from_data(request)
   if user_id > 0:
-    user = user_logic.get_user_summary(user_id)
+    user = user_logic.get_user_summary(user_id, True)
     return make_response(jsonify(user), 201)
+  else:
+    abort(400)
+
+@api.route('/api/user', methods=['PUT'])
+def modify_existing_user():
+  user_id = auth.auth_from_data(request)
+  if user_id > 0:
+    user_logic.modify_user(user_id, request.json)
+    return make_response("OK", 201)
   else:
     abort(400)
   

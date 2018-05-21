@@ -115,11 +115,22 @@ def get_by_username(username):
 	user = User.query.filter_by(username=username).first()
 	return build_user(user)
 
-def get_user_summary(user_id):
+def get_user_summary_with_email(user_id):
+	return get_user_summary(user_id, True)
+
+def get_user_summary(user_id, include_email=False):
 	user_data = {}
 	user = User.query.filter_by(id=user_id).first()
-	user_data['user'] = build_user(user, False)
+	user_data['user'] = build_user(user, include_email)
 	return user_data
+
+def modify_user(user_id, user_data):
+	user = User.query.filter_by(id=user_id).first()
+	user.email = user_data['email']
+	user.username = user_data['username']
+	user.bio = user_data['bio']
+	db.session.add(user)
+	db.session.commit()
 
 def build_user(user_obj, include_email=True):
 	user = {}
