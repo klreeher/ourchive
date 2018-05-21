@@ -23,24 +23,42 @@ export default class Notifications extends React.Component {
 
   deleteNotification(notification)
   {
-    console.log(notification.id)
-    var notificationsFiltered = this.state.notifications.filter(function( obj ) {
-        return obj.id !== notification.id;
-    });
-    this.setState(
-    {
-      notifications: notificationsFiltered
-    })
+    axios.delete('/api/notifications/'+ notification.id, {   
+          headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json'
+          }})
+        .then(function (response) {
+          var notificationsFiltered = this.state.notifications.filter(function( obj ) {
+              return obj.id !== notification.id;
+          });
+          this.setState(
+          {
+            notifications: notificationsFiltered
+          })
+
+        }.bind(this))
+        .catch(function (error) {
+          console.log(error);
+      });
+    
   }
 
   deleteAll(evt)
   {
     evt.target.blur();
     if (confirm("Are you sure you want to delete ALL notifications? This cannot be reversed!")) {
-        console.log("delete all");
-        this.setState({
-          notifications: []
-        })
+        axios.delete('/api/notifications', {   
+          headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json'
+          }})
+        .then(function (response) {
+            this.setState({
+            notifications: []
+          })
+
+        }.bind(this))
+        .catch(function (error) {
+          console.log(error);
+      });
+        
     } else {
         console.log("cancel delete all");
     }
@@ -48,42 +66,26 @@ export default class Notifications extends React.Component {
 
   getNotifications()
   {
-    var notificationsJson = [
-      {
-        "type": "Work",
-        "content": "New comment on [title] from [user]: blah blah blah blah blah blah...",
-        "dateCreated": "2018-01-18",
-        "id": 123,
-        "workId": 1,
-        "chapterId": 2,
-        "commentId": 257
-      },
-      {
-        "type": "Bookmark",
-        "content": "New comment on [bookmark title] from [user]: blah blah blah blah blah blah...",
-        "dateCreated": "2018-01-18",
-        "id": 125,
-        "bookmarkId": 5,
-        "commentId": 296
-      },
-      {
-        "type": "System Notification",
-        "content": "An update to your favorite collection [name] has occurred!",
-        "dateCreated": "2018-01-20",
-        "id": 124
-      }
-    ]
-    this.setState(
-    {
-      notifications: notificationsJson,
-      notificationsOriginal: notificationsJson
-    })
+    axios.get('/api/notifications', {   
+          headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json'
+          }})
+        .then(function (response) {
+          this.setState({
+            notifications: response.data,
+            notificationsOriginal: response.data
+          })
+
+        }.bind(this))
+        .catch(function (error) {
+          console.log(error);
+      });
   }
   filterOnComments(evt)
   {
-    var transform = this.filter("Comment")
+    var works = this.filter("Work")
+    var bookmarks = this.filter("Bookmark")
     this.setState({
-      notifications: transform
+      notifications: works.concat(bookmarks)
     })
   }
   filterOnSystemNotification(evt)

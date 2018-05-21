@@ -207,14 +207,8 @@ class NavbarInternal extends React.Component {
             New Work
         </NavItem>   
 
-        <IndexLinkContainer to="/bookmark/1">
-            <NavItem>Bookmarks</NavItem>
-          </IndexLinkContainer>  
-
         {this.state.admin &&
-          <IndexLinkContainer to="/admin">
-            <NavItem>Admin</NavItem>
-          </IndexLinkContainer>
+            <NavItem href="/admin">Admin</NavItem>
         }
 
         <NavDropdown eventKey={3} title="User" id="user-nav-dropdown">          
@@ -232,10 +226,6 @@ class NavbarInternal extends React.Component {
           </IndexLinkContainer>
         </NavDropdown>      
         
-        
-        <IndexLinkContainer to="/user/1/show">
-          <NavItem>User Profile</NavItem>
-        </IndexLinkContainer>
         <NavItem onClick={evt => this.logout(evt)}>Logout</NavItem>
         </Nav>
         </Navbar.Collapse>
@@ -252,12 +242,6 @@ class NavbarInternal extends React.Component {
           </Navbar.Brand>
         </Navbar.Header>
         <Nav>  
-        <IndexLinkContainer to="/bookmark/1">
-          <NavItem>Bookmarks</NavItem>
-        </IndexLinkContainer>
-        <IndexLinkContainer to="/user/1/show">
-          <NavItem>User Profile</NavItem>
-        </IndexLinkContainer>
         <NavItem onClick={evt => this.showLogin(evt)}>Login</NavItem>
         <NavItem onClick={evt => this.showRegister(evt)}>Register</NavItem>
         </Nav>

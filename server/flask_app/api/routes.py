@@ -578,11 +578,11 @@ def get_tagged_bookmarks(tag_id, tag_text, page):
   return json.dumps(tag.get_tagged_bookmarks(tag_id, tag_text, page))
 
 
-@api.route('/api/notifications/user/<int:userId>', methods=['GET'])
-def get_user_notifications(requested_user_id):
+@api.route('/api/notifications', methods=['GET'])
+def get_user_notifications():
   user_id = auth.auth_from_data(request)
-  if user_id > 0 and user_id == requested_user_id:
-    result = notification.get_notifications(user_id)
+  if user_id > 0:
+    result = notification.get_user_notifications(user_id)
     if result is not None:
       return make_response(jsonify(result), 201)
     else:
@@ -590,7 +590,7 @@ def get_user_notifications(requested_user_id):
   else:
     abort(400)
 
-@api.route('/api/notifications/<int:notificationId>', methods=['DELETE'])
+@api.route('/api/notifications/<int:notification_id>', methods=['DELETE'])
 def delete_notification(notification_id):
   user_id = auth.auth_from_data(request)
   if user_id > 0:
@@ -602,10 +602,10 @@ def delete_notification(notification_id):
   else:
     abort(400)
 
-@api.route('/api/notifications/user/<int:userId>', methods=['DELETE'])
-def delete_all_notifications(user_id):
+@api.route('/api/notifications', methods=['DELETE'])
+def delete_all_notifications():
   user_id = auth.auth_from_data(request)
-  if user_id > 0 and user_id == requested_user_id:
+  if user_id > 0:
     result = notification.delete_notification_by_user(user_id)
     if result is not None:
       return make_response(jsonify(result), 201)
