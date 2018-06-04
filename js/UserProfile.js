@@ -24,6 +24,7 @@ export default class UserProfile extends React.Component {
 
     showMessageModal(event)
     {
+      event.target.blur()
       this.setState(
       {
         showMessageModal: true
@@ -35,7 +36,7 @@ export default class UserProfile extends React.Component {
       axios.post('/api/message/', {
         message_subject: this.state.messageTitle,
         message_content: this.state.messageText,
-        to_user: this.state.profile_user.userId, 
+        to_user: this.state.profile_user.id, 
       }, {   
         headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json'
       }})

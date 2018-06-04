@@ -218,7 +218,7 @@ class NavbarInternal extends React.Component {
           <IndexLinkContainer to="/my-profile">
             <NavItem>My Profile</NavItem>
           </IndexLinkContainer>
-          <IndexLinkContainer to={"/user/"+this.state.userId+"/messages"}>
+          <IndexLinkContainer to={"/user/messages"}>
             <NavItem>Messages</NavItem>
           </IndexLinkContainer>
           <IndexLinkContainer to="/notifications">

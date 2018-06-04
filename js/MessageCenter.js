@@ -24,7 +24,7 @@ export default class MessageCenter extends React.Component {
 
 	getMessages()
 	{
-		axios.get('/api/user/'+this.state.user_id+'/messages/inbox', {   
+		axios.get('/api/user/messages/inbox', {   
         	headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json'
       		}})
 	      .then(function (response) {
@@ -43,7 +43,7 @@ export default class MessageCenter extends React.Component {
 	}
 	getOutbox()
 	{
-		axios.get('/api/user/'+this.state.user_id+'/messages/outbox',  {   
+		axios.get('/api/user/messages/outbox',  {   
         	headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json'
       		}})
 	      .then(function (response) {
@@ -113,7 +113,7 @@ export default class MessageCenter extends React.Component {
 	}
 	deleteMessage(id)
 	{
-		axios.delete('/api/message/'+id, {"empty":"empty"}, {   
+		axios.delete('/api/message/'+id, {   
         	headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json'
       		}})
 	      .then(function (response) {
@@ -135,9 +135,9 @@ export default class MessageCenter extends React.Component {
 	{
 		//todo the UI for this is - send mark all read - mark all read locally
 		event.target.blur()
-		axios.post('/api/user/'+1+'/messages/read'), {"empty":"empty"}, {   
+		axios.post('/api/user/messages/read', {}, {   
         	headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json'
-      		}}
+      		}})
 		      .then(function (response) {
 		        var oldMessages = this.state.messages;
 				for (var i = 0; i < oldMessages.length; i++) { 
@@ -157,8 +157,7 @@ export default class MessageCenter extends React.Component {
 	{
 		event.target.blur()
 		if (confirm("Are you sure you want to delete ALL messages? This cannot be reversed!")) {
-		    
-		      axios.delete('/api/user/'+this.state.user_id+'/messages/delete', {"empty":"empty"}, {   
+		    axios.delete('/api/user/messages/delete', {   
         	headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json'
       		}})
 		      .then(function (response) {

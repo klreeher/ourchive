@@ -106,11 +106,10 @@ def reset(userId, token):
     abort(400)
   return auth.reset_password(request.json, userId, token)
 
-@api.route('/api/user/<int:userId>/messages/inbox')
-def get_inbox(userId):
+@api.route('/api/user/messages/inbox')
+def get_inbox():
   user_id = auth.auth_from_data(request)
-  print(request.headers)
-  if user_id > 0 and user_id == userId:
+  if user_id > 0:
     result = message.get_inbox(user_id)
     if result is not None:
       return make_response(jsonify(result), 201)
@@ -119,10 +118,10 @@ def get_inbox(userId):
   else:
     abort(400)
 
-@api.route('/api/user/<int:userId>/messages/outbox')
-def get_outbox(userId):
+@api.route('/api/user/messages/outbox')
+def get_outbox():
   user_id = auth.auth_from_data(request)
-  if user_id > 0 and user_id == userId:
+  if user_id > 0:
     result = message.get_outbox(user_id)
     if result is not None:
       return make_response(jsonify(result), 201)
@@ -304,10 +303,10 @@ def delete_message(messageId):
   else:
     abort(400)
 
-@api.route('/api/user/<int:userId>/messages/delete', methods=['DELETE'])
-def delete_all(userId):
+@api.route('/api/user/messages/delete', methods=['DELETE'])
+def delete_all():
   user_id = auth.auth_from_data(request)
-  if user_id > 0 and user_id == userId:
+  if user_id > 0:
     result = message.delete_all_messages(user_id)
     if result is not None:
       responseObject = {
@@ -320,10 +319,10 @@ def delete_all(userId):
   else:
     abort(400)
 
-@api.route('/api/user/<int:userId>/messages/read', methods=['POST'])
-def mark_all_read(userId):
+@api.route('/api/user/messages/read', methods=['POST'])
+def mark_all_read():
   user_id = auth.auth_from_data(request)
-  if user_id > 0 and user_id == userId:
+  if user_id > 0:
     result = message.mark_all_read(user_id)
     if result is not None:
       responseObject = {
@@ -441,7 +440,6 @@ def get_work(workId):
 @api.route('/api/bookmark/', methods=['POST'])
 def post_bookmark():
   user_id = auth.auth_from_data(request)
-  print(user_id)
   if user_id > 0:
     request.json['user_id'] = user_id
     result = bookmark.add_bookmark(request.json)

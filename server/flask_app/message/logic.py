@@ -34,9 +34,10 @@ def delete_all_messages(user_id):
 	inbox = User.query.filter_by(id=user_id).first().received_messages.all()
 	outbox = User.query.filter_by(id=user_id).first().sent_messages.all()
 	for message in inbox:
-		delete_message(message.id)
+		delete_message(message.id, user_id)
 	for message in outbox:
-		delete_message(message.id)
+		delete_message(message.id, user_id)
+	return 1
 
 def update_read_status(message_id, status, user_id):
 	message = Message.query.filter_by(id=message_id).first()
@@ -55,6 +56,7 @@ def mark_all_read(user_id):
 	user = User.query.filter_by(id=user_id).first()
 	for message in user.received_messages:
 		update_read_status(message.id, True, user_id)
+	return 1
 
 def get_message(message_id, user_id):
 	message = Message.query.filter_by(id=message_id).first()
