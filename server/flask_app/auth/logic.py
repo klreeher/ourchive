@@ -131,8 +131,9 @@ def authorize(request):
 		}
 		return make_response(jsonify(responseObject), 401)
 
-def reset_password(request, user_id, token):
-	token_valid = user_logic.validate_reset_token(user_id, token)
+def reset_password(request, username, token):
+	user = User.query.filter_by(username=username).first()
+	token_valid = user_logic.validate_reset_token(user.id, token)
 	if token_valid is not True:
 		responseObject = {
 			'status': 'failure',
@@ -140,7 +141,6 @@ def reset_password(request, user_id, token):
 		}
 		return make_response(jsonify(responseObject), 401)
 	password = user_logic.encrypt_password(request.get('password'))
-	user = User.query.filter_by(username=request.get('username')).first()
 	user.password = password
 	db.session.add(user)
 	db.session.commit()

@@ -17,8 +17,8 @@ def in_blocklist(blocked_user, blocking_user):
 
 def add_reset(reset_user):
 	s = TimestampSigner('secret-key')
-	token = s.sign(str(reset_user)+'password-reset')
-	redis_db.set("password-reset:#"+str(reset_user), token)
+	token = s.sign(str(reset_user.id)+'password-reset')
+	redis_db.set("password-reset:#"+str(reset_user.id), token)
 	return token
 
 def validate_reset_token(reset_user, token):

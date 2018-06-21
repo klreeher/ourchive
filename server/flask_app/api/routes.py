@@ -11,7 +11,6 @@ from server.flask_app.auth import logic as auth
 from server.flask_app.user import logic as user_logic
 from server.flask_app.search import logic as search
 from server.flask_app.notification import logic as notification
-from flask import current_app as app
 
 @api.route('/<path:path>')
 def unknown_path(path):
@@ -97,20 +96,19 @@ def register():
     abort(400)
   return auth.register(request.json)
 
-@api.route('/api/user/<int:userId>/reset/<string:token>', methods=['POST'])
-def reset(userId, token):
-  if not request.json:
-    abort(400)
-  if request.json["email"] is None:
-    abort(400)
-  if request.json["password"] is None:
-    abort(400)
-  return auth.reset_password(request.json, userId, token)
+@api.route('/api/user/<string:username>/reset/<string:token>', methods=['POST'])
+def reset(username, token):
+  return auth.reset_password(request.json, username, token)
 
-@api.route('/api/user/messages/inbox')
-def get_inbox():
+@api.route('/api/user/<string:username>/reset', methods=['POST'])
+def send_reset(username):
+  return notification.do_password_reset(username)
+
+@api.route('/api/user/<int:userId>/messages/inbox')
+def get_inbox(userId):
   user_id = auth.auth_from_data(request)
-  if user_id > 0:
+  print(request.headers)
+  if user_id > 0 and user_id == userId:
     result = message.get_inbox(user_id)
     if result is not None:
       return make_response(jsonify(result), 201)
@@ -119,10 +117,10 @@ def get_inbox():
   else:
     abort(400)
 
-@api.route('/api/user/messages/outbox')
-def get_outbox():
+@api.route('/api/user/<int:userId>/messages/outbox')
+def get_outbox(userId):
   user_id = auth.auth_from_data(request)
-  if user_id > 0:
+  if user_id > 0 and user_id == userId:
     result = message.get_outbox(user_id)
     if result is not None:
       return make_response(jsonify(result), 201)
@@ -185,11 +183,6 @@ def get_work_types():
 def get_general_work_types():
   types = user_logic.get_work_types()
   return make_response(jsonify(types), 201)
-
-@api.route('/api/works/tus', methods=['GET'])
-def get_tus_data():
-  tus = {"tus_endpoint": app.config['TUS_ENDPOINT']}
-  return make_response(jsonify(tus), 201)
 
 @api.route('/api/admin/notifications/types', methods=['GET'])
 def get_notification_types():
@@ -309,10 +302,10 @@ def delete_message(messageId):
   else:
     abort(400)
 
-@api.route('/api/user/messages/delete', methods=['DELETE'])
-def delete_all():
+@api.route('/api/user/<int:userId>/messages/delete', methods=['DELETE'])
+def delete_all(userId):
   user_id = auth.auth_from_data(request)
-  if user_id > 0:
+  if user_id > 0 and user_id == userId:
     result = message.delete_all_messages(user_id)
     if result is not None:
       responseObject = {
@@ -325,10 +318,10 @@ def delete_all():
   else:
     abort(400)
 
-@api.route('/api/user/messages/read', methods=['POST'])
-def mark_all_read():
+@api.route('/api/user/<int:userId>/messages/read', methods=['POST'])
+def mark_all_read(userId):
   user_id = auth.auth_from_data(request)
-  if user_id > 0:
+  if user_id > 0 and user_id == userId:
     result = message.mark_all_read(user_id)
     if result is not None:
       responseObject = {
@@ -446,6 +439,7 @@ def get_work(workId):
 @api.route('/api/bookmark/', methods=['POST'])
 def post_bookmark():
   user_id = auth.auth_from_data(request)
+  print(user_id)
   if user_id > 0:
     request.json['user_id'] = user_id
     result = bookmark.add_bookmark(request.json)
@@ -483,29 +477,30 @@ def update_bookmark(bookmarkId):
     bookmark_id = bookmark.update_bookmark(request.json)
     return json.dumps({"bookmark_id": bookmark_id})
 
-@api.route('/api/user/<int:userId>', methods=['GET'])
+@api.route('/api/user/<int:userId>')
 def get_user(userId):
-  user = user_logic.get_user_summary(userId)
-  return make_response(jsonify(user), 201)
-
-@api.route('/api/user', methods=['GET'])
-def get_user_from_token():
-  user_id = auth.auth_from_data(request)
-  if user_id > 0:
-    user = user_logic.get_user_summary(user_id, True)
-    return make_response(jsonify(user), 201)
-  else:
-    abort(400)
-
-@api.route('/api/user', methods=['PUT'])
-def modify_existing_user():
-  user_id = auth.auth_from_data(request)
-  if user_id > 0:
-    user_logic.modify_user(user_id, request.json)
-    return make_response("OK", 201)
-  else:
-    abort(400)
-
+  user = json.dumps(
+      {
+        "userName": "elena",
+        "aboutMe": "HUNDRED YARD HATER",
+        "lastLogin": "2017-07-04",
+        "works_count": 25,
+        "bookmarks_count": 30,
+        "userId": 1,
+        "works": [
+        {
+          "key": "1",
+          "title": "a series of unfortunate dev choices",
+          "name": "anastasia",
+          "creator_id": 2,
+          "chapter_count": 3,
+          "is_complete": "false",
+          "word_count": 100500,
+          "work_summary": "some stuff happens"
+        }],
+        "bookmarks": []
+      })
+  return user
 
 @api.route('/api/bookmark/curator/<int:curatorId>')
 @api.route('/api/bookmark/curator/<int:curatorId>/<int:page>')
@@ -559,6 +554,7 @@ def add_comment_reply():
   if user_id > 0:
     request.json['user_id'] = user_id
     result = comment.add_reply(request.json)
+    print(result)
     if result is not None:
       responseObject = {
           'id': result
@@ -580,40 +576,3 @@ def get_tagged_works(tag_id, tag_text, page):
 @api.route('/api/tag/bookmark/<int:tag_id>/<path:tag_text>/<int:page>', methods=['GET'])
 def get_tagged_bookmarks(tag_id, tag_text, page):
   return json.dumps(tag.get_tagged_bookmarks(tag_id, tag_text, page))
-
-
-@api.route('/api/notifications', methods=['GET'])
-def get_user_notifications():
-  user_id = auth.auth_from_data(request)
-  if user_id > 0:
-    result = notification.get_user_notifications(user_id)
-    if result is not None:
-      return make_response(jsonify(result), 201)
-    else:
-      abort(400)
-  else:
-    abort(400)
-
-@api.route('/api/notifications/<int:notification_id>', methods=['DELETE'])
-def delete_notification(notification_id):
-  user_id = auth.auth_from_data(request)
-  if user_id > 0:
-    result = notification.delete_notification(user_id, notification_id)
-    if result is not None:
-      return make_response(jsonify(result), 201)
-    else:
-      abort(400)
-  else:
-    abort(400)
-
-@api.route('/api/notifications', methods=['DELETE'])
-def delete_all_notifications():
-  user_id = auth.auth_from_data(request)
-  if user_id > 0:
-    result = notification.delete_notification_by_user(user_id)
-    if result is not None:
-      return make_response(jsonify(result), 201)
-    else:
-      abort(400)
-  else:
-    abort(400)

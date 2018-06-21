@@ -41,20 +41,20 @@ def build_notification(notification):
 	notification_json['notification_type_id'] = notification.notification_type_id
 	return notification_json
 
-def do_password_reset(user_id):
-	user = User.query.filter_by(id=user_id).first()
+def do_password_reset(username):
+	user = User.query.filter_by(username=username).first()
 	token = user_logic.add_reset(user)
-	response = send_password_reset_email(token)
+	response = send_password_reset_email(token, user.email, user.id)
 	if response != "":
 		#todo log
-		return 400
+		return response
 	else:
-		return 201
+		return "ok"
 
 
-def send_password_reset_email(token, email):
+def send_password_reset_email(token, email, user_id):
 	SMTPserver = app.config.get('EMAIL_SMTP')
-	sender =     app.config.get('EMAIL_SENDER')
+	sender =     app.config.get('ADMIN_USER')
 	destination = [email]
 
 	USERNAME = app.config.get('ADMIN_USER')
@@ -63,24 +63,19 @@ def send_password_reset_email(token, email):
 
 
 	content="""\
-	We have received a password reset request for the account associated with this email. If you made this request, please follow the link to reset your password: 
-	"""+app.config.get('APP_ROOT') + "/user/reset/"+token
+	We have received a password reset request for the account associated with this email. If you made this request, please use this token to reset your password:
+	"""+token.decode("utf8")
 
 	subject="Password reset requested"
 
+	msg = MIMEText(content, text_subtype)
+	msg['Subject']=       subject
+	msg['From']   = sender
+	conn = SMTP(SMTPserver)
+	conn.set_debuglevel(False)
+	conn.login(USERNAME, PASSWORD)
 	try:
-	    msg = MIMEText(content, text_subtype)
-	    msg['Subject']=       subject
-	    msg['From']   = sender
-
-	    conn = SMTP(SMTPserver)
-	    conn.set_debuglevel(False)
-	    conn.login(USERNAME, PASSWORD)
-	    try:
-	        conn.sendmail(sender, destination, msg.as_string())
-	    finally:
-	        conn.quit()
-	        return ""
-
-	except Exception as exc:
-	    return "mail failed: " + str(exc)
+		conn.sendmail(sender, destination, msg.as_string())
+	finally:
+		conn.quit()
+	return ""

@@ -39,6 +39,7 @@ class NavbarInternal extends React.Component {
     this.setUserName = this.setUserName.bind(this);
     this.setPassword = this.setPassword.bind(this);
     this.setEmail = this.setEmail.bind(this);
+    this.setResetToken = this.setResetToken.bind(this);
   }
 
   logout(evt)
@@ -83,6 +84,12 @@ class NavbarInternal extends React.Component {
     });
   }
 
+    setResetToken(evt) {
+      this.setState({
+        resetToken: evt.target.value
+      });
+    }
+
   showLogin(evt)
   {
     evt.target.blur()
@@ -94,8 +101,43 @@ class NavbarInternal extends React.Component {
     this.setState({ showRegisterModal: true });
   }
 
-  resetPassword(evt) {
-    console.log("not implemented");
+  resetPassword(evt){
+    evt.target.blur()
+    axios.post('/api/user/'+this.state.userName+'/reset', {
+    })
+    .then((response) => {
+      this.setState({showRegisterModal: false,
+      showLoginModal: false,
+      showResetModal: true})
+
+    })
+    .catch(function (error) {
+      this.props.alert.show('An error has occurred: '+ error, {
+          timeout: 6000,
+          type: 'error'
+        })
+      this.setState({showRegisterModal: false});
+    }.bind(this));
+  }
+  performReset(evt) {
+    evt.target.blur()
+    axios.post('/api/user/'+this.state.userName+'/reset/'+this.state.resetToken, {
+    username: this.state.userName,
+    password: this.state.password
+    })
+    .then((response) => {
+      this.setState({showRegisterModal: false,
+      showLoginModal: true,
+      showResetModal: false})
+
+    })
+    .catch(function (error) {
+      this.props.alert.show('An error has occurred: '+ error, {
+          timeout: 6000,
+          type: 'error'
+        })
+      this.setState({showRegisterModal: false});
+    }.bind(this));
   }
   trySubmit(evt) {
     if(evt.keyCode == 13){
@@ -191,7 +233,8 @@ class NavbarInternal extends React.Component {
   closeModals(evt) {
     this.setState({
       showModal: false,
-      showRegisterModal: false
+      showRegisterModal: false,
+      showResetModal: false
     })
   }
 
@@ -307,6 +350,39 @@ class NavbarInternal extends React.Component {
                     </div>
                     <div className="form-group">
                       <button onClick={evt => this.handleRegister(evt)} className="btn btn-default">Submit</button>
+                    </div>
+                </div>
+              </div>
+          </div>
+
+          </Modal.Body>
+        </Modal>
+
+        <Modal show={this.state.showResetModal} onHide={evt => this.closeModals(evt)}>
+          <Modal.Header closeButton>
+            <Modal.Title>Reset Password</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <div>
+              <div className="panel panel-default">
+                <div className="panel-body">
+                    <div className="form-group">
+                      <label htmlFor="userName">Username</label>
+                      <input id="userName"
+                        name="userNameInput" onChange={this.setUserName} className="form-control"></input>
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="password">Password</label>
+                      <input id="password" className="form-control" type="password"
+                      onChange={this.setPassword}></input>
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="token">Reset Token</label>
+                      <input id="token" className="form-control"
+                      onChange={this.setResetToken}></input>
+                    </div>
+                    <div className="form-group">
+                      <button onClick={evt => this.performReset(evt)} className="btn btn-default">Submit</button>
                     </div>
                 </div>
               </div>
