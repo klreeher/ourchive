@@ -18,7 +18,7 @@ import { withAlert } from 'react-alert';
 class NavbarInternal extends React.Component {
 
   componentDidMount() {
-    
+
 
   }
 
@@ -43,7 +43,7 @@ class NavbarInternal extends React.Component {
 
   logout(evt)
   {
-    axios.post('/api/user/logout/', {empty: "empty"}, {   
+    axios.post('/api/user/logout/', {empty: "empty"}, {
       headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json'
     }})
     .then((response) => {
@@ -56,9 +56,15 @@ class NavbarInternal extends React.Component {
       this.props.updateUser();
     })
     .catch(function (error) {
-      console.log(error);
+      localStorage.removeItem('jwt');
+      localStorage.removeItem('admin');
+      localStorage.removeItem('friendly_name')
+      this.setState({
+        loggedIn: false
+      });
+      this.props.updateUser();
     });
-    
+
   }
 
   setUserName(evt) {
@@ -80,7 +86,7 @@ class NavbarInternal extends React.Component {
   showLogin(evt)
   {
     evt.target.blur()
-    this.setState({ showModal: true })    
+    this.setState({ showModal: true })
   }
   showRegister(evt)
   {
@@ -97,11 +103,11 @@ class NavbarInternal extends React.Component {
     }
   }
   handleLogin(evt) {
-    if (this.state.userName != "" && this.state.userName != null 
+    if (this.state.userName != "" && this.state.userName != null
       && this.state.password != "" && this.state.password != null)
     {
       axios.post('/api/user/login/', {
-      username: this.state.userName, 
+      username: this.state.userName,
       password: this.state.password
       })
       .then((response) => {
@@ -109,7 +115,7 @@ class NavbarInternal extends React.Component {
         localStorage.setItem('admin', response.data['admin'])
         localStorage.setItem('friendly_name', response.data['username'])
         this.props.updateUser();
-        this.setState({ 
+        this.setState({
           userName: "",
           password: "",
           email: "",
@@ -137,16 +143,16 @@ class NavbarInternal extends React.Component {
         this.setState({ showModal: false });
 
     }
-    
+
   }
 
   handleRegister(evt) {
-    if (this.state.userName != "" && this.state.userName != null 
+    if (this.state.userName != "" && this.state.userName != null
       && this.state.password != "" && this.state.password != null
       && this.state.email != "" && this.state.email != null)
     {
       axios.post('/api/user/register/', {
-      username: this.state.userName, 
+      username: this.state.userName,
       password: this.state.password,
       email: this.state.email
       })
@@ -154,7 +160,7 @@ class NavbarInternal extends React.Component {
         localStorage.setItem('jwt', response.data['auth_token']);
         localStorage.setItem('friendly_name', response.data['username'])
         this.props.updateUser();
-        this.setState({ 
+        this.setState({
           userName: "",
           password: "",
           loggedIn: true,
@@ -179,7 +185,7 @@ class NavbarInternal extends React.Component {
           })
         this.setState({ showRegisterModal: false });
     }
-    
+
   }
 
   closeModals(evt) {
@@ -202,16 +208,16 @@ class NavbarInternal extends React.Component {
         </Navbar.Header>
         <Navbar.Collapse>
         <Nav>
-            
+
         <NavItem href="/create/work">
             New Work
-        </NavItem>   
+        </NavItem>
 
         {this.state.admin &&
             <NavItem href="/admin">Admin</NavItem>
         }
 
-        <NavDropdown eventKey={3} title="User" id="user-nav-dropdown">          
+        <NavDropdown eventKey={3} title="User" id="user-nav-dropdown">
           <IndexLinkContainer to="/bookmarks/new">
             <NavItem>New Bookmark</NavItem>
           </IndexLinkContainer>
@@ -224,8 +230,8 @@ class NavbarInternal extends React.Component {
           <IndexLinkContainer to="/notifications">
             <NavItem>Notifications</NavItem>
           </IndexLinkContainer>
-        </NavDropdown>      
-        
+        </NavDropdown>
+
         <NavItem onClick={evt => this.logout(evt)}>Logout</NavItem>
         </Nav>
         </Navbar.Collapse>
@@ -241,7 +247,7 @@ class NavbarInternal extends React.Component {
             <a href="/">ourchive</a>
           </Navbar.Brand>
         </Navbar.Header>
-        <Nav>  
+        <Nav>
         <NavItem onClick={evt => this.showLogin(evt)}>Login</NavItem>
         <NavItem onClick={evt => this.showRegister(evt)}>Register</NavItem>
         </Nav>
@@ -259,7 +265,7 @@ class NavbarInternal extends React.Component {
                       <label htmlFor="login_userName">Username</label>
                       <input id="login_userName" onKeyUp={evt => this.trySubmit(evt)} ref="userInput"
                         name="userNameInput" onChange={this.setUserName} className="form-control"></input>
-                    </div>              
+                    </div>
                     <div className="form-group">
                       <label htmlFor="password">Password</label>
                       <input id="password" className="form-control" type="password" ref="pwInput"
@@ -286,14 +292,14 @@ class NavbarInternal extends React.Component {
                 <div className="panel-body">
                     <div className="form-group">
                       <label htmlFor="userName">Email</label>
-                      <input id="email" 
+                      <input id="email"
                         name="emailInput" onChange={this.setEmail} className="form-control"></input>
-                    </div>  
+                    </div>
                     <div className="form-group">
                       <label htmlFor="userName">Username</label>
-                      <input id="userName" 
+                      <input id="userName"
                         name="userNameInput" onChange={this.setUserName} className="form-control"></input>
-                    </div>              
+                    </div>
                     <div className="form-group">
                       <label htmlFor="password">Password</label>
                       <input id="password" className="form-control" type="password"

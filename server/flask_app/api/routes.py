@@ -11,6 +11,7 @@ from server.flask_app.auth import logic as auth
 from server.flask_app.user import logic as user_logic
 from server.flask_app.search import logic as search
 from server.flask_app.notification import logic as notification
+from flask import current_app as app
 
 @api.route('/<path:path>')
 def unknown_path(path):
@@ -19,13 +20,13 @@ def unknown_path(path):
 
 @api.route('/api/search/term/<string:searchTerm>', methods=['POST'])
 def search_by_term(searchTerm):
-  result = search.search_on_term(searchTerm, request.json["search_works"], 
+  result = search.search_on_term(searchTerm, request.json["search_works"],
     request.json["search_bookmarks"], 1)
   return make_response(jsonify(result), 201)
 
 @api.route('/api/search/term/<string:searchTerm>/page/<int:pageNumber>', methods=['POST'])
 def search_by_paginated_term(searchTerm, pageNumber):
-  result = search.search_on_term(searchTerm, request.json["search_works"], 
+  result = search.search_on_term(searchTerm, request.json["search_works"],
     request.json["search_bookmarks"], pageNumber)
   return make_response(jsonify(result), 201)
 
@@ -184,6 +185,11 @@ def get_work_types():
 def get_general_work_types():
   types = user_logic.get_work_types()
   return make_response(jsonify(types), 201)
+
+@api.route('/api/works/tus', methods=['GET'])
+def get_tus_data():
+  tus = {"tus_endpoint": app.config['TUS_ENDPOINT']}
+  return make_response(jsonify(tus), 201)
 
 @api.route('/api/admin/notifications/types', methods=['GET'])
 def get_notification_types():
@@ -499,7 +505,7 @@ def modify_existing_user():
     return make_response("OK", 201)
   else:
     abort(400)
-  
+
 
 @api.route('/api/bookmark/curator/<int:curatorId>')
 @api.route('/api/bookmark/curator/<int:curatorId>/<int:page>')
@@ -611,4 +617,3 @@ def delete_all_notifications():
       abort(400)
   else:
     abort(400)
-

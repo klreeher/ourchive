@@ -1,6 +1,6 @@
 import os
 basedir = os.path.abspath(os.path.dirname(__file__))
-postgres_local_base = 'postgresql://postgres:F4rG0==nd@localhost/'
+postgres_local_base = 'postgresql://ourchive:F4rG0==nd@localhost/'
 database_name = 'ourchive'
 
 
@@ -25,6 +25,7 @@ class DevelopmentConfig(BaseConfig):
     ADMIN_USER = 'administrator@stopthatimp.net'
     ADMIN_USER_PASSWORD = 'CHANGEME'
     EMAIL_SMTP = 'smtp.zoho.com'
+    TUS_ENDPOINT = 'http://127.0.0.1:5000/uploads'
 
 
 class TestingConfig(BaseConfig):
@@ -41,3 +42,4 @@ class ProductionConfig(BaseConfig):
     SECRET_KEY = 'change_me'
     DEBUG = False
     SQLALCHEMY_DATABASE_URI = 'postgresql:///example'
+    TUS_ENDPOINT = 'http://ourchive-dev.stopthatimp.net/uploads'
