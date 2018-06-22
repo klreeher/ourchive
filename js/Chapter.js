@@ -60,7 +60,8 @@ export default class Chapter extends React.Component {
       text: this.state.newCommentText, 
       chapter_id: this.state.chapter.id
     }, {   
-      headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json'
+      headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json',
+      'CSRF-Token': this.props.csrf
     }})
     .then(function (response) {
         newComment.id = response.data["id"]

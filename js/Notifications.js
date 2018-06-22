@@ -24,7 +24,8 @@ export default class Notifications extends React.Component {
   deleteNotification(notification)
   {
     axios.delete('/api/notifications/'+ notification.id, {   
-          headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json'
+          headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json',
+          'CSRF-Token': this.props.csrf
           }})
         .then(function (response) {
           var notificationsFiltered = this.state.notifications.filter(function( obj ) {
@@ -47,7 +48,8 @@ export default class Notifications extends React.Component {
     evt.target.blur();
     if (confirm("Are you sure you want to delete ALL notifications? This cannot be reversed!")) {
         axios.delete('/api/notifications', {   
-          headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json'
+          headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json',
+          'CSRF-Token': this.props.csrf
           }})
         .then(function (response) {
             this.setState({
@@ -67,7 +69,8 @@ export default class Notifications extends React.Component {
   getNotifications()
   {
     axios.get('/api/notifications', {   
-          headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json'
+          headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json',
+          'CSRF-Token': this.props.csrf
           }})
         .then(function (response) {
           this.setState({

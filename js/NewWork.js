@@ -32,7 +32,8 @@ class NewWork extends React.Component {
       work_id: this.state.work_id,
       work_type: this.state.selected_type
     }, {
-      headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json'
+      headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json',
+        'CSRF-Token': this.props.csrf
     }})
     .then(function (response) {
       history.push({

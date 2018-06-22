@@ -25,7 +25,8 @@ export default class MessageCenter extends React.Component {
 	getMessages()
 	{
 		axios.get('/api/user/messages/inbox', {   
-        	headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json'
+        	headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json',
+        	'CSRF-Token': this.props.csrf
       		}})
 	      .then(function (response) {
 	      	if (response.data.length > 0)
@@ -44,7 +45,8 @@ export default class MessageCenter extends React.Component {
 	getOutbox()
 	{
 		axios.get('/api/user/messages/outbox',  {   
-        	headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json'
+        	headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json',
+        	'CSRF-Token': this.props.csrf
       		}})
 	      .then(function (response) {
 	        this.setState({
@@ -73,7 +75,8 @@ export default class MessageCenter extends React.Component {
         to_user: parent_message_to_id, 
         parent_id: parent_id
       }, {   
-        	headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json'
+        	headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json',
+        	'CSRF-Token': this.props.csrf
       		}})
       .then(function (response) {
         this.getMessages()
@@ -103,7 +106,8 @@ export default class MessageCenter extends React.Component {
 	markAsRead(id, parentId)
 	{
 		axios.post('/api/message/'+id+'/read', {"empty":"empty"}, {   
-        	headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json'
+        	headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json',
+        	'CSRF-Token': this.props.csrf
       		}})
 	      .then(function (response) {
 	      }.bind(this))
@@ -114,7 +118,8 @@ export default class MessageCenter extends React.Component {
 	deleteMessage(id)
 	{
 		axios.delete('/api/message/'+id, {   
-        	headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json'
+        	headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json',
+        	'CSRF-Token': this.props.csrf
       		}})
 	      .then(function (response) {
 	      	var messagesFiltered = this.state.messages.filter(function( obj ) {
@@ -136,7 +141,8 @@ export default class MessageCenter extends React.Component {
 		//todo the UI for this is - send mark all read - mark all read locally
 		event.target.blur()
 		axios.post('/api/user/messages/read', {}, {   
-        	headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json'
+        	headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json',
+        	'CSRF-Token': this.props.csrf
       		}})
 		      .then(function (response) {
 		        var oldMessages = this.state.messages;
@@ -158,7 +164,8 @@ export default class MessageCenter extends React.Component {
 		event.target.blur()
 		if (confirm("Are you sure you want to delete ALL messages? This cannot be reversed!")) {
 		    axios.delete('/api/user/messages/delete', {   
-        	headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json'
+        	headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json',
+        	'CSRF-Token': this.props.csrf
       		}})
 		      .then(function (response) {
 		        //todo add success message

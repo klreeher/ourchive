@@ -38,7 +38,8 @@ export default class UserProfile extends React.Component {
         message_content: this.state.messageText,
         to_user: this.state.profile_user.id, 
       }, {   
-        headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json'
+        headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json',
+        'CSRF-Token': this.props.csrf
       }})
       .then(function (response) {
         //todo add success message

@@ -6,6 +6,13 @@ from .. import db
 from flask import current_app as app
 from ..models import User, BlacklistToken
 from server.flask_app.user import logic as user_logic
+from itsdangerous import TimestampSigner
+
+def generate_csrf(auth_token):
+	s = TimestampSigner(app.config.get('SECRET_KEY'))
+	token = s.sign(auth_token)
+	return token
+	
 
 def register(post_data):
 	user = User.query.filter_by(email=post_data.get('email')).first()
@@ -62,6 +69,7 @@ def login(post_data):
 						'status': 'success',
 						'message': 'Successfully logged in.',
 						'auth_token': auth_token.decode(),
+						'csrf': generate_csrf(auth_token.decode()).decode(),
 						'admin': user.admin,
 						'username': user.username
 					}
@@ -106,6 +114,16 @@ def authorize(request):
 	if auth_token:
 		resp = User.decode_auth_token(auth_token)
 		if not isinstance(resp, str):
+			s = TimestampSigner(app.config.get('SECRET_KEY'))
+			try:
+				csrf_token = s.unsign(request.headers.get('CSRF-Token'))
+			except Exception as e:
+				responseObject = {
+					'status': 'fail',
+					'message': 'Invalid data.',
+					'status_int': 401
+				}
+				return make_response(jsonify(responseObject), 401)
 			user = User.query.filter_by(id=resp).first()
 			responseObject = {
 				'status': 'success',

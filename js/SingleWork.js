@@ -72,7 +72,8 @@ export default class SingleWork extends React.Component {
   {
     evt.preventDefault()
     axios.delete('/api/work/'+workId, {   
-          headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json'
+          headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json',
+          'CSRF-Token': this.props.csrf
           }})
         .then(function (response) {
           this.setState({

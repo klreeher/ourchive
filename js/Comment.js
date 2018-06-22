@@ -34,7 +34,8 @@ export default class Comment extends React.Component {
       text: this.state.newCommentText,
       parent_id: this.state.comment.id
     }, {   
-      headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json'
+      headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json',
+      'CSRF-Token': this.props.csrf
     }})
     .then(function (response) {
       newComment.id = response.data["id"]

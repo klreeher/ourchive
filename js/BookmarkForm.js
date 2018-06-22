@@ -31,7 +31,8 @@ class BookmarkForm extends React.Component {
 	      links: [],
 	      id: this.state.id
 	    }, {   
-      headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json'
+      headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json',
+      'CSRF-Token': this.props.csrf
     }})
 	    .then(function (response) {
 	      history.push({

@@ -18,19 +18,28 @@ import { withAlert } from 'react-alert';
 class NavbarInternal extends React.Component {
 
   componentDidMount() {
-
-
-  }
-
-  componentWillMount() {
     var state = localStorage.getItem('jwt');
     var admin = localStorage.getItem('admin');
     var id = localStorage.getItem('user_id');
+    var token = null;
+    if (state != null) {
+        axios.post('/api/user/token/', {}, {
+          headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json',
+          'CSRF-Token': this.props.csrf
+        }})
+        .then((response) => {          
+          this.props.updateCsrf(response.data)
+        })
+        .catch(function (error) {
+          console.log(error)
+        });
+    }
     this.setState({
-      loggedIn: state != null,
-      admin: admin != null && admin.toLowerCase() === "true",
-      userId: id
-    })
+        loggedIn: state != null,
+        admin: admin != null && admin.toLowerCase() === "true",
+        userId: id
+      })
+    
   }
   constructor(props)
   {
@@ -45,7 +54,8 @@ class NavbarInternal extends React.Component {
   logout(evt)
   {
     axios.post('/api/user/logout/', {empty: "empty"}, {
-      headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json'
+      headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json',
+      'CSRF-Token': this.props.csrf
     }})
     .then((response) => {
       localStorage.removeItem('jwt');
@@ -156,7 +166,7 @@ class NavbarInternal extends React.Component {
         localStorage.setItem('jwt', response.data['auth_token']);
         localStorage.setItem('admin', response.data['admin'])
         localStorage.setItem('friendly_name', response.data['username'])
-        this.props.updateUser();
+        this.props.updateUser(response.data['csrf']);
         this.setState({
           userName: "",
           password: "",

@@ -16,13 +16,14 @@ def in_blocklist(blocked_user, blocking_user):
 	return str(blocked_user).encode("utf8") in blocklist
 
 def add_reset(reset_user):
-	s = TimestampSigner('secret-key')
+	#todo this key should actually be secret
+	s = TimestampSigner(app.config.get('SECRET_KEY'))
 	token = s.sign(str(reset_user.id)+'password-reset')
 	redis_db.set("password-reset:#"+str(reset_user.id), token)
 	return token
 
 def validate_reset_token(reset_user, token):
-	s = TimestampSigner('secret-key')
+	s = TimestampSigner(app.config.get('SECRET_KEY'))
 	try:
 		new_token = s.unsign(token, max_age=43200)
 		redis_val = redis_db.get("password-reset:#"+str(reset_user))

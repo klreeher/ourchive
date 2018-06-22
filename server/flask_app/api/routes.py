@@ -81,6 +81,13 @@ def login():
     abort(400)
   return auth.login(request.json)
 
+@api.route('/api/user/token/', methods=['POST'])
+def get_token():
+  if request.headers.get('Authorization') is not None:
+    return auth.generate_csrf(request.headers.get('Authorization').split(" ")[1])
+  else:
+    abort(400)
+
 @api.route('/api/user/authorize/', methods=['POST'])
 def authorize():
   if not request.json:
@@ -444,7 +451,6 @@ def get_work(workId):
 @api.route('/api/bookmark/', methods=['POST'])
 def post_bookmark():
   user_id = auth.auth_from_data(request)
-  print(user_id)
   if user_id > 0:
     request.json['user_id'] = user_id
     result = bookmark.add_bookmark(request.json)

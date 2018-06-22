@@ -109,7 +109,8 @@ export default class BookmarkItem extends React.Component {
       user_id: 1, 
       bookmark_id: this.state.bookmark.id
     }, {   
-      headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json'
+      headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json',
+      'CSRF-Token': this.props.csrf
     }})
     .then(function (response) {
       	newComment.id = response.data["id"]
@@ -136,7 +137,8 @@ export default class BookmarkItem extends React.Component {
   {
   	evt.target.blur()
     axios.delete('/api/bookmark/'+bookmarkId, {   
-          headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json'
+          headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json',
+          'CSRF-Token': this.props.csrf
           }})
         .then(function (response) {
           this.setState({

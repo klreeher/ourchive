@@ -17,7 +17,8 @@ export default class Admin extends React.Component {
           axios.post('/api/admin/users/'+response.data['id']+'/banned', {
           empty: 'empty'
           }, {   
-            headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json'
+            headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json',
+            'CSRF-Token': this.props.csrf
           }})
           .then(function (response) {
               
@@ -41,7 +42,8 @@ export default class Admin extends React.Component {
     });
     this.setState({banned_users: oldBannedUsers, newBannedUser: ''});
     axios.delete('/api/admin/users/'+userId+'/banned', {   
-        headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json'
+        headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json',
+        'CSRF-Token': this.props.csrf
       }})
       .then(function (response) {
           
@@ -57,7 +59,8 @@ export default class Admin extends React.Component {
   }
   componentDidMount() { 
     axios.get('/api/admin/tags/types', {   
-          headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json'
+          headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json',
+          'CSRF-Token': this.props.csrf
           }})
         .then(function (response) {
           this.setState({tag_types: response.data});  
@@ -67,7 +70,8 @@ export default class Admin extends React.Component {
           console.log(error);
       });
     axios.get('/api/admin/notifications/types', {   
-          headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json'
+          headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json',
+          'CSRF-Token': this.props.csrf
           }})
         .then(function (response) {
           this.setState({notification_types: response.data});  
@@ -77,7 +81,8 @@ export default class Admin extends React.Component {
           console.log(error);
       });
     axios.get('/api/admin/works/types', {   
-          headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json'
+          headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json',
+          'CSRF-Token': this.props.csrf
           }})
         .then(function (response) {
           this.setState({work_types: response.data});  
@@ -88,7 +93,8 @@ export default class Admin extends React.Component {
       });
 
     axios.get('/api/admin/users/banned', {   
-          headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json'
+          headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json',
+          'CSRF-Token': this.props.csrf
           }})
         .then(function (response) {
           this.setState({banned_users: response.data});  
@@ -121,7 +127,8 @@ export default class Admin extends React.Component {
       'types': newWorkType
       },
       {   
-        headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json'
+        headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json',
+        'CSRF-Token': this.props.csrf
       }})
       .then(function (response) {
           var oldWorkTypes = this.state.work_types;
@@ -150,7 +157,8 @@ export default class Admin extends React.Component {
       'types': newTagType
       },
       {   
-        headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json'
+        headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json',
+        'CSRF-Token': this.props.csrf
       }})
       .then(function (response) {
           var oldTagTypes = this.state.tag_types;
