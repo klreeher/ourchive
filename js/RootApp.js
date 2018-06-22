@@ -37,29 +37,27 @@ export default class RootApp extends React.Component {
     this.updateUser = this.updateUser.bind(this);
     this.updateCsrf = this.updateCsrf.bind(this);
   }
-  componentWillMount() {     
-    
+  componentWillMount() {
+
   }
   componentWillUpdate(nextProps, nextState)
   {
   }
 
-  updateUser(csrf)
+  updateUser()
   {
     var user = localStorage.getItem('jwt');
-    console.log(csrf)
     this.setState(
     {
-      user: user,
-      csrf_token: csrf
+      user: user
     })
   }
 
-  updateCsrf(csrf)
+  updateCsrf()
   {
     this.setState(
     {
-      csrf_token: csrf
+      csrf_token: document.getElementById("csrf_token").innerHTML
     })
   }
 
@@ -82,7 +80,7 @@ export default class RootApp extends React.Component {
             <Route path="/bookmark/:bookmarkId" component={(props, state, params) => <BookmarkItem user={user} csrf={csrf} {...props}/>}/>
             <Route path="/create/work" is_edit="false" component={(props, state, params) => <NewWork user={user} csrf={csrf} {...props}/>}/>
             <Route path="/bookmarks/new" component={(props, state, params) => <BookmarkForm user={user} csrf={csrf} {...props}/>}/>
-            <Route path="/my-profile" component={MyProfile}/>
+            <Route path="/my-profile" component={(props, state, params) => <MyProfile user={user} csrf={csrf} {...props}/>}/>
             <Route path="/user/:userId/show" component={(props, state, params) => <UserProfile user={user} csrf={csrf} {...props}/>}/>
             <Route path="/user/:userId/edit" component={UserForm}/>
             <Route path="/user/messages" component={(props, state, params) => <MessageCenter user={user} csrf={csrf} {...props}/>}/>
@@ -93,4 +91,3 @@ export default class RootApp extends React.Component {
     );
   }
 }
-

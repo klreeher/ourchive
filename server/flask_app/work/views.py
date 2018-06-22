@@ -7,11 +7,12 @@ from .. import tag as tag_blueprint
 from flask import current_app as app
 from ..models import Work, Chapter, Tag, User, TagType
 from .search_wrapper import WorkSearch
+from ..auth import logic as auth
 from ..tag.search_wrapper import TagSearch
 
 @work.route('/')
 def homepage():
-  return render_template('index.html')
+  return render_template('index.html', csrf_token=auth.generate_csrf().decode())
 
 def get_tag_categories():
 	tags = []
@@ -68,7 +69,7 @@ def update_work(json):
 		work.type_id = json['work_type']
 	db.session.add(work)
 	word_count = update_chapters(work, chapters)
-	work.word_count = word_count		
+	work.word_count = word_count
 	add_tags(work, work_tags)
 	db.session.commit()
 	if app.config.get('USE_ES'):
@@ -95,7 +96,7 @@ def add_work(json):
 		type_id=type_id)
 	db.session.add(work)
 	word_count = add_chapters(work, chapters)
-	work.word_count = word_count		
+	work.word_count = word_count
 	add_tags(work, work_tags)
 	db.session.commit()
 	if app.config.get('USE_ES'):
@@ -115,7 +116,7 @@ def add_chapters(work, chapters):
 
 def update_chapters(work, chapters):
 	count = 0
-	for chapter_item in chapters:		
+	for chapter_item in chapters:
 		if 'id' not in chapter_item:
 			chapter = Chapter(title=chapter_item['title'], number=chapter_item['number'], text=chapter_item['text'], audio_url=get_file_url(chapter_item['audio_url']),image_url=get_file_url(chapter_item['image_url']))
 			work.chapters.append(chapter)
@@ -138,7 +139,7 @@ def add_tags(work, tags):
 			existing = Tag.query.filter_by(text=tag, tag_type_id=tag_item['id']).first()
 			if existing:
 				if existing not in work.tags:
-					work.tags.append(existing)			
+					work.tags.append(existing)
 			else:
 				work.tags.append(Tag(text=tag, tag_type_id=tag_item['id']))
 				tag_blueprint.logic.add_tag(tag, tag_item['id'])

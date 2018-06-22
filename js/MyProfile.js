@@ -9,8 +9,12 @@ import { withRouter } from "react-router-dom";
 
 
 export default class MyProfile extends React.Component {
-	constructor(props) {    
-	  	super(props);	  	
+	constructor(props) {
+	  	super(props);
+			if (this.props.csrf === undefined)
+			{
+				this.props.csrf = this.props.location.state.csrf
+			}
 	    this.state = this.state = {user: {}, works: [], bookmarks: [], curator: [], work_page: 1, bookmark_page: 1,
       work_pages: 1, bookmark_pages: 1};
         this.getUser = this.getUser.bind(this);
@@ -24,16 +28,17 @@ export default class MyProfile extends React.Component {
 
     fetchUser()
   	{
-	  	axios.get('/api/user', {   
+	  	axios.get('/api/user', {
           headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json',
           'CSRF-Token': this.props.csrf
           }})
 	      .then(function (response) {
-          this.getWorks(0, response.data.user['id']);
-          this.getBookmarks(0, response.data.user['id']);
+					console.log(response)
+          this.getWorks(0, response.data['id']);
+          this.getBookmarks(0, response.data['id']);
 	        this.setState({
-	          user: response.data.user
-	        });  
+	          user: response.data
+	        });
 
 	      }.bind(this))
 	      .catch(function (error) {
@@ -43,13 +48,13 @@ export default class MyProfile extends React.Component {
 
     getUser()
     {
-    	
+
     	var userProfile = localStorage.getItem('jwt');
     	if (userProfile == null)
     	{
     		  this.props.history.push("/");
     		  return;
-    	} 
+    	}
     	else
     	{
         this.fetchUser();
@@ -78,10 +83,10 @@ export default class MyProfile extends React.Component {
     }
   }
 
-  getWorkPage(page) {   
+  getWorkPage(page) {
     axios.get('/api/work/creator/1/'+page)
         .then(function (response) {
-          this.setState({           
+          this.setState({
             works: response.data.works,
             work_page: page,
             work_pages: response.data.pages
@@ -95,7 +100,7 @@ export default class MyProfile extends React.Component {
   getBookmarkPage(page) {
     axios.get('/api/bookmark/curator/'+this.state.curator.curator_id+'/'+page)
         .then(function (response) {
-          this.setState({           
+          this.setState({
             bookmarks: response.data.bookmarks,
             bookmark_page: page,
             bookmark_pages: response.data.pages
@@ -113,7 +118,7 @@ export default class MyProfile extends React.Component {
             this.setState({
               works: response.data.works,
               work_pages: response.data.pages
-            });  
+            });
 
           }.bind(this))
           .catch(function (error) {
@@ -128,11 +133,11 @@ export default class MyProfile extends React.Component {
             if (response.data.bookmarks.length > 0) {
               curator = response.data.bookmarks[0].curator
             }
-            this.setState({                
+            this.setState({
               bookmarks: response.data.bookmarks,
               curator: curator,
               bookmark_pages: response.data.pages
-            });  
+            });
 
           }.bind(this))
           .catch(function (error) {
@@ -141,12 +146,17 @@ export default class MyProfile extends React.Component {
     }
 
     editMyAccount(evt) {
-      this.props.history.push("/user/"+this.state.user.id+"/edit");
+			var pathname = "/user/"+this.state.user.id+"/edit";
+			var csrf = this.props.csrf
+      this.props.history.push({
+				pathname: pathname,
+	      state: { csrf: csrf}
+			});
     }
     deleteMyAccount(evt) {
       this.props.history.push("/user/"+this.state.user.id+"/edit");
     }
-    componentDidMount() { 
+    componentDidMount() {
     	this.getUser();
   	}
 
@@ -160,7 +170,7 @@ export default class MyProfile extends React.Component {
         </div>
         <div className="row">
           <div className="col-xs-12">
-      		  <UserContainer user={this.state.user} works={this.state.works} bookmarks={this.state.bookmarks} 
+      		  <UserContainer user={this.state.user} works={this.state.works} bookmarks={this.state.bookmarks}
             curator={this.state.curator} totalWorkPages={this.state.work_pages} totalBookmarkPages={this.state.bookmark_pages}
             currentWorkPage={this.state.work_page} currentBookmarkPage={this.state.bookmark_page} previousPage={this.previousPage} nextPage={this.nextPage}/>
       	 </div>

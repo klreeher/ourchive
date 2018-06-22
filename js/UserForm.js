@@ -9,9 +9,13 @@ import {FormGroup, Checkbox, ControlLabel, HelpBlock, FormControl, Button, Radio
 
 
 export default class UserForm extends React.Component {
-	constructor(props) {    
-	  	super(props);	  	
-	    this.state = this.state = {user: {}, bio: "",
+	constructor(props) {
+	  	super(props);
+			if (this.props.csrf === undefined)
+			{
+				this.props.csrf = this.props.location.state.csrf
+			}
+	    this.state = {user: {}, bio: "",
             email: "", username: ""};
         this.setusername = this.setusername.bind(this);
         this.setemail = this.setemail.bind(this);
@@ -20,14 +24,14 @@ export default class UserForm extends React.Component {
 
     fetchUser(userId)
     {
-        axios.get('/api/user', {   
+        axios.get('/api/user', {
           headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json',
           'CSRF-Token': this.props.csrf
           }})
           .then(function (response) {
             this.setState({
-              user: response.data.user
-            });  
+              user: response.data
+            });
 
           }.bind(this))
           .catch(function (error) {
@@ -37,13 +41,13 @@ export default class UserForm extends React.Component {
 
     getUser()
     {
-        
+
       var userProfile = localStorage.getItem('jwt');
       if (userProfile == null)
       {
           this.props.history.push("/");
           return;
-      } 
+      }
       else
       {
         this.fetchUser();
@@ -53,21 +57,26 @@ export default class UserForm extends React.Component {
     modifyUser(evt) {
       evt.preventDefault()
       axios.put('/api/user', {
-        email: this.state.user.email, 
-        bio: this.state.user.bio, 
+        email: this.state.user.email,
+        bio: this.state.user.bio,
         username: this.state.user.username
-      }, {   
+      }, {
       headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json',
       'CSRF-Token': this.props.csrf
     }}).then(function (response) {
-        
-      })
+				var pathname = "/my-profile";
+				var csrf = this.props.csrf;
+				this.props.history.push({
+					pathname: pathname,
+					state: { csrf: csrf}
+				});
+      }.bind(this))
       .catch(function (error) {
         console.log(error);
       });
     }
 
-    componentWillMount() { 
+    componentWillMount() {
         this.getUser();
     }
 
@@ -90,21 +99,25 @@ export default class UserForm extends React.Component {
     }
 
     render() {
+			const AddOrUpdate = withRouter(({ history }) => (
+	    <div>	<button className="btn btn-default" onMouseDown={evt => this.modifyUser(evt)}>Submit</button>
+	    </div>
+	    ))
         return (
     	   <div className="row">
                 <div className="row">
                     <form>
-                        
+
                         <FormGroup controlId="formControlsusername">
                           <ControlLabel>User Name</ControlLabel>
-                          <FormControl  type="text" 
+                          <FormControl  type="text"
                             value={this.state.user.username}
                             onChange={this.setusername}
                           />
                         </FormGroup>
                         <FormGroup controlId="formControlsemail">
                           <ControlLabel>Email</ControlLabel>
-                          <FormControl  type="text" 
+                          <FormControl  type="text"
                             value={this.state.user.email}
                             onChange={this.setemail}
                           />
@@ -112,16 +125,18 @@ export default class UserForm extends React.Component {
 
                         <FormGroup controlId="formControlsusername">
                           <ControlLabel>About Me</ControlLabel>
-                          <FormControl componentClass="textarea" 
+                          <FormControl componentClass="textarea"
                             value={this.state.user.bio}
                             onChange={this.setbio}
                           />
                         </FormGroup>
 
-                        <div className="form-group">
-                          <button onMouseDown={evt => this.modifyUser(evt)} className="btn btn-default">Submit</button>
-                        </div>
+
                       </form>
+
+											<div className="form-group">
+												<AddOrUpdate/>
+											</div>
                 </div>
             </div>
     );

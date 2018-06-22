@@ -7,12 +7,13 @@ from flask import current_app as app
 from ..models import User, BlacklistToken
 from server.flask_app.user import logic as user_logic
 from itsdangerous import TimestampSigner
+import datetime
 
-def generate_csrf(auth_token):
+def generate_csrf():
 	s = TimestampSigner(app.config.get('SECRET_KEY'))
-	token = s.sign(auth_token)
+	token = s.sign(str(datetime.datetime.now()))
 	return token
-	
+
 
 def register(post_data):
 	user = User.query.filter_by(email=post_data.get('email')).first()
@@ -69,7 +70,6 @@ def login(post_data):
 						'status': 'success',
 						'message': 'Successfully logged in.',
 						'auth_token': auth_token.decode(),
-						'csrf': generate_csrf(auth_token.decode()).decode(),
 						'admin': user.admin,
 						'username': user.username
 					}

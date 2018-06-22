@@ -116,6 +116,10 @@ def get_by_username(username):
 	user = User.query.filter_by(username=username).first()
 	return build_user(user)
 
+def get_by_id(user_id):
+	user = User.query.filter_by(id=user_id).first()
+	return build_user(user)
+
 def get_user_summary_with_email(user_id):
 	return get_user_summary(user_id, True)
 

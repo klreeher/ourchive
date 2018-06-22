@@ -23,23 +23,15 @@ class NavbarInternal extends React.Component {
     var id = localStorage.getItem('user_id');
     var token = null;
     if (state != null) {
-        axios.post('/api/user/token/', {}, {
-          headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json',
-          'CSRF-Token': this.props.csrf
-        }})
-        .then((response) => {          
-          this.props.updateCsrf(response.data)
-        })
-        .catch(function (error) {
-          console.log(error)
-        });
+      this.props.updateCsrf()
+
     }
     this.setState({
         loggedIn: state != null,
         admin: admin != null && admin.toLowerCase() === "true",
         userId: id
       })
-    
+
   }
   constructor(props)
   {
@@ -166,7 +158,7 @@ class NavbarInternal extends React.Component {
         localStorage.setItem('jwt', response.data['auth_token']);
         localStorage.setItem('admin', response.data['admin'])
         localStorage.setItem('friendly_name', response.data['username'])
-        this.props.updateUser(response.data['csrf']);
+        this.props.updateUser();
         this.setState({
           userName: "",
           password: "",

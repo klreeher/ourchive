@@ -15,7 +15,7 @@ from flask import current_app as app
 
 @api.route('/<path:path>')
 def unknown_path(path):
-  return render_template('index.html')
+  return render_template('index.html', csrf_token=auth.generate_csrf().decode())
 
 
 @api.route('/api/search/term/<string:searchTerm>', methods=['POST'])
@@ -80,13 +80,6 @@ def login():
   if request.json["password"] is None:
     abort(400)
   return auth.login(request.json)
-
-@api.route('/api/user/token/', methods=['POST'])
-def get_token():
-  if request.headers.get('Authorization') is not None:
-    return auth.generate_csrf(request.headers.get('Authorization').split(" ")[1])
-  else:
-    abort(400)
 
 @api.route('/api/user/authorize/', methods=['POST'])
 def authorize():
@@ -488,30 +481,25 @@ def update_bookmark(bookmarkId):
     bookmark_id = bookmark.update_bookmark(request.json)
     return json.dumps({"bookmark_id": bookmark_id})
 
-@api.route('/api/user/<int:userId>')
+@api.route('/api/user/<int:userId>', methods=['GET'])
 def get_user(userId):
-  user = json.dumps(
-      {
-        "userName": "elena",
-        "aboutMe": "HUNDRED YARD HATER",
-        "lastLogin": "2017-07-04",
-        "works_count": 25,
-        "bookmarks_count": 30,
-        "userId": 1,
-        "works": [
-        {
-          "key": "1",
-          "title": "a series of unfortunate dev choices",
-          "name": "anastasia",
-          "creator_id": 2,
-          "chapter_count": 3,
-          "is_complete": "false",
-          "word_count": 100500,
-          "work_summary": "some stuff happens"
-        }],
-        "bookmarks": []
-      })
-  return user
+  return make_response(jsonify(user_logic.get_by_id(userId)), 201)
+
+@api.route('/api/user', methods=['GET'])
+def get_user_from_token():
+    user_id = auth.auth_from_data(request)
+    if user_id > 0:
+        return make_response(jsonify(user_logic.get_by_id(user_id)), 201)
+    else:
+        abort(400)
+
+@api.route('/api/user', methods=['PUT'])
+def update_user():
+    user_id = auth.auth_from_data(request)
+    if user_id > 0:
+        return make_response(jsonify(user_logic.modify_user(user_id, request.json)), 201)
+    else:
+        abort(400)
 
 @api.route('/api/bookmark/curator/<int:curatorId>')
 @api.route('/api/bookmark/curator/<int:curatorId>/<int:page>')

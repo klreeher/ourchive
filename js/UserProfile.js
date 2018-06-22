@@ -7,8 +7,8 @@ import UserContainer from './UserContainer';
 
 
 export default class UserProfile extends React.Component {
-	constructor(props) {    
-	  	super(props);	  	
+	constructor(props) {
+	  	super(props);
 	    this.state = this.state = {profile_user: {}, works: [], bookmarks: [], curator: [], work_page: 1, bookmark_page: 1,
       work_pages: 1, bookmark_pages: 1};
       this.setMessageTitle = this.setMessageTitle.bind(this)
@@ -36,8 +36,8 @@ export default class UserProfile extends React.Component {
       axios.post('/api/message/', {
         message_subject: this.state.messageTitle,
         message_content: this.state.messageText,
-        to_user: this.state.profile_user.id, 
-      }, {   
+        to_user: this.state.profile_user.id,
+      }, {
         headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json',
         'CSRF-Token': this.props.csrf
       }})
@@ -53,7 +53,7 @@ export default class UserProfile extends React.Component {
       .catch(function (error) {
         console.log(error);
       });
-      
+
     }
 
     setMessageTitle(event)
@@ -75,9 +75,10 @@ export default class UserProfile extends React.Component {
   	{
 	  	axios.get('/api/user/'+userId)
 	      .then(function (response) {
+					console.log(response)
 	        this.setState({
-	            profile_user: response.data.user
-	        });  
+	            profile_user: response.data
+	        });
 
 	      }.bind(this))
 	      .catch(function (error) {
@@ -112,10 +113,10 @@ export default class UserProfile extends React.Component {
     }
   }
 
-  getWorkPage(page) {   
+  getWorkPage(page) {
     axios.get('/api/work/creator/1/'+page)
         .then(function (response) {
-          this.setState({           
+          this.setState({
             works: response.data.works,
             work_page: page,
             work_pages: response.data.pages
@@ -129,7 +130,7 @@ export default class UserProfile extends React.Component {
   getBookmarkPage(page) {
     axios.get('/api/bookmark/curator/'+this.state.curator.curator_id+'/'+page)
         .then(function (response) {
-          this.setState({           
+          this.setState({
             bookmarks: response.data.bookmarks,
             bookmark_page: page,
             bookmark_pages: response.data.pages
@@ -147,7 +148,7 @@ export default class UserProfile extends React.Component {
             this.setState({
               works: response.data.works,
               work_pages: response.data.pages
-            });  
+            });
 
           }.bind(this))
           .catch(function (error) {
@@ -162,11 +163,11 @@ export default class UserProfile extends React.Component {
             if (response.data.bookmarks.length > 0) {
               curator = response.data.bookmarks[0].curator
             }
-            this.setState({                
+            this.setState({
               bookmarks: response.data.bookmarks,
               curator: curator,
               bookmark_pages: response.data.pages
-            });  
+            });
 
           }.bind(this))
           .catch(function (error) {
@@ -174,7 +175,7 @@ export default class UserProfile extends React.Component {
         });
     }
 
-    componentDidMount() { 
+    componentDidMount() {
     	this.getUser();
       this.getWorks(0, this.props.match.params.userId);
       this.getBookmarks(0, this.props.match.params.userId)
@@ -188,13 +189,13 @@ export default class UserProfile extends React.Component {
         </div>
 
         }
-        
+
         <div className="row">
-          <UserContainer user={this.state.profile_user} works={this.state.works} bookmarks={this.state.bookmarks} 
+          <UserContainer user={this.state.profile_user} works={this.state.works} bookmarks={this.state.bookmarks}
           curator={this.state.curator} totalWorkPages={this.state.work_pages} totalBookmarkPages={this.state.bookmark_pages}
-            currentWorkPage={this.state.work_page} currentBookmarkPage={this.state.bookmark_page} 
+            currentWorkPage={this.state.work_page} currentBookmarkPage={this.state.bookmark_page}
             previousPage={this.previousPage} nextPage={this.nextPage}/>
-        </div>  
+        </div>
         <Modal show={this.state.showMessageModal} onHide={evt => this.handleSendMessage(evt)}>
           <Modal.Header closeButton>
             <Modal.Title>Send Message</Modal.Title>
@@ -207,12 +208,12 @@ export default class UserProfile extends React.Component {
                       <label htmlFor="messageTitle">Message Title</label>
                       <input id="messageTitle"
                         name="messageTitleInput" onChange={this.setMessageTitle} className="form-control"/>
-                    </div>  
+                    </div>
                     <div className="form-group">
                       <label htmlFor="messageText">Message Text</label>
                       <textarea id="messageText" rows="3"
                         name="messageText" onChange={this.setMessageText} className="form-control"></textarea>
-                    </div>  
+                    </div>
                     <div className="form-group">
                       <button onClick={evt => this.handleSendMessage(evt)} className="btn btn-default">Send Message</button>
                     </div>
@@ -221,9 +222,9 @@ export default class UserProfile extends React.Component {
           </div>
 
           </Modal.Body>
-        </Modal>      
+        </Modal>
       </div>
-      
+
 
     );
   }
