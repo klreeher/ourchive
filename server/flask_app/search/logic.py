@@ -6,8 +6,9 @@ from ..bookmark.search_wrapper import BookmarkSearch
 from ..tag.search_wrapper import TagSearch
 
 def do_advanced_search(include_terms, exclude_terms, 
-	curator_usernames, creator_usernames, search_works, search_bookmarks, page_number):
+	curator_usernames, creator_usernames, search_works, search_bookmarks, page_number, types=None):
 	results = {}
+	print(types)
 	final_query = None
 	if search_works:
 		if include_terms != "":
@@ -22,6 +23,15 @@ def do_advanced_search(include_terms, exclude_terms,
 				final_query = final_query & search_by_creators_query(creator_usernames.split())
 			else:
 				final_query = search_by_creators_query(creator_usernames.split())
+		if types is not None:
+			type_query = None
+			for work_type in types:
+				if type_query is not None:
+					type_query = type_query | search_by_type_query(str(work_type['id']))
+				else:
+					type_query = search_by_type_query(str(work_type['id']))
+			final_query = final_query & type_query
+		print(final_query)
 		work_results = search_works_on_query(final_query, page_number)
 		results["works"] = work_results['works']
 		results['work_pages'] = work_results['pages']
@@ -216,6 +226,10 @@ def search_by_complete(complete):
 	search = search.query(query)		
 	results = search.execute()
 	return results
+
+def search_by_type_query(type):
+	query = Match(work_type_id=type)
+	return query
 
 def search_bookmark_by_term(term, page_number=1):
 	BookmarkSearch.init()

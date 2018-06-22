@@ -14,7 +14,7 @@ export default class Search extends React.Component {
 	    super(props);
 	    this.state = {user: this.props.user,  searchTerm: "", advancedText: "Show Advanced Search", searchBookmarks: true,
       searchWorks: true, work_types: [], searchCurator: "", searchCreator: "", searchAny: "", searchNone: "",
-      bookmark_page: 1, work_page: 1};
+      bookmark_page: 1, work_page: 1, search_types: []};
       this.doSearch = this.doSearch.bind(this);
       this.searchType = this.searchType.bind(this);
       this.toggleAdvanced = this.toggleAdvanced.bind(this);
@@ -60,10 +60,11 @@ export default class Search extends React.Component {
   doAdvancedSearch(event)
   {
     event.target.blur()
+    console.log(this.state.search_types)
     axios.post('/api/search/advanced', {"search_works": this.state.searchWorks,
         "search_bookmarks": this.state.searchBookmarks, "include_terms": this.state.searchAny,
         "exclude_terms": this.state.searchNone, "curator_usernames": this.state.searchCurator,
-        "creator_usernames": this.state.searchCreator})
+        "creator_usernames": this.state.searchCreator, "work_types": this.state.search_types})
         .then(function (response) {
           this.setState({           
             works: response.data.works,
@@ -154,9 +155,26 @@ export default class Search extends React.Component {
     console.log(event.target.value)
   }
 
-  searchType(type_id)
+  searchType(type, evt)
   {
-    console.log(type_id)
+    var search_types = this.state.search_types;
+    if (evt.target.checked)
+    {
+      if (!search_types.includes(type)) {
+        search_types.push(type)
+      }
+    }
+    else
+    {
+      if (search_types.includes(type)) {
+        search_types = search_types.filter(function(element) {
+            return element !== type;
+        });
+      }
+    }
+    this.setState({
+      search_types: search_types
+    })
   }
 
   updateSearchWorks(event)
@@ -278,7 +296,7 @@ export default class Search extends React.Component {
           <div className="col-sm-4 h3">Basic Search</div>
         </div>
 		    <div className="row">
-          <div className="col-md-6">
+          <div className="col-md-6 col-sm-4 col-xs-4">
             <div className="input-group">
               <input className="form-control" value={this.state.searchTerm} onChange={evt => this.updateSearchTerm(evt)} placeholder="Find me something great!"></input>
               <span className="input-group-btn">

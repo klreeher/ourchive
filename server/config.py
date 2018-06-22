@@ -10,7 +10,7 @@ class BaseConfig:
     BCRYPT_LOG_ROUNDS = 13
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     RESULT_PAGES = 25
-    UPLOAD_TYPE = 'aws'
+    UPLOAD_TYPE = 'file'
     USE_ES = True
 
 

@@ -11,6 +11,7 @@ from server.flask_app.auth import logic as auth
 from server.flask_app.user import logic as user_logic
 from server.flask_app.search import logic as search
 from server.flask_app.notification import logic as notification
+from flask import current_app as app
 
 @api.route('/<path:path>')
 def unknown_path(path):
@@ -48,14 +49,14 @@ def search_by_incomplete():
 def do_advanced_search():
   result = search.do_advanced_search(request.json['include_terms'], request.json['exclude_terms'],
     request.json['curator_usernames'], request.json['creator_usernames'],
-    request.json['search_works'], request.json['search_bookmarks'], 1)
+    request.json['search_works'], request.json['search_bookmarks'], 1, request.json['work_types'])
   return make_response(jsonify(result), 201)
 
 @api.route('/api/search/advanced/page/<int:pageNumber>', methods=['POST'])
 def do_page_advanced_search(pageNumber):
   result = search.do_advanced_search(request.json['include_terms'], request.json['exclude_terms'],
     request.json['curator_usernames'], request.json['creator_usernames'],
-    request.json['search_works'], request.json['search_bookmarks'], pageNumber)
+    request.json['search_works'], request.json['search_bookmarks'], pageNumber, request.json['work_types'])
   return make_response(jsonify(result), 201)
 
 @api.route('/api/user/username/<string:username>', methods=['GET'])
@@ -142,6 +143,10 @@ def add_work_types():
     return make_response(jsonify(responseObject), 201)
   else:
     abort(400)
+
+@api.route('/api/works/tus', methods=['GET'])
+def get_tus_endpoint():
+  return make_response(jsonify({"tus_endpoint": app.config.get('TUS_ENDPOINT')}), 201)
 
 @api.route('/api/admin/notifications/types', methods=['POST'])
 def add_notification_types():

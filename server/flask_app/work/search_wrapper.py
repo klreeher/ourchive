@@ -58,7 +58,6 @@ class WorkSearch(DocType):
 
 
 	def create_from_json(self, work_json):
-		#todo add work type
 		WorkSearch.init()
 		complete = work_json['is_complete'] == "True"
 		self.title=work_json['title']
@@ -69,5 +68,7 @@ class WorkSearch(DocType):
 			self.word_count=work_json['word_count']
 		self.user_id=work_json['user_id']
 		self.meta.id = work_json['id']
+		if 'work_type' in work_json:
+			self.work_type_id = work_json['work_type']
 		self.add_chapters(work_json['chapters'], str(self.meta.id))
 		self.save()

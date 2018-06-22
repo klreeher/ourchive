@@ -287,7 +287,6 @@ class NewWork extends React.Component {
       });
       axios.get('/api/works/tus')
       .then(function (response) {
-        console.log(response);
         this.setState({tus_endpoint: response.data.tus_endpoint});
       }.bind(this))
       .catch(function (error) {

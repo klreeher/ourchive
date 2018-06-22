@@ -10,7 +10,7 @@ from server.flask_app.user import logic as user_logic
 def register(post_data):
 	user = User.query.filter_by(email=post_data.get('email')).first()
 	if not user:
-		user = User.query.filter_by(username=post_data.get('username')).first()
+		user = User.query.filter_by(username=post_data.get('username').lower()).first()
 	if not user:
 		try:
 			password_data = post_data.get('password')
@@ -18,7 +18,7 @@ def register(post_data):
 				email=post_data.get('email'),
 				password=password_data
 			)
-			user.username = post_data.get('username')
+			user.username = post_data.get('username').lower()
 			db.session.add(user)
 			db.session.commit()
 			auth_token = user.encode_auth_token(user.id)
@@ -32,7 +32,7 @@ def register(post_data):
 		except Exception as e:
 			responseObject = {
 				'status': 'fail',
-				'message': 'Some error occurred. Please try again.',
+				'message': str(e),
 				'status_int': 500
 			}
 			return make_response(jsonify(responseObject), 500)
@@ -46,7 +46,7 @@ def register(post_data):
 def login(post_data):
 	try:
 		user = User.query.filter_by(
-		username=post_data.get('username')
+		username=post_data.get('username').lower()
 		).first()
 		if user is not None and user.banned == True:
 			responseObject = {

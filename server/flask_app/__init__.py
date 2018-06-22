@@ -49,12 +49,6 @@ app.register_blueprint(api_blueprint)
 from .tag import tag as tag_blueprint
 app.register_blueprint(tag_blueprint)
 
-@tm.upload_file_handler
-@app.route('/uploads', methods=['POST'])
-def upload_file_hander( upload_file_path, filename ):
-    app.logger.info( "doing something cool with {}, {}".format( upload_file_path, filename))
-    return filename
-
 @app.route('/uploads/<path:filename>', methods=['GET'])
 def download(filename):
   uploads = os.path.join(app.root_path, tm.upload_folder)
