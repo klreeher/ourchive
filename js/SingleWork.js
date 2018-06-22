@@ -4,7 +4,7 @@ import axios from 'axios';
 import Chapter from './Chapter';
 import TagList from './TagList';
 import {
-  Link, withRouter 
+  Link, withRouter
 } from 'react-router-dom';
 
 export default class SingleWork extends React.Component {
@@ -71,7 +71,7 @@ export default class SingleWork extends React.Component {
   deleteWork(evt, workId)
   {
     evt.preventDefault()
-    axios.delete('/api/work/'+workId, {   
+    axios.delete('/api/work/'+workId, {
           headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json',
           'CSRF-Token': this.props.csrf
           }})
@@ -92,7 +92,7 @@ export default class SingleWork extends React.Component {
                 var chapter = "chapter_"+chapterId+"_component";
                 this.refs[chapter].toggleComments(null, commentId);
               }
-          }); 
+          });
         }.bind(this))
         .catch(function (error) {
           console.log(error);
@@ -126,21 +126,21 @@ export default class SingleWork extends React.Component {
   }
 
   constructor(props) {
-    super(props);    
+    super(props);
     this.state = {workId: props.match.params.workId, work: [], current_chapter: [],
       chapter_index: 0, viewer_is_creator: false, user: this.props.user, showAllChapters: false};
-    
+
   }
 
   componentDidMount()
   {
-    this.getWork(this.state.workId); 
+    this.getWork(this.state.workId);
   }
   componentWillUpdate(nextProps, nextState)
   {
   }
 
-  
+
   render() {
     const nextDisabled = this.state.work.chapters === undefined || this.state.chapter_index + 1 >= this.state.work.chapters.length;
     const previousDisabled = this.state.chapter_index === 0;
@@ -157,7 +157,7 @@ export default class SingleWork extends React.Component {
     return (
 
     <div>
-      {this.state.work.id != undefined && 
+      {this.state.work.id != undefined &&
         <div>
           <div className={this.state.viewer_is_creator ? "viewer-creator row" : "viewer row"}>
             <div className="col-md-3 col-xs-6">
@@ -166,7 +166,7 @@ export default class SingleWork extends React.Component {
               <Bookmark/>
             </div>
           </div>
-        
+
         <div className="row">
           <div className="col-xs-9 col-md-12"><h1>{this.state.work.title}</h1></div>
         </div>
@@ -195,19 +195,19 @@ export default class SingleWork extends React.Component {
         </div>
         <br/>
         <hr/>
-    
-        {this.state.work.tags.map(tag => 
+
+        {this.state.work.tags.map(tag =>
           <div className="row" key={tag.id}>
           <div className="col-xs-9 col-md-12">
               <ul className="list-inline">
                 <TagList tag_category={tag.label} category_id={tag.id} tags={tag.tags}/>
               </ul>
-          </div> 
+          </div>
           </div>
         )}
-        
-        
-        { this.state.showAllChapters ? 
+
+
+        { this.state.showAllChapters ?
 
           <div>
             <div className="row">
@@ -217,9 +217,9 @@ export default class SingleWork extends React.Component {
             </div>
             <br/>
             <hr/>
-            {this.state.work.chapters.map(chapter => 
+            {this.state.work.chapters.map(chapter =>
               <div className="row" key={chapter.id} id={"chapter_"+chapter.id} ref={"chapter_"+chapter.id}>
-                  <Chapter chapter={chapter} user={this.props.user} ref={"chapter_"+chapter.id+"_component"}/> 
+                  <Chapter chapter={chapter} user={this.props.user} csrf={this.props.csrf} ref={"chapter_"+chapter.id+"_component"}/>
               </div>
             )}
           </div> :
@@ -233,7 +233,7 @@ export default class SingleWork extends React.Component {
             <br/>
             <hr/>
             {this.state.current_chapter && <div className="row" id={"chapter_"+this.state.current_chapter.id}>
-                <Chapter chapter={this.state.current_chapter} user={this.props.user}/>
+                <Chapter chapter={this.state.current_chapter} user={this.props.user} csrf={this.props.csrf} />
             </div>  }
             <button className="btn btn-link" onMouseDown={evt => this.previousChapter(evt)} disabled={previousDisabled}>Previous Chapter</button>
             <button className="btn btn-link" onMouseDown={evt => this.nextChapter(evt)} disabled={nextDisabled}>Next Chapter</button>
@@ -241,8 +241,8 @@ export default class SingleWork extends React.Component {
 
 
         }
-        
-        
+
+
         <br/>
         <br/>
         </div>
@@ -251,7 +251,7 @@ export default class SingleWork extends React.Component {
         this.state.work.id === undefined && <div></div>
       }
     </div>
-      
+
     );
   }
 }

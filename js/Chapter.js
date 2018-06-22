@@ -21,7 +21,7 @@ export default class Chapter extends React.Component {
     this.toggleComments = this.toggleComments.bind(this)
     this.updateNewCommentText = this.updateNewCommentText.bind(this)
   }
-  componentWillMount() { 
+  componentWillMount() {
     //do things
   }
   componentWillUpdate(nextProps, nextState)
@@ -32,7 +32,7 @@ export default class Chapter extends React.Component {
   }
   toggleComments(event, commentId)
   {
-    if (event != null) 
+    if (event != null)
     {
       event.preventDefault();
       event.target.blur();
@@ -53,13 +53,13 @@ export default class Chapter extends React.Component {
     event.preventDefault()
     if (this.state.newCommentText == null || this.state.newCommentText == "") return;
     var commentUser = localStorage.getItem('friendly_name') != null && localStorage.getItem('friendly_name') != "" ? localStorage.getItem('friendly_name') : "Anonymous";
-    var newComment = {text: this.state.newCommentText, userName: commentUser, 
+    var newComment = {text: this.state.newCommentText, userName: commentUser,
       comments: [], chapterId: this.state.chapter.id};
     var apiRoute = "/api/chapter/comment/";
     axios.post(apiRoute, {
-      text: this.state.newCommentText, 
+      text: this.state.newCommentText,
       chapter_id: this.state.chapter.id
-    }, {   
+    }, {
       headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json',
       'CSRF-Token': this.props.csrf
     }})
@@ -112,14 +112,14 @@ export default class Chapter extends React.Component {
             </div>
           </div>
           <br/>
-          
+
           <div className="row">
             <div className="col-xs-6">
                 Leave a comment:
             </div>
-          </div>  
+          </div>
           <div className="row">
-                <NewComment comment={null} user={this.props.user} 
+                <NewComment comment={null} user={this.props.user}
             addComment={this.addComment} updateNewCommentText={this.updateNewCommentText}
             newCommentText={this.state.newCommentText}/>
           </div>
@@ -134,21 +134,20 @@ export default class Chapter extends React.Component {
               <div className="col-xs-4 col-md-12">
                 <h3>Comments</h3>
               </div>
-            </div>   
+            </div>
             <div className="row">
               <div className="col-xs-9 col-md-12">
-                {this.state.chapter.comments.map(comment => 
+                {this.state.chapter.comments.map(comment =>
                   <div key={comment.id} className="col-md-12" ref={"comment_"+comment.id}>
-                    <Comment comment={comment} user={this.props.user} chapterId={this.state.chapter.id}/>
+                    <Comment comment={comment} user={this.props.user} chapterId={this.state.chapter.id} csrf={this.props.csrf}/>
                   </div>
-                    
+
                   )}
               </div>
-            </div>  
-          </div>    
+            </div>
+          </div>
         </div>
       </div>
     );
   }
 }
-
