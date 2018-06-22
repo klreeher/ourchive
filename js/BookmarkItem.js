@@ -241,7 +241,7 @@ export default class BookmarkItem extends React.Component {
 		            {this.state.bookmark.comments ? <div className="row">
 		              {this.state.bookmark.comments.map(comment => 
 		                <div key={comment.id} className="col-md-12" ref={"comment_"+comment.id}>
-		                  <Comment comment={comment} user={this.props.user} bookmarkId={this.state.bookmark.id}/>
+		                  <Comment comment={comment} user={this.props.user} csrf={this.props.csrf} bookmarkId={this.state.bookmark.id}/>
 		                </div>
 		                  
 		                )}
