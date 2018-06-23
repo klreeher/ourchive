@@ -111,6 +111,7 @@ class NewWork extends React.Component {
             this.updateStatus(percentage, 2, chapterUploadId+1)
         }).bind(this),
         onSuccess: (function() {
+          console.log(upload)
             console.log("Download %s from %s", upload.file.name, upload.url)
             this.finishUpload(upload.file.name, upload.url,
               this.state.chapterUploadId, this.state.chapterUploadProperty)

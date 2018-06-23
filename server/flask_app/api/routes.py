@@ -307,7 +307,7 @@ def delete_message(messageId):
   else:
     abort(400)
 
-@api.route('/api/user/<int:userId>/messages/delete', methods=['DELETE'])
+@api.route('/api/user/messages/delete', methods=['DELETE'])
 def delete_all(userId):
   user_id = auth.auth_from_data(request)
   if user_id > 0 and user_id == userId:
@@ -323,7 +323,7 @@ def delete_all(userId):
   else:
     abort(400)
 
-@api.route('/api/user/<int:userId>/messages/read', methods=['POST'])
+@api.route('/api/user/messages/read', methods=['POST'])
 def mark_all_read(userId):
   user_id = auth.auth_from_data(request)
   if user_id > 0 and user_id == userId:

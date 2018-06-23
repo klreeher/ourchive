@@ -49,16 +49,14 @@ app.register_blueprint(api_blueprint)
 from .tag import tag as tag_blueprint
 app.register_blueprint(tag_blueprint)
 
-@app.route('/uploads/<path:filename>', methods=['GET'])
-def download(filename):
+@app.route('/<path:stuff>/uploads/<path:filename>', methods=['GET'])
+def download(stuff, filename):
   uploads = os.path.join(app.root_path, tm.upload_folder)
   return send_from_directory(directory=uploads, filename=filename)
 
 @app.route('/audio/<string:audio_file>')
 def audio(audio_file):
   return send_from_directory(filename=audio_file, directory='audio')
-
-
 
 if __name__ == '__main__':
   app.run(debug=True)
