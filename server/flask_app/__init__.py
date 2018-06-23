@@ -28,7 +28,7 @@ tm = tus_manager(app, upload_url='/uploads', upload_folder=app.config.get('UPLOA
   upload_finish_cb=None, storage=storage)
 
 db = SQLAlchemy(app)
-redis_db = redis.StrictRedis(host="localhost", port=6379, db=0)
+redis_db = redis.StrictRedis(host="localhost", port=6379, db=0, password='CHANGEME')
 es_client = Elasticsearch()
 connections.create_connection(hosts=['localhost'])
 

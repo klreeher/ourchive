@@ -105,11 +105,11 @@ def reset(username, token):
 def send_reset(username):
   return notification.do_password_reset(username)
 
-@api.route('/api/user/<int:userId>/messages/inbox')
-def get_inbox(userId):
+@api.route('/api/user/messages/inbox')
+def get_inbox():
   user_id = auth.auth_from_data(request)
   print(request.headers)
-  if user_id > 0 and user_id == userId:
+  if user_id > 0:
     result = message.get_inbox(user_id)
     if result is not None:
       return make_response(jsonify(result), 201)
@@ -118,10 +118,10 @@ def get_inbox(userId):
   else:
     abort(400)
 
-@api.route('/api/user/<int:userId>/messages/outbox')
-def get_outbox(userId):
+@api.route('/api/user/messages/outbox')
+def get_outbox():
   user_id = auth.auth_from_data(request)
-  if user_id > 0 and user_id == userId:
+  if user_id > 0:
     result = message.get_outbox(user_id)
     if result is not None:
       return make_response(jsonify(result), 201)
