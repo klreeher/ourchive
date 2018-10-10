@@ -33,6 +33,9 @@ class BookmarkSearch(DocType):
 	class Meta:
 		index = 'bookmark'
 
+	class Index:
+		name = 'bookmark'
+
 	def save(self, ** kwargs):
 		self.created_at = datetime.now()
 		return super().save(** kwargs)
