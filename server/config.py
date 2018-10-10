@@ -1,7 +1,7 @@
 import os
 basedir = os.path.abspath(os.path.dirname(__file__))
-postgres_local_base = 'postgresql://ourchive:F4rG0==nd@localhost/'
-database_name = 'ourchive'
+postgres_local_base = 'postgresql://ourchive:ourchive@postgres/'
+database_name = 'ourchivedb'
 
 
 class BaseConfig:

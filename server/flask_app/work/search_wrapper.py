@@ -43,6 +43,9 @@ class WorkSearch(DocType):
 	class Meta:
 		index = 'work'
 
+	class Index:
+		name = 'work'
+
 	def add_chapters(self, chapter_json, work_id):
 		chapter_count = 1
 		for chapter in chapter_json:
@@ -63,7 +66,7 @@ class WorkSearch(DocType):
 		self.title=work_json['title']
 		self.work_summary=work_json['work_summary']
 		self.work_notes=work_json['work_notes']
-		self.is_complete=complete 
+		self.is_complete=complete
 		if 'word_count' in work_json:
 			self.word_count=work_json['word_count']
 		self.user_id=work_json['user_id']

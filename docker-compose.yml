@@ -1,0 +1,45 @@
+version: '3.1'
+
+services:
+  postgres:
+    restart: always
+    image: 'postgres:10.4-alpine'
+    env_file:
+      - '.env'
+    volumes:
+      - 'ourchive-postgresql:/var/lib/postgresql/data'
+    ports:
+      - '5432:5432'
+
+  elasticsearch:
+    image: elasticsearch:6.4.2
+    volumes:
+      - './elasticsearch:/var/lib/elasticsearch/data'
+    hostname: elasticsearch
+    restart: always
+    ports:
+      - '9200:9200'
+
+  redis:
+    image: 'redis:4.0-alpine'
+    command: redis-server --requirepass devpassword
+    volumes:
+      - './redis:/var/lib/redis/data'
+    ports:
+      - '6379:6379'
+
+  website:
+    build: .
+    entrypoint: ["python", "manage.py","runserver"]
+    env_file:
+      - '.env'
+    volumes:
+      - '.:/ourchive'
+    ports:
+      - '5000:5000'
+
+volumes:
+  ourchive-postgresql:
+      external: true
+  redis:
+  elasticseach:

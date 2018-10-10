@@ -2,7 +2,7 @@
 
 # ourchive
 
-Ourchive is a configurable, multi-media archive app. It grew out of a need for archival web apps that focus on browsability and searchability, and are able to be easily installed and maintained by a non-technical administrator.
+Ourchive is a configurable, multi-media archive application. It grew out of a need for archival web apps that focus on browsability and searchability, and are able to be easily installed and maintained by a non-technical administrator.
 
 <!-- MarkdownTOC -->
 
