@@ -7,6 +7,9 @@ module.exports = {
     path: __dirname + '/server/flask_app/static',
     filename: "bundle.js"
   },
+  watchOptions: {
+    poll: 15000
+  },
   module: {
     rules: [
       {

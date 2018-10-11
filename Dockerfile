@@ -6,8 +6,6 @@ RUN curl -sL https://deb.nodesource.com/setup_10.x | bash - && apt-get update &&
 
 COPY requirements.txt requirements.txt
 RUN pip install -r requirements.txt
-RUN npm install -D webpack webpack-cli
-RUN npm install
 
 RUN mkdir -p /ourchive
 WORKDIR /ourchive

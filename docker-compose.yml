@@ -38,6 +38,18 @@ services:
     ports:
       - '5000:5000'
 
+  webpack:
+    build:
+      context: .
+      dockerfile: docker.webpack
+    ports:
+      - '35729:35729'
+    volumes:
+      - '.:/ourchive'
+      - '/ourchive/node_modules'
+      - './js'
+
+
 volumes:
   ourchive-postgresql:
       external: true
