@@ -423,7 +423,7 @@ def delete_work(workId):
         }
       return make_response(jsonify(responseObject), 201)
     else:
-      abort(400)
+      abort(404)
   else:
     abort(400)
 

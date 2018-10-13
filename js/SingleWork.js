@@ -6,8 +6,9 @@ import TagList from './TagList';
 import {
   Link, withRouter
 } from 'react-router-dom';
+import { withAlert } from 'react-alert';
 
-export default class SingleWork extends React.Component {
+class SingleWork extends React.Component {
 
 
   bookmarkItem(evt, history)
@@ -68,34 +69,27 @@ export default class SingleWork extends React.Component {
       })
   }
 
-  deleteWork(evt, workId)
+  deleteWork(evt, workId, history)
   {
     evt.preventDefault()
     axios.delete('/api/work/'+workId, {
           headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json',
           'CSRF-Token': this.props.csrf
           }})
-        .then(function (response) {
-          this.setState({
-            work: [],
-            current_chapter: response.data.chapters ? response.data.chapters[0] : [],
-            chapter_index: 0,
-            viewer_is_creator: true,
-            showAllChapters: this.props.location.search.length > 0
-          }, () => {
-            var queryParams = new URLSearchParams(this.props.location.search);
-            var chapterId = queryParams.get('chapterId');
-            var commentId = queryParams.get('commentId');
-            if (this.state.showAllChapters)
-              {
-                var comment = "comment_"+commentId;
-                var chapter = "chapter_"+chapterId+"_component";
-                this.refs[chapter].toggleComments(null, commentId);
-              }
-          });
-        }.bind(this))
-        .catch(function (error) {
-          console.log(error);
+        .then((response) => {
+          this.props.alert.show('Work has been deleted.', {
+            timeout: 6000,
+            type: 'info'
+          })
+          history.push({
+            pathname: '/'
+          })
+        })
+        .catch((error) => {
+          this.props.alert.show('An error has occurred.', {
+            timeout: 6000,
+            type: 'error'
+          })
       });
   }
   nextChapter(evt)
@@ -150,6 +144,10 @@ export default class SingleWork extends React.Component {
     <button onMouseDown={evt => this.updateWork(evt, this.state.work.id, history)} className="btn btn-link">Update</button>
     ))
 
+    const Delete = withRouter(({ history }) => (
+    <button onMouseDown={evt => this.deleteWork(evt, this.state.work.id, history)} className="btn btn-link">Delete</button>
+    ))
+
     const Bookmark = withRouter(({ history }) => (
     <button onMouseDown={evt => this.bookmarkItem(evt, history)} className="btn btn-link">Bookmark Work</button>
     ))
@@ -162,7 +160,7 @@ export default class SingleWork extends React.Component {
           <div className={this.state.viewer_is_creator ? "viewer-creator row" : "viewer row"}>
             <div className="col-md-3 col-xs-6">
               <Update/>
-              <button onClick={evt => this.deleteWork(evt, this.state.work.id)} className="btn btn-link">Delete</button>
+              <Delete/>
               <Bookmark/>
             </div>
           </div>
@@ -255,3 +253,5 @@ export default class SingleWork extends React.Component {
     );
   }
 }
+
+export default withAlert(SingleWork)

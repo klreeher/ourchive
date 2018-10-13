@@ -6,8 +6,9 @@ import NewComment from './NewComment';
 import Comment from './Comment';
 import ReactDOM from 'react-dom';
 import { withRouter } from 'react-router-dom';
+import { withAlert } from 'react-alert';
 
-export default class BookmarkItem extends React.Component {
+class BookmarkItem extends React.Component {
 
 	
 
@@ -133,26 +134,36 @@ export default class BookmarkItem extends React.Component {
       newCommentText: event.target.value
     })
   }
-  deleteBookmark(evt, bookmarkId)
+  deleteBookmark(evt, bookmarkId, history)
   {
   	evt.target.blur()
     axios.delete('/api/bookmark/'+bookmarkId, {   
           headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json',
           'CSRF-Token': this.props.csrf
           }})
-        .then(function (response) {
-          this.setState({
-            bookmark: {"work": {}, "tags": [], "links": [],
-	    	"id": -1}
-          }); 
-        }.bind(this))
-        .catch(function (error) {
-          console.log(error);
+        .then((response) => {
+          this.props.alert.show('Bookmark has been deleted.', {
+            timeout: 6000,
+            type: 'info'
+          })
+          history.push({
+            pathname: '/'
+          })
+        })
+        .catch((error) => {
+          this.props.alert.show('An error has occurred.', {
+            timeout: 6000,
+            type: 'error'
+          })
       });
   }
   render() {
   	const Update = withRouter(({ history }) => (
     <button onMouseDown={evt => this.editBookmark(evt, history)} className="btn btn-link">Update</button>
+    ))
+
+    const Delete = withRouter(({ history }) => (
+    <button onMouseDown={evt => this.deleteBookmark(evt, this.state.bookmark.id, history)} className="btn btn-link">Delete</button>
     ))
     return (
     	<div>
@@ -161,7 +172,7 @@ export default class BookmarkItem extends React.Component {
 	      		<div className="col-sm-5">{this.state.bookmark.curator_title}</div>
 	      		<div className="col-sm-5">{this.props.user && this.props.user.id === this.state.bookmark.user_id && 
 		            		<div className="pull-right"> 
-		            			<button className="btn btn-link">Edit</button> | <button className="btn btn-link">Delete</button>
+		            			<button className="btn btn-link">Edit</button> | <Delete/>
 		            		</div>
 		            	}
 		        </div>
@@ -255,3 +266,5 @@ export default class BookmarkItem extends React.Component {
   }
 
 }
+
+export default withAlert(BookmarkItem)
