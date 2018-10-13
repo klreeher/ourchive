@@ -20,7 +20,9 @@ export default class BookmarkStub extends React.Component {
 
   render() {
     return (
+    	
     	<div>
+    	{this.state.bookmark.curator != undefined &&
     	  <div className="panel-body">
 	      	<div className="row">
 	      		<div className="col-sm-5">{this.state.bookmark.curator_title}</div>
@@ -63,7 +65,10 @@ export default class BookmarkStub extends React.Component {
 				        </div>
 				      )}		            
 		        </div>
-	          </div> 
+	          </div> }
+	          {
+	          	this.state.bookmark.curator === undefined && <div></div>
+	          }
 	  		</div>
       
     );

@@ -83,9 +83,9 @@ export default class UserContainer extends React.Component {
 	    		<br/>
 	    			<div className="list">
 				        {this.state.bookmarks && this.state.bookmarks.map(bookmark => 
-				          {bookmark.curator && <div key={bookmark.key}>
+				          <div key={bookmark.key}>
 	                        <BookmarkStub bookmark={bookmark} user={this.props.user} curator={bookmark.curator} ref={"bookmark_"+bookmark.id}/>
-				          </div>}
+				          </div>
 				        )}
 				    </div>
 				    <div className="row">

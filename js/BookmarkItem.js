@@ -187,7 +187,7 @@ class BookmarkItem extends React.Component {
 		      		<div className="col-md-12">
 		        		<blockquote>
 			        		<div className="row">
-			        			<div className="col-md-12">{this.state.bookmark.work.title} by {this.state.bookmark.work.name}</div>
+			        			<div className="col-md-12">{this.state.bookmark.work.title} by {this.state.bookmark.work.username}</div>
 			        		</div>
 			        		<div className="row">
 			        			<div className="col-md-4">Complete? {this.state.bookmark.work.is_complete ? "True" : "False"}</div>
@@ -209,20 +209,23 @@ class BookmarkItem extends React.Component {
 		                {this.state.safe_description}
 		            </div>
 		        </div>	
-				<div className="row">
-		        	<div className="col-md-12">If you like this, {this.state.curator.curator_name} recommends...</div>            
-		        </div>
-		        {this.state.bookmark.links ? <div className="row">
-			        <div className="col-xs-11 col-xs-offset-1">
-				        <ol className="list-inline">
-					        {this.state.bookmark.links.map(link => 					          
-					         	<div key={link.link}>
-					         	  <li>
-					            	<a href={link.link}>{link.text}</a>
-					              </li>
-					          	</div>					          
-					        )}
-					    </ol>
+				
+		        {this.state.bookmark.links ? <div>
+		        	<div className="row">
+		        		<div className="col-md-12">If you like this, {this.state.curator.curator_name} recommends...</div>            
+			        </div>
+			        <div className="row">
+				        <div className="col-xs-11 col-xs-offset-1">
+					        <ol className="list-inline">
+						        {this.state.bookmark.links.map(link => 					          
+						         	<div key={link.link}>
+						         	  <li>
+						            	<a href={link.link}>{link.text}</a>
+						              </li>
+						          	</div>					          
+						        )}
+						    </ol>
+				        </div>
 			        </div>
 			    </div> : <div/>}
 		        <div className="row">
