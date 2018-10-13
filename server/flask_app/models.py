@@ -251,6 +251,8 @@ class Bookmark(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'))
     user = db.relationship('User')
 
+    is_private = db.Column(db.Boolean, nullable=True, default=False)
+
     work_id = db.Column(db.Integer, db.ForeignKey('works.id', ondelete='CASCADE'))
     work = db.relationship('Work', back_populates='bookmarks')
 

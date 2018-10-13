@@ -183,7 +183,7 @@ export default class UserProfile extends React.Component {
 
     render() {
     return (
-      <div className="col-lg-12">
+      <div>
         {this.props.user != null && <div className="row">
           <button className="btn btn-link" onClick={evt => this.showMessageModal(event)}>Send Message</button>
         </div>

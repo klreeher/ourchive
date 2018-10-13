@@ -50,6 +50,9 @@ def delete_work(work_id, user_id, admin_override=False):
 		if work.user.id == user_id or admin_override:
 			Work.query.filter_by(id=work_id).delete()
 			db.session.commit()
+			doc = WorkSearch.get(id=work_id)
+			if doc is not None:
+				doc.delete()
 			return work_id
 
 def update_work(json):

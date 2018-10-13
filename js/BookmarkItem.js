@@ -49,7 +49,9 @@ class BookmarkItem extends React.Component {
 
   getBookmark(bookmarkId)
   {
-    axios.get('/api/bookmark/'+bookmarkId)
+    axios.get('/api/bookmark/'+bookmarkId, { headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json',
+          'CSRF-Token': this.props.csrf
+          }})
         .then(function (response) {
           this.setState({
             bookmark: response.data,
@@ -57,21 +59,24 @@ class BookmarkItem extends React.Component {
             curator: response.data["curator"],
             id: bookmarkId
           }, () => {
-            var cleaned_description = DOMPurify.sanitize(this.state.bookmark.description);
-            var cleaned_work_summary = DOMPurify.sanitize(this.state.bookmark.work.work_summary);
-            this.setState({
-              safe_summary: cleaned_work_summary,
-              safe_description: cleaned_description
-            })
-            var queryParams = new URLSearchParams(this.props.location.search);            
-        	var commentId = queryParams.get('commentId');
-        	var bookmarkId = queryParams.get('bookmarkId');
-        	if (commentId != null)
-        	{
-        		var comment = "comment_"+commentId;
-                var bookmark = "bookmark_"+bookmarkId;
-                this.refs[bookmark].toggleComments(null, commentId);
-        	}
+          	if (this.state.bookmark.id != undefined) {
+          		var cleaned_description = DOMPurify.sanitize(this.state.bookmark.description);
+	            var cleaned_work_summary = DOMPurify.sanitize(this.state.bookmark.work.work_summary);
+	            this.setState({
+	              safe_summary: cleaned_work_summary,
+	              safe_description: cleaned_description
+	            })
+	            var queryParams = new URLSearchParams(this.props.location.search);            
+	        	var commentId = queryParams.get('commentId');
+	        	var bookmarkId = queryParams.get('bookmarkId');
+	        	if (commentId != null)
+	        	{
+	        		var comment = "comment_"+commentId;
+	                var bookmark = "bookmark_"+bookmarkId;
+	                this.refs[bookmark].toggleComments(null, commentId);
+	        	}
+          	}
+            
           });
 
         }.bind(this))
@@ -167,6 +172,7 @@ class BookmarkItem extends React.Component {
     ))
     return (
     	<div>
+    	{this.state.bookmark.id != undefined &&
     	  <div className="panel-body">
 	      	<div className="row">
 	      		<div className="col-sm-5">{this.state.bookmark.curator_title}</div>
@@ -260,6 +266,10 @@ class BookmarkItem extends React.Component {
 		            </div> : <div/>}
 		          </div>  
 	          </div> 
+	          }
+		      {
+		        this.state.bookmark.id === undefined && <div></div>
+		      }
 	  		</div>
       
     );

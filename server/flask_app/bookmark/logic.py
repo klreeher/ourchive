@@ -21,6 +21,8 @@ def add_bookmark(data):
 		bookmark.description = data["description"]
 	if "rating" in data:
 		bookmark.rating = data["rating"]
+	if 'is_private' in data:
+		bookmark.is_private = data['is_private'] == 'on'
 	user = User.query.filter_by(id=data['user_id']).first()
 	bookmark.user = user
 	db.session.add(bookmark)	
@@ -39,6 +41,8 @@ def update_bookmark(data):
 	bookmark.curator_title = data["curator_title"]
 	bookmark.rating = data["rating"]
 	bookmark.description = data["description"]
+	if 'is_private' in data:
+		bookmark.is_private = data['is_private'] == 'on'
 	add_tags(bookmark, data["tags"])
 	add_links(bookmark, data["links"])
 	db.session.add(bookmark)	
@@ -52,10 +56,10 @@ def update_bookmark(data):
 		search_obj.create_from_json(data)
 	return bookmark.id
 
-def get_bookmark(bookmark_id):
+def get_bookmark(bookmark_id, user_id):
 	bookmark = Bookmark.query.filter_by(id=bookmark_id).first()
 	if bookmark is not None:
-		return build_bookmark(bookmark)
+		return build_bookmark(bookmark, user_id)
 	else:
 		return None
 
@@ -79,13 +83,21 @@ def delete_bookmark(bookmark_id, user_id, admin_override=False):
 			if bookmark.user_id == user_id or admin_override:
 				Bookmark.query.filter_by(id=bookmark_id).delete()
 				db.session.commit()
+				doc = BookmarkSearch.get(id=bookmark_id)
+				if doc is not None:
+					doc.delete()
 				return bookmark_id
 		return None
 	except:
 		#todo log
 		return None
 
-def build_bookmark(bookmark):
+def build_bookmark(bookmark, user_id=None):
+	if bookmark.is_private:
+		if user_id is not None and bookmark.user_id != user_id:
+			return {}
+		if user_id is None or user_id < 1:
+			return {}
 	user = User.query.filter_by(id=bookmark.user_id).first()
 	curator = {}
 	curator["curator_name"] = user.username
@@ -100,6 +112,7 @@ def build_bookmark(bookmark):
 	built["comments"] = list(build_bookmark_comments(bookmark.comments))
 	built["tags"] = list(build_bookmark_tags(bookmark.tags))
 	built["links"] = list(build_bookmark_links(bookmark.links))
+	built['is_private'] = bookmark.is_private
 	return built
 
 #todo horribly non DRY, need to clean up these little json building functions

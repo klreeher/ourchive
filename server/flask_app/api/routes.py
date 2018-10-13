@@ -459,7 +459,8 @@ def post_bookmark():
 
 @api.route('/api/bookmark/<int:bookmarkId>', methods=['GET'])
 def get_bookmark(bookmarkId):
-  return json.dumps(bookmark.get_bookmark(bookmarkId))
+  user_id = auth.auth_from_data(request)
+  return json.dumps(bookmark.get_bookmark(bookmarkId, user_id))
 
 @api.route('/api/bookmark/<int:bookmarkId>', methods=['DELETE'])
 def delete_bookmark(bookmarkId):
