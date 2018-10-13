@@ -210,15 +210,15 @@ export default class Admin extends React.Component {
                   </div>
                   <br/>
                   <div className="row">
-                    <div className="col-sm-4"><strong>Tag Types</strong></div>
+                    <div className="col-sm-10"><strong>Tag Types</strong></div>
                   </div>
                   <div className="row">
-                    <div className="col-sm-4">
+                    <div className="col-sm-10">
                       <ul>
                         {this.state.tag_types.map(type => 
                             <div key={type.id}>
                               <li>
-                                <div className="col-sm-2">{type.label}</div>
+                                <div className="col-sm-8">{type.label}</div>
                               </li>
                             </div>
                         )}

@@ -7,6 +7,17 @@ from server.flask_app import app, bcrypt, db
 from server.flask_app.work import views as work_logic
 from server.flask_app.bookmark import logic as bookmark_logic
 
+def create_user(username, password, email, admin=False):
+	user = User(
+		email=email,
+		password=password
+	)
+	user.username = username.lower()
+	user.admin = admin
+	db.session.add(user)
+	db.session.commit()
+	return user
+
 def add_blocklist(blocked_user, blocking_user):
 	results = redis_db.sadd("blocklist:#"+str(blocking_user), str(blocked_user))
 	return results
@@ -114,7 +125,10 @@ def ban_users(users):
 
 def get_by_username(username):
 	user = User.query.filter_by(username=username).first()
-	return build_user(user)
+	if user is not None:
+		return build_user(user)
+	else:
+		return None
 
 def get_by_id(user_id):
 	user = User.query.filter_by(id=user_id).first()

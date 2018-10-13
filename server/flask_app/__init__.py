@@ -10,6 +10,8 @@ from file_storage import FileStorage
 from s3_storage import S3Storage
 from elasticsearch import Elasticsearch
 from elasticsearch_dsl import connections
+from pathlib import Path
+import yaml
 
 app = Flask(__name__)
 
@@ -31,8 +33,6 @@ db = SQLAlchemy(app)
 redis_db = redis.StrictRedis(host="localhost", port=6379, db=0, password='CHANGEME')
 es_client = Elasticsearch()
 connections.create_connection(hosts=['elasticsearch'])
-
-
 
 from .work import work as work_blueprint
 app.register_blueprint(work_blueprint)
@@ -57,6 +57,25 @@ def download(stuff, filename):
 @app.route('/audio/<string:audio_file>')
 def audio(audio_file):
   return send_from_directory(filename=audio_file, directory='audio')
+
+@app.before_first_request
+def do_init():
+	path = os.path.dirname(os.path.abspath(__file__))+"/seed.yml"
+	my_file = Path(path)
+	develop = True
+	if my_file.is_file():
+		with open(path, 'r') as stream:
+		    try:
+		    	objects = yaml.safe_load(stream)
+		    	admin = user.logic.get_by_username('admin')
+	    		if admin is None:
+	    			user.logic.create_user('admin', objects['admin_pw'], objects['admin_email'], True)
+		    	if objects['develop'] == False:
+		    		develop = False
+		    except yaml.YAMLError as exc:
+		        print(exc)
+		if develop is False:
+			os.remove(path)
 
 if __name__ == '__main__':
   app.run(debug=True)

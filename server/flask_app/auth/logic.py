@@ -21,14 +21,7 @@ def register(post_data):
 		user = User.query.filter_by(username=post_data.get('username').lower()).first()
 	if not user:
 		try:
-			password_data = post_data.get('password')
-			user = User(
-				email=post_data.get('email'),
-				password=password_data
-			)
-			user.username = post_data.get('username').lower()
-			db.session.add(user)
-			db.session.commit()
+			user = user_logic.create_user(post_data.get('username'), post_data.get('password'), post_data.get('email'), False)
 			auth_token = user.encode_auth_token(user.id)
 			responseObject = {
 				'status': 'success',
