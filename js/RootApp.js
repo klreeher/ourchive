@@ -80,7 +80,7 @@ export default class RootApp extends React.Component {
             <Route path="/bookmark/:bookmarkId" component={(props, state, params) => <BookmarkItem user={user} csrf={csrf} {...props}/>}/>
             <Route path="/create/work" is_edit="false" component={(props, state, params) => <NewWork user={user} csrf={csrf} {...props}/>}/>
             <Route path="/bookmarks/new" component={(props, state, params) => <BookmarkForm user={user} csrf={csrf} {...props}/>}/>
-            <Route path="/my-profile" component={(props, state, params) => <MyProfile user={user} csrf={csrf} {...props}/>}/>
+            <Route path="/user/profile" component={(props, state, params) => <MyProfile user={user} csrf={csrf} {...props}/>}/>
             <Route path="/user/:userId/show" component={(props, state, params) => <UserProfile user={user} csrf={csrf} {...props}/>}/>
             <Route path="/user/:userId/edit" component={UserForm}/>
             <Route path="/user/messages" component={(props, state, params) => <MessageCenter user={user} csrf={csrf} {...props}/>}/>

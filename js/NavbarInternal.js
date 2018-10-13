@@ -266,7 +266,7 @@ class NavbarInternal extends React.Component {
           <IndexLinkContainer to="/bookmarks/new">
             <NavItem>New Bookmark</NavItem>
           </IndexLinkContainer>
-          <IndexLinkContainer to="/my-profile">
+          <IndexLinkContainer to="/user/profile">
             <NavItem>My Profile</NavItem>
           </IndexLinkContainer>
           <IndexLinkContainer to={"/user/messages"}>

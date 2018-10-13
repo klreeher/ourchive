@@ -13,6 +13,9 @@ export default class BookmarkStub extends React.Component {
 	    this.state = {bookmark: props.bookmark, curator: props.curator, viewer_is_creator: true, newCommentText: "",
     		toggleCommentsText: "Show Comments", showComments: false,
 	    	user: props.user};
+	    if (this.state.bookmark.work === undefined) {
+	    	this.state.bookmark.work = {}
+	    }
     }
 
   render() {

@@ -6,14 +6,17 @@ import WorkStub from './WorkStub';
 import UserContainer from './UserContainer';
 import EditDeleteButtons from './EditDeleteButtons';
 import { withRouter } from "react-router-dom";
+import { withAlert } from 'react-alert'
 
 
-export default class MyProfile extends React.Component {
+class MyProfile extends React.Component {
 	constructor(props) {
 	  	super(props);
 			if (this.props.csrf === undefined)
 			{
-				this.props.csrf = this.props.location.state.csrf
+        if (this.props.location.state != undefined) {
+          this.props.csrf = this.props.location.state.csrf
+        }
 			}
 	    this.state = this.state = {user: {}, works: [], bookmarks: [], curator: [], work_page: 1, bookmark_page: 1,
       work_pages: 1, bookmark_pages: 1};
@@ -33,7 +36,6 @@ export default class MyProfile extends React.Component {
           'CSRF-Token': this.props.csrf
           }})
 	      .then(function (response) {
-					console.log(response)
           this.getWorks(0, response.data['id']);
           this.getBookmarks(0, response.data['id']);
 	        this.setState({
@@ -160,6 +162,13 @@ export default class MyProfile extends React.Component {
     	this.getUser();
   	}
 
+    componentWillUpdate(nextProps, nextState)
+    {
+    }
+
+    componentWillMount() {
+    }
+
     render() {
     return (
     	<div>
@@ -180,3 +189,4 @@ export default class MyProfile extends React.Component {
   }
 
 }
+export default withAlert(MyProfile)

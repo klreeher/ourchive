@@ -83,13 +83,13 @@ export default class UserContainer extends React.Component {
 	    		<br/>
 	    			<div className="list">
 				        {this.state.bookmarks && this.state.bookmarks.map(bookmark => 
-				          <div key={bookmark.key}>
+				          {bookmark.curator && <div key={bookmark.key}>
 	                        <BookmarkStub bookmark={bookmark} user={this.props.user} curator={bookmark.curator} ref={"bookmark_"+bookmark.id}/>
-				          </div>
+				          </div>}
 				        )}
 				    </div>
 				    <div className="row">
-		        		{this.state.bookmarks.length > 0 && <PaginationControl paginationName="bookmark" previousPage={this.props.previousPage} nextPage={this.props.nextPage}
+		        		{this.state.bookmarks && this.state.bookmarks.length > 0 && <PaginationControl paginationName="bookmark" previousPage={this.props.previousPage} nextPage={this.props.nextPage}
 	                      totalPages={this.props.totalBookmarkPages} currentPage={this.props.currentBookmarkPage}/>}
 		        	</div>
 		        </div>
