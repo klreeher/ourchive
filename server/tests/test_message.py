@@ -53,11 +53,11 @@ class TestMessage(BaseTestCase):
     def test_send_to_user_who_blocked_me(self):
         data = self.build_data()
         user_logic.add_blocklist(2, 1)
-        resp_login = auth.login(dict(email='test@test.com',password='test'))
+        resp_login = auth.login(dict(email='test2@test.com',password='test',username='test2'))
         response = self.client.post(
             '/api/message/',
-            headers=dict(Authorization='Bearer ' + 
-                resp_login.json['auth_token']),
+            headers={'Authorization':'Bearer ' + 
+                resp_login.json['auth_token'], 'CSRF-Token':'2018-10-14 18:54:25.991752.DqUiYQ.dNTEDv7Ay6xxz9JMCmUUvBPYpf0'},
             content_type='application/json',
             data=json.dumps(data)
         )
@@ -82,11 +82,12 @@ class TestMessage(BaseTestCase):
             email='test@test.com',
             password='test'
         )
-        db.session.add(user)
+        user.username='test'
         userTwo = User(
             email='test2@test.com',
             password='test'
         )
+        userTwo.username='test2'
         db.session.add(user)
         db.session.add(userTwo)
         db.session.commit()

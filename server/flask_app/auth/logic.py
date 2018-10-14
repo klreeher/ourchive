@@ -45,50 +45,50 @@ def register(post_data):
 		return make_response(jsonify(responseObject), 401)
 
 def login(post_data):
-	try:
-		user = User.query.filter_by(
-		username=post_data.get('username').lower()
-		).first()
-		if user is not None and user.banned == True:
-			responseObject = {
-				'status': 'fail',
-				'message': 'User is banned.'
-			}
-			return make_response(jsonify(responseObject), 403)
-		elif user is not None:
-			if bcrypt.checkpw(post_data.get('password').encode('utf8'), user.password.encode('utf8')):
-				auth_token = user.encode_auth_token(user.id)
-				if auth_token:
-					responseObject = {
-						'status': 'success',
-						'message': 'Successfully logged in.',
-						'auth_token': auth_token.decode(),
-						'admin': user.admin,
-						'username': user.username,
-						'email': user.email
-					}
-				return make_response(jsonify(responseObject), 201)
-			else:
-				responseObject = {
-				'status': 'fail',
-				'message': 'Unauthorized user.',
-				'status_int': 404
-			}
-			return make_response(jsonify(responseObject), 404)
-		else:
-			responseObject = {
-				'status': 'fail',
-				'message': 'User does not exist.',
-				'status_int': 404
-			}
-			return make_response(jsonify(responseObject), 404)
-	except Exception as e:
+	#try:
+	user = User.query.filter_by(
+	username=post_data.get('username').lower()
+	).first()
+	if user is not None and user.banned == True:
 		responseObject = {
 			'status': 'fail',
-			'message': 'Try again',
-			'status_int': 500
+			'message': 'User is banned.'
 		}
-		return make_response(jsonify(responseObject), 500)
+		return make_response(jsonify(responseObject), 403)
+	elif user is not None:
+		if bcrypt.checkpw(post_data.get('password').encode('utf8'), user.password.encode('utf8')):
+			auth_token = user.encode_auth_token(user.id)
+			if auth_token:
+				responseObject = {
+					'status': 'success',
+					'message': 'Successfully logged in.',
+					'auth_token': auth_token.decode(),
+					'admin': user.admin,
+					'username': user.username,
+					'email': user.email
+				}
+			return make_response(jsonify(responseObject), 201)
+		else:
+			responseObject = {
+			'status': 'fail',
+			'message': 'Unauthorized user.',
+			'status_int': 404
+		}
+		return make_response(jsonify(responseObject), 404)
+	else:
+		responseObject = {
+			'status': 'fail',
+			'message': 'User does not exist.',
+			'status_int': 404
+		}
+		return make_response(jsonify(responseObject), 404)
+	#except Exception as e:
+	#	responseObject = {
+	#		'status': 'fail',
+	#		'message': 'Try again',
+	#		'status_int': 500
+	#	}
+	#	return make_response(jsonify(responseObject), 500)
 
 
 def authorize(request):

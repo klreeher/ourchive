@@ -1,0 +1,5 @@
+COMPOSE_PROJECT_NAME=ourchive-test
+PYTHONUNBUFFERED=true
+POSTGRES_USER=ourchive
+POSTGRES_PASSWORD=ourchive
+POSTGRES_DB=ourchivedb_test

@@ -74,11 +74,11 @@ def logout():
 @api.route('/api/user/login/', methods=['POST'])
 def login():
   if not request.json:
-    abort(400)
+    abort(401)
   if request.json["username"] is None:
-    abort(400)
+    abort(403)
   if request.json["password"] is None:
-    abort(400)
+    abort(403)
   return auth.login(request.json)
 
 @api.route('/api/user/authorize/', methods=['POST'])
@@ -142,7 +142,7 @@ def add_work_types():
       }
     return make_response(jsonify(responseObject), 201)
   else:
-    abort(400)
+    abort(403)
 
 @api.route('/api/works/tus', methods=['GET'])
 def get_tus_endpoint():

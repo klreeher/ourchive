@@ -83,15 +83,15 @@ class TestUserModel(BaseTestCase):
         self.assertTrue(blocked)
 
     def test_get_work_types(self):        
-        response = auth.register(dict(email='elena@gmail.com', password='123456789'))
+        response = auth.register(dict(email='elena@gmail.com', password='123456789',username='elena'))
         user = User.query.first()
         user.admin = True 
         db.session.commit()
         user_logic.add_work_type({'type_name': 'Criticism'})
         response = self.client.get(
             '/api/admin/works/types',
-            headers=dict(Authorization='Bearer ' + 
-                response.json['auth_token']),
+            headers={'Authorization':'Bearer ' + 
+                response.json['auth_token'], 'CSRF-Token':'2018-10-14 18:54:25.991752.DqUiYQ.dNTEDv7Ay6xxz9JMCmUUvBPYpf0'},
             content_type='application/json',
             data=json.dumps(dict(
                 empty='empty'

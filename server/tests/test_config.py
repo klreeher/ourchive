@@ -16,7 +16,7 @@ class TestDevelopmentConfig(TestCase):
         self.assertTrue(app.config['DEBUG'] is True)
         self.assertFalse(current_app is None)
         self.assertTrue(
-            app.config['SQLALCHEMY_DATABASE_URI'] == 'postgresql://ourchive:F4rG0==nd@localhost/ourchive'
+            app.config['SQLALCHEMY_DATABASE_URI'] == 'postgresql://ourchive:ourchive@postgres/ourchivedb'
         )
 
 
@@ -29,7 +29,7 @@ class TestTestingConfig(TestCase):
         self.assertTrue(app.config['SECRET_KEY'] is 'bad_policy')
         self.assertTrue(app.config['DEBUG'])
         self.assertTrue(
-            app.config['SQLALCHEMY_DATABASE_URI'] == 'postgresql://ourchive:F4rG0==nd@localhost/ourchive_test'
+            app.config['SQLALCHEMY_DATABASE_URI'] == 'postgresql://ourchive:ourchive@postgres-test/ourchivedb_test'
         )
 
 

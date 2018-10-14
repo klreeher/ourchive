@@ -4,11 +4,13 @@ from ..models import User
 from ..work.search_wrapper import WorkSearch
 from ..bookmark.search_wrapper import BookmarkSearch
 from ..tag.search_wrapper import TagSearch
+from flask import current_app as app
 
 def do_advanced_search(include_terms, exclude_terms, 
 	curator_usernames, creator_usernames, search_works, search_bookmarks, page_number, types=None):
+	if not app.config.get('USE_ES'):
+		return {}
 	results = {}
-	print(types)
 	final_query = None
 	if search_works:
 		if include_terms != "":
@@ -55,6 +57,8 @@ def do_advanced_search(include_terms, exclude_terms,
 	return results
 
 def search_works_on_query(query, page_number):
+	if not app.config.get('USE_ES'):
+		return {}
 	WorkSearch.init()
 	search = WorkSearch.search()
 	search = search.query(query)
@@ -69,6 +73,8 @@ def search_works_on_query(query, page_number):
 	return work_results
 
 def search_bookmarks_on_query(query, page_number):
+	if not app.config.get('USE_ES'):
+		return {}
 	BookmarkSearch.init()
 	search = BookmarkSearch.search()
 	search = search.query(query)
@@ -180,6 +186,8 @@ def get_bookmark_query(term):
 		fuzziness=2)
 
 def search_text_on_term(term, page_number=1):
+	if not app.config.get('USE_ES'):
+		return {}
 	WorkSearch.init()
 	search = WorkSearch.search()
 	query = get_work_query(term)
@@ -221,6 +229,8 @@ def search_by_curator_query(curator_name):
 	return query
 
 def search_by_complete(complete):
+	if not app.config.get('USE_ES'):
+		return {}
 	search = WorkSearch.search()
 	query = Match(is_complete=complete)
 	search = search.query(query)		
@@ -232,6 +242,8 @@ def search_by_type_query(type):
 	return query
 
 def search_bookmark_by_term(term, page_number=1):
+	if not app.config.get('USE_ES'):
+		return {}
 	BookmarkSearch.init()
 	search = BookmarkSearch.search()
 	query = get_bookmark_query(term)
@@ -266,6 +278,8 @@ def build_bookmark_search_results(item):
 	return bookmark
 
 def search_tag(tag):
+	if not app.config.get('USE_ES'):
+		return {}
 	search = TagSearch.search()
 	query = Match(text=tag)
 	search = search.query(query)

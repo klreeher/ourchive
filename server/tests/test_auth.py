@@ -12,8 +12,8 @@ import time
 
 class TestAuthBlueprint(BaseTestCase):
 	
-	def do_register(self, email, password):
-		return auth.register(dict(email=email, password=password))
+	def do_register(self, email, password, username='elena'):
+		return auth.register(dict(email=email, password=password, username=username))
 
 	def test_registration(self):
 		response = self.do_register('elena@gmail.com', '123456789')
@@ -41,7 +41,7 @@ class TestAuthBlueprint(BaseTestCase):
 	def test_registered_user_login(self):
 		response = self.do_register('elena@gmail.com', '123456789')
 		data_register = response.json
-		response = auth.login(dict(email='elena@gmail.com',password='123456789'))
+		response = auth.login(dict(email='elena@gmail.com',password='123456789',username='elena'))
 		data = response.json
 		self.assertTrue(data['status'] == 'success')
 		self.assertTrue(data['message'] == 'Successfully logged in.')
@@ -54,7 +54,7 @@ class TestAuthBlueprint(BaseTestCase):
 		data_register = response.json
 		user = User.query.filter_by(email='elena@gmail.com').first()
 		user_logic.ban_user(user.id)
-		response = auth.login(dict(email='elena@gmail.com',password='123456789'))
+		response = auth.login(dict(email='elena@gmail.com',password='123456789',username='elena'))
 		data = response.json
 		self.assertTrue(data['status'] == 'fail')
 		self.assertTrue(data['message'] == 'User is banned.')
@@ -62,7 +62,7 @@ class TestAuthBlueprint(BaseTestCase):
 		self.assertEqual(response.status_code, 403)
 
 	def test_non_registered_user_login(self):
-		response = auth.login(dict(email='joe@gmail.com',password='123456'))
+		response = auth.login(dict(email='joe@gmail.com',password='123456',username='elena'))
 		data = response.json
 		self.assertTrue(data['status'] == 'fail')
 		self.assertTrue(data['message'] == 'User does not exist.')
@@ -73,8 +73,8 @@ class TestAuthBlueprint(BaseTestCase):
 		response = self.do_register('elena@gmail.com', '123456789')
 		response = self.client.post(
             '/api/user/authorize/',
-            headers=dict(Authorization='Bearer ' + 
-				response.json['auth_token']),
+            headers={'Authorization':'Bearer ' + 
+				response.json['auth_token'], 'CSRF-Token':'2018-10-14 18:54:25.991752.DqUiYQ.dNTEDv7Ay6xxz9JMCmUUvBPYpf0'},
             content_type='application/json',
             data=json.dumps(dict(
                 empty='empty'
@@ -94,8 +94,8 @@ class TestAuthBlueprint(BaseTestCase):
 		db.session.commit()
 		response = self.client.post(
             '/api/admin/works/types',
-            headers=dict(Authorization='Bearer ' + 
-				response.json['auth_token']),
+            headers={'Authorization':'Bearer ' + 
+				response.json['auth_token'], 'CSRF-Token':'2018-10-14 18:54:25.991752.DqUiYQ.dNTEDv7Ay6xxz9JMCmUUvBPYpf0'},
             content_type='application/json',
             data=json.dumps(dict(
                 types={'id': 1, 'type_name': 'one'}
@@ -108,7 +108,7 @@ class TestAuthBlueprint(BaseTestCase):
 	def test_valid_logout(self):
 		resp_register = self.do_register('elena@gmail.com', '123456789')
 		data_register = resp_register.json
-		resp_login = auth.login(dict(email='elena@gmail.com',password='123456789'))
+		resp_login = auth.login(dict(email='elena@gmail.com',password='123456789',username='elena'))
 		data_login = resp_login.json
 		response = self.client.post(
             '/api/user/logout/',
@@ -125,9 +125,9 @@ class TestAuthBlueprint(BaseTestCase):
 		self.assertEqual(response.status_code, 201)
 
 	def test_invalid_logout(self):
-		resp_register = auth.register(dict(email='joe@gmail.com',password='123456'))
+		resp_register = auth.register(dict(email='joe@gmail.com',password='123456',username='elena'))
 		data_register = resp_register.json
-		resp_login = auth.login(dict(email='joe@gmail.com',password='123456'))
+		resp_login = auth.login(dict(email='joe@gmail.com',password='123456',username='elena'))
 		data_login = resp_login.json
 		response = self.client.post(
             '/api/user/logout/',
@@ -145,9 +145,9 @@ class TestAuthBlueprint(BaseTestCase):
 		self.assertEqual(response.status_code, 401)
 
 	def test_valid_blacklisted_token_logout(self):
-		resp_register = auth.register(dict(email='joe@gmail.com',password='123456'))
+		resp_register = auth.register(dict(email='joe@gmail.com',password='123456',username='joe'))
 		data_register = resp_register.json
-		resp_login = auth.login(dict(email='joe@gmail.com',password='123456'))
+		resp_login = auth.login(dict(email='joe@gmail.com',password='123456',username='joe'))
 		data_login = resp_login.json
 
 		blacklist_token = BlacklistToken(token=data_login['auth_token'])
@@ -170,7 +170,7 @@ class TestAuthBlueprint(BaseTestCase):
 
 
 	def test_valid_blacklisted_token_user(self):
-		resp_register = auth.register(dict(email='joe@gmail.com',password='123456'))
+		resp_register = auth.register(dict(email='joe@gmail.com',password='123456', username='joe'))
 		data_register = resp_register.json
 		# blacklist a valid token
 		blacklist_token = BlacklistToken(token=data_register['auth_token'])
@@ -178,8 +178,8 @@ class TestAuthBlueprint(BaseTestCase):
 		db.session.commit()
 		response = self.client.post(
             '/api/user/logout/',
-            headers=dict(Authorization='Bearer ' + 
-				data_register['auth_token']),
+            headers={'Authorization':'Bearer ' + 
+				data_register['auth_token'], 'CSRF-Token':'2018-10-14 18:54:25.991752.DqUiYQ.dNTEDv7Ay6xxz9JMCmUUvBPYpf0'},
             content_type='application/json',
             data=json.dumps(dict(
                 empty='empty'
@@ -208,9 +208,10 @@ class TestAuthBlueprint(BaseTestCase):
 
 	def test_password_reset(self):
 		response = self.do_register('elena@gmail.com', '123456789')
-		token = user_logic.add_reset(1)
+		user = User.query.first()
+		token = user_logic.add_reset(user)
 		response = self.client.post(
-            '/api/user/1/reset/'+token.decode("utf-8"),
+            '/api/user/elena/reset/'+token.decode("utf-8"),
             content_type='application/json',
             data=json.dumps(dict(
                 email='elena@gmail.com',password='1234567810'
@@ -220,9 +221,10 @@ class TestAuthBlueprint(BaseTestCase):
 
 	def test_invalid_password_reset(self):
 		response = self.do_register('elena@gmail.com', '123456789')
-		token = user_logic.add_reset(1)
+		user = User.query.first()
+		token = user_logic.add_reset(user)
 		response = self.client.post(
-            '/api/user/1/reset/'+"badvalbadval",
+            '/api/user/elena/reset/'+"badvalbadval",
             content_type='application/json',
             data=json.dumps(dict(
                 email='elena@gmail.com',password='1234567810'

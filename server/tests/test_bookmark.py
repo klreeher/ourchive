@@ -44,7 +44,7 @@ class TestBookmark(BaseTestCase):
         work_id = work.add_work(work_data)
         work_fetched = Work.query.filter_by(id=work_id).first()
         bookmark_id = bookmark.add_bookmark(data)
-        new_bookmark = bookmark.get_bookmark(1)
+        new_bookmark = bookmark.get_bookmark(1, 1)
         self.assertTrue(new_bookmark["curator_title"] == "A Fic I Read")
 
     def test_get_bookmarks_by_curator(self):
