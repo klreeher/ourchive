@@ -261,7 +261,7 @@ class NavbarInternal extends React.Component {
         <Navbar.Collapse>
         <Nav>
 
-        <IndexLinkContainer to="/work/new">
+        <IndexLinkContainer to="/works/new">
             <NavItem>New Work</NavItem>
         </IndexLinkContainer>
 

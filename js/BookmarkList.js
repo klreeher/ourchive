@@ -39,7 +39,7 @@ class BookmarkList extends React.Component {
             timeout: 6000,
             type: 'error'
         })
-	    });
+	    }.bind(this));
 	}
 
 	previousPage(name) {
@@ -64,7 +64,7 @@ class BookmarkList extends React.Component {
             timeout: 6000,
             type: 'error'
         })
-      });
+      }.bind(this));
   }
 
 	constructor(props) {

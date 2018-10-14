@@ -40,7 +40,7 @@ class Notifications extends React.Component {
             timeout: 6000,
             type: 'error'
           })
-      });
+      }.bind(this));
     
   }
 
@@ -63,7 +63,7 @@ class Notifications extends React.Component {
             timeout: 6000,
             type: 'error'
           })
-      });
+      }.bind(this));
         
     } else {
         console.log("cancel delete all");
@@ -88,7 +88,7 @@ class Notifications extends React.Component {
             timeout: 6000,
             type: 'error'
           })
-      });
+      }.bind(this));
   }
   filterOnComments(evt)
   {

@@ -94,7 +94,7 @@ class Search extends React.Component {
             timeout: 6000,
             type: 'error'
           })
-      });
+      }.bind(this));
   } 
 
   toggleAdvanced(event)
@@ -258,7 +258,7 @@ class Search extends React.Component {
             timeout: 6000,
             type: 'error'
           })
-      });
+      }.bind(this));
     }
     else
     {
@@ -276,7 +276,7 @@ class Search extends React.Component {
             timeout: 6000,
             type: 'error'
           })
-        });
+        }.bind(this));
     }
     
   }
@@ -300,7 +300,7 @@ class Search extends React.Component {
             timeout: 6000,
             type: 'error'
           })
-      });
+        }.bind(this));
     }
     else
     {
@@ -318,7 +318,7 @@ class Search extends React.Component {
             timeout: 6000,
             type: 'error'
           })
-        });
+        }.bind(this));
     }
     
   }

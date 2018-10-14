@@ -35,16 +35,16 @@ class NewWork extends React.Component {
         'CSRF-Token': this.props.csrf
     }})
     .then(function (response) {
-      history.push({
+      this.props.history.push({
         pathname: '/work/'+response.data.work_id
       })
-    })
+    }.bind(this))
     .catch(function (error) {
       this.props.alert.show('An error has occurred. Contact your administrator if this persists.', {
             timeout: 6000,
             type: 'error'
           })
-    });
+    }.bind(this));
   }
   updateTitle(evt) {
     if (this.state.has_errors && evt.target.value != "") {
@@ -110,17 +110,17 @@ class NewWork extends React.Component {
             timeout: 6000,
             type: 'error'
           })
-        }).bind(this),
+        }.bind(this)),
         onProgress: (function(bytesUploaded, bytesTotal) {
             var percentage = (bytesUploaded / bytesTotal * 100).toFixed(2)
             this.updateStatus(percentage, 2, chapterUploadId+1)
-        }).bind(this),
+        }.bind(this)),
         onSuccess: (function() {
           console.log(upload)
             console.log("Download %s from %s", upload.file.name, upload.url)
             this.finishUpload(upload.file.name, upload.url,
               this.state.chapterUploadId, this.state.chapterUploadProperty)
-        }).bind(this)
+        }.bind(this))
     })
     // Start the upload
     upload.start()
@@ -190,16 +190,16 @@ class NewWork extends React.Component {
             timeout: 6000,
             type: 'error'
           })
-        }).bind(this),
+        }.bind(this)),
         onProgress: (function(bytesUploaded, bytesTotal) {
             var percentage = (bytesUploaded / bytesTotal * 100).toFixed(2)
             this.updateStatus(percentage, 1, chapterUploadId+1)
-        }).bind(this),
+        }.bind(this)),
         onSuccess: (function() {
             console.log("Download %s from %s", upload.file.name, upload.url)
             this.finishUpload(upload.file.name, upload.url,
               this.state.chapterUploadId, this.state.chapterUploadProperty)
-        }).bind(this)
+        }.bind(this))
     })
     // Start the upload
     upload.start()

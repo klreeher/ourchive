@@ -78,7 +78,7 @@ class Chapter extends React.Component {
             timeout: 6000,
             type: 'error'
         })
-    });
+    }.bind(this));
   }
   updateNewCommentText(event)
   {

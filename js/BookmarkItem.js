@@ -87,7 +87,7 @@ class BookmarkItem extends React.Component {
             timeout: 6000,
             type: 'error'
         })
-      });
+      }.bind(this));
   }
 
   toggleComments(event, commentId)
@@ -137,7 +137,7 @@ class BookmarkItem extends React.Component {
             timeout: 6000,
             type: 'error'
         })
-    });
+    }.bind(this));
     
   }
   updateNewCommentText(event)

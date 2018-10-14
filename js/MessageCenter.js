@@ -45,7 +45,7 @@ class MessageCenter extends React.Component {
             timeout: 6000,
             type: 'error'
           })
-	    });
+	    }.bind(this));
 	}
 	getOutbox()
 	{
@@ -64,7 +64,7 @@ class MessageCenter extends React.Component {
             timeout: 6000,
             type: 'error'
           })
-	    });
+	    }.bind(this));
 	}
 	componentDidMount()
 	{
@@ -98,7 +98,7 @@ class MessageCenter extends React.Component {
             timeout: 6000,
             type: 'error'
           })
-      });
+      }.bind(this));
 	    
 	}
 	updateNewMessageText(event)
@@ -127,7 +127,7 @@ class MessageCenter extends React.Component {
 	            timeout: 6000,
 	            type: 'error'
 	          })
-	      });
+	      }.bind(this));
 	}
 	deleteMessage(id)
 	{
@@ -149,7 +149,7 @@ class MessageCenter extends React.Component {
 	            timeout: 6000,
 	            type: 'error'
 	          })
-	      });
+	      }.bind(this));
 		
 
 	}
@@ -176,7 +176,7 @@ class MessageCenter extends React.Component {
 		            timeout: 6000,
 		            type: 'error'
 		          })
-		      });
+		      }.bind(this));
 		
 	}
 	deleteAll(event)
@@ -199,7 +199,7 @@ class MessageCenter extends React.Component {
 		            timeout: 6000,
 		            type: 'error'
 		          })
-		      });
+		      }.bind(this));
 		}
 	}
 	showInbox(event)

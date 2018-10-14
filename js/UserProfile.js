@@ -56,7 +56,7 @@ class UserProfile extends React.Component {
             timeout: 6000,
             type: 'error'
           })
-      });
+      }.bind(this));
 
     }
 
@@ -90,7 +90,7 @@ class UserProfile extends React.Component {
             timeout: 6000,
             type: 'error'
           })
-	    });
+	    }.bind(this));
   	}
 
     getUser()
@@ -134,7 +134,7 @@ class UserProfile extends React.Component {
             timeout: 6000,
             type: 'error'
           })
-        });
+        }.bind(this));
   }
 
   getBookmarkPage(page) {
@@ -151,7 +151,7 @@ class UserProfile extends React.Component {
             timeout: 6000,
             type: 'error'
           })
-        });
+        }.bind(this));
   }
 
     getWorks(index, userId)
@@ -169,7 +169,7 @@ class UserProfile extends React.Component {
             timeout: 6000,
             type: 'error'
           })
-        });
+        }.bind(this));
     }
     getBookmarks(index, userId)
     {
@@ -191,7 +191,7 @@ class UserProfile extends React.Component {
             timeout: 6000,
             type: 'error'
           })
-        });
+        }.bind(this));
     }
 
     componentDidMount() {

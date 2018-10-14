@@ -61,13 +61,13 @@ class SingleWork extends React.Component {
             timeout: 6000,
             type: 'error'
           })
-      });
+      }.bind(this));
   }
 
   updateWork(evt, workId)
   {
     this.props.history.push({
-        pathname: '/work/new/'+workId,
+        pathname: '/works/new/'+workId,
         state: { work: this.state.work, is_edit: true }
       })
   }
@@ -157,7 +157,7 @@ class SingleWork extends React.Component {
         var deleteAction = {}
         deleteAction.actionToDo = this.deleteWork;
         deleteAction.actionText="Delete";
-        action.variables=[this.state.work.id]
+        deleteAction.variables=[this.state.work.id]
         actions.push(deleteAction)
       }
       var bookmarkAction = {}

@@ -83,6 +83,7 @@ def delete_bookmark(bookmark_id, user_id, admin_override=False):
 		if bookmark is not None:
 			if bookmark.user_id == user_id or admin_override:
 				db.session.delete(bookmark)
+				db.session.commit()
 				doc = BookmarkSearch.get(id=bookmark_id)
 				if doc is not None:
 					doc.delete()

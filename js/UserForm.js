@@ -40,7 +40,7 @@ class UserForm extends React.Component {
             timeout: 6000,
             type: 'error'
           })
-        });
+        }.bind(this));
     }
 
     getUser()
@@ -80,7 +80,7 @@ class UserForm extends React.Component {
             timeout: 6000,
             type: 'error'
           })
-      });
+      }.bind(this));
     }
 
     componentDidMount() {

@@ -24,7 +24,7 @@ class TagResults extends React.Component {
             timeout: 6000,
             type: 'error'
           })
-	    });
+	    }.bind(this));
 	}
 
 	constructor(props) {
@@ -74,7 +74,7 @@ class TagResults extends React.Component {
             timeout: 6000,
             type: 'error'
           })
-	    });
+	    }.bind(this));
   }
 
   getBookmarkPage(page) {
@@ -91,7 +91,7 @@ class TagResults extends React.Component {
             timeout: 6000,
             type: 'error'
           })
-	    });
+	    }.bind(this));
   }
 
 	componentDidMount() { 

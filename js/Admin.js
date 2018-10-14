@@ -29,7 +29,7 @@ class Admin extends React.Component {
                 timeout: 6000,
                 type: 'error'
             })
-          })
+          }.bind(this))
           
         }.bind(this))
         .catch(function (error) {
@@ -37,7 +37,7 @@ class Admin extends React.Component {
             timeout: 6000,
             type: 'error'
         })
-      });
+      }.bind(this));
   }
 
   unBanUser(evt, userId)
@@ -60,7 +60,7 @@ class Admin extends React.Component {
             timeout: 6000,
             type: 'error'
         })
-    })
+    }.bind(this))
   }
 
   constructor(props) {
@@ -81,7 +81,7 @@ class Admin extends React.Component {
             timeout: 6000,
             type: 'error'
         })
-      });
+      }.bind(this));
     axios.get('/api/admin/notifications/types', {   
           headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json',
           'CSRF-Token': this.props.csrf
@@ -95,7 +95,7 @@ class Admin extends React.Component {
             timeout: 6000,
             type: 'error'
         })
-      });
+      }.bind(this));
     axios.get('/api/admin/works/types', {   
           headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json',
           'CSRF-Token': this.props.csrf
@@ -109,7 +109,7 @@ class Admin extends React.Component {
             timeout: 6000,
             type: 'error'
         })
-      });
+      }.bind(this));
 
     axios.get('/api/admin/users/banned', {   
           headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json',
@@ -124,7 +124,7 @@ class Admin extends React.Component {
             timeout: 6000,
             type: 'error'
         })
-      });
+      }.bind(this));
   }
   componentWillUpdate(nextProps, nextState)
   {
@@ -166,7 +166,7 @@ class Admin extends React.Component {
             timeout: 6000,
             type: 'error'
         })
-    })
+    }.bind(this))
     
   }
   newTagType(evt) {
@@ -199,7 +199,7 @@ class Admin extends React.Component {
             timeout: 6000,
             type: 'error'
         })
-    })
+    }.bind(this))
   }
   
   render() {

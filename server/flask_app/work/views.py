@@ -48,7 +48,7 @@ def delete_work(work_id, user_id, admin_override=False):
 	work = Work.query.filter_by(id=work_id).first()
 	if work is not None:
 		if work.user.id == user_id or admin_override:
-			Work.query.filter_by(id=work_id).delete()
+			db.session.delete(work)
 			db.session.commit()
 			doc = WorkSearch.get(id=work_id)
 			if doc is not None:
@@ -76,7 +76,7 @@ def update_work(json):
 	add_tags(work, work_tags)
 	db.session.commit()
 	if app.config.get('USE_ES'):
-		doc = WorkSearch.get(id=work_id)
+		doc = WorkSearch.get(id=work.id)
 		if doc is not None:
 			doc.delete()
 		json['id'] = work.id
