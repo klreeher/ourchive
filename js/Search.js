@@ -36,7 +36,7 @@ class Search extends React.Component {
             timeout: 6000,
             type: 'error'
           })
-      });
+      }.bind(this));
   }
 
   checkForEnter(event) {
@@ -67,7 +67,7 @@ class Search extends React.Component {
             timeout: 6000,
             type: 'error'
           })
-      });
+      }.bind(this));
   } 
 
   doAdvancedSearch(event)
