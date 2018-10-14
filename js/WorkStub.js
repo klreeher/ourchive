@@ -11,7 +11,7 @@ export default class WorkStub extends React.Component {
   }
   render() {
     return (
-      
+      <div className="list-row panel panel-default">
         <div className="panel-body">
             <div className="col-md-12"><h3><Link to={"/work/"+this.props.work.id}>{this.props.work.title}</Link> by <Link to={"/user/"+this.props.work.user_id+"/show"}>{this.props.work.username}</Link></h3></div>
             <div className="row">
@@ -24,6 +24,7 @@ export default class WorkStub extends React.Component {
               <div className="col-md-2"><h5>Type: {this.props.work.type_name}</h5></div>
             </div>
           </div>
+        </div>
 
     );
   }

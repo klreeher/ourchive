@@ -11,13 +11,11 @@ export default class EditDeleteButtons extends React.Component {
 	}
 	render() {
 		return (
-			<ButtonToolbar>
-				<DropdownButton title={this.props.dropdownLabel} id="dropdown-size-medium" bsStyle="default">
-					{this.props.actions.map(action => 
-						<MenuItem onClick={evt => action.actionToDo(evt, ...action.variables)}>{action.actionText}</MenuItem>
-		        	)}
-				 </DropdownButton>
-			</ButtonToolbar>
+			<DropdownButton title={this.props.dropdownLabel} id="dropdown-size-medium" bsStyle="default">
+				{this.props.actions.map(action => 
+					<MenuItem onClick={evt => action.actionToDo(evt, ...action.variables)}>{action.actionText}</MenuItem>
+	        	)}
+			 </DropdownButton>
 		);
 	}
 }

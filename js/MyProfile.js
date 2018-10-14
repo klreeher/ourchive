@@ -176,6 +176,7 @@ class MyProfile extends React.Component {
       var action = {}
       action.actionToDo = this.editMyAccount;
       action.actionText="Edit";
+      action.variables=[]
       actions.push(action)
       var deleteAction = {}
       deleteAction.actionToDo = this.deleteMyAccount;
@@ -198,4 +199,4 @@ class MyProfile extends React.Component {
   }
 
 }
-export default withAlert(MyProfile)
+export default withAlert(withRouter(MyProfile))

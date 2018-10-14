@@ -59,7 +59,7 @@ export default class MessageCenter extends React.Component {
 	        console.log(error);
 	    });
 	}
-	componentWillMount()
+	componentDidMount()
 	{
 		this.getMessages();
 		this.getOutbox();

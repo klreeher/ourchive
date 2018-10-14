@@ -43,13 +43,15 @@ export default class SearchResults extends React.Component {
                 <Tab.Pane eventKey="second">
                   {this.props.works != null ? <div className="row">
                   <div className="row">
-                    {this.props.works.map(work => 
-                      <div key={work.key} >
-                        <WorkStub work={work}/>
-                      </div>
+                    <div className="col-md-12">
+                      {this.props.works.map(work => 
+                        <div key={work.key} >
+                          <WorkStub work={work}/>
+                        </div>
 
-                    )}
+                      )}
                     </div>
+                  </div>
                     <PaginationControl paginationName="work" previousPage={this.props.previousPage} nextPage={this.props.nextPage}
                       totalPages={this.props.totalWorkPages} currentPage={this.props.currentWorkPage}/>
                   </div> : <div/>}

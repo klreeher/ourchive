@@ -23,7 +23,7 @@ export default class BookmarkStub extends React.Component {
   render() {
     return (
     	
-    	<div>
+    	<div className="list-row panel panel-default">
     	{this.state.bookmark.curator != undefined &&
     	  <div className="panel-body">
 	      	<div className="row">

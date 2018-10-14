@@ -16,7 +16,7 @@ export default class Notifications extends React.Component {
       this.deleteNotification = this.deleteNotification.bind(this);
     }
 
-  componentWillMount()
+  componentDidMount()
   {
     this.getNotifications();
   }

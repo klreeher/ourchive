@@ -76,7 +76,7 @@ export default class UserForm extends React.Component {
       });
     }
 
-    componentWillMount() {
+    componentDidMount() {
         this.getUser();
     }
 

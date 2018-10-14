@@ -35,6 +35,12 @@ export default class Search extends React.Component {
       });
   }
 
+  checkForEnter(event) {
+    if(event.keyCode == 13){
+        this.doSearch(event)
+    }
+  }
+
   doSearch(event)
   {
       event.target.blur()
@@ -298,7 +304,9 @@ export default class Search extends React.Component {
 		    <div className="row">
           <div className="col-md-6 col-sm-4 col-xs-4">
             <div className="input-group">
-              <input className="form-control" value={this.state.searchTerm} onChange={evt => this.updateSearchTerm(evt)} placeholder="Find me something great!"></input>
+              <input className="form-control" value={this.state.searchTerm} 
+                onChange={evt => this.updateSearchTerm(evt)} placeholder="Find me something great!"
+                onKeyUp={evt => this.checkForEnter(evt)}></input>
               <span className="input-group-btn">
                 <button className="btn btn-primary" type="button" onClick={this.doSearch}>Search</button>
               </span>

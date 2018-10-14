@@ -196,7 +196,7 @@ class BookmarkItem extends React.Component {
 	    	<div>
 	    		{this.props.user && this.props.user.id === this.state.bookmark.user_id && 
 	        		<div className="row">
-	        			  <div className="col-xs-3 col-xs-offset-9">
+	        			  <div className="col-xs-1 col-xs-offset-10">
 				              <EditDeleteButtons dropdownLabel="Actions" actions={actions}/>
 				          </div>
 	        		</div>

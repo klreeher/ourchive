@@ -76,6 +76,9 @@ def update_work(json):
 	add_tags(work, work_tags)
 	db.session.commit()
 	if app.config.get('USE_ES'):
+		doc = WorkSearch.get(id=work_id)
+		if doc is not None:
+			doc.delete()
 		json['id'] = work.id
 		search_obj = WorkSearch()
 		search_obj.create_from_json(json)
