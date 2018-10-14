@@ -66,10 +66,8 @@ class SingleWork extends React.Component {
 
   updateWork(evt, workId)
   {
-    console.log(evt)
-    console.log(workId)
     this.props.history.push({
-        pathname: '/create/work/'+workId,
+        pathname: '/work/new/'+workId,
         state: { work: this.state.work, is_edit: true }
       })
   }

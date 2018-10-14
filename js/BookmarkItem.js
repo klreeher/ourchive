@@ -12,9 +12,6 @@ import { withAlert } from 'react-alert';
 import EditDeleteButtons from './EditDeleteButtons';
 
 class BookmarkItem extends React.Component {
-
-	
-
 	constructor(props) {
 	    super(props);
 	    if (props.bookmark === undefined)
@@ -34,13 +31,15 @@ class BookmarkItem extends React.Component {
 		this.toggleComments = this.toggleComments.bind(this)
 		this.updateNewCommentText = this.updateNewCommentText.bind(this)
 		this.getBookmark = this.getBookmark.bind(this)
+		this.deleteBookmark = this.deleteBookmark.bind(this)
+		this.editBookmark = this.editBookmark.bind(this)
 	}
 
-	editBookmark(evt, history)
+	editBookmark(evt, bookmarkId)
 	{
 		evt.target.blur();
-		history.push({
-		  pathname: '/bookmarks/new',
+		this.props.history.push({
+		  pathname: '/bookmarks/new/'+bookmarkId,
 		  state: { bookmark: this.state.bookmark }
 		})
 	}
@@ -148,9 +147,8 @@ class BookmarkItem extends React.Component {
       newCommentText: event.target.value
     })
   }
-  deleteBookmark(evt, bookmarkId, history)
+  deleteBookmark(evt, bookmarkId)
   {
-  	evt.target.blur()
     axios.delete('/api/bookmark/'+bookmarkId, {   
           headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json',
           'CSRF-Token': this.props.csrf
@@ -160,7 +158,7 @@ class BookmarkItem extends React.Component {
             timeout: 6000,
             type: 'info'
           })
-          history.push({
+          this.props.history.push({
             pathname: '/'
           })
         })
@@ -171,28 +169,22 @@ class BookmarkItem extends React.Component {
           })
       });
   }
-  render() {
-  	const Update = withRouter(({ history }) => (
-    <button onMouseDown={evt => this.editBookmark(evt, history)} className="btn btn-link">Update</button>
-    ))
 
-    const Delete = withRouter(({ history }) => (
-    <button onMouseDown={evt => this.deleteBookmark(evt, this.state.bookmark.id, history)} className="btn btn-link">Delete</button>
-    ))
+  render() {
 
     const loggedIn = this.props.user != null;
     const actions = []
     if (loggedIn && this.state.curator != undefined) {
       if (this.state.curator.curator_name === localStorage.getItem('friendly_name')) {
         var action = {}
-        action.actionToDo = this.updateBookmark;
+        action.actionToDo = this.editBookmark;
         action.actionText="Update";
         action.variables=[this.state.bookmark.id]
         actions.push(action)
         var deleteAction = {}
-        deleteAction.actionToDo = this.deleteWork;
+        deleteAction.actionToDo = this.deleteBookmark;
         deleteAction.actionText="Delete";
-        action.variables=[this.state.bookmark.id]
+        deleteAction.variables=[this.state.bookmark.id]
         actions.push(deleteAction)
       }
     }

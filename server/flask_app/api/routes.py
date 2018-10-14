@@ -473,9 +473,9 @@ def delete_bookmark(bookmarkId):
         }
       return make_response(jsonify(responseObject), 201)
     else:
-      abort(400)
+      abort(403)
   else:
-    abort(400)
+    abort(403)
 
 @api.route('/api/bookmark/<int:bookmarkId>', methods=['POST'])
 def update_bookmark(bookmarkId):
