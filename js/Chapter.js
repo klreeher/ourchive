@@ -8,8 +8,9 @@ import Image from 'react-image';
 import ReactPlayer from 'react-player';
 import Comment from './Comment';
 import NewComment from './NewComment';
+import { withAlert } from 'react-alert';
 
-export default class Chapter extends React.Component {
+class Chapter extends React.Component {
 
 
   constructor(props) {
@@ -73,7 +74,10 @@ export default class Chapter extends React.Component {
         });
     }.bind(this))
     .catch(function (error) {
-      console.log(error);
+      this.props.alert.show('An error has occurred. Contact your administrator if this persists.', {
+            timeout: 6000,
+            type: 'error'
+        })
     });
   }
   updateNewCommentText(event)
@@ -154,3 +158,5 @@ export default class Chapter extends React.Component {
     );
   }
 }
+
+export default withAlert(Chapter)

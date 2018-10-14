@@ -4,9 +4,10 @@ import Link from 'react-router-dom';
 import {Tabs, Tab, Modal} from 'react-bootstrap';
 import WorkStub from './WorkStub';
 import UserContainer from './UserContainer';
+import { withAlert } from 'react-alert';
 
 
-export default class UserProfile extends React.Component {
+class UserProfile extends React.Component {
 	constructor(props) {
 	  	super(props);
 	    this.state = this.state = {profile_user: {}, works: [], bookmarks: [], curator: [], work_page: 1, bookmark_page: 1,
@@ -51,7 +52,10 @@ export default class UserProfile extends React.Component {
         })
       }.bind(this))
       .catch(function (error) {
-        console.log(error);
+        this.props.alert.show('An error has occurred. Contact your administrator if this persists.', {
+            timeout: 6000,
+            type: 'error'
+          })
       });
 
     }
@@ -82,7 +86,10 @@ export default class UserProfile extends React.Component {
 
 	      }.bind(this))
 	      .catch(function (error) {
-	        console.log(error);
+	        this.props.alert.show('An error has occurred. Contact your administrator if this persists.', {
+            timeout: 6000,
+            type: 'error'
+          })
 	    });
   	}
 
@@ -123,7 +130,10 @@ export default class UserProfile extends React.Component {
           });
         }.bind(this))
         .catch(function (error) {
-          console.log(error);
+          this.props.alert.show('An error has occurred. Contact your administrator if this persists.', {
+            timeout: 6000,
+            type: 'error'
+          })
         });
   }
 
@@ -137,7 +147,10 @@ export default class UserProfile extends React.Component {
           });
         }.bind(this))
         .catch(function (error) {
-          console.log(error);
+          this.props.alert.show('An error has occurred. Contact your administrator if this persists.', {
+            timeout: 6000,
+            type: 'error'
+          })
         });
   }
 
@@ -152,7 +165,10 @@ export default class UserProfile extends React.Component {
 
           }.bind(this))
           .catch(function (error) {
-            console.log(error);
+            this.props.alert.show('An error has occurred. Contact your administrator if this persists.', {
+            timeout: 6000,
+            type: 'error'
+          })
         });
     }
     getBookmarks(index, userId)
@@ -171,7 +187,10 @@ export default class UserProfile extends React.Component {
 
           }.bind(this))
           .catch(function (error) {
-            console.log(error);
+            this.props.alert.show('An error has occurred. Contact your administrator if this persists.', {
+            timeout: 6000,
+            type: 'error'
+          })
         });
     }
 
@@ -228,5 +247,6 @@ export default class UserProfile extends React.Component {
 
     );
   }
-
 }
+
+export default withAlert(UserProfile);

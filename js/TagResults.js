@@ -3,9 +3,9 @@ import axios from 'axios';
 import Link from 'react-router-dom';
 import SearchResults from './SearchResults';
 import ReactDOM from 'react-dom';
+import { withAlert } from 'react-alert';
 
-
-export default class TagResults extends React.Component {
+class TagResults extends React.Component {
 
 	getData()
 	{
@@ -20,7 +20,10 @@ export default class TagResults extends React.Component {
 	        });
 	      }.bind(this))
 	      .catch(function (error) {
-	        console.log(error);
+	        this.props.alert.show('An error has occurred. Contact your administrator if this persists.', {
+            timeout: 6000,
+            type: 'error'
+          })
 	    });
 	}
 
@@ -67,8 +70,11 @@ export default class TagResults extends React.Component {
 	        });
 	      }.bind(this))
 	      .catch(function (error) {
-	        console.log(error);
-	    	});
+	        this.props.alert.show('An error has occurred. Contact your administrator if this persists.', {
+            timeout: 6000,
+            type: 'error'
+          })
+	    });
   }
 
   getBookmarkPage(page) {
@@ -81,8 +87,11 @@ export default class TagResults extends React.Component {
 	        });
 	      }.bind(this))
 	      .catch(function (error) {
-	        console.log(error);
-	    	});
+	        this.props.alert.show('An error has occurred. Contact your administrator if this persists.', {
+            timeout: 6000,
+            type: 'error'
+          })
+	    });
   }
 
 	componentDidMount() { 
@@ -101,5 +110,6 @@ export default class TagResults extends React.Component {
       
     );
   }
-
 }
+
+export default withAlert(TagResults);

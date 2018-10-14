@@ -7,7 +7,6 @@ import { withRouter } from 'react-router-dom';
 import { withAlert } from 'react-alert'
 import ErrorList from './ErrorList';
 
-
 class NewWork extends React.Component {
 
   addWork(evt, history)
@@ -41,7 +40,10 @@ class NewWork extends React.Component {
       })
     })
     .catch(function (error) {
-      console.log(error);
+      this.props.alert.show('An error has occurred. Contact your administrator if this persists.', {
+            timeout: 6000,
+            type: 'error'
+          })
     });
   }
   updateTitle(evt) {
@@ -103,9 +105,12 @@ class NewWork extends React.Component {
         chunkSize: 5*1024*1024,
         retryDelays: [0, 1000, 3000, 5000],
         metadata: {filename: file.name},
-        onError: function(error) {
-            console.log("Failed because: " + error)
-        },
+        onError: (function(error) {
+            this.props.alert.show('An error has occurred: ' + error, {
+            timeout: 6000,
+            type: 'error'
+          })
+        }).bind(this),
         onProgress: (function(bytesUploaded, bytesTotal) {
             var percentage = (bytesUploaded / bytesTotal * 100).toFixed(2)
             this.updateStatus(percentage, 2, chapterUploadId+1)
@@ -180,9 +185,12 @@ class NewWork extends React.Component {
         chunkSize: 5*1024*1024,
         retryDelays: [0, 1000, 3000, 5000],
         metadata: {filename: file.name},
-        onError: function(error) {
-            console.log("Failed because: " + error)
-        },
+        onError: (function(error) {
+            this.props.alert.show('An error has occurred: ' + error, {
+            timeout: 6000,
+            type: 'error'
+          })
+        }).bind(this),
         onProgress: (function(bytesUploaded, bytesTotal) {
             var percentage = (bytesUploaded / bytesTotal * 100).toFixed(2)
             this.updateStatus(percentage, 1, chapterUploadId+1)
@@ -222,7 +230,10 @@ class NewWork extends React.Component {
 
         }.bind(this))
         .catch(function (error) {
-          console.log(error);
+          this.props.alert.show('An error has occurred. Contact your administrator if this persists.', {
+            timeout: 6000,
+            type: 'error'
+          })
       });
   }
   create_work_tag(val, oldItem, tags, tag_category) {
@@ -292,7 +303,10 @@ class NewWork extends React.Component {
         this.setState({tus_endpoint: response.data.tus_endpoint});
       }.bind(this))
       .catch(function (error) {
-        console.log(error);
+        this.props.alert.show('An error has occurred. Contact your administrator if this persists.', {
+            timeout: 6000,
+            type: 'error'
+          })
       });
   }
   componentWillUpdate(nextProps, nextState)

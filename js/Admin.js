@@ -2,9 +2,10 @@ import React from 'react';
 import axios from 'axios';
 import { withRouter } from 'react-router-dom';
 import {Tabs, Tab, Row, Nav, Col, NavItem} from 'react-bootstrap';
+import { withAlert } from 'react-alert';
 
 
-export default class Admin extends React.Component {
+class Admin extends React.Component {
 
   addBannedUser(evt)
   {
@@ -24,12 +25,18 @@ export default class Admin extends React.Component {
               
           }.bind(this))
           .catch(function (error) {
-            console.log(error);
+            this.props.alert.show('An error has occurred. Contact your administrator if this persists.', {
+                timeout: 6000,
+                type: 'error'
+            })
           })
           
         }.bind(this))
         .catch(function (error) {
-          console.log(error);
+          this.props.alert.show('An error has occurred. Contact your administrator if this persists.', {
+            timeout: 6000,
+            type: 'error'
+        })
       });
   }
 
@@ -49,7 +56,10 @@ export default class Admin extends React.Component {
           
       }.bind(this))
       .catch(function (error) {
-        console.log(error);
+        this.props.alert.show('An error has occurred. Contact your administrator if this persists.', {
+            timeout: 6000,
+            type: 'error'
+        })
     })
   }
 
@@ -67,7 +77,10 @@ export default class Admin extends React.Component {
 
         }.bind(this))
         .catch(function (error) {
-          console.log(error);
+          this.props.alert.show('An error has occurred. Contact your administrator if this persists.', {
+            timeout: 6000,
+            type: 'error'
+        })
       });
     axios.get('/api/admin/notifications/types', {   
           headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json',
@@ -78,7 +91,10 @@ export default class Admin extends React.Component {
 
         }.bind(this))
         .catch(function (error) {
-          console.log(error);
+          this.props.alert.show('An error has occurred. Contact your administrator if this persists.', {
+            timeout: 6000,
+            type: 'error'
+        })
       });
     axios.get('/api/admin/works/types', {   
           headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json',
@@ -89,7 +105,10 @@ export default class Admin extends React.Component {
 
         }.bind(this))
         .catch(function (error) {
-          console.log(error);
+          this.props.alert.show('An error has occurred. Contact your administrator if this persists.', {
+            timeout: 6000,
+            type: 'error'
+        })
       });
 
     axios.get('/api/admin/users/banned', {   
@@ -101,7 +120,10 @@ export default class Admin extends React.Component {
 
         }.bind(this))
         .catch(function (error) {
-          console.log(error);
+          this.props.alert.show('An error has occurred. Contact your administrator if this persists.', {
+            timeout: 6000,
+            type: 'error'
+        })
       });
   }
   componentWillUpdate(nextProps, nextState)
@@ -140,7 +162,10 @@ export default class Admin extends React.Component {
           })
       }.bind(this))
       .catch(function (error) {
-        console.log(error);
+        this.props.alert.show('An error has occurred. Contact your administrator if this persists.', {
+            timeout: 6000,
+            type: 'error'
+        })
     })
     
   }
@@ -170,7 +195,10 @@ export default class Admin extends React.Component {
           })
       }.bind(this))
       .catch(function (error) {
-        console.log(error);
+        this.props.alert.show('An error has occurred. Contact your administrator if this persists.', {
+            timeout: 6000,
+            type: 'error'
+        })
     })
   }
   
@@ -293,3 +321,5 @@ export default class Admin extends React.Component {
     );
   }
 }
+
+export default withAlert(Admin)

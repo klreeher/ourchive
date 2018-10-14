@@ -6,9 +6,10 @@ import WorkStub from './WorkStub';
 import UserContainer from './UserContainer';
 import EditDeleteButtons from './EditDeleteButtons';
 import {FormGroup, Checkbox, ControlLabel, HelpBlock, FormControl, Button, Radio} from 'react-bootstrap';
+import { withAlert } from 'react-alert';
 
 
-export default class UserForm extends React.Component {
+class UserForm extends React.Component {
 	constructor(props) {
 	  	super(props);
 			if (this.props.csrf === undefined)
@@ -35,7 +36,10 @@ export default class UserForm extends React.Component {
 
           }.bind(this))
           .catch(function (error) {
-            console.log(error);
+            this.props.alert.show('An error has occurred. Contact your administrator if this persists.', {
+            timeout: 6000,
+            type: 'error'
+          })
         });
     }
 
@@ -72,7 +76,10 @@ export default class UserForm extends React.Component {
 				});
       }.bind(this))
       .catch(function (error) {
-        console.log(error);
+        this.props.alert.show('An error has occurred. Contact your administrator if this persists.', {
+            timeout: 6000,
+            type: 'error'
+          })
       });
     }
 
@@ -141,5 +148,6 @@ export default class UserForm extends React.Component {
             </div>
     );
   }
-
 }
+
+export default withAlert(UserForm);

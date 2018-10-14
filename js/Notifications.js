@@ -3,11 +3,9 @@ import axios from 'axios';
 import Link from 'react-router-dom';
 import {Tabs, Tab, DropdownButton, MenuItem} from 'react-bootstrap';
 import Notification from './Notification';
+import { withAlert } from 'react-alert';
 
-export default class Notifications extends React.Component {
-
-	
-
+class Notifications extends React.Component {
 	constructor(props) {
 	    super(props);
 	    this.state = {user: this.props.user, notifications: []};
@@ -38,7 +36,10 @@ export default class Notifications extends React.Component {
 
         }.bind(this))
         .catch(function (error) {
-          console.log(error);
+          this.props.alert.show('An error has occurred. Contact your administrator if this persists.', {
+            timeout: 6000,
+            type: 'error'
+          })
       });
     
   }
@@ -58,7 +59,10 @@ export default class Notifications extends React.Component {
 
         }.bind(this))
         .catch(function (error) {
-          console.log(error);
+          this.props.alert.show('An error has occurred. Contact your administrator if this persists.', {
+            timeout: 6000,
+            type: 'error'
+          })
       });
         
     } else {
@@ -80,7 +84,10 @@ export default class Notifications extends React.Component {
 
         }.bind(this))
         .catch(function (error) {
-          console.log(error);
+          this.props.alert.show('An error has occurred. Contact your administrator if this persists.', {
+            timeout: 6000,
+            type: 'error'
+          })
       });
   }
   filterOnComments(evt)
@@ -163,5 +170,6 @@ export default class Notifications extends React.Component {
       </div>
     );
   }
-
 }
+
+export default withAlert(Notifications)

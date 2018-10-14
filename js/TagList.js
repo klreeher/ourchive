@@ -5,6 +5,7 @@ import {
 import TagItem from './TagItem';
 import Autosuggest from 'react-autosuggest';
 import axios from 'axios';
+import { withAlert } from 'react-alert';
 
 
 const getSuggestionValue = suggestion => suggestion;
@@ -15,7 +16,7 @@ const renderSuggestion = suggestion => (
   </div>
 );
 
-export default class TagList extends React.Component {
+class TagList extends React.Component {
 
 
   constructor(props) {
@@ -70,7 +71,7 @@ export default class TagList extends React.Component {
   }
 
   onSuggestionsFetchRequested(value) {
-    var cleaned = value.value.replace('/', '_')
+    var cleaned = value.value.replace('/', '_');
     axios.get('/api/tag/'+this.state.category_id+'/suggestions/'+cleaned)
         .then(function (response) {
           this.setState({
@@ -79,9 +80,11 @@ export default class TagList extends React.Component {
 
         }.bind(this))
         .catch(function (error) {
-          console.log(error);
+          this.props.alert.show('An error has occurred. Contact your administrator if this persists.', {
+            timeout: 6000,
+            type: 'error'
+          })
       });
-    
   }
 
   onSuggestionsClearRequested() {
@@ -173,4 +176,6 @@ export default class TagList extends React.Component {
     );
   }
 }
+
+export default withAlert(TagList)
 

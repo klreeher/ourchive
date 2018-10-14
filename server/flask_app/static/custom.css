@@ -68,7 +68,7 @@
 
 .new_textBox {
     box-shadow: none;
-    border: 1px solid #ffffff;
+    border: 1px solid #f6f6f6;
     padding: .2em .5em .2em .5em;
     display: block;
     float: left;
@@ -85,9 +85,6 @@ div.work_text p {
 
 /* universal */
 
-body {
-  padding-top: 0px;
-}
 
 section {
   overflow: auto;
@@ -167,9 +164,9 @@ a {
 }
 
 .customNav {
-    background-color: #BABBD0;
+    background-color: #0F114D;
     color: #0F114D;
-    border: 1px solid #BABBD0;
+    border: 1px solid #0F114D;
  }
 
  .customNav a {
@@ -185,8 +182,8 @@ a {
 footer {
   margin-top: 45px;
   padding-top: 5px;
-  border-top: 1px solid #eaeaea;
-  color: #777;
+  border-top: 1px solid #0F114D;
+  color: #0F114D;
 }
 
 footer a {
@@ -212,10 +209,13 @@ footer ul li {
 }
 
 body {
-  background-color: #fff;
-  color: #0F114D;
-  font-family: verdana, arial, helvetica, sans-serif;
-  font-size: 18px;
+  margin:40px auto;
+  line-height:1.6;
+  font-size:18px;
+  color:#0F114D;
+  padding:0 10px;
+  background-color: #f6f6f6;
+  padding-top: 0;
 }
 
 p, ol, ul, td {
@@ -227,10 +227,11 @@ p, ol, ul, td {
 
 h1, h2, h3, h4, h5, blockquote {
   color: #0F114D;
+  line-height: 1.2
 }
 
 pre {
-  background-color: #eee;
+  background-color: #f6f6f6;
   padding: 10px;
   font-size: 15px;
 }
@@ -267,7 +268,7 @@ div {
     margin: -7px;
     margin-bottom: 0px;
     background-color: #c00;
-    color: #fff;
+    color: #f6f6f6;
   }
 
   ul li {
@@ -287,7 +288,7 @@ div {
 
 .react-autosuggest__input {
     box-shadow: none;
-    border: 1px solid #ffffff;
+    border: 1px solid #f6f6f6;
     padding: .2em .5em .2em .5em;
     
     margin: 2px 5px 2px 0;
@@ -302,7 +303,7 @@ div {
     border: 0px;
 
     background: none;
-    background-color: #FFF;
+    background-color: #f6f6f6;
     list-style: square;
     font-weight: normal;
     padding: .2em .5em .2em .5em; 
@@ -366,20 +367,28 @@ div {
     background-color: #0F114D;
 }
 
+.nav-tabs {
+  background-color: #EEE;
+}
+
+.nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover, .panel-body{
+  background-color: #f6f6f6 !important;
+}
+
 .navbar-default {
-  background-color: #fff; 
+  background-color: #f6f6f6; 
   background-image: none;
   background-repeat: no-repeat;
   filter: none;
   border-top: 0px;
-  border-bottom: 1px solid #BABBD0;
+  border-bottom: 1px solid #0F114D;
   border-left: 0px;
   border-right: 0px;
   box-shadow: none;
 }
 
 .navbar-collapse {
-  background-color: #fff; 
+  background-color: #f6f6f6; 
   background-image: none;
   background-repeat: no-repeat;
   filter: none;
@@ -390,7 +399,7 @@ div {
 }
 
 .navbar-brand {
-  background-color: #fff; 
+  background-color: #f6f6f6; 
   background-image: none;
   background-repeat: no-repeat;
   filter: none;
@@ -398,7 +407,7 @@ div {
 }
 
 .nav {
-  background-color: #fff; 
+  background-color: #f6f6f6; 
   background-image: none;
   background-repeat: no-repeat;
   filter: none;

@@ -4,8 +4,9 @@ import {
 } from 'react-router-dom';
 import NewComment from './NewComment';
 import axios from 'axios';
+import { withAlert } from 'react-alert';
 
-export default class Comment extends React.Component {
+class Comment extends React.Component {
 
 
   constructor(props) {
@@ -48,7 +49,10 @@ export default class Comment extends React.Component {
       });
     }.bind(this))
     .catch(function (error) {
-      console.log(error);
+      this.props.alert.show('An error has occurred. Contact your administrator if this persists.', {
+            timeout: 6000,
+            type: 'error'
+        })
     });
     
     
@@ -102,4 +106,6 @@ export default class Comment extends React.Component {
     );
   }
 }
+
+export default withAlert(Comment)
 

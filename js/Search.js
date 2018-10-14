@@ -5,8 +5,9 @@ import SearchResults from './SearchResults';
 import WorkStub from './WorkStub';
 import WorkTypeCheckbox from './WorkTypeCheckbox';
 import {Tabs, Tab, Row, Nav, Col, NavItem} from 'react-bootstrap';
+import { withAlert } from 'react-alert';
 
-export default class Search extends React.Component {
+class Search extends React.Component {
 
 	
 
@@ -31,7 +32,10 @@ export default class Search extends React.Component {
 
         }.bind(this))
         .catch(function (error) {
-          console.log(error);
+          this.props.alert.show('An error has occurred. Contact your administrator if this persists.', {
+            timeout: 6000,
+            type: 'error'
+          })
       });
   }
 
@@ -59,7 +63,10 @@ export default class Search extends React.Component {
           });
         }.bind(this))
         .catch(function (error) {
-          console.log(error);
+          this.props.alert.show('An error has occurred. Contact your administrator if this persists.', {
+            timeout: 6000,
+            type: 'error'
+          })
       });
   } 
 
@@ -83,7 +90,10 @@ export default class Search extends React.Component {
           });
         }.bind(this))
         .catch(function (error) {
-          console.log(error);
+          this.props.alert.show('An error has occurred. Contact your administrator if this persists.', {
+            timeout: 6000,
+            type: 'error'
+          })
       });
   } 
 
@@ -143,22 +153,30 @@ export default class Search extends React.Component {
 
   updateExactlyTerms(evt)
   {
-    console.log(event.target.value)
+    this.setState({
+      searchExactly: evt.target.value
+    })
   }
 
   updateAnyTags(evt) 
   {
-    console.log(event.target.value)
+     this.setState({
+      searchAnyTags: evt.target.value
+    })
   }
 
   updateNoneTags(evt)
   {
-    console.log(event.target.value)
+     this.setState({
+      searchNoneTags: evt.target.value
+    })
   }
 
   updateExactlyTags(evt)
   {
-    console.log(event.target.value)
+     this.setState({
+      searchExactlyTags: evt.target.value
+    })
   }
 
   searchType(type, evt)
@@ -236,7 +254,10 @@ export default class Search extends React.Component {
           });
         }.bind(this))
         .catch(function (error) {
-          console.log(error);
+          this.props.alert.show('An error has occurred. Contact your administrator if this persists.', {
+            timeout: 6000,
+            type: 'error'
+          })
       });
     }
     else
@@ -251,7 +272,10 @@ export default class Search extends React.Component {
           });
         }.bind(this))
         .catch(function (error) {
-          console.log(error);
+          this.props.alert.show('An error has occurred. Contact your administrator if this persists.', {
+            timeout: 6000,
+            type: 'error'
+          })
         });
     }
     
@@ -272,7 +296,10 @@ export default class Search extends React.Component {
           });
         }.bind(this))
         .catch(function (error) {
-          console.log(error);
+          this.props.alert.show('An error has occurred. Contact your administrator if this persists.', {
+            timeout: 6000,
+            type: 'error'
+          })
       });
     }
     else
@@ -287,7 +314,10 @@ export default class Search extends React.Component {
           });
         }.bind(this))
         .catch(function (error) {
-          console.log(error);
+          this.props.alert.show('An error has occurred. Contact your administrator if this persists.', {
+            timeout: 6000,
+            type: 'error'
+          })
         });
     }
     
@@ -422,5 +452,6 @@ export default class Search extends React.Component {
       </div>
     );
   }
-
 }
+
+export default withAlert(Search)

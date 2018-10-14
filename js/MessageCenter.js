@@ -5,8 +5,9 @@ import {Tabs, Tab} from 'react-bootstrap';
 import Message from './Message';
 import NewComment from './NewComment';
 import EditDeleteButtons from './EditDeleteButtons';
+import { withAlert } from 'react-alert';
 
-export default class MessageCenter extends React.Component {
+class MessageCenter extends React.Component {
 
 	
 
@@ -40,7 +41,10 @@ export default class MessageCenter extends React.Component {
 
 	      }.bind(this))
 	      .catch(function (error) {
-	        console.log(error);
+	        this.props.alert.show('An error has occurred. Contact your administrator if this persists.', {
+            timeout: 6000,
+            type: 'error'
+          })
 	    });
 	}
 	getOutbox()
@@ -56,7 +60,10 @@ export default class MessageCenter extends React.Component {
 
 	      }.bind(this))
 	      .catch(function (error) {
-	        console.log(error);
+	        this.props.alert.show('An error has occurred. Contact your administrator if this persists.', {
+            timeout: 6000,
+            type: 'error'
+          })
 	    });
 	}
 	componentDidMount()
@@ -87,7 +94,10 @@ export default class MessageCenter extends React.Component {
 	    })
       }.bind(this))
       .catch(function (error) {
-        console.log(error);
+        this.props.alert.show('An error has occurred. Contact your administrator if this persists.', {
+            timeout: 6000,
+            type: 'error'
+          })
       });
 	    
 	}
@@ -113,7 +123,10 @@ export default class MessageCenter extends React.Component {
 	      .then(function (response) {
 	      }.bind(this))
 	      .catch(function (error) {
-	        console.log(error);
+	        this.props.alert.show('An error has occurred. Contact your administrator if this persists.', {
+	            timeout: 6000,
+	            type: 'error'
+	          })
 	      });
 	}
 	deleteMessage(id)
@@ -132,7 +145,10 @@ export default class MessageCenter extends React.Component {
 			})
 	      }.bind(this))
 	      .catch(function (error) {
-	        console.log(error);
+	        this.props.alert.show('An error has occurred. Contact your administrator if this persists.', {
+	            timeout: 6000,
+	            type: 'error'
+	          })
 	      });
 		
 
@@ -156,7 +172,10 @@ export default class MessageCenter extends React.Component {
 				})
 		      }.bind(this))
 		      .catch(function (error) {
-		        console.log(error);
+		        this.props.alert.show('An error has occurred. Contact your administrator if this persists.', {
+		            timeout: 6000,
+		            type: 'error'
+		          })
 		      });
 		
 	}
@@ -176,10 +195,11 @@ export default class MessageCenter extends React.Component {
 		        })
 		      }.bind(this))
 		      .catch(function (error) {
-		        console.log(error);
+		        this.props.alert.show('An error has occurred. Contact your administrator if this persists.', {
+		            timeout: 6000,
+		            type: 'error'
+		          })
 		      });
-		} else {
-		    console.log("cancel delete all");
 		}
 	}
 	showInbox(event)
@@ -227,3 +247,5 @@ export default class MessageCenter extends React.Component {
 	  );
 }
 }
+
+export default withAlert(MessageCenter)

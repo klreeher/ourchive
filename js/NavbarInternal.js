@@ -63,10 +63,12 @@ class NavbarInternal extends React.Component {
       localStorage.removeItem('jwt');
       localStorage.removeItem('admin');
       localStorage.removeItem('friendly_name')
+      localStorage.removeItem('email')
       this.setState({
         loggedIn: false
       });
       this.props.updateUser();
+      this.forceUpdate()
     });
 
   }
@@ -170,6 +172,7 @@ class NavbarInternal extends React.Component {
           admin: response.data['admin'],
           userId: 1
         });
+        this.forceUpdate();
 
       })
       .catch(function (error) {
@@ -205,6 +208,7 @@ class NavbarInternal extends React.Component {
       .then((response) => {
         localStorage.setItem('jwt', response.data['auth_token']);
         localStorage.setItem('friendly_name', response.data['username'])
+        localStorage.setItem('email', this.state.email)
         this.props.updateUser();
         this.setState({
           userName: "",
@@ -213,6 +217,7 @@ class NavbarInternal extends React.Component {
           showRegisterModal: false,
           userId: 1
         });
+        this.forceUpdate()
 
       })
       .catch(function (error) {
@@ -256,9 +261,9 @@ class NavbarInternal extends React.Component {
         <Navbar.Collapse>
         <Nav>
 
-        <NavItem href="/create/work">
-            New Work
-        </NavItem>
+        <IndexLinkContainer to="/work/new">
+            <NavItem>New Work</NavItem>
+        </IndexLinkContainer>
 
         {this.state.admin &&
             <NavItem href="/admin">Admin</NavItem>

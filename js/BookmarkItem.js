@@ -84,7 +84,10 @@ class BookmarkItem extends React.Component {
 
         }.bind(this))
         .catch(function (error) {
-          console.log(error);
+          this.props.alert.show('An error has occurred. Contact your administrator if this persists.', {
+            timeout: 6000,
+            type: 'error'
+        })
       });
   }
 
@@ -131,7 +134,10 @@ class BookmarkItem extends React.Component {
 	    });
     }.bind(this))
     .catch(function (error) {
-      console.log(error);
+      this.props.alert.show('An error has occurred. Contact your administrator if this persists.', {
+            timeout: 6000,
+            type: 'error'
+        })
     });
     
   }
