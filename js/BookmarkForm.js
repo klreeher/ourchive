@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import { withRouter, Link } from 'react-router-dom';
+import { withRouter, Link} from 'react-router-dom';
 import TagList from './TagList';
 import ErrorList from './ErrorList';
 import { withAlert } from 'react-alert';
@@ -128,6 +128,19 @@ class BookmarkForm extends React.Component {
 	    });
   	}
 
+  	componentDidMount()
+	{
+	    if (!this.props.user) {
+	    	this.props.alert.show('You must be logged in to perform this action.', {
+	            timeout: 6000,
+	            type: 'info'
+	        })
+	        this.props.history.push({
+	            pathname: '/'
+	        })
+	    }
+	}
+
   	render() {
   		const AddOrUpdate = withRouter(({ history }) => (
 	    <div> <button onMouseDown={evt => this.addBookmark(evt, history)} className="btn btn-default">Submit</button>
@@ -214,4 +227,4 @@ class BookmarkForm extends React.Component {
 
 }
 
-export default withAlert(BookmarkForm)
+export default withAlert(withRouter(BookmarkForm))

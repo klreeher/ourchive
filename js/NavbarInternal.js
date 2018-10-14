@@ -53,6 +53,7 @@ class NavbarInternal extends React.Component {
       localStorage.removeItem('jwt');
       localStorage.removeItem('admin');
       localStorage.removeItem('friendly_name')
+      localStorage.removeItem('email')
       this.setState({
         loggedIn: false
       });
@@ -158,6 +159,7 @@ class NavbarInternal extends React.Component {
         localStorage.setItem('jwt', response.data['auth_token']);
         localStorage.setItem('admin', response.data['admin'])
         localStorage.setItem('friendly_name', response.data['username'])
+        localStorage.setItem('email', response.data['email'])
         this.props.updateUser();
         this.setState({
           userName: "",

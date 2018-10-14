@@ -119,7 +119,9 @@ export default class Notifications extends React.Component {
   }
   render() {
     return (
-      <div className="container-fluid text-padding">
+      <div>
+      {this.state.notifications && 
+        <div>
         <div className="row">
           <div className="col-xs-3">
 
@@ -154,7 +156,10 @@ export default class Notifications extends React.Component {
             )}
           </tbody>          
         </table>  
-        </div>      
+        </div>   
+        </div>
+      }
+           
       </div>
     );
   }

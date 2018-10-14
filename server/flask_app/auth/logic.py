@@ -64,7 +64,8 @@ def login(post_data):
 						'message': 'Successfully logged in.',
 						'auth_token': auth_token.decode(),
 						'admin': user.admin,
-						'username': user.username
+						'username': user.username,
+						'email': user.email
 					}
 				return make_response(jsonify(responseObject), 201)
 			else:

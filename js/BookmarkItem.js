@@ -1,12 +1,15 @@
 import React from 'react';
 import axios from 'axios';
-import Link from 'react-router-dom';
+import {
+  Link
+} from 'react-router-dom';
 import TagList from './TagList';
 import NewComment from './NewComment';
 import Comment from './Comment';
 import ReactDOM from 'react-dom';
 import { withRouter } from 'react-router-dom';
 import { withAlert } from 'react-alert';
+import EditDeleteButtons from './EditDeleteButtons';
 
 class BookmarkItem extends React.Component {
 
@@ -170,24 +173,42 @@ class BookmarkItem extends React.Component {
     const Delete = withRouter(({ history }) => (
     <button onMouseDown={evt => this.deleteBookmark(evt, this.state.bookmark.id, history)} className="btn btn-link">Delete</button>
     ))
+
+    const loggedIn = this.props.user != null;
+    const actions = []
+    if (loggedIn && this.state.curator != undefined) {
+      if (this.state.curator.curator_name === localStorage.getItem('friendly_name')) {
+        var action = {}
+        action.actionToDo = this.updateBookmark;
+        action.actionText="Update";
+        action.variables=[this.state.bookmark.id]
+        actions.push(action)
+        var deleteAction = {}
+        deleteAction.actionToDo = this.deleteWork;
+        deleteAction.actionText="Delete";
+        action.variables=[this.state.bookmark.id]
+        actions.push(deleteAction)
+      }
+    }
     return (
     	<div>
     	{this.state.bookmark.id != undefined &&
-    	  <div className="panel-body">
-	      	<div className="row">
-	      		<div className="col-sm-5">{this.state.bookmark.curator_title}</div>
-	      		<div className="col-sm-5">{this.props.user && this.props.user.id === this.state.bookmark.user_id && 
-		            		<div className="pull-right"> 
-		            			<button className="btn btn-link">Edit</button> | <Delete/>
-		            		</div>
-		            	}
-		        </div>
-		    </div>
+	    	<div>
+	    		{this.props.user && this.props.user.id === this.state.bookmark.user_id && 
+	        		<div className="row">
+	        			  <div className="col-xs-3 col-xs-offset-9">
+				              <EditDeleteButtons dropdownLabel="Actions" actions={actions}/>
+				          </div>
+	        		</div>
+		        }
+		      	<div className="row">
+		      		<div className="col-xs-5">{this.state.bookmark.curator_title}</div>
+		      	</div>	      		
 		      	<div className="row">
 		      		<div className="col-md-12">
 		        		<blockquote>
 			        		<div className="row">
-			        			<div className="col-md-12">{this.state.bookmark.work.title} by {this.state.bookmark.work.username}</div>
+			        			<div className="col-md-12"><Link to={"/work/"+this.state.bookmark.work.id}>{this.state.bookmark.work.title}</Link> by <Link to={"/user/"+this.state.bookmark.work.user_id+"/show"}>{this.state.bookmark.work.username}</Link></div>
 			        		</div>
 			        		<div className="row">
 			        			<div className="col-md-4">Complete? {this.state.bookmark.work.is_complete ? "True" : "False"}</div>
@@ -201,6 +222,7 @@ class BookmarkItem extends React.Component {
 		            <div className="col-md-12">{this.state.curator.curator_name}'s rating: {this.state.bookmark.rating}</div>
 		            	
 		        </div>
+		        {this.state.safe_description && this.state.safe_description != "" ? <div>
 		        <div className="row">
 		            <div className="col-md-12">{this.state.curator.curator_name} says...</div>
 		        </div>			        
@@ -208,9 +230,9 @@ class BookmarkItem extends React.Component {
 		            <div className="col-xs-11 col-xs-offset-1">
 		                {this.state.safe_description}
 		            </div>
-		        </div>	
+		        </div></div> : <div></div>}
 				
-		        {this.state.bookmark.links ? <div>
+		        {this.state.bookmark.links && this.state.bookmark.links.length > 0 ? <div>
 		        	<div className="row">
 		        		<div className="col-md-12">If you like this, {this.state.curator.curator_name} recommends...</div>            
 			        </div>
@@ -228,15 +250,17 @@ class BookmarkItem extends React.Component {
 				        </div>
 			        </div>
 			    </div> : <div/>}
+			    
 		        <div className="row">
 		             {this.state.bookmark.tags.map(tag => 
-			          <div className="row" key={tag.id}>
-			          <div className="col-xs-9 col-md-12">
-			              <ul className="list-inline">
-			                <TagList tag_category={tag.label} category_id={tag.id} tags={tag.tags}/>
-			              </ul>
-			          </div> 
-			          </div>
+			          {this.state.bookmark.tags && this.state.bookmark.tags.length > 0 ?
+			          	<div className="row" key={tag.id}>
+				          <div className="col-xs-9 col-md-12">
+				              <ul className="list-inline">
+				                <TagList tag_category={tag.label} category_id={tag.id} tags={tag.tags}/>
+				              </ul>
+				          </div> 
+				        </div> : <div></div>}
 			        )}	            
 		        </div>
 
@@ -268,13 +292,12 @@ class BookmarkItem extends React.Component {
 
 		            </div> : <div/>}
 		          </div>  
-	          </div> 
+	          </div>
 	          }
 		      {
 		        this.state.bookmark.id === undefined && <div></div>
 		      }
-	  		</div>
-      
+	  		</div>    
     );
   }
 

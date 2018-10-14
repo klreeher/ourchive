@@ -4,6 +4,7 @@ import Link from 'react-router-dom';
 import {Tabs, Tab} from 'react-bootstrap';
 import Message from './Message';
 import NewComment from './NewComment';
+import EditDeleteButtons from './EditDeleteButtons';
 
 export default class MessageCenter extends React.Component {
 
@@ -186,35 +187,43 @@ export default class MessageCenter extends React.Component {
 		
 	}
 	render() {
-		return (
-		  	<Tabs defaultActiveKey={1} id="message-center-tabs">
-			    <Tab eventKey={1} title="Inbox">
-			    	<br/>
-			    	<button className="btn btn-link" onClick={this.markAllRead}>Mark all as read</button> | 
-	                <button className="btn btn-link" onClick={this.deleteAll}>Delete all</button>
-	                <br/>
-	               
-		            <br/>
-			    	{this.state.messages.map(message => 
+	  const actions = []
+      var action = {}
+      action.actionToDo = this.markAllRead;
+      action.actionText="Mark All Read";
+      actions.push(action)
+      var deleteAction = {}
+      deleteAction.actionToDo = this.deleteAll;
+      deleteAction.actionText="Delete All";
+      actions.push(deleteAction)
+	  return (
+	  	<Tabs defaultActiveKey={1} id="message-center-tabs">
+		    <Tab eventKey={1} title="Inbox">
+		    	<div className="row">
+			      <div className="col-xs-10">
+			  		  {this.state.messages.map(message => 
 		                <div key={message.id}>
 		                  <Message sendMessage={this.sendMessage} deleteMessage={this.deleteMessage} 
 		                  	message={message} allowReply={true} markAsRead={this.markAsRead}/>
 		                </div>                  
 		                )}
-			    	
-				</Tab>
-				<Tab eventKey={2} title="Sent">
-					<br/>
-					{this.state.outbox.map(message => 
-		            <div key={message.id}>
-		              <Message sendMessage={this.sendMessage} deleteMessage={this.deleteMessage} 
-		              	message={message} allowReply={false}/>
-		            </div>                  
-		            )}
-			    </Tab>
-		    
-			</Tabs>
-		);
-	}
-
+			  	  </div>
+			      <div className="col-xs-2">
+			        <EditDeleteButtons dropdownLabel="Inbox Actions" actions={actions}/>
+			      </div>
+			    </div>		    	
+			</Tab>
+			<Tab eventKey={2} title="Sent">
+				<br/>
+				{this.state.outbox.map(message => 
+	            <div key={message.id}>
+	              <Message sendMessage={this.sendMessage} deleteMessage={this.deleteMessage} 
+	              	message={message} allowReply={false}/>
+	            </div>                  
+	            )}
+		    </Tab>
+	    
+		</Tabs>
+	  );
+}
 }

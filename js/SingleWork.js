@@ -7,14 +7,15 @@ import {
   Link, withRouter
 } from 'react-router-dom';
 import { withAlert } from 'react-alert';
+import EditDeleteButtons from './EditDeleteButtons';
 
 class SingleWork extends React.Component {
 
 
-  bookmarkItem(evt, history)
+  bookmarkItem(evt)
   {
     evt.target.blur();
-    history.push({
+    this.props.history.push({
       pathname: '/bookmarks/new',
       state: { work: this.state.work }
     })
@@ -35,7 +36,6 @@ class SingleWork extends React.Component {
             work: response.data,
             current_chapter: response.data.chapters ? response.data.chapters[0] : [],
             chapter_index: 0,
-            viewer_is_creator: true,
             showAllChapters: this.props.location.search.length > 0
           }, () => {
             var queryParams = new URLSearchParams(this.props.location.search);
@@ -61,15 +61,17 @@ class SingleWork extends React.Component {
       });
   }
 
-  updateWork(evt, workId, history)
+  updateWork(evt, workId)
   {
-    history.push({
+    console.log(evt)
+    console.log(workId)
+    this.props.history.push({
         pathname: '/create/work/'+workId,
         state: { work: this.state.work, is_edit: true }
       })
   }
 
-  deleteWork(evt, workId, history)
+  deleteWork(evt, workId)
   {
     evt.preventDefault()
     axios.delete('/api/work/'+workId, {
@@ -81,7 +83,7 @@ class SingleWork extends React.Component {
             timeout: 6000,
             type: 'info'
           })
-          history.push({
+          this.props.history.push({
             pathname: '/'
           })
         })
@@ -122,7 +124,10 @@ class SingleWork extends React.Component {
   constructor(props) {
     super(props);
     this.state = {workId: props.match.params.workId, work: [], current_chapter: [],
-      chapter_index: 0, viewer_is_creator: false, user: this.props.user, showAllChapters: false};
+      chapter_index: 0, user: this.props.user, showAllChapters: false};
+    this.updateWork = this.updateWork.bind(this)
+    this.deleteWork = this.deleteWork.bind(this)
+    this.bookmarkItem = this.bookmarkItem.bind(this)
 
   }
 
@@ -139,34 +144,39 @@ class SingleWork extends React.Component {
     const nextDisabled = this.state.work.chapters === undefined || this.state.chapter_index + 1 >= this.state.work.chapters.length;
     const previousDisabled = this.state.chapter_index === 0;
     const loggedIn = this.state.user != null;
-
-    const Update = withRouter(({ history }) => (
-    <button onMouseDown={evt => this.updateWork(evt, this.state.work.id, history)} className="btn btn-link">Update</button>
-    ))
-
-    const Delete = withRouter(({ history }) => (
-    <button onMouseDown={evt => this.deleteWork(evt, this.state.work.id, history)} className="btn btn-link">Delete</button>
-    ))
-
-    const Bookmark = withRouter(({ history }) => (
-    <button onMouseDown={evt => this.bookmarkItem(evt, history)} className="btn btn-link">Bookmark Work</button>
-    ))
-
+    const actions = []
+    if (loggedIn) {
+      
+      if (this.state.work.username === localStorage.getItem('friendly_name')) {
+        var action = {}
+        action.actionToDo = this.updateWork;
+        action.actionText="Update";
+        action.variables=[this.state.work.id]
+        actions.push(action)
+        var deleteAction = {}
+        deleteAction.actionToDo = this.deleteWork;
+        deleteAction.actionText="Delete";
+        action.variables=[this.state.work.id]
+        actions.push(deleteAction)
+      }
+      var bookmarkAction = {}
+      bookmarkAction.actionToDo = this.bookmarkItem;
+      bookmarkAction.actionText="Bookmark";
+      bookmarkAction.variables=[]
+      actions.push(bookmarkAction)
+    }
     return (
 
     <div>
       {this.state.work.id != undefined &&
-        <div>
-          <div className={this.state.viewer_is_creator ? "viewer-creator row" : "viewer row"}>
-            <div className="col-md-3 col-xs-6">
-              <Update/>
-              <Delete/>
-              <Bookmark/>
-            </div>
+        <div> 
+        {loggedIn && <div className="row">
+          <div className="col-xs-3 col-xs-offset-9">
+              <EditDeleteButtons dropdownLabel="Actions" actions={actions}/>
           </div>
-
+        </div>}
         <div className="row">
-          <div className="col-xs-9 col-md-12"><h1>{this.state.work.title}</h1></div>
+          <div className="col-xs-12 col-md-12"><h1>{this.state.work.title}</h1></div>
         </div>
         <div className="row">
           <div className="col-xs-9 col-md-12">
@@ -254,4 +264,4 @@ class SingleWork extends React.Component {
   }
 }
 
-export default withAlert(SingleWork)
+export default withAlert(withRouter(SingleWork))

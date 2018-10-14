@@ -101,11 +101,14 @@ export default class Chapter extends React.Component {
           </div>
           <br/>
           <br/>
-          <div className="row">
-            <div className="col-xs-9 col-md-12">
-              <audio ref="audio_tag" src={this.state.chapter.audio_url} controls/>
+          {this.state.chapter.audio_url && this.state.chapter.audio_url != "" ?
+            <div className="row">
+              <div className="col-xs-9 col-md-12">
+                <audio ref="audio_tag" src={this.state.chapter.audio_url} controls/>
+              </div>
             </div>
-          </div>
+          : <div></div>}
+          
           <div className="row">
             <div className="col-xs-9 col-md-12">
               {this.state.chapter.image_url && <img src={this.state.chapter.image_url} alt='{this.state.chapter.image_alt_text}'/>}

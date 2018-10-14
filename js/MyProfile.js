@@ -27,6 +27,8 @@ class MyProfile extends React.Component {
         this.previousPage = this.previousPage.bind(this);
         this.getWorkPage = this.getWorkPage.bind(this);
         this.getBookmarkPage = this.getBookmarkPage.bind(this);
+        this.editMyAccount = this.editMyAccount.bind(this);
+        this.deleteMyAccount = this.deleteMyAccount.bind(this);
     }
 
     fetchUser()
@@ -170,19 +172,26 @@ class MyProfile extends React.Component {
     }
 
     render() {
+      const actions = []
+      var action = {}
+      action.actionToDo = this.editMyAccount;
+      action.actionText="Edit";
+      actions.push(action)
+      var deleteAction = {}
+      deleteAction.actionToDo = this.deleteMyAccount;
+      deleteAction.actionText="Delete";
+      actions.push(deleteAction)
     return (
     	<div>
         <div className="row">
-          <div className="col-xs-8">
-      		  <EditDeleteButtons viewer_is_creator={true} editAction={evt => this.editMyAccount(evt)} deleteAction={evt => this.deleteMyAccount(evt)}/>
-          </div>
-        </div>
-        <div className="row">
-          <div className="col-xs-12">
+          <div className="col-xs-10">
       		  <UserContainer user={this.state.user} works={this.state.works} bookmarks={this.state.bookmarks}
             curator={this.state.curator} totalWorkPages={this.state.work_pages} totalBookmarkPages={this.state.bookmark_pages}
             currentWorkPage={this.state.work_page} currentBookmarkPage={this.state.bookmark_page} previousPage={this.previousPage} nextPage={this.nextPage}/>
-      	 </div>
+      	  </div>
+          <div className="col-xs-2">
+            <EditDeleteButtons dropdownLabel="Actions" actions={actions}/>
+          </div>
         </div>
       </div>
     );

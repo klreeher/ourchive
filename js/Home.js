@@ -23,7 +23,7 @@ class Home extends React.Component {
     return (
       <div>
         <div className="row">
-          <div className="col-xs-12"><h1>Ourchive <small>A multi-media archive for everyone.</small></h1></div>
+          <div className="col-xs-12"><h1>Ourchive. <small>A multi-media archive for everyone.</small></h1></div>
         </div>
         <Search user={this.props.user}/>
         <br/>

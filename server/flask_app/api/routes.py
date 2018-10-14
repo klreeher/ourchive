@@ -308,9 +308,9 @@ def delete_message(messageId):
     abort(400)
 
 @api.route('/api/user/messages/delete', methods=['DELETE'])
-def delete_all(userId):
+def delete_all():
   user_id = auth.auth_from_data(request)
-  if user_id > 0 and user_id == userId:
+  if user_id > 0:
     result = message.delete_all_messages(user_id)
     if result is not None:
       responseObject = {
@@ -324,9 +324,9 @@ def delete_all(userId):
     abort(400)
 
 @api.route('/api/user/messages/read', methods=['POST'])
-def mark_all_read(userId):
+def mark_all_read():
   user_id = auth.auth_from_data(request)
-  if user_id > 0 and user_id == userId:
+  if user_id > 0:
     result = message.mark_all_read(user_id)
     if result is not None:
       responseObject = {
@@ -554,7 +554,6 @@ def add_comment_reply():
   if user_id > 0:
     request.json['user_id'] = user_id
     result = comment.add_reply(request.json)
-    print(result)
     if result is not None:
       responseObject = {
           'id': result
@@ -576,3 +575,16 @@ def get_tagged_works(tag_id, tag_text, page):
 @api.route('/api/tag/bookmark/<int:tag_id>/<path:tag_text>/<int:page>', methods=['GET'])
 def get_tagged_bookmarks(tag_id, tag_text, page):
   return json.dumps(tag.get_tagged_bookmarks(tag_id, tag_text, page))
+
+@api.route('/api/notifications', methods=['GET'])
+def get_notifications():
+  user_id = auth.auth_from_data(request)
+  if user_id > 0:
+    result = notification.get_user_notifications(user_id)
+    if result is not None:
+      return make_response(jsonify(result), 201)
+    else:
+      abort(400)
+  else:
+    abort(403)
+

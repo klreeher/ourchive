@@ -64,7 +64,7 @@ export default class UserForm extends React.Component {
       headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json',
       'CSRF-Token': this.props.csrf
     }}).then(function (response) {
-				var pathname = "/my-profile";
+				var pathname = "/user/profile";
 				var csrf = this.props.csrf;
 				this.props.history.push({
 					pathname: pathname,

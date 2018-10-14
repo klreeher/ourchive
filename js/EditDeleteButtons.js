@@ -1,25 +1,23 @@
 import React from 'react';
+import {
+  DropdownButton,
+  ButtonToolbar,
+  MenuItem
+} from 'react-bootstrap';
 
 export default class EditDeleteButtons extends React.Component {
-
-	
-
 	constructor(props) {
-	    super(props);
-
+	  super(props);
 	}
-
-
-  render() {
-    return (
-    	<div>
-			<div className={this.props.viewer_is_creator ? "viewer-creator row pull-right" : "viewer row pull-right"}>
-		      <div className="col-xs-12">
-		        <button onClick={this.props.editAction} className="btn btn-link">Edit</button> | <button onClick={this.props.deleteAction} className="btn btn-link">Delete</button>		            
-		      </div>
-		   	</div>
-	   	</div>
-    );
-  }
-
+	render() {
+		return (
+			<ButtonToolbar>
+				<DropdownButton title={this.props.dropdownLabel} id="dropdown-size-medium" bsStyle="default">
+					{this.props.actions.map(action => 
+						<MenuItem onClick={evt => action.actionToDo(evt, ...action.variables)}>{action.actionText}</MenuItem>
+		        	)}
+				 </DropdownButton>
+			</ButtonToolbar>
+		);
+	}
 }
