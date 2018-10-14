@@ -30,15 +30,17 @@ export default class SearchResults extends React.Component {
                 <Tab.Pane eventKey="first">
                   {this.props.bookmarks != null ? <div className="row">
                   <div className="row">
-                    {this.props.bookmarks.map(bookmark => 
-                      <div key={bookmark.id} >
-                        <BookmarkStub bookmark={bookmark} user={this.props.user} curator={bookmark.curator} ref={"bookmark_"+bookmark.id}/>
-                      </div>
-                    )}
+                    <div className="col-md-12">
+                      {this.props.bookmarks.map(bookmark => 
+                        <div key={bookmark.id} >
+                          <BookmarkStub bookmark={bookmark} user={this.props.user} curator={bookmark.curator} ref={"bookmark_"+bookmark.id}/>
+                        </div>
+                      )}
                     </div>
-                    <PaginationControl paginationName="bookmark" previousPage={this.props.previousPage} nextPage={this.props.nextPage}
-                      totalPages={this.props.totalBookmarkPages} currentPage={this.props.currentBookmarkPage}/>
-                  </div> : <div/>}
+                   </div>
+                  <PaginationControl paginationName="bookmark" previousPage={this.props.previousPage} nextPage={this.props.nextPage}
+                    totalPages={this.props.totalBookmarkPages} currentPage={this.props.currentBookmarkPage}/>
+                </div> : <div/>}
                 </Tab.Pane>
                 <Tab.Pane eventKey="second">
                   {this.props.works != null ? <div className="row">

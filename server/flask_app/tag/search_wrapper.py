@@ -14,6 +14,9 @@ class TagSearch(DocType):
 	class Meta:
 		index = 'tag'
 
+	class Index:
+		name = 'tag'
+
 	def save(self, ** kwargs):
 		return super().save(** kwargs)
 

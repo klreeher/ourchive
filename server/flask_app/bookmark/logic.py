@@ -13,6 +13,7 @@ def get_work_from_bookmark(data):
 	data['work']['title'] = work.title
 	data['work']['username'] = work.user.username
 	data['work']['user_id'] = work.user_id
+	data['work']['work_id'] = data['work_id']
 	return data
 
 def add_bookmark(data):

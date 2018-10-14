@@ -251,11 +251,13 @@ def build_bookmark_search_results(item):
 	bookmark['curator_title'] = item.curator_title
 	bookmark['rating'] = item.rating
 	bookmark['description'] = item.description
+	bookmark['id'] = item.meta.id
 	bookmark['work'] = {}
 	bookmark['curator'] = {}
 	user = User.query.filter_by(id=item.user_id).first()
 	if user is not None:
 		bookmark['curator']['curator_name'] = user.username
+		bookmark['curator']['curator_id'] = user.id
 	bookmark['tags'] = []
 	if len(item.work) == 1:
 		bookmark['work']['title'] = item.work[0].title

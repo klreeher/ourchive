@@ -253,14 +253,13 @@ class BookmarkItem extends React.Component {
 			    
 		        <div className="row">
 		             {this.state.bookmark.tags.map(tag => 
-			          {this.state.bookmark.tags && this.state.bookmark.tags.length > 0 ?
 			          	<div className="row" key={tag.id}>
 				          <div className="col-xs-9 col-md-12">
 				              <ul className="list-inline">
 				                <TagList tag_category={tag.label} category_id={tag.id} tags={tag.tags}/>
 				              </ul>
 				          </div> 
-				        </div> : <div></div>}
+				        </div>
 			        )}	            
 		        </div>
 

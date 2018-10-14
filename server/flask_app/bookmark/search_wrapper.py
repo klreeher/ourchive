@@ -14,6 +14,7 @@ class BookmarkWorkSearch(InnerDoc):
 		self.title=work_json['title']
 		self.username=work_json['username']
 		self.user_id=work_json['user_id']
+		self.meta.id = work_json['work_id']
 
 	def save_from_json(self, work_json):
 		BookmarkWorkSearch.init()

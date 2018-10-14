@@ -27,51 +27,32 @@ export default class BookmarkStub extends React.Component {
     	{this.state.bookmark.curator != undefined &&
     	  <div className="panel-body">
 	      	<div className="row">
-	      		<div className="col-sm-5"><Link to={"/bookmark/"+this.state.bookmark.id}>{this.state.bookmark.curator_title}</Link></div>
-	      		<div className="col-sm-5">{this.props.user && this.props.user.id === this.state.bookmark.user_id && 
-		            		<div className="pull-right"> 
-		            			<button className="btn btn-link">Edit</button> | <button className="btn btn-link">Delete</button>
-		            		</div>
-		            	}
-		        </div>
+	      		<div className="col-sm-5"><Link to={"/bookmark/"+this.state.bookmark.id}>{this.state.bookmark.curator_title}</Link> curated by <Link to={"/user/"+this.state.curator.curator_id+"/show"}>{this.state.curator.curator_name}</Link></div>
 		    </div>
-		      	<div className="row">
-		      		<div className="col-md-12">
-		        		<blockquote>
-			        		<div className="row">
-			        			<div className="col-md-12"><Link to={"/work/"+this.state.bookmark.work.id}>{this.state.bookmark.work.title}</Link> by <Link to={"/user/"+this.state.bookmark.work.user_id+"/show"}>{this.state.bookmark.work.username}</Link></div>
-			        		</div>
-		        		</blockquote>
-	        		</div>        			
-		        </div>
-		        <div className="row">
-		            <div className="col-md-12">{this.state.curator.curator_name}'s rating: {this.state.bookmark.rating}</div>
-		            	
-		        </div>
-		        <div className="row">
-		            <div className="col-md-12">{this.state.curator.curator_name} says...</div>
-		        </div>			        
-		        <div className="row">
-		            <div className="col-xs-11 col-xs-offset-1">
-		                {this.state.bookmark.description}
-		            </div>
-		        </div>	
-		         <div className="row">
-		             {this.state.bookmark.tags.map(tag => 
-				        <div className="row" key={tag.id}>
-					      <div className="col-xs-9 col-md-12">
-				              <ul className="list-inline">
-				                <TagList tag_category={tag.label} category_id={tag.id} tags={tag.tags}/>
-				              </ul>
-				          </div> 
-				        </div>
-				      )}		            
-		        </div>
-	          </div> }
-	          {
-	          	this.state.bookmark.curator === undefined && <div></div>
-	          }
-	  		</div>
+	      	<div className="row">
+	      		<div className="col-sm-11 col-sm-offset-1">
+		        	Bookmarked work: {this.state.bookmark.work.title} by {this.state.bookmark.work.username}
+        		</div>        			
+	        </div>
+	        <div className="row">
+	            <div className="col-md-12">{this.state.curator.curator_name}'s rating: {this.state.bookmark.rating}</div>	
+	        </div>
+	         <div className="row">
+	             {this.state.bookmark.tags.map(tag => 
+			        <div className="row" key={tag.id}>
+				      <div className="col-xs-9 col-md-12">
+			              <ul className="list-inline">
+			                <TagList tag_category={tag.label} category_id={tag.id} tags={tag.tags}/>
+			              </ul>
+			          </div> 
+			        </div>
+			      )}		            
+	        </div>
+          </div> }
+          {
+          	this.state.bookmark.curator === undefined && <div></div>
+          }
+  		</div>
       
     );
   }

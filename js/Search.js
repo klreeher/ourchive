@@ -94,7 +94,7 @@ export default class Search extends React.Component {
       {
         this.setState({
           showAdvancedSearch: true,
-          advancedText: "Hide Advanced Search"
+          advancedText: "Show Basic Search"
         })
       }
       else
