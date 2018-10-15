@@ -11,3 +11,5 @@ npm-debug.log
 Pipfile.lock
 *.pyc
 server/flask_app/uploads/*
+*.epub
+*.jpg

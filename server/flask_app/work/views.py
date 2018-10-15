@@ -71,6 +71,9 @@ def update_work(json):
 		work.is_complete = 0
 	if 'work_type' in json:
 		work.type_id = json['work_type']
+	if 'cover_url' in json:
+		work.cover_url = get_file_url(json['cover_url'])
+		work.cover_alt_text = json['cover_alt_text']
 	db.session.add(work)
 	word_count = update_chapters(work, chapters)
 	work.word_count = word_count
@@ -99,6 +102,9 @@ def add_work(json):
 		type_id = json['work_type']
 	else:
 		type_id = None
+	if 'cover_url' in json:
+		work.cover_url = get_file_url(json['cover_url'])
+		work.cover_alt_text = json['cover_alt_text']
 	work = Work(title=title,work_summary=work_summary,is_complete=is_complete,word_count=0,user_id=json['user_id'],work_notes=work_notes,
 		type_id=type_id)
 	db.session.add(work)
@@ -173,6 +179,8 @@ def build_work(work):
 	work_json['word_count'] = work.word_count
 	work_json['work_summary'] = work.work_summary
 	work_json['work_notes'] = work.work_notes
+	work_json['cover_url'] = work.cover_url
+	work_json['cover_alt_text'] = work.cover_alt_text
 	#todo i am sure there is a more elegant way to do all this de/serialization
 	work_json['chapters'] = list(build_work_chapters(work))
 	work_json['tags'] = build_work_tags(work)

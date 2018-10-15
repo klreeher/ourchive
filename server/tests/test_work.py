@@ -187,7 +187,7 @@ class TestWorkView(BaseTestCase):
             chapter['number'] = 1
             chapter['text'] = "Plot plot plot plot plot"
             chapter['audio_url'] = ""
-            chapter['image_url'] = ""     
+            chapter['image_url'] = app.config['TEST_FILE_LOC']+'test_image.jpg'   
             chapter['summary'] = "sixteen tiny horses"  
             chapter['image_alt_text'] = ""     
             data["chapters"] = [chapter]

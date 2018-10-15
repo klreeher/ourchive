@@ -34,6 +34,8 @@ class TestingConfig(BaseConfig):
     DEBUG = True
     TESTING = True
     BCRYPT_LOG_ROUNDS = 4
+    UPLOAD_ROOT = '/ourchive/server/tests/'
+    UPLOAD_FOLDER = 'ourchive/server/tests/uploads'
     SQLALCHEMY_DATABASE_URI = postgres_local_base + 'postgres-test/' +database_name + '_test'
     PRESERVE_CONTEXT_ON_EXCEPTION = False
     USE_ES = False

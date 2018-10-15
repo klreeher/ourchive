@@ -128,6 +128,8 @@ class Work(db.Model):
     work_notes = db.Column(db.String)
     is_complete = db.Column(db.Integer)
     word_count = db.Column(db.Integer)
+    cover_url = db.Column(db.String)
+    cover_alt_text = db.Column(db.String)
     created_on = db.Column(db.DateTime, server_default=db.func.now())
     updated_on = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now())
     chapters = db.relationship('Chapter', backref='chapter_work',

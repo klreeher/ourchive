@@ -29,7 +29,7 @@ manager.add_command('runserver', Server(host='0.0.0.0', port='5000'))
 @manager.command
 def test():
     """Runs the unit tests without test coverage."""
-    tests = unittest.TestLoader().discover('server/tests', pattern='test*.py')
+    tests = unittest.TestLoader().discover('server/tests', pattern='test_*.py')
     result = unittest.TextTestRunner(verbosity=2).run(tests)
     if result.wasSuccessful():
         return 0
