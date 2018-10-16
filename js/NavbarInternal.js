@@ -221,7 +221,7 @@ class NavbarInternal extends React.Component {
 
       })
       .catch(function (error) {
-        this.props.alert.show('An error has occurred: '+ error, {
+        this.props.alert.show(error.response.data.message, {
             timeout: 6000,
             type: 'error'
           })

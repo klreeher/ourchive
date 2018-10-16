@@ -42,7 +42,7 @@ def register(post_data):
 			'status': 'fail',
 			'message': 'User already exists. Please log in.',
 		}
-		return make_response(jsonify(responseObject), 401)
+		return make_response(jsonify(responseObject), 409)
 
 def login(post_data):
 	#try:

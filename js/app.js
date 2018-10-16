@@ -5,12 +5,12 @@ import { Provider as AlertProvider } from 'react-alert';
 import AlertTemplate from 'react-alert-template-basic';
 
 const options = {
-  position: 'bottom center',
+  position: 'top center',
   timeout: 5000,
   offset: '30px',
   transition: 'scale'
 }
-	
+
 class App extends Component  {
   render () {
 
@@ -24,4 +24,3 @@ class App extends Component  {
 }
 
 render(<App />, document.getElementById('reactEntry'))
-

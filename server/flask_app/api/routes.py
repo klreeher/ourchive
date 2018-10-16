@@ -90,11 +90,11 @@ def authorize():
 @api.route('/api/user/register/', methods=['POST'])
 def register():
   if not request.json:
-    abort(400)
+    abort(401)
   if request.json["email"] is None:
-    abort(400)
+    abort(401)
   if request.json["password"] is None:
-    abort(400)
+    abort(401)
   return auth.register(request.json)
 
 @api.route('/api/user/<string:username>/reset/<string:token>', methods=['POST'])
@@ -587,4 +587,3 @@ def get_notifications():
       abort(400)
   else:
     abort(403)
-
