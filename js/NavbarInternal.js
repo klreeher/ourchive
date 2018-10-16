@@ -144,9 +144,16 @@ class NavbarInternal extends React.Component {
       this.setState({showRegisterModal: false});
     }.bind(this));
   }
-  trySubmit(evt) {
-    if(evt.keyCode == 13){
-        this.handleLogin(evt)
+  trySubmit(evt, key) {
+    console.log(evt)
+    if(evt.keyCode == 13) {
+      console.log(key)
+        if (key === 1) {
+          this.handleLogin(evt)
+        }
+        else if (key === 2) {
+          this.handleRegister(evt)
+        }
     }
   }
   handleLogin(evt) {
@@ -317,13 +324,13 @@ class NavbarInternal extends React.Component {
                 <div className="panel-body">
                     <div className="form-group">
                       <label htmlFor="login_userName">Username</label>
-                      <input id="login_userName" onKeyUp={evt => this.trySubmit(evt)} ref="userInput"
+                      <input id="login_userName" onKeyUp={evt => this.trySubmit(evt, 1)} ref="userInput"
                         name="userNameInput" onChange={this.setUserName} className="form-control"></input>
                     </div>
                     <div className="form-group">
                       <label htmlFor="password">Password</label>
                       <input id="password" className="form-control" type="password" ref="pwInput"
-                      onChange={this.setPassword} onKeyUp={evt => this.trySubmit(evt)}></input>
+                      onChange={this.setPassword} onKeyUp={evt => this.trySubmit(evt, 1)}></input>
                     </div>
                     <button className="btn btn-link" onClick={evt => this.resetPassword(evt)}>Forgot password?</button>
                     <div className="form-group">
@@ -347,17 +354,17 @@ class NavbarInternal extends React.Component {
                     <div className="form-group">
                       <label htmlFor="userName">Email</label>
                       <input id="email"
-                        name="emailInput" onChange={this.setEmail} className="form-control"></input>
+                        name="emailInput" onChange={this.setEmail} onKeyUp={evt => this.trySubmit(evt, 2)} className="form-control"></input>
                     </div>
                     <div className="form-group">
                       <label htmlFor="userName">Username</label>
                       <input id="userName"
-                        name="userNameInput" onChange={this.setUserName} className="form-control"></input>
+                        name="userNameInput" onChange={this.setUserName} onKeyUp={evt => this.trySubmit(evt, 2)}  className="form-control"></input>
                     </div>
                     <div className="form-group">
                       <label htmlFor="password">Password</label>
                       <input id="password" className="form-control" type="password"
-                      onChange={this.setPassword}></input>
+                      onChange={this.setPassword} onKeyUp={evt => this.trySubmit(evt, 2)} ></input>
                     </div>
                     <div className="form-group">
                       <button onClick={evt => this.handleRegister(evt)} className="btn btn-default">Submit</button>
