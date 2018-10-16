@@ -163,6 +163,7 @@ class NavbarInternal extends React.Component {
         localStorage.setItem('friendly_name', response.data['username'])
         localStorage.setItem('email', response.data['email'])
         this.props.updateUser();
+        this.props.updateCsrf();
         this.setState({
           userName: "",
           password: "",
@@ -210,6 +211,7 @@ class NavbarInternal extends React.Component {
         localStorage.setItem('friendly_name', response.data['username'])
         localStorage.setItem('email', this.state.email)
         this.props.updateUser();
+        this.props.updateCsrf();
         this.setState({
           userName: "",
           password: "",
