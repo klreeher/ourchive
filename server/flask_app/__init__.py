@@ -32,7 +32,7 @@ tm = tus_manager(app, upload_url='/uploads', upload_folder=app.config.get('UPLOA
 db = SQLAlchemy(app)
 redis_db = redis.StrictRedis(host=app.config.get('REDIS_SERVERNAME'), port=6379, db=0, password=app.config.get('REDIS_PASSWORD'))
 es_client = Elasticsearch()
-connections.create_connection(hosts=['elasticsearch'])
+connections.create_connection(hosts=[app.config.get('ELASTICSEARCH_SERVERNAME')])
 
 from .work import work as work_blueprint
 app.register_blueprint(work_blueprint)
