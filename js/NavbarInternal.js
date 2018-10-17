@@ -145,9 +145,7 @@ class NavbarInternal extends React.Component {
     }.bind(this));
   }
   trySubmit(evt, key) {
-    console.log(evt)
     if(evt.keyCode == 13) {
-      console.log(key)
         if (key === 1) {
           this.handleLogin(evt)
         }
