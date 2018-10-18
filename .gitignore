@@ -2,7 +2,7 @@ uploads/*
 audio/*
 venv/*
 ourchive-env/*
-tus-server/data/*
+tus-data/data/*
 .DS_Store
 venv
 node_modules

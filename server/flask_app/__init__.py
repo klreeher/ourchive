@@ -5,6 +5,7 @@ from flask_cors import CORS
 import bcrypt
 from flask_sqlalchemy import SQLAlchemy
 import os
+from os import listdir
 import redis
 from file_storage import FileStorage
 from s3_storage import S3Storage
@@ -49,9 +50,10 @@ app.register_blueprint(api_blueprint)
 from .tag import tag as tag_blueprint
 app.register_blueprint(tag_blueprint)
 
-@app.route('/<path:stuff>/uploads/<path:filename>', methods=['GET'])
+@app.route('/<path:stuff>/files/<path:filename>', methods=['GET'])
 def download(stuff, filename):
-  uploads = os.path.join(app.root_path, tm.upload_folder)
+  uploads = os.path.join(app.config.get('UPLOAD_FOLDER'))
+  filename = filename + app.config.get('UPLOAD_SUFFIX')
   return send_from_directory(directory=uploads, filename=filename)
 
 @app.route('/audio/<string:audio_file>')
