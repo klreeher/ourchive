@@ -97,6 +97,7 @@ class SingleWork extends React.Component {
   }
   nextChapter(evt)
   {
+    evt.preventDefault();
     var nextIndex = this.state.chapter_index + 1
     var nextChapter = this.state.work.chapters[nextIndex]
     this.setState({
@@ -104,8 +105,9 @@ class SingleWork extends React.Component {
       chapter_index: nextIndex
     })
   }
-  previousChapter()
+  previousChapter(evt)
   {
+    evt.preventDefault();
     var previousIndex = this.state.chapter_index - 1
     var previousChapter = this.state.work.chapters[previousIndex]
     this.setState({
@@ -241,9 +243,9 @@ class SingleWork extends React.Component {
             </div>
             <br/>
             <hr/>
-            {this.state.current_chapter && <div className="row" id={"chapter_"+this.state.current_chapter.id}>
+            <div className="row" id={"chapter_"+this.state.current_chapter.id}>
                 <Chapter chapter={this.state.current_chapter} user={this.props.user} csrf={this.props.csrf} />
-            </div>  }
+            </div>
             <button className="btn btn-link" onMouseDown={evt => this.previousChapter(evt)} disabled={previousDisabled}>Previous Chapter</button>
             <button className="btn btn-link" onMouseDown={evt => this.nextChapter(evt)} disabled={nextDisabled}>Next Chapter</button>
           </div>

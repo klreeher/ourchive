@@ -28,6 +28,8 @@ class DevelopmentConfig(BaseConfig):
     TUS_ENDPOINT = 'http://127.0.0.1:5000/uploads'
     REDIS_SERVERNAME = 'redis'
     REDIS_PORT=6379
+    REDIS_PASSWORD='devpassword'
+    ELASTICSEARCH_SERVERNAME='elasticsearch'
 
 
 class TestingConfig(BaseConfig):

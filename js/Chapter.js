@@ -25,11 +25,14 @@ class Chapter extends React.Component {
   componentWillMount() {
     //do things
   }
-  componentWillUpdate(nextProps, nextState)
+  componentDidUpdate(nextProps, nextState)
   {
   }
   componentWillReceiveProps(nextProps) {
-    this.setState({ chapter: nextProps.chapter });
+    var clean = DOMPurify.sanitize(nextProps.chapter.text);
+    this.setState({chapter: nextProps.chapter, user: nextProps.user, newCommentText: "",
+    toggleCommentsText: "Show Comments", cleaned_text: clean});
+    document.getElementById("chapter_top").scrollIntoView();
   }
   toggleComments(event, commentId)
   {
@@ -55,18 +58,18 @@ class Chapter extends React.Component {
     if (this.state.newCommentText == null || this.state.newCommentText == "") return;
     var commentUser = localStorage.getItem('friendly_name') != null && localStorage.getItem('friendly_name') != "" ? localStorage.getItem('friendly_name') : "Anonymous";
     var newComment = {text: this.state.newCommentText, userName: commentUser,
-      comments: [], chapterId: this.state.chapter.id};
+      comments: [], chapterId: this.props.chapter.id};
     var apiRoute = "/api/chapter/comment/";
     axios.post(apiRoute, {
       text: this.state.newCommentText,
-      chapter_id: this.state.chapter.id
+      chapter_id: this.props.chapter.id
     }, {
       headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json',
       'CSRF-Token': this.props.csrf
     }})
     .then(function (response) {
         newComment.id = response.data["id"]
-        var original = this.state.chapter;
+        var original = this.props.chapter;
         original.comments.push(newComment);
         this.setState({
           chapter: original,
@@ -89,13 +92,13 @@ class Chapter extends React.Component {
   }
   render() {
     return (
-      <div>
+      <div id="chapter_top">
         <div className="text-padding">
           <div className="row">
-            <div className="col-xs-9 col-md-12 "><h2>Chapter {this.state.chapter.number}: {this.state.chapter.title}</h2></div>
+            <div className="col-xs-9 col-md-12 "><h2>Chapter {this.props.chapter.number}: {this.props.chapter.title}</h2></div>
           </div>
           <div className="row">
-            <div className="col-xs-9 col-md-12 render-linebreak"><blockquote>{this.state.chapter.summary}</blockquote></div>
+            <div className="col-xs-9 col-md-12 render-linebreak"><blockquote>{this.props.chapter.summary}</blockquote></div>
           </div>
           <hr/>
 
@@ -105,17 +108,17 @@ class Chapter extends React.Component {
           </div>
           <br/>
           <br/>
-          {this.state.chapter.audio_url && this.state.chapter.audio_url != "" ?
+          {this.props.chapter.audio_url && this.props.chapter.audio_url != "" ?
             <div className="row">
               <div className="col-xs-9 col-md-12">
-                <audio ref="audio_tag" src={this.state.chapter.audio_url} controls/>
+                <audio ref="audio_tag" src={this.props.chapter.audio_url} controls/>
               </div>
             </div>
           : <div></div>}
           
           <div className="row">
             <div className="col-xs-9 col-md-12">
-              {this.state.chapter.image_url && <img src={this.state.chapter.image_url} alt='{this.state.chapter.image_alt_text}'/>}
+              {this.props.chapter.image_url && <img src={this.props.chapter.image_url} alt='{this.props.chapter.image_alt_text}'/>}
             </div>
           </div>
           <br/>
@@ -144,9 +147,9 @@ class Chapter extends React.Component {
             </div>
             <div className="row">
               <div className="col-xs-9 col-md-12">
-                {this.state.chapter.comments.map(comment =>
+                {this.props.chapter.comments.map(comment =>
                   <div key={comment.id} className="col-md-12" ref={"comment_"+comment.id}>
-                    <Comment comment={comment} user={this.props.user} chapterId={this.state.chapter.id} csrf={this.props.csrf}/>
+                    <Comment comment={comment} user={this.props.user} chapterId={this.props.chapter.id} csrf={this.props.csrf}/>
                   </div>
 
                   )}

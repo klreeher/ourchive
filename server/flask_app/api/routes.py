@@ -114,9 +114,9 @@ def get_inbox():
     if result is not None:
       return make_response(jsonify(result), 201)
     else:
-      abort(400)
+      abort(401)
   else:
-    abort(400)
+    abort(401)
 
 @api.route('/api/user/messages/outbox')
 def get_outbox():
