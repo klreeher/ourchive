@@ -243,9 +243,9 @@ class SingleWork extends React.Component {
             </div>
             <br/>
             <hr/>
-            <div className="row" id={"chapter_"+this.state.current_chapter.id}>
+            {this.state.current_chapter && <div className="row" id={"chapter_"+this.state.current_chapter.id}>
                 <Chapter chapter={this.state.current_chapter} user={this.props.user} csrf={this.props.csrf} />
-            </div>
+            </div>}
             <button className="btn btn-link" onMouseDown={evt => this.previousChapter(evt)} disabled={previousDisabled}>Previous Chapter</button>
             <button className="btn btn-link" onMouseDown={evt => this.nextChapter(evt)} disabled={nextDisabled}>Next Chapter</button>
           </div>

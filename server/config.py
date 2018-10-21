@@ -18,7 +18,7 @@ class DevelopmentConfig(BaseConfig):
     DEBUG = True
     BCRYPT_LOG_ROUNDS = 4
     SQLALCHEMY_DATABASE_URI = postgres_local_base + 'postgres/' + database_name
-    UPLOAD_ROOT = '/ourchive/tus-data/files/'
+    UPLOAD_ROOT = '/ourchive/tus-data/data/'
     UPLOAD_FOLDER = '/ourchive/tus-data/data/'
     UPLOAD_SUFFIX = '.bin'
     AWS_BUCKET = 'ourchive-test-bucket'

@@ -391,7 +391,14 @@ def post_work():
   user_id = auth.auth_from_data(request)
   if user_id > 0:
     request.json['user_id'] = user_id
-    work_id = work.add_work(request.json)
+    try:
+      work_id = work.add_work(request.json)
+    except ValueError as error:
+      responseObject = {
+          'status': 'failure',
+          'message': 'File type invalid.'
+        }
+      return make_response(jsonify(responseObject), 400)
     return json.dumps({"work_id": work_id})
   else:
     abort(400)

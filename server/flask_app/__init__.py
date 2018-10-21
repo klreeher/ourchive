@@ -53,7 +53,6 @@ app.register_blueprint(tag_blueprint)
 @app.route('/<path:stuff>/files/<path:filename>', methods=['GET'])
 def download(stuff, filename):
   uploads = os.path.join(app.config.get('UPLOAD_FOLDER'))
-  filename = filename + app.config.get('UPLOAD_SUFFIX')
   return send_from_directory(directory=uploads, filename=filename)
 
 @app.route('/audio/<string:audio_file>')

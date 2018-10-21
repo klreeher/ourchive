@@ -122,8 +122,11 @@ def add_work(json):
 def add_chapters(work, chapters):
 	count = 0
 	for chapter_item in chapters:
-		chapter = Chapter(title=chapter_item['title'], number=chapter_item['number'], text=chapter_item['text'], audio_url=get_file_url(chapter_item['audio_url']),image_url=get_file_url(chapter_item['image_url']),
+		chapter = Chapter(title=chapter_item['title'], number=chapter_item['number'], text=chapter_item['text'],
 			summary=chapter_item['summary'], image_alt_text=chapter_item['image_alt_text'])
+		chapter = validate_files(chapter, chapter_item)
+		if chapter == -1:
+			raise ValueError('Chapter audio or image is corrupted or of the wrong type.')
 		work.chapters.append(chapter)
 		count = count + count_words(chapter_item['text'])
 	return count
@@ -132,23 +135,18 @@ def update_chapters(work, chapters):
 	count = 0
 	for chapter_item in chapters:
 		if 'id' not in chapter_item:
-			chapter = Chapter(title=chapter_item['title'], number=chapter_item['number'], text=chapter_item['text'], audio_url=get_file_url(chapter_item['audio_url']),image_url=get_file_url(chapter_item['image_url']))
+			chapter = Chapter(title=chapter_item['title'], number=chapter_item['number'], text=chapter_item['text'], image_alt_text=chapter_item['image_alt_text'])
+			chapter = validate_files(chapter, chapter_item)
+			if chapter == -1:
+				raise ValueError('Chapter audio or image is corrupted or of the wrong type.')
 			work.chapters.append(chapter)
 		elif 'delete' not in chapter_item:
-			if chapter.audio_url:
-				audio_url = get_file_url(chapter_item['audio_url'])
-				if not (file_utils.file_is_audio(audio_url)):
-					return -1
-				else:
-					chapter.audio_url = audio_url
-			if chapter.image_url:
-				image_url = get_file_url(chapter_item['image_url'])
-				if not (file_utils.file_is_image(image_url)):
-					return -1
-				else:
-					chapter.image_url = image_url
 			#not chapter_item['delete']:
 			chapter = Chapter.query.filter_by(id=chapter_item['id']).first()
+			chapter = validate_files(chapter, chapter_item)
+			print(chapter)
+			if chapter == -1:
+				raise ValueError('Chapter audio or image is corrupted or of the wrong type.')
 			chapter.title = chapter_item['title']
 			chapter.summary = chapter_item['summary']
 			chapter.number = chapter_item['number']
@@ -160,6 +158,21 @@ def update_chapters(work, chapters):
 			work.chapters.remove(chapter)
 		count = count + count_words(chapter_item['text'])
 	return count
+
+def validate_files(chapter, chapter_item):
+	if chapter_item['audio_url']:
+		audio_url = get_file_url(chapter_item['audio_url'])
+		if not (file_utils.file_is_audio(audio_url)):
+			return -1
+		else:
+			chapter.audio_url = audio_url
+	if chapter_item['image_url']:
+		image_url = get_file_url(chapter_item['image_url'])
+		if not (file_utils.file_is_image(image_url)):
+			return -1
+		else:
+			chapter.image_url = image_url
+	return chapter
 
 def add_tags(work, tags):
 	for tag_item in tags:
@@ -268,4 +281,4 @@ def get_file_url(url):
 		return ''
 	url_root = app.config.get('UPLOAD_ROOT')
 	identifier = url.rsplit('/', 1)[-1]
-	return url_root + identifier
+	return url_root + identifier + app.config.get('UPLOAD_SUFFIX')
