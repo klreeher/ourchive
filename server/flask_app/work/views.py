@@ -9,6 +9,7 @@ from ..models import Work, Chapter, Tag, User, TagType
 from .search_wrapper import WorkSearch
 from ..auth import logic as auth
 from ..tag.search_wrapper import TagSearch
+import file_utils
 
 @work.route('/')
 def homepage():
@@ -134,14 +135,24 @@ def update_chapters(work, chapters):
 			chapter = Chapter(title=chapter_item['title'], number=chapter_item['number'], text=chapter_item['text'], audio_url=get_file_url(chapter_item['audio_url']),image_url=get_file_url(chapter_item['image_url']))
 			work.chapters.append(chapter)
 		elif 'delete' not in chapter_item:
+			if chapter.audio_url:
+				audio_url = get_file_url(chapter_item['audio_url'])
+				if not (file_utils.file_is_audio(audio_url)):
+					return -1
+				else:
+					chapter.audio_url = audio_url
+			if chapter.image_url:
+				image_url = get_file_url(chapter_item['image_url'])
+				if not (file_utils.file_is_image(image_url)):
+					return -1
+				else:
+					chapter.image_url = image_url
 			#not chapter_item['delete']:
 			chapter = Chapter.query.filter_by(id=chapter_item['id']).first()
 			chapter.title = chapter_item['title']
 			chapter.summary = chapter_item['summary']
 			chapter.number = chapter_item['number']
 			chapter.text = chapter_item['text']
-			chapter.audio_url = get_file_url(chapter_item['audio_url'])
-			chapter.image_url = get_file_url(chapter_item['image_url'])
 			chapter.image_alt_text = chapter_item['image_alt_text']
 			db.session.add(chapter)
 		else:

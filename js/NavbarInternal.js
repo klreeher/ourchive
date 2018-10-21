@@ -257,7 +257,7 @@ class NavbarInternal extends React.Component {
   render() {
 
     const navbarLoggedIn = (
-      <div className="col-xs-8 col-md-12">
+      <div className="col-xs-6 col-md-12">
       <Navbar collapseOnSelect>
         <Navbar.Header>
           <Navbar.Brand>
@@ -299,7 +299,7 @@ class NavbarInternal extends React.Component {
     );
 
     const navbarLoggedOut = (
-    <div className="col-xs-8 col-md-12">
+    <div className="col-xs-6 col-md-12">
       <Navbar>
         <Navbar.Header>
           <Navbar.Brand>
