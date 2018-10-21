@@ -54,7 +54,7 @@ class MyProfile extends React.Component {
     {
 
     	var userProfile = localStorage.getItem('jwt');
-    	if (userProfile == undefined || localStorage.getItem('friendly_name') == undefined || userProfile = "")
+    	if (userProfile == undefined || localStorage.getItem('friendly_name') == undefined || userProfile == "")
     	{
     		  document.location.href="/";
     		  return;
