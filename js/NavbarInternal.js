@@ -19,6 +19,7 @@ class NavbarInternal extends React.Component {
 
   componentDidMount() {
     var state = localStorage.getItem('jwt');
+    var friendly_name = localStorage.getItem('friendly_name')
     var admin = localStorage.getItem('admin');
     var id = localStorage.getItem('user_id');
     var token = null;
@@ -27,7 +28,7 @@ class NavbarInternal extends React.Component {
 
     }
     this.setState({
-        loggedIn: state != null,
+        loggedIn: state != null && state != "" && friendly_name != null && friendly_name != "",
         admin: admin != null && admin.toLowerCase() === "true",
         userId: id
       })
@@ -69,7 +70,7 @@ class NavbarInternal extends React.Component {
       });
       this.props.updateUser();
       this.forceUpdate()
-    });
+    }.bind(this));
 
   }
 
@@ -409,14 +410,10 @@ class NavbarInternal extends React.Component {
       </div>
     );
 
-    if (this.state.loggedIn)
-    {
-      return (navbarLoggedIn);
-    }
-    else
-    {
-      return (navbarLoggedOut);
-    }
+    return (
+      <div>{this.state.loggedIn ? navbarLoggedIn : navbarLoggedOut}</div>
+  );
+  
   }
 }
 
