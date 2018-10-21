@@ -1,11 +1,12 @@
 import re
 import json
 from flask import current_app as app
-from ..models import User, WorkType, TagType, NotificationType
+from database import db
+from models import User, WorkType, TagType, NotificationType
 from itsdangerous import TimestampSigner
-from server.flask_app import bcrypt, db, redis_db
-from server.flask_app.work import views as work_logic
-from server.flask_app.bookmark import logic as bookmark_logic
+from work import views as work_logic
+from bookmark import logic as bookmark_logic
+import bcrypt
 
 def create_user(username, password, email, admin=False):
 	user = User(
@@ -19,25 +20,25 @@ def create_user(username, password, email, admin=False):
 	return user
 
 def add_blocklist(blocked_user, blocking_user):
-	results = redis_db.sadd("blocklist:#"+str(blocking_user), str(blocked_user))
+	results = app.redis_db.sadd("blocklist:#"+str(blocking_user), str(blocked_user))
 	return results
 
 def in_blocklist(blocked_user, blocking_user):
-	blocklist = redis_db.smembers("blocklist:#"+str(blocking_user))
+	blocklist = app.redis_db.smembers("blocklist:#"+str(blocking_user))
 	return str(blocked_user).encode("utf8") in blocklist
 
 def add_reset(reset_user):
 	#todo this key should actually be secret
 	s = TimestampSigner(app.config.get('SECRET_KEY'))
 	token = s.sign(str(reset_user.id)+'password-reset')
-	redis_db.set("password-reset:#"+str(reset_user.id), token)
+	app.redis_db.set("password-reset:#"+str(reset_user.id), token)
 	return token
 
 def validate_reset_token(reset_user, token):
 	s = TimestampSigner(app.config.get('SECRET_KEY'))
 	try:
 		new_token = s.unsign(token, max_age=43200)
-		redis_val = redis_db.get("password-reset:#"+str(reset_user))
+		redis_val = app.redis_db.get("password-reset:#"+str(reset_user))
 		if (token == redis_val.decode("utf8")):
 			return True
 		else:

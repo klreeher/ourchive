@@ -1,9 +1,9 @@
 from datetime import datetime
 from elasticsearch_dsl.query import MultiMatch, Match, Nested, Q, Query
-from ..models import User
-from ..work.search_wrapper import WorkSearch
-from ..bookmark.search_wrapper import BookmarkSearch
-from ..tag.search_wrapper import TagSearch
+from models import User
+from work.search_wrapper import WorkSearch
+from bookmark.search_wrapper import BookmarkSearch
+from tag.search_wrapper import TagSearch
 from flask import current_app as app
 
 def do_advanced_search(include_terms, exclude_terms, 

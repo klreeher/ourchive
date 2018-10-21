@@ -11,5 +11,5 @@ RUN mkdir -p /ourchive
 WORKDIR /ourchive
 COPY . /ourchive
 
-ENTRYPOINT ["python", "manage.py"]
+ENTRYPOINT ["python", "server/flask_app/manage.py"]
 CMD ["runserver"]

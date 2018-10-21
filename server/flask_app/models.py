@@ -1,8 +1,9 @@
 import datetime
 import jwt
 import bcrypt
-from server.flask_app import app, db
+from database import db
 from sqlalchemy.ext.declarative import declarative_base
+from flask import current_app as app
 
 Base = declarative_base()
 

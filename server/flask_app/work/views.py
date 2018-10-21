@@ -2,18 +2,11 @@ from flask import render_template
 import re
 import json
 from . import work
-from .. import db
-from .. import tag as tag_blueprint
 from flask import current_app as app
-from ..models import Work, Chapter, Tag, User, TagType
-from .search_wrapper import WorkSearch
-from ..auth import logic as auth
-from ..tag.search_wrapper import TagSearch
 import file_utils
-
-@work.route('/')
-def homepage():
-  return render_template('index.html', csrf_token=auth.generate_csrf().decode())
+from models import Work, Chapter, Tag, User, TagType
+from database import db
+import tag as tag_blueprint
 
 def get_tag_categories():
 	tags = []

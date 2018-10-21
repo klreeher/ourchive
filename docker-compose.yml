@@ -30,7 +30,7 @@ services:
 
   website:
     build: .
-    entrypoint: ["python", "manage.py","runserver"]
+    entrypoint: ["python", "server/flask_app/manage.py","runserver"]
     env_file:
       - '.env'
     volumes:
