@@ -3,6 +3,7 @@ audio/*
 venv/*
 ourchive-env/*
 tus-data/*
+tus-data/data/*
 .DS_Store
 venv
 node_modules
