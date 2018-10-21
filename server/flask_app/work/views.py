@@ -76,7 +76,7 @@ def update_work(json):
 		work.cover_url = get_file_url(json['cover_url'])
 		work.cover_alt_text = json['cover_alt_text']
 	db.session.add(work)
-	word_count = update_chapters(work, chapters)
+	word_count = update_chapters(work, chapters, json['delete_list'])
 	work.word_count = word_count
 	add_tags(work, work_tags)
 	db.session.commit()
@@ -131,7 +131,7 @@ def add_chapters(work, chapters):
 		count = count + count_words(chapter_item['text'])
 	return count
 
-def update_chapters(work, chapters):
+def update_chapters(work, chapters, delete_list):
 	count = 0
 	for chapter_item in chapters:
 		if 'id' not in chapter_item:
@@ -140,11 +140,10 @@ def update_chapters(work, chapters):
 			if chapter == -1:
 				raise ValueError('Chapter audio or image is corrupted or of the wrong type.')
 			work.chapters.append(chapter)
-		elif 'delete' not in chapter_item:
-			#not chapter_item['delete']:
+			count = count + count_words(chapter_item['text'])
+		else:
 			chapter = Chapter.query.filter_by(id=chapter_item['id']).first()
 			chapter = validate_files(chapter, chapter_item)
-			print(chapter)
 			if chapter == -1:
 				raise ValueError('Chapter audio or image is corrupted or of the wrong type.')
 			chapter.title = chapter_item['title']
@@ -152,11 +151,12 @@ def update_chapters(work, chapters):
 			chapter.number = chapter_item['number']
 			chapter.text = chapter_item['text']
 			chapter.image_alt_text = chapter_item['image_alt_text']
+			count = count + count_words(chapter_item['text'])
 			db.session.add(chapter)
-		else:
-			chapter = Chapter.query.filter_by(id=chapter_item['id']).first()
-			work.chapters.remove(chapter)
-		count = count + count_words(chapter_item['text'])
+	for chapter_id in delete_list:
+		chapter = Chapter.query.filter_by(id=chapter_id).first()
+		count = count - count_words(chapter.text)
+		work.chapters.remove(chapter)
 	return count
 
 def validate_files(chapter, chapter_item):

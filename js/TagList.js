@@ -139,7 +139,7 @@ class TagList extends React.Component {
       onChange: this.onChange
     };
     return (
-      <div className="col-md-12">
+      <div>
         <div className="row">
             <div className="col-md-3 tag_category">
               {this.state.tag_category}
@@ -170,8 +170,7 @@ class TagList extends React.Component {
               />
             </div>
           }
-        </div>
-        <br/>
+          </div>
       </div>
     );
   }

@@ -8,7 +8,6 @@ export default class ChapterForm extends React.Component {
 
   constructor(props) {
     super(props);    
-    this.state = {number: props.chapter_number, chapter: props.chapter};
   }
   componentWillMount() { 
     //do things
@@ -18,25 +17,31 @@ export default class ChapterForm extends React.Component {
   }
   render() {
     return (
-        <div id={this.state.number}>
+        <div id={this.props.chapter_number}>
+              <hr/>
               <div className="form-group">
-                <label htmlFor={"chapter_title_"+this.state.number}>Chapter Title</label>
-                <input id={"chapter_title_"+this.state.number} value={this.state.chapter.title}
+                <div className="row">
+                  <div className="col-xs-8"><h3><strong>Chapter {this.props.chapter_number}</strong> <small><button className="btn btn-link" type="button" onMouseDown={evt => this.props.deleteChapter(evt, this.props.chapter_number, this.props.chapter.id)}>DELETE</button></small></h3></div>
+                </div>
+              </div>
+              <div className="form-group">
+                <label htmlFor={"chapter_title_"+this.props.chapter_number}>Chapter Title</label>
+                <input id={"chapter_title_"+this.props.chapter_number} value={this.props.chapter.title}
                   name="title" onChange={this.props.handler} className="form-control"></input>
               </div>              
               <div className="form-group">
                 <label htmlFor="summary">Chapter Summary</label>
-                <textarea id="summary" className="form-control" name="summary" value={this.state.chapter.summary}
+                <textarea id="summary" className="form-control" name="summary" value={this.props.chapter.summary}
                 onChange={this.props.handler} rows="3"></textarea>
               </div>
               <div className="form-group">
                 <label htmlFor="chapter_notes">Chapter Notes</label>
-                <textarea id="chapter_notes" className="form-control" name="chapter_notes" value={this.state.chapter.chapter_notes}
+                <textarea id="chapter_notes" className="form-control" name="chapter_notes" value={this.props.chapter.chapter_notes}
                 onChange={this.props.handler} rows="3"></textarea>
               </div>
               <div className="form-group">
                 <div className="progressBar">
-                  <div className="progressBarInner" id={"image_bar_"+this.state.number}></div>
+                  <div className="progressBarInner" id={"image_bar_"+this.props.chapter_number}></div>
                 </div>                
               </div>
               <div className="form-group">
@@ -46,12 +51,12 @@ export default class ChapterForm extends React.Component {
               </div>
               <div className="form-group">
                 <label htmlFor="image_alt_text">Chapter Image Alt Text</label>
-                <input className="form-control" id={"image_alt_text_" + this.state.number}
+                <input className="form-control" id={"image_alt_text_" + this.props.chapter_number}
                 name="image_alt_text" onChange={this.props.handler}></input>
               </div>
               <div className="form-group">
                 <div className="progressBar">
-                  <div className="progressBarInner" id={"audio_bar_"+this.state.number}></div>
+                  <div className="progressBarInner" id={"audio_bar_"+this.props.chapter_number}></div>
                 </div>                
               </div>
               <div className="form-group">
@@ -61,7 +66,7 @@ export default class ChapterForm extends React.Component {
               </div>
               <div className="form-group">
                 <label htmlFor="chapter_text">Chapter Text</label>
-                <textarea id="text" className="form-control" name="text" onChange={this.props.handler} rows="10" value={this.state.chapter.text}></textarea>
+                <textarea id="text" className="form-control" name="text" onChange={this.props.handler} rows="10" value={this.props.chapter.text}></textarea>
               </div>
         </div>
 
