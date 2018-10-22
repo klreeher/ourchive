@@ -7,6 +7,8 @@ import file_utils
 from models import Work, Chapter, Tag, User, TagType
 from database import db
 import tag as tag_blueprint
+from .search_wrapper import WorkSearch
+from tag.search_wrapper import TagSearch
 
 def get_tag_categories():
 	tags = []
