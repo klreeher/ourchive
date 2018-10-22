@@ -259,7 +259,7 @@ class NewWork extends React.Component {
     val = DOMPurify.sanitize(val);
     var original = tags;
     var filtered = original.filter(tag => tag == val)
-    if (filtered == undefined || filtered.length > 0 || val == undefined) return
+    if (filtered === undefined || filtered.length > 0 || val == undefined) return
     original.push(val);
     var copy = this.state.work_tags;
     var tags = copy.filter(tag => tag.label == tag_category)[0]
@@ -322,8 +322,7 @@ class NewWork extends React.Component {
     //todo call get categories
   }
   componentDidMount() {
-    console.log(this.state.work_tags)
-      this.getTagCategories();
+      //this.getTagCategories();
       axios.get('/api/works/types')
         .then(function (response) {
           this.setState({work_types: response.data});
@@ -394,9 +393,9 @@ class NewWork extends React.Component {
             <label htmlFor="work_notes">Notes</label>
             <textarea id="work_notes" className="form-control" rows="3" value={this.state.work_notes} onChange={evt => this.updateWorkNotes(evt)}></textarea>
           </div>
-          {this.state.work_tags.map(tag =>
-              <div key={tag.id} classname="form-group">
-                  <TagList tag_category={tag.label} category_id={tag.id} tags={tag.tags} underEdit={true} createWorkTags={this.create_work_tag}
+          {this.state.work_tags && this.state.work_tags.map(tag =>
+              <div className="form-group">
+                  <TagList key={tag.id} tag_category={tag.label} category_id={tag.id} tags={tag.tags} underEdit={true} createWorkTags={this.create_work_tag}
                   removeWorkTag={this.remove_work_tag}/>
               </div>
           )}

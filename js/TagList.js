@@ -39,17 +39,6 @@ class TagList extends React.Component {
   componentWillMount() {
     //do things
   }
-  componentWillUpdate(nextProps, nextState)
-  {
-    //do things
-  }
-  componentDidUpdate() {
-    if (this.state.oldItem !== '')
-    {
-      document.getElementById("tags_ul"+this.state.tag_category).append(this.state.oldItem)
-      this.state.oldItem = ''
-    }
-  }
   onChange(event, newValue) {
     var newVal = newValue["newValue"]
     if (newVal != '') {
@@ -70,11 +59,14 @@ class TagList extends React.Component {
   }
 
   onSuggestionsFetchRequested(value) {
+    if (this.props.category_id === undefined || this.props.category_id < 1) {
+      return
+    }
     var cleaned = DOMPurify.sanitize(value.value);
-    axios.get('/api/tag/'+this.state.category_id+'/suggestions/'+cleaned)
+    axios.get('/api/tag/'+this.props.category_id+'/suggestions/'+cleaned)
         .then(function (response) {
           if (!('results' in response.data)) {
-            this.props.removeWorkTag(this.state.category_id, cleaned)
+            this.props.removeWorkTag(this.props.category_id, cleaned)
             return
           }
           this.setState({
@@ -107,7 +99,7 @@ class TagList extends React.Component {
         event.target.value = ''
         var id = event.target.id.charAt(0);
         var oldItem = event.target.parentElement
-        this.props.createWorkTags(oldVal, oldItem, this.state.tags, this.state.tag_category);
+        this.props.createWorkTags(oldVal, oldItem, this.props.tags, this.props.tag_category);
         this.setState({
           oldItem: oldItem
         })
@@ -119,7 +111,7 @@ class TagList extends React.Component {
   newTagAuto(event, suggestion) {
     var oldVal = event.target.value
     event.target.value = ''
-    this.props.createWorkTags(suggestion.suggestionValue, '', this.state.tags, this.state.tag_category);
+    this.props.createWorkTags(suggestion.suggestionValue, '', this.props.tags, this.props.tag_category);
     event.preventDefault();
     this.setState({
       value: ""
@@ -137,7 +129,7 @@ class TagList extends React.Component {
       <div>
         <div className="row">
             <div className="col-md-3 tag_category">
-              {this.state.tag_category}
+              {this.props.tag_category}
             </div>
         </div>
         <div className="row">
