@@ -6,7 +6,7 @@ from ..bookmark.search_wrapper import BookmarkSearch
 from ..tag.search_wrapper import TagSearch
 from flask import current_app as app
 
-def do_advanced_search(include_terms, exclude_terms, 
+def do_advanced_search(include_terms, exclude_terms,
 	curator_usernames, creator_usernames, search_works, search_bookmarks, page_number, types=None):
 	if not app.config.get('USE_ES'):
 		return {}
@@ -163,8 +163,8 @@ def search_on_term(term, search_works, search_bookmarks, page_number):
 	return results
 
 def get_work_query(term):
-	query = MultiMatch(query=term, fields=['title', 'work_summary', 'work_notes', 'word_count', 
-		'user_id'], 
+	query = MultiMatch(query=term, fields=['title', 'work_summary', 'work_notes', 'word_count',
+		'user_id'],
 		fuzziness=2)
 	return query
 
@@ -175,14 +175,27 @@ def get_chapter_query(term):
                 "multi_match" : {
                     "query" : term,
                     "fields" : ["chapters.title", "chapters.text", "chapters.summary", "chapters.image_alt_text"]
-                    
+
                 }
             }
         }})
 	return chapter_query
 
+def get_work_tags_query(term):
+	tags_query = Q({"nested": {
+		"path" : "tags",
+            "query" : {
+                "multi_match" : {
+                    "query" : term,
+                    "fields" : ["tags.text"]
+
+                }
+            }
+        }})
+	return tags_query
+
 def get_bookmark_query(term):
-	return MultiMatch(query=term, fields=['curator_title', 'rating', 'description'], 
+	return MultiMatch(query=term, fields=['curator_title', 'rating', 'description'],
 		fuzziness=2)
 
 def search_text_on_term(term, page_number=1):
@@ -191,7 +204,7 @@ def search_text_on_term(term, page_number=1):
 	WorkSearch.init()
 	search = WorkSearch.search()
 	query = get_work_query(term)
-	chapter_query = get_chapter_query(term)	
+	chapter_query = get_chapter_query(term)
 	combined = chapter_query | query
 	search = search[(page_number-1) * 25:page_number*25]
 	search = search.query(combined)
@@ -212,7 +225,7 @@ def build_work_search_results(item):
 	work['word_count'] = item.word_count
 	work['user_id'] = item.user_id
 	user = User.query.filter_by(id=item.user_id).first()
-	if user is not None: 
+	if user is not None:
 		work['username'] = user.username
 	work['chapter_count'] = len(item.chapters)
 	work['id'] = item.meta.id
@@ -233,7 +246,7 @@ def search_by_complete(complete):
 		return {}
 	search = WorkSearch.search()
 	query = Match(is_complete=complete)
-	search = search.query(query)		
+	search = search.query(query)
 	results = search.execute()
 	return results
 

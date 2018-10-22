@@ -10,13 +10,13 @@ export default class TagItem extends React.Component {
     super(props);
     this.state = {tag: props.tag, category_id: props.category, underEdit: props.underEdit};
   }
-  componentWillMount() { 
+  componentWillMount() {
     //do things
   }
   componentWillUpdate(nextProps, nextState)
   {
   }
-  
+
   goToTag(evt, history) {
     evt.target.blur();
     var cleaned = this.state.tag.replace('/', '%2F')
@@ -25,17 +25,16 @@ export default class TagItem extends React.Component {
       state: { category_id: this.state.category_id, tag: this.state.tag }
     })
   }
-  
+
   render() {
     const TagLink = withRouter(({ history }) => (
       <li className="tag_li" id={this.state.tag}>
-      <span onMouseDown={evt => this.goToTag(evt, history)}>{this.state.tag}</span> {this.state.underEdit && 
-          <a className="close_icon_link" onClick={this.props.removeTag}><span className="close_icon">x</span></a>
+      <span onMouseDown={evt => this.goToTag(evt, history)}>{this.state.tag}</span> {this.state.underEdit &&
+          <a className="close_icon_link" onClick={evt => this.props.removeTag(this.state.category_id, this.state.tag)}><span className="close_icon">x</span></a>
         }</li>
     ))
     return (
-        <TagLink/>        
+        <TagLink/>
     );
   }
 }
-

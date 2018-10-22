@@ -9,12 +9,13 @@ from ..models import Tag, Bookmark, Work, TagType
 
 def get_suggestions(term, type_id):
 	dirty = term.replace('_', '/')
+	dirty = dirty.replace('', '.')
+	dirty = dirty.replace('[]', '\\')
 	data = {}
 	data['results'] = []
 	results = redis_db.zrevrange("tag-suggestions:#"+str(type_id)+":#"+dirty.lower(), 0, 9)
 	for item in results:
 		data['results'].append(item.decode("utf-8"))
-	print(data)
 	return data
 
 def add_tag(tag_text, type_id):
@@ -65,4 +66,3 @@ def get_tagged_bookmarks(tag_id, tag_text, page):
 		return {}
 	results = {}
 	return get_bookmark_results(tag, results, page)
-

@@ -30,14 +30,13 @@ class TagList extends React.Component {
       this.state = {tags: [], tag_category: props.tag_category, oldItem: '', value: '', suggestions: [],
       underEdit: props.underEdit};
     }
-    this.removeTag = this.removeTag.bind(this);
     this.onChange = this.onChange.bind(this);
     this.onSuggestionsFetchRequested = this.onSuggestionsFetchRequested.bind(this);
     this.onSuggestionsClearRequested = this.onSuggestionsClearRequested.bind(this);
     this.newTagAuto = this.newTagAuto.bind(this);
     this.newTag = this.newTag.bind(this);
   }
-  componentWillMount() { 
+  componentWillMount() {
     //do things
   }
   componentWillUpdate(nextProps, nextState)
@@ -49,12 +48,12 @@ class TagList extends React.Component {
     {
       document.getElementById("tags_ul"+this.state.tag_category).append(this.state.oldItem)
       this.state.oldItem = ''
-    }    
+    }
   }
   onChange(event, newValue) {
     var newVal = newValue["newValue"]
     if (newVal != '') {
-      if (newVal.slice(-1) == ',') {        
+      if (newVal.slice(-1) == ',') {
           var oldVal = newVal.slice(0, -1)
           this.props.createWorkTags(oldVal, '', this.state.tags, this.state.tag_category);
           event.preventDefault();
@@ -67,20 +66,25 @@ class TagList extends React.Component {
     }
    this.setState({
         value: newValue["newValue"]
-      })  
+      })
   }
 
   onSuggestionsFetchRequested(value) {
-    var cleaned = value.value.replace('/', '_');
+    var cleaned = DOMPurify.sanitize(value.value);
     axios.get('/api/tag/'+this.state.category_id+'/suggestions/'+cleaned)
         .then(function (response) {
+          if (!('results' in response.data)) {
+            this.props.removeWorkTag(this.state.category_id, cleaned)
+            return
+          }
           this.setState({
             suggestions: response.data["results"]
           })
 
         }.bind(this))
         .catch(function (error) {
-          this.props.alert.show('An error has occurred. Contact your administrator if this persists.', {
+          console.log(error)
+          this.props.alert.show('Suggestions can\'t be fetched for this tag.', {
             timeout: 6000,
             type: 'error'
           })
@@ -92,16 +96,7 @@ class TagList extends React.Component {
       suggestions: []
     })
   }
-  removeTag(event)
-  {
-    event.preventDefault()
-    var oldTags = this.state.tags
-    var tagText = event.target.parentElement.parentElement.id
-    var newTags = oldTags.filter(tag => tag !== tagText);
-    this.setState({
-      tags: newTags
-    })
-  }
+
 
   newTag(event) {
     var characterPressed = String.fromCharCode(event.which);
@@ -148,16 +143,16 @@ class TagList extends React.Component {
         <div className="row">
             <div className="col-md-5">
               <ul className="list-inline" id={"tags_ul"+this.state.tag_category}>
-                  {this.state.tags && this.state.tags.map(tag => 
+                  {this.props.tags && this.props.tags.map(tag =>
                     <div key={tag}>
-                      <TagItem tag={tag} removeTag={this.removeTag} underEdit={this.state.underEdit} category={this.state.category_id}/>
+                      <TagItem tag={tag} removeTag={this.props.removeWorkTag} underEdit={this.state.underEdit} category={this.state.category_id}/>
                     </div>
                   )}
               </ul>
-            </div>  
+            </div>
 
 
-          {this.state.underEdit && 
+          {this.state.underEdit &&
             <div className="col-md-4">
               <Autosuggest id={"autosuggest"+this.state.tag_category}
                 suggestions={suggestions}
@@ -178,4 +173,3 @@ class TagList extends React.Component {
 }
 
 export default withAlert(TagList)
-

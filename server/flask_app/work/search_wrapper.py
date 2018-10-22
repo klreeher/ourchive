@@ -25,6 +25,17 @@ class ChapterSearch(InnerDoc):
 		chapter = self.create_from_json(chapter_json)
 		chapter.save()
 
+class WorkTagSearch(InnerDoc):
+	text = Text()
+
+	def create_from_text(self, tag_text):
+		self.text=tag_text
+
+	def save_from_text(self, tag_text):
+		WorkTagSearch.init()
+		tag = self.create_from_text(tag_text)
+		tag.save()
+
 
 class WorkSearch(DocType):
 	title = Text()
@@ -40,6 +51,8 @@ class WorkSearch(DocType):
 
 	chapters = Nested(ChapterSearch)
 
+	tags = Nested(WorkTagSearch)
+
 	class Meta:
 		index = 'work'
 
@@ -54,6 +67,13 @@ class WorkSearch(DocType):
 			self.chapters.append(
 				chapter_search)
 			chapter_count += 1
+
+	def add_tags(self, tag_json):
+		for tag in tag_json:
+			tag_search = WorkTagSearch()
+			tag_search.create_from_text(tag['text'])
+			self.tags.append(
+				tag_search)
 
 	def save(self, ** kwargs):
 		self.created_at = datetime.now()
@@ -74,4 +94,6 @@ class WorkSearch(DocType):
 		if 'work_type' in work_json:
 			self.work_type_id = work_json['work_type']
 		self.add_chapters(work_json['chapters'], str(self.meta.id))
+		if 'tags' in work_json:
+			self.add_tags(work_json['tags'])
 		self.save()

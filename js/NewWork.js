@@ -237,15 +237,26 @@ class NewWork extends React.Component {
       });
   }
   create_work_tag(val, oldItem, tags, tag_category) {
+    val = DOMPurify.sanitize(val);
     var original = tags;
     var filtered = original.filter(tag => tag == val)
-    if (filtered.length > 0 || val == undefined) return
+    if (filtered == undefined || filtered.length > 0 || val == undefined) return
     original.push(val);
     var copy = this.state.work_tags;
     var tags = copy.filter(tag => tag.label == tag_category)[0]
     tags.tags = original
     this.setState({
       work_tags: copy
+    })
+  }
+
+  remove_work_tag(category_id, tag_text)
+  {
+    var oldTags = this.state.work_tags
+    var newTags = oldTags[category_id-1].tags.filter(tag => tag !== tag_text);
+    oldTags[category_id-1].tags = newTags;
+    this.setState({
+      work_tags: oldTags
     })
   }
   constructor(props) {
@@ -285,6 +296,7 @@ class NewWork extends React.Component {
     this.updateStatus = this.updateStatus.bind(this)
     this.updateWorkType = this.updateWorkType.bind(this)
     this.updateStatusBar = this.updateStatusBar.bind(this)
+    this.remove_work_tag = this.remove_work_tag.bind(this)
   }
   componentWillMount() {
     //todo call get categories
@@ -364,7 +376,8 @@ class NewWork extends React.Component {
           <div className="form-group">
           {this.state.work_tags.map(tag =>
               <div key={tag.id}>
-                  <TagList tag_category={tag.label} category_id={tag.id} tags={tag.tags} underEdit={true} createWorkTags={this.create_work_tag}/>
+                  <TagList tag_category={tag.label} category_id={tag.id} tags={tag.tags} underEdit={true} createWorkTags={this.create_work_tag}
+                  removeWorkTag={this.remove_work_tag}/>
               </div>
           )}
           </div>
