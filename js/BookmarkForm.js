@@ -17,20 +17,21 @@ class BookmarkForm extends React.Component {
 				has_errors: true,
 				errors: ['The title field is blank. Please add a title.']
 			})
-			window.scrollTo(0, 0);          
+			window.scrollTo(0, 0);
 			return
 		}
 	    axios.post(this.state.post_url, {
-	      curator_title: this.state.title, 
-	      rating: this.state.rating, 
-	      description: this.state.description, 
-	      is_private: this.state.is_private, 
-	      tags: this.state.bookmark_tags, 
+	      curator_title: this.state.title,
+	      rating: this.state.rating,
+	      description: this.state.description,
+	      is_private: this.state.is_private,
+	      tags: this.state.bookmark_tags,
 	      is_queued: this.state.is_queued,
 	      work_id: this.state.work.id,
 	      links: [],
-	      id: this.state.id
-	    }, {   
+	      id: this.state.id,
+				delete_tags_list: this.state.delete_tags_list
+	    }, {
       headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json',
       'CSRF-Token': this.props.csrf
     }})
@@ -54,13 +55,13 @@ class BookmarkForm extends React.Component {
 	        this.state = {bookmark: this.props.location.state.bookmark, title: this.props.location.state.bookmark.curator_title,
 	        	rating: this.props.location.state.bookmark.rating, description: this.props.location.state.bookmark.description,
 	        	is_private: this.props.location.state.bookmark.is_private, is_queued: this.props.location.state.bookmark.is_queued,
-	        	work: this.props.location.state.bookmark.work, links: this.props.location.state.bookmark.links,
+	        	work: this.props.location.state.bookmark.work, links: this.props.location.state.bookmark.links, delete_tags_list: [],
 	        	bookmark_tags: this.props.location.state.bookmark.tags, id: this.props.location.state.bookmark.id,
 	        	post_url: "/api/bookmark/"+this.props.location.state.bookmark.id};
 	    }
 	    else
 	    {
-	    	this.state = this.state = {bookmark: {}, value: "", bookmark_tags: [], 
+	    	this.state = this.state = {bookmark: {}, value: "", bookmark_tags: [],
 	    	work: this.props.location.state.work, post_url: "/api/bookmark/", title: ""};
 
 	    }
@@ -70,14 +71,15 @@ class BookmarkForm extends React.Component {
 	    this.updatePrivateCheckbox = this.updatePrivateCheckbox.bind(this);
 	    this.updateAddToQueue = this.updateAddToQueue.bind(this);
 	    this.create_bookmark_tag = this.create_bookmark_tag.bind(this);
-	    this.getTagCategories();
+	    //this.getTagCategories();
+			this.remove_bookmark_tag = this.remove_bookmark_tag.bind(this)
 	}
 
 	getTagCategories()
     {
       axios.get('/api/tag/categories')
           .then(function (response) {
-            this.setState({bookmark_tags: response.data});  
+            this.setState({bookmark_tags: response.data});
 
           }.bind(this))
           .catch(function (error) {
@@ -98,6 +100,18 @@ class BookmarkForm extends React.Component {
 	    })
   }
 
+	remove_bookmark_tag(category_id, tag_text)
+  {
+    var oldTags = this.state.bookmark_tags
+    var deleteTags = this.state.delete_tags_list
+    deleteTags.push({"category_id": category_id, "tag": tag_text})
+    var newTags = oldTags[category_id-1].tags.filter(tag => tag !== tag_text);
+    oldTags[category_id-1].tags = newTags;
+    this.setState({
+      bookmark_tags: oldTags
+    })
+  }
+
     setDescription(e) {
     	this.setState({ description: e.target.value });
   	}
@@ -111,7 +125,7 @@ class BookmarkForm extends React.Component {
   			this.setState({
   				has_errors: false,
   				errors: [],
-  				title: e.target.value 
+  				title: e.target.value
   			})
   			return
   		}
@@ -162,15 +176,15 @@ class BookmarkForm extends React.Component {
 			    	<form>
 			    		<FormGroup controlId="formControlsTitle">
 					      <ControlLabel>Title</ControlLabel>
-					      <FormControl componentClass="input" value={this.state.title} 
-					      placeholder="Enter a memorable title for your bookmark" 
+					      <FormControl componentClass="input" value={this.state.title}
+					      placeholder="Enter a memorable title for your bookmark"
 					      onChange={this.setTitle}
 					      />
 					    </FormGroup>
-					    
+
 					    <FormGroup controlId="formControlsDescription">
 					      <ControlLabel>Bookmark Description</ControlLabel>
-					      <FormControl  componentClass="textarea" 
+					      <FormControl  componentClass="textarea"
 					      	value={this.state.description}
 					      	placeholder="Enter your review, description, or other curation notes here"
 					      	onChange={this.setDescription}
@@ -198,12 +212,12 @@ class BookmarkForm extends React.Component {
 
 					    <FormGroup>
 					     <div className="row">
-				          {this.state.bookmark_tags.map(tag => 
-				              <div key={tag.id}>
-				                  <TagList tag_category={tag.label} tags={tag.tags} category_id={tag.id}
-				                  underEdit={true} createWorkTags={this.create_bookmark_tag}/>
-				              </div>
-				          )}
+							 {this.state.bookmark_tags && this.state.bookmark_tags.map(tag =>
+									 <div className="form-group">
+											 <TagList key={tag.id} tag_category={tag.label} category_id={tag.id} tags={tag.tags} underEdit={true} createWorkTags={this.create_bookmark_tag}
+											 removeWorkTag={this.remove_bookmark_tag}/>
+									 </div>
+							 )}
 				          </div>
 				       	</FormGroup>
 

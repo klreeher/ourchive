@@ -75,6 +75,7 @@ def update_work(json):
 	word_count = update_chapters(work, chapters, json['delete_list'])
 	work.word_count = word_count
 	add_tags(work, work_tags)
+	remove_tags(work, json['delete_tags_list'])
 	db.session.commit()
 	if app.config.get('USE_ES'):
 		doc = None
@@ -188,6 +189,14 @@ def add_tags(work, tags):
 					search_obj = TagSearch()
 					search_obj.create_from_item(tag, tag_item['id'])
 
+	return work.tags
+
+def remove_tags(work, tags_to_remove):
+	for tag_item in tags_to_remove:
+		existing = Tag.query.filter_by(text=tag_item['tag'], tag_type_id=tag_item['category_id']).first()
+		if existing:
+			if existing in work.tags:
+				work.tags.remove(existing)
 	return work.tags
 
 def count_words(text):

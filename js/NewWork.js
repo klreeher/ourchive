@@ -30,7 +30,8 @@ class NewWork extends React.Component {
       chapters: this.state.chapters,
       work_id: this.state.work_id,
       work_type: this.state.selected_type,
-      delete_list: this.state.delete_list
+      delete_list: this.state.delete_list,
+      delete_tags_list: this.state.delete_tags_list
     }, {
       headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json',
         'CSRF-Token': this.props.csrf
@@ -272,6 +273,8 @@ class NewWork extends React.Component {
   remove_work_tag(category_id, tag_text)
   {
     var oldTags = this.state.work_tags
+    var deleteTags = this.state.delete_tags_list
+    deleteTags.push({"category_id": category_id, "tag": tag_text})
     var newTags = oldTags[category_id-1].tags.filter(tag => tag !== tag_text);
     oldTags[category_id-1].tags = newTags;
     this.setState({
@@ -292,7 +295,7 @@ class NewWork extends React.Component {
         var parsedComplete = true;
       }
         this.state = {title: this.props.location.state.work.title, work_summary: this.props.location.state.work.work_summary,
-          is_complete: parsedComplete, work_notes: this.props.location.state.work.work_notes, delete_list: [],
+          is_complete: parsedComplete, work_notes: this.props.location.state.work.work_notes, delete_list: [], delete_tags_list: [],
           work_tags: this.props.location.state.work.tags, chapters: this.props.location.state.work.chapters, is_edit: true,
           work_id: this.props.location.state.work.id, postUrl: '/api/work/'+this.props.location.state.work.id,
           user: this.props.user, username: friendlyName, work_types: [], selected_type: this.props.location.state.work.type_id};

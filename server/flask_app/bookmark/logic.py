@@ -26,7 +26,7 @@ def add_bookmark(data):
 		bookmark.is_private = data['is_private'] == 'on'
 	user = User.query.filter_by(id=data['user_id']).first()
 	bookmark.user = user
-	db.session.add(bookmark)	
+	db.session.add(bookmark)
 	add_tags(bookmark, data["tags"])
 	add_links(bookmark, data['links'])
 	db.session.commit()
@@ -46,8 +46,9 @@ def update_bookmark(data):
 		bookmark.is_private = data['is_private'] == 'on'
 	add_tags(bookmark, data["tags"])
 	add_links(bookmark, data["links"])
-	db.session.add(bookmark)	
+	db.session.add(bookmark)
 	add_tags(bookmark, data["tags"])
+	remove_tags(bookmark, data['delete_tags_list'])
 	db.session.commit()
 	if app.config.get('USE_ES'):
 		data['user_id'] = bookmark.user_id
@@ -157,9 +158,17 @@ def add_tags(bookmark, tags):
 			existing = Tag.query.filter_by(text=tag, tag_type_id=tag_item['id']).first()
 			if existing:
 				if existing not in bookmark.tags:
-					bookmark.tags.append(existing)			
+					bookmark.tags.append(existing)
 			else:
 				bookmark.tags.append(Tag(text=tag, tag_type_id=tag_item['id']))
+	return bookmark.tags
+
+def remove_tags(bookmark, tags_to_remove):
+	for tag_item in tags_to_remove:
+		existing = Tag.query.filter_by(text=tag_item['tag'], tag_type_id=tag_item['category_id']).first()
+		if existing:
+			if existing in bookmark.tags:
+				bookmark.tags.remove(existing)
 	return bookmark.tags
 
 def add_links(bookmark, links):
