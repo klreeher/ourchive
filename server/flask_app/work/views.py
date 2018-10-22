@@ -10,6 +10,8 @@ import tag as tag_blueprint
 from .search_wrapper import WorkSearch
 from tag.search_wrapper import TagSearch
 import elasticsearch
+from PIL import Image
+from pydub import AudioSegment
 
 def get_tag_categories():
 	tags = []
@@ -166,12 +168,17 @@ def validate_files(chapter, chapter_item):
 		if not (file_utils.file_is_audio(audio_url)):
 			return -1
 		else:
+			audio = AudioSegment.from_file(audio_url)
+			chapter.audio_length = len(audio)
 			chapter.audio_url = audio_url
 	if chapter_item['image_url']:
 		image_url = get_file_url(chapter_item['image_url'])
 		if not (file_utils.file_is_image(image_url)):
 			return -1
 		else:
+			image = Image.open(image_url)
+			chapter.image_format = image.format
+			chapter.image_size = image.size
 			chapter.image_url = image_url
 	return chapter
 

@@ -8,22 +8,22 @@ from flask import current_app as app
 Base = declarative_base()
 
 
-work_tag_table = db.Table('work_tag_table', 
+work_tag_table = db.Table('work_tag_table',
     db.Column('tag_id', db.Integer, db.ForeignKey('tags.id'), primary_key=True),
     db.Column('work_id', db.Integer, db.ForeignKey('works.id'), primary_key=True)
 )
 
-bookmark_tag_table = db.Table('bookmark_tag_table', 
+bookmark_tag_table = db.Table('bookmark_tag_table',
     db.Column('tag_id', db.Integer, db.ForeignKey('tags.id'), primary_key=True),
     db.Column('bookmark_id', db.Integer, db.ForeignKey('bookmarks.id'), primary_key=True)
 )
 
-comment_to_comment = db.Table("comment_to_comment", 
+comment_to_comment = db.Table("comment_to_comment",
     db.Column("parent_comment_id", db.Integer, db.ForeignKey("comments.id"), primary_key=True),
     db.Column("child_comment_id", db.Integer, db.ForeignKey("comments.id"), primary_key=True)
 )
 
-message_to_message = db.Table("message_to_message", 
+message_to_message = db.Table("message_to_message",
     db.Column("parent_message_id", db.Integer, db.ForeignKey("messages.id"), primary_key=True),
     db.Column("child_message_id", db.Integer, db.ForeignKey("messages.id"), primary_key=True)
 )
@@ -115,7 +115,7 @@ class BlacklistToken(db.Model):
         # check whether auth token has been blacklisted
         res = BlacklistToken.query.filter_by(token=str(auth_token)).first()
         if res:
-            return True  
+            return True
         else:
             return False
 
@@ -159,7 +159,7 @@ class WorkType(db.Model):
     type_name = db.Column(db.String(200))
 
     def __init__(self, type_name):
-        self.type_name = type_name    
+        self.type_name = type_name
 
     def __repr__(self):
         return '<WorkType: {}>'.format(self.id)
@@ -175,8 +175,11 @@ class Chapter(db.Model):
     number = db.Column(db.Integer)
     text = db.Column(db.String)
     audio_url = db.Column(db.String)
+    audio_length = db.Column(db.BigInteger)
     image_url = db.Column(db.String)
     image_alt_text = db.Column(db.String)
+    image_format = db.Column(db.String)
+    image_size = db.Column(db.String)
     summary = db.Column(db.String)
     comments = db.relationship('Comment', backref='comment_chapter',
                                 lazy='dynamic')
