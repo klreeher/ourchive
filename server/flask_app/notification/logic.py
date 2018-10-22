@@ -1,12 +1,12 @@
-from ..models import User, Notification
-from server.flask_app.user import logic as user_logic
+from models import User, Notification
+from user import logic as user_logic
 import sys
 import os
 import re
 from smtplib import SMTP_SSL as SMTP
 from email.mime.text import MIMEText
 from flask import current_app as app
-from .. import db
+from database import db
 
 def get_user_notifications(user_id):
 	notifications = User.query.filter_by(id=user_id).first().notifications

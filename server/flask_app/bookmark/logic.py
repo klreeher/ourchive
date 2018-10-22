@@ -1,10 +1,10 @@
 from flask import render_template
 import re
 import json
-from .. import db
-from ..work import views
+from work import views
 from flask import current_app as app
-from ..models import Work, Chapter, Tag, User, TagType, Bookmark, BookmarkLink
+from database import db
+from models import Work, Chapter, Tag, User, TagType, Bookmark, BookmarkLink
 from .search_wrapper import BookmarkSearch
 
 def get_work_from_bookmark(data):

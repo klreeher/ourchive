@@ -13,7 +13,7 @@ services:
 
   website-test:
     build: .
-    entrypoint: ["python", "manage.py","runserver"]
+    entrypoint: ["python", "server/flask_app/manage.py","runserver"]
     env_file:
       - '.test_env'
     volumes:

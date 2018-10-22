@@ -2,12 +2,12 @@ from flask import render_template, make_response, jsonify
 import bcrypt
 import re
 import json
-from .. import db
 from flask import current_app as app
-from ..models import User, BlacklistToken
-from server.flask_app.user import logic as user_logic
+from models import User, BlacklistToken
+from user import logic as user_logic
 from itsdangerous import TimestampSigner
 import datetime
+from database import db
 
 def generate_csrf():
 	s = TimestampSigner(app.config.get('SECRET_KEY'))

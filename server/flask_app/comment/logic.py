@@ -1,9 +1,10 @@
 from flask import render_template
 import re
 import json
-from .. import db
-from ..work import views
-from ..models import Comment
+from work import views
+from models import Comment
+from flask import current_app as app
+from database import db
 
 def add_comment(json, comment):	
 	if 'user_id' in json:

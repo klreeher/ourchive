@@ -29,7 +29,8 @@ class NewWork extends React.Component {
       work_tags: this.state.work_tags,
       chapters: this.state.chapters,
       work_id: this.state.work_id,
-      work_type: this.state.selected_type
+      work_type: this.state.selected_type,
+      delete_list: this.state.delete_list
     }, {
       headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json',
         'CSRF-Token': this.props.csrf
@@ -222,6 +223,24 @@ class NewWork extends React.Component {
       chapters: original
     });
   }
+  deleteChapter(evt, chapter_number, chapter_id)
+  {
+    evt.preventDefault()
+    var delete_list_orig = this.state.delete_list;
+    if (chapter_id != undefined && chapter_id > 0) {
+      delete_list_orig.push(chapter_id)
+    }
+    var original = this.state.chapters;
+    for (var i = chapter_number-1; i < original.length - 1; i++) {
+        original[i] = original[i + 1]
+        original[i].number = original[i].number - 1
+    }
+    original.pop();
+    this.setState({
+      chapters: original,
+      delete_list: delete_list_orig
+    });
+  }
   getTagCategories()
   {
     axios.get('/api/tag/categories')
@@ -273,7 +292,7 @@ class NewWork extends React.Component {
         var parsedComplete = true;
       }
         this.state = {title: this.props.location.state.work.title, work_summary: this.props.location.state.work.work_summary,
-          is_complete: parsedComplete, work_notes: this.props.location.state.work.work_notes,
+          is_complete: parsedComplete, work_notes: this.props.location.state.work.work_notes, delete_list: [],
           work_tags: this.props.location.state.work.tags, chapters: this.props.location.state.work.chapters, is_edit: true,
           work_id: this.props.location.state.work.id, postUrl: '/api/work/'+this.props.location.state.work.id,
           user: this.props.user, username: friendlyName, work_types: [], selected_type: this.props.location.state.work.type_id};
@@ -297,11 +316,13 @@ class NewWork extends React.Component {
     this.updateWorkType = this.updateWorkType.bind(this)
     this.updateStatusBar = this.updateStatusBar.bind(this)
     this.remove_work_tag = this.remove_work_tag.bind(this)
+    this.deleteChapter = this.deleteChapter.bind(this)
   }
   componentWillMount() {
     //todo call get categories
   }
   componentDidMount() {
+    console.log(this.state.work_tags)
       this.getTagCategories();
       axios.get('/api/works/types')
         .then(function (response) {
@@ -373,24 +394,17 @@ class NewWork extends React.Component {
             <label htmlFor="work_notes">Notes</label>
             <textarea id="work_notes" className="form-control" rows="3" value={this.state.work_notes} onChange={evt => this.updateWorkNotes(evt)}></textarea>
           </div>
-          <div className="form-group">
           {this.state.work_tags.map(tag =>
-              <div key={tag.id}>
+              <div key={tag.id} classname="form-group">
                   <TagList tag_category={tag.label} category_id={tag.id} tags={tag.tags} underEdit={true} createWorkTags={this.create_work_tag}
                   removeWorkTag={this.remove_work_tag}/>
               </div>
           )}
-          </div>
-          <br/>
-          <br/>
-          <hr/>
-          <div className="form-group">
           {this.state.chapters.map(chapter => (
                         <ChapterForm key={chapter.number} chapter_number={chapter.number} handler={this.handler} handlerAudio={this.uploadAudio}
                         handlerImage={this.uploadImage} chapter={chapter} showImageUpload={this.state.showUpload}
-                        showAudioUpload={this.state.showUpload}/>
+                        showAudioUpload={this.state.showUpload} deleteChapter={this.deleteChapter}/>
                     ))}
-          </div>
         <div className="form-group">
           <button className="btn btn-link" onMouseDown={evt => this.appendChapter(evt)}>Add Chapter</button>
         </div>

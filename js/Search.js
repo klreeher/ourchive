@@ -369,12 +369,6 @@ class Search extends React.Component {
                   <input id="excludeTerms" type="text" className="form-control" onChange={evt => this.updateNoneTerms(evt)} value={this.state.searchNone}/>
               </div>
             </div>
-            <div className="row text-padding">
-              <div className="col-sm-4">Exactly matching</div>
-              <div className="col-sm-6">
-                  <input id="matchTerm" type="text" className="form-control" onChange={evt => this.updateExactlyTerms(evt)} value={this.state.searchExactly}/>
-              </div>
-            </div>
             <div className="row">
               <div className="col-sm-4 h3">Users</div>
             </div>         
@@ -402,13 +396,7 @@ class Search extends React.Component {
             <div className="row text-padding">
               <div className="col-sm-4">None of these tags</div>
               <div className="col-sm-6">
-                  <input id="noneTags" type="text" className="form-control" onChange={evt => this.updateNoneTags(evt)} value={this.state.searchExactlyTags}/> 
-              </div>
-            </div>
-            <div className="row text-padding">
-              <div className="col-sm-4">Exactly these tags</div>
-              <div className="col-sm-6">
-                  <input id="exactlyTags" type="text" className="form-control" onChange={evt => this.updateExactlyTags(evt)} value={this.state.searchNoneTags}/> 
+                  <input id="noneTags" type="text" className="form-control" onChange={evt => this.updateNoneTags(evt)} value={this.state.searchNoneTags}/> 
               </div>
             </div>
             <div className="row">

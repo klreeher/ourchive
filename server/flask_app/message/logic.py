@@ -1,10 +1,11 @@
 from flask import render_template
 import re
 import json
-from .. import db
-from ..work import views
-from ..auth import logic as auth
-from ..models import Work, Chapter, Tag, User, TagType, Bookmark, BookmarkLink, Message
+from work import views
+from flask import current_app as app
+from auth import logic as auth
+from database import db
+from models import Work, Chapter, Tag, User, TagType, Bookmark, BookmarkLink, Message
 
 def add_message(json):
 	message = Message(to_user_id = json["to_user"], from_user_id = json["from_user"],

@@ -30,11 +30,12 @@ services:
 
   website:
     build: .
-    entrypoint: ["python", "manage.py","runserver"]
+    entrypoint: ["python", "server/flask_app/manage.py","runserver"]
     env_file:
       - '.env'
     volumes:
       - '.:/ourchive'
+      - './tus-data'
     ports:
       - '5000:5000'
 
@@ -49,9 +50,16 @@ services:
       - '/ourchive/node_modules'
       - './js'
 
+  tusd:
+    image: 'tusproject/tusd'
+    volumes:
+      - './tus-data:/srv/tusd-data'
+    ports:
+      - '1080:1080'
 
 volumes:
   ourchive-postgresql:
       external: true
   redis:
   elasticseach:
+  tus-data:

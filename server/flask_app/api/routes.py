@@ -2,15 +2,15 @@ import json
 from flask import render_template, request, make_response, abort, jsonify
 
 from . import api
-from server.flask_app.work import views as work
-from server.flask_app.bookmark import logic as bookmark
-from server.flask_app.message import logic as message
-from server.flask_app.tag import logic as tag
-from server.flask_app.comment import logic as comment
-from server.flask_app.auth import logic as auth
-from server.flask_app.user import logic as user_logic
-from server.flask_app.search import logic as search
-from server.flask_app.notification import logic as notification
+from work import views as work
+from bookmark import logic as bookmark
+from message import logic as message
+from tag import logic as tag
+from comment import logic as comment
+from auth import logic as auth
+from user import logic as user_logic
+from search import logic as search
+from notification import logic as notification
 from flask import current_app as app
 
 @api.route('/<path:path>')
@@ -114,9 +114,9 @@ def get_inbox():
     if result is not None:
       return make_response(jsonify(result), 201)
     else:
-      abort(400)
+      abort(401)
   else:
-    abort(400)
+    abort(401)
 
 @api.route('/api/user/messages/outbox')
 def get_outbox():
@@ -391,7 +391,14 @@ def post_work():
   user_id = auth.auth_from_data(request)
   if user_id > 0:
     request.json['user_id'] = user_id
-    work_id = work.add_work(request.json)
+    try:
+      work_id = work.add_work(request.json)
+    except ValueError as error:
+      responseObject = {
+          'status': 'failure',
+          'message': 'File type invalid.'
+        }
+      return make_response(jsonify(responseObject), 400)
     return json.dumps({"work_id": work_id})
   else:
     abort(400)

@@ -3,7 +3,7 @@ from elasticsearch_dsl import DocType, Date, Nested, Boolean, \
 	analyzer, InnerDoc, Completion, Keyword, Text, Index, FacetedSearch, TermsFacet
 from elasticsearch_dsl.query import MultiMatch, Match
 from flask import current_app as app
-from ..models import User
+from models import User
 
 
 class TagSearch(DocType):
