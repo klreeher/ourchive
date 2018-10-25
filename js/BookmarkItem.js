@@ -46,7 +46,7 @@ class BookmarkItem extends React.Component {
 
   componentDidMount()
   {
-    this.getBookmark(this.state.bookmark.id); 
+    this.getBookmark(this.state.bookmark.id);
   }
 
   getBookmark(bookmarkId)
@@ -68,7 +68,7 @@ class BookmarkItem extends React.Component {
 	              safe_summary: cleaned_work_summary,
 	              safe_description: cleaned_description
 	            })
-	            var queryParams = new URLSearchParams(this.props.location.search);            
+	            var queryParams = new URLSearchParams(this.props.location.search);
 	        	var commentId = queryParams.get('commentId');
 	        	var bookmarkId = queryParams.get('bookmarkId');
 	        	if (commentId != null)
@@ -78,7 +78,7 @@ class BookmarkItem extends React.Component {
 	                this.refs[bookmark].toggleComments(null, commentId);
 	        	}
           	}
-            
+
           });
 
         }.bind(this))
@@ -92,7 +92,7 @@ class BookmarkItem extends React.Component {
 
   toggleComments(event, commentId)
   {
-    if (event != null) 
+    if (event != null)
     {
       event.preventDefault();
       event.target.blur();
@@ -116,10 +116,10 @@ class BookmarkItem extends React.Component {
     var newComment = {text: this.state.newCommentText, userName: commentUser, comments: [], bookmarkId: this.state.bookmark.id};
     var apiRoute = "/api/bookmark/comment/";
     axios.post(apiRoute, {
-      text: this.state.newCommentText, 
-      user_id: 1, 
+      text: this.state.newCommentText,
+      user_id: 1,
       bookmark_id: this.state.bookmark.id
-    }, {   
+    }, {
       headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json',
       'CSRF-Token': this.props.csrf
     }})
@@ -138,7 +138,7 @@ class BookmarkItem extends React.Component {
             type: 'error'
         })
     }.bind(this));
-    
+
   }
   updateNewCommentText(event)
   {
@@ -149,7 +149,7 @@ class BookmarkItem extends React.Component {
   }
   deleteBookmark(evt, bookmarkId)
   {
-    axios.delete('/api/bookmark/'+bookmarkId, {   
+    axios.delete('/api/bookmark/'+bookmarkId, {
           headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json',
           'CSRF-Token': this.props.csrf
           }})
@@ -192,7 +192,7 @@ class BookmarkItem extends React.Component {
     	<div>
     	{this.state.bookmark.id != undefined &&
 	    	<div>
-	    		{this.props.user && this.props.user.id === this.state.bookmark.user_id && 
+	    		{this.props.user && this.props.user.id === this.state.bookmark.user_id &&
 	        		<div className="row">
 	        			  <div className="col-xs-1 col-xs-offset-10">
 				              <EditDeleteButtons dropdownLabel="Actions" actions={actions}/>
@@ -201,7 +201,7 @@ class BookmarkItem extends React.Component {
 		        }
 		      	<div className="row">
 		      		<div className="col-xs-5">{this.state.bookmark.curator_title}</div>
-		      	</div>	      		
+		      	</div>
 		      	<div className="row">
 		      		<div className="col-md-12">
 		        		<blockquote>
@@ -213,88 +213,103 @@ class BookmarkItem extends React.Component {
 			        			<div className="col-md-4">Word count: {this.state.bookmark.work.word_count}</div>
 			        			<div className="col-md-4">Chapter count: {this.state.bookmark.work.chapter_count}</div>
 			        		</div>
-		        		</blockquote>	
-	        		</div>        			
+		        		</blockquote>
+	        		</div>
 		        </div>
 		        <div className="row">
-		            <div className="col-md-12">{this.state.curator.curator_name}'s rating: {this.state.bookmark.rating}</div>
-		            	
+		            <div className="col-md-12">{this.state.curator.curator_name} rated it: {this.state.bookmark.rating}</div>
+
 		        </div>
 		        {this.state.safe_description && this.state.safe_description != "" ? <div>
 		        <div className="row">
 		            <div className="col-md-12">{this.state.curator.curator_name} says...</div>
-		        </div>			        
+		        </div>
 		        <div className="row">
 		            <div className="col-xs-11 col-xs-offset-1">
 		                {this.state.safe_description}
 		            </div>
 		        </div></div> : <div></div>}
-				
+
 		        {this.state.bookmark.links && this.state.bookmark.links.length > 0 ? <div>
 		        	<div className="row">
-		        		<div className="col-md-12">If you like this, {this.state.curator.curator_name} recommends...</div>            
+		        		<div className="col-md-12">If you like this, {this.state.curator.curator_name} recommends...</div>
 			        </div>
 			        <div className="row">
 				        <div className="col-xs-11 col-xs-offset-1">
 					        <ol className="list-inline">
-						        {this.state.bookmark.links.map(link => 					          
+						        {this.state.bookmark.links.map(link =>
 						         	<div key={link.link}>
 						         	  <li>
 						            	<a href={link.link}>{link.text}</a>
 						              </li>
-						          	</div>					          
+						          	</div>
 						        )}
 						    </ol>
 				        </div>
 			        </div>
 			    </div> : <div/>}
-			    
+
 		        <div className="row">
-		             {this.state.bookmark.tags.map(tag => 
+		             {this.state.bookmark.tags.map(tag =>
 			          	<div className="row" key={tag.id}>
 				          <div className="col-xs-9 col-md-12">
 				              <ul className="list-inline">
 				                <TagList tag_category={tag.label} category_id={tag.id} tags={tag.tags}/>
 				              </ul>
-				          </div> 
+				          </div>
 				        </div>
-			        )}	            
+			        )}
 		        </div>
 
-		        <div className="row">
-		            <div className="col-md-12">
-		                Leave a comment:
-		            </div>
-		          </div>          
-		          <NewComment comment={null} user={this.props.user} 
-		            addComment={this.addComment} updateNewCommentText={this.updateNewCommentText}
-		            newCommentText={this.state.newCommentText}/>
-		          <br/>
-		          <div className="row">
-		            <button className="btn btn-link btn-lg" onClick={this.toggleComments}>{this.state.toggleCommentsText}</button>
-		          </div>
-		          <div className={this.state.showComments ? "viewer-creator" : "viewer"}>
-		            <div className="row">
-		              <div className="col-md-12">
-		                <h3>Comments</h3>
-		              </div>
-		            </div>   
-		            {this.state.bookmark.comments ? <div className="row">
-		              {this.state.bookmark.comments.map(comment => 
-		                <div key={comment.id} className="col-md-12" ref={"comment_"+comment.id}>
-		                  <Comment comment={comment} user={this.props.user} csrf={this.props.csrf} bookmarkId={this.state.bookmark.id}/>
-		                </div>
-		                  
-		                )}
+              {this.state.bookmark.comments_permitted &&
+                <div>
 
-		            </div> : <div/>}
-		          </div>  
+                    {this.state.bookmark.anon_comments_permitted || this.props.user != undefined ?
+
+                      <div>
+                          <div className="row">
+                            <div className="col-md-12">
+                                Leave a comment:
+                            </div>
+                          </div>
+                          <NewComment comment={null} user={this.props.user}
+                            addComment={this.addComment} updateNewCommentText={this.updateNewCommentText}
+                            newCommentText={this.state.newCommentText}/>
+                          <br/>
+                      </div> : <div/>
+
+                    }
+
+                    <div className="row">
+                      <button className="btn btn-link btn-lg" onClick={this.toggleComments}>{this.state.toggleCommentsText}</button>
+                    </div>
+                    <div className={this.state.showComments ? "viewer-creator" : "viewer"}>
+                      <div className="row">
+                        <div className="col-md-12">
+                          <h3>Comments</h3>
+                        </div>
+                      </div>
+                      {this.state.bookmark.comments ?
+                        <div className="row">
+                          {this.state.bookmark.comments.map(comment =>
+                            <div key={comment.id} className="col-md-12" ref={"comment_"+comment.id}>
+                              <Comment comment={comment} user={this.props.user} csrf={this.props.csrf} bookmarkId={this.state.bookmark.id}
+                              anon_comments_permitted={this.state.bookmark.anon_comments_permitted}/>
+                            </div>
+
+                            )}
+
+                        </div>
+                        : <div/>}
+                    </div>
+                </div>
+              }
 	          </div>
 	          }
 		      {
 		        this.state.bookmark.id === undefined && <div></div>
 		      }
-	  		</div>    
+	  		</div>
     );
   }
 

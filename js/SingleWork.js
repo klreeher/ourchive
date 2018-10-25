@@ -149,7 +149,7 @@ class SingleWork extends React.Component {
     const loggedIn = this.state.user != null;
     const actions = []
     if (loggedIn) {
-      
+
       if (this.state.work.username === localStorage.getItem('friendly_name')) {
         var action = {}
         action.actionToDo = this.updateWork;
@@ -172,7 +172,7 @@ class SingleWork extends React.Component {
 
     <div>
       {this.state.work.id != undefined &&
-        <div> 
+        <div>
         {loggedIn && <div className="row">
           <div className="col-xs-3 col-xs-offset-9 float-right">
               <EditDeleteButtons dropdownLabel="Actions" actions={actions}/>
@@ -244,7 +244,7 @@ class SingleWork extends React.Component {
             <br/>
             <hr/>
             {this.state.current_chapter && <div className="row" id={"chapter_"+this.state.current_chapter.id}>
-                <Chapter chapter={this.state.current_chapter} user={this.props.user} csrf={this.props.csrf} />
+                <Chapter chapter={this.state.current_chapter} user={this.props.user} csrf={this.props.csrf} work_id={this.state.work.id} comments_permitted={this.state.work.comments_permitted} anon_comments_permitted={this.state.work.anon_comments_permitted}/>
             </div>}
             <button className="btn btn-link" onMouseDown={evt => this.previousChapter(evt)} disabled={previousDisabled}>Previous Chapter</button>
             <button className="btn btn-link" onMouseDown={evt => this.nextChapter(evt)} disabled={nextDisabled}>Next Chapter</button>

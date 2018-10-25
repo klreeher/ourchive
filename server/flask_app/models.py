@@ -133,6 +133,9 @@ class Work(db.Model):
     cover_alt_text = db.Column(db.String)
     created_on = db.Column(db.DateTime, server_default=db.func.now())
     updated_on = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now())
+    anon_comments_permitted = db.Column(db.Boolean, nullable=True, default=False)
+    comments_permitted = db.Column(db.Boolean, nullable=True, default=False)
+
     chapters = db.relationship('Chapter', backref='chapter_work',
                                 lazy='dynamic', cascade='all,delete')
 
@@ -253,7 +256,8 @@ class Bookmark(db.Model):
     description = db.Column(db.String)
     created_on = db.Column(db.DateTime, server_default=db.func.now())
     updated_on = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now())
-
+    anon_comments_permitted = db.Column(db.Boolean, nullable=True, default=False)
+    comments_permitted = db.Column(db.Boolean, nullable=True, default=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'))
     user = db.relationship('User')
 

@@ -17,7 +17,7 @@ def get_work_from_bookmark(data):
 	return data
 
 def add_bookmark(data):
-	bookmark = Bookmark(curator_title=data["curator_title"],work_id=data["work_id"])
+	bookmark = Bookmark(curator_title=data["curator_title"],work_id=data["work_id"],comments_permitted=data['comments_permitted'],anon_comments_permitted=data['anon_comments_permitted'])
 	if "description" in data:
 		bookmark.description = data["description"]
 	if "rating" in data:
@@ -42,6 +42,8 @@ def update_bookmark(data):
 	bookmark.curator_title = data["curator_title"]
 	bookmark.rating = data["rating"]
 	bookmark.description = data["description"]
+	bookmark.anon_comments_permitted = data['anon_comments_permitted']
+	bookmark.comments_permitted = data['comments_permitted']
 	if 'is_private' in data:
 		bookmark.is_private = data['is_private'] == 'on'
 	add_tags(bookmark, data["tags"])
@@ -116,6 +118,8 @@ def build_bookmark(bookmark, user_id=None):
 	built["tags"] = list(build_bookmark_tags(bookmark.tags))
 	built["links"] = list(build_bookmark_links(bookmark.links))
 	built['is_private'] = bookmark.is_private
+	built['anon_comments_permitted'] = bookmark.anon_comments_permitted
+	built['comments_permitted'] = bookmark.comments_permitted
 	return built
 
 #todo horribly non DRY, need to clean up these little json building functions

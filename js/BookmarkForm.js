@@ -30,7 +30,9 @@ class BookmarkForm extends React.Component {
 	      work_id: this.state.work.id,
 	      links: [],
 	      id: this.state.id,
-				delete_tags_list: this.state.delete_tags_list
+				delete_tags_list: this.state.delete_tags_list,
+				anon_comments_permitted: this.state.anon_comments_permitted,
+	      comments_permitted: this.state.comments_permitted
 	    }, {
       headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json',
       'CSRF-Token': this.props.csrf
@@ -45,7 +47,7 @@ class BookmarkForm extends React.Component {
             timeout: 6000,
             type: 'error'
         })
-	   });
+	   }.bind(this));
 	}
 
 	constructor(props) {
@@ -57,12 +59,13 @@ class BookmarkForm extends React.Component {
 	        	is_private: this.props.location.state.bookmark.is_private, is_queued: this.props.location.state.bookmark.is_queued,
 	        	work: this.props.location.state.bookmark.work, links: this.props.location.state.bookmark.links, delete_tags_list: [],
 	        	bookmark_tags: this.props.location.state.bookmark.tags, id: this.props.location.state.bookmark.id,
+						comments_permitted: this.props.location.state.bookmark.comments_permitted, anon_comments_permitted: this.props.location.state.bookmark.anon_comments_permitted,
 	        	post_url: "/api/bookmark/"+this.props.location.state.bookmark.id};
 	    }
 	    else
 	    {
 	    	this.state = this.state = {bookmark: {}, value: "", bookmark_tags: [],
-	    	work: this.props.location.state.work, post_url: "/api/bookmark/", title: ""};
+	    	work: this.props.location.state.work, post_url: "/api/bookmark/", title: "", comments_permitted: true, anon_comments_permitted: true};
 
 	    }
 	    this.setDescription = this.setDescription.bind(this);
@@ -71,6 +74,8 @@ class BookmarkForm extends React.Component {
 	    this.updatePrivateCheckbox = this.updatePrivateCheckbox.bind(this);
 	    this.updateAddToQueue = this.updateAddToQueue.bind(this);
 	    this.create_bookmark_tag = this.create_bookmark_tag.bind(this);
+			this.updateCommentsPermitted = this.updateCommentsPermitted.bind(this);
+			this.updateAnonCommentsPermitted = this.updateAnonCommentsPermitted.bind(this);
 	    //this.getTagCategories();
 			this.remove_bookmark_tag = this.remove_bookmark_tag.bind(this)
 	}
@@ -144,6 +149,20 @@ class BookmarkForm extends React.Component {
 	      is_queued: evt.target.value
 	    });
   	}
+
+		updateAnonCommentsPermitted(evt) {
+	    var oldVal = this.state.anon_comments_permitted
+	    this.setState({
+	      anon_comments_permitted: !oldVal
+	    });
+	  }
+
+	  updateCommentsPermitted(evt) {
+	    var oldVal = this.state.comments_permitted
+	    this.setState({
+	      comments_permitted: !oldVal
+	    });
+	  }
 
   	componentDidMount()
 	{
@@ -235,6 +254,21 @@ class BookmarkForm extends React.Component {
 				        </div>
 				        </FormGroup>
 
+								<FormGroup>
+									<div className="checkbox">
+										 <label>
+											 <input type="checkbox" onChange={evt => this.updateAnonCommentsPermitted(evt)} checked={this.state.anon_comments_permitted}/>Allow anon comments?
+										 </label>
+								 </div>
+							 </FormGroup>
+
+							 <FormGroup>
+								 <div className="checkbox">
+										<label>
+											<input type="checkbox" onChange={evt => this.updateCommentsPermitted(evt)} checked={this.state.comments_permitted}/>Allow comments?
+										</label>
+								</div>
+							</FormGroup>
 				        </form>
 
 					    <AddOrUpdate/>

@@ -62,6 +62,8 @@ def update_work(json):
 	work.title = json['title']
 	work.work_summary = json['work_summary']
 	work.work_notes = json['work_notes']
+	work.anon_comments_permitted = json['anon_comments_permitted']
+	work.comments_permitted = json['comments_permitted']
 	work_tags = json['work_tags']
 	chapters = json['chapters']
 	if json['is_complete'] == True:
@@ -98,6 +100,8 @@ def add_work(json):
 	work_notes = json['work_notes']
 	work_tags = json['work_tags']
 	chapters = json['chapters']
+	anon_comments_permitted = json['anon_comments_permitted']
+	comments_permitted = json['comments_permitted']
 	if json['is_complete'] == True:
 		is_complete = 1
 	else:
@@ -110,7 +114,7 @@ def add_work(json):
 		work.cover_url = get_file_url(json['cover_url'])
 		work.cover_alt_text = json['cover_alt_text']
 	work = Work(title=title,work_summary=work_summary,is_complete=is_complete,word_count=0,user_id=json['user_id'],work_notes=work_notes,
-		type_id=type_id)
+		type_id=type_id, anon_comments_permitted = anon_comments_permitted, comments_permitted = comments_permitted)
 	db.session.add(work)
 	word_count = add_chapters(work, chapters)
 	work.word_count = word_count
@@ -225,6 +229,8 @@ def build_work(work):
 	work_json['work_notes'] = work.work_notes
 	work_json['cover_url'] = work.cover_url
 	work_json['cover_alt_text'] = work.cover_alt_text
+	work_json['anon_comments_permitted'] = work.anon_comments_permitted
+	work_json['comments_permitted'] = work.comments_permitted
 	#todo i am sure there is a more elegant way to do all this de/serialization
 	work_json['chapters'] = list(build_work_chapters(work))
 	work_json['tags'] = build_work_tags(work)

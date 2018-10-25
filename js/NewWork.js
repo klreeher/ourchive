@@ -31,7 +31,9 @@ class NewWork extends React.Component {
       work_id: this.state.work_id,
       work_type: this.state.selected_type,
       delete_list: this.state.delete_list,
-      delete_tags_list: this.state.delete_tags_list
+      delete_tags_list: this.state.delete_tags_list,
+      anon_comments_permitted: this.state.anon_comments_permitted,
+      comments_permitted: this.state.comments_permitted
     }, {
       headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json',
         'CSRF-Token': this.props.csrf
@@ -72,6 +74,21 @@ class NewWork extends React.Component {
       is_complete: !oldVal
     });
   }
+
+  updateAnonCommentsPermitted(evt) {
+    var oldVal = this.state.anon_comments_permitted
+    this.setState({
+      anon_comments_permitted: !oldVal
+    });
+  }
+
+  updateCommentsPermitted(evt) {
+    var oldVal = this.state.comments_permitted
+    this.setState({
+      comments_permitted: !oldVal
+    });
+  }
+
   updateWorkNotes(evt) {
     this.setState({
       work_notes: evt.target.value
@@ -298,7 +315,8 @@ class NewWork extends React.Component {
           is_complete: parsedComplete, work_notes: this.props.location.state.work.work_notes, delete_list: [], delete_tags_list: [],
           work_tags: this.props.location.state.work.tags, chapters: this.props.location.state.work.chapters, is_edit: true,
           work_id: this.props.location.state.work.id, postUrl: '/api/work/'+this.props.location.state.work.id,
-          user: this.props.user, username: friendlyName, work_types: [], selected_type: this.props.location.state.work.type_id};
+          user: this.props.user, username: friendlyName, work_types: [], selected_type: this.props.location.state.work.type_id,
+          anon_comments_permitted: this.props.location.state.work.anon_comments_permitted, comments_permitted: this.props.location.state.work.comments_permitted};
         this.handler = this.handler.bind(this);
         this.uploadAudio = this.uploadAudio.bind(this);
         this.uploadImage = this.uploadImage.bind(this);
@@ -307,7 +325,7 @@ class NewWork extends React.Component {
     {
         this.state = {title: '', work_summary: '', is_complete: false, work_notes: '',
           work_tags: [], chapters: [], is_edit: false, postUrl: '/api/work/',
-          user: this.props.user, username: friendlyName, work_types: [], selected_type: 1};
+          user: this.props.user, username: friendlyName, work_types: [], selected_type: 1, comments_permitted: true, anon_comments_permitted: true};
         this.addChapter();
         this.handler = this.handler.bind(this);
         this.uploadAudio = this.uploadAudio.bind(this);
@@ -390,6 +408,22 @@ class NewWork extends React.Component {
             <label>
               <input type="checkbox" id="complete" onChange={evt => this.updateCheckbox(evt)} checked={this.state.is_complete}/>Work is complete?
             </label>
+          </div>
+
+          <div className='form-group'>
+            <div className="checkbox">
+              <label>
+                <input type="checkbox" id="complete" onChange={evt => this.updateAnonCommentsPermitted(evt)} checked={this.state.anon_comments_permitted}/>Allow anon comments?
+              </label>
+            </div>
+          </div>
+
+          <div className='form-group'>
+            <div className="checkbox">
+              <label>
+                <input type="checkbox" id="complete" onChange={evt => this.updateCommentsPermitted(evt)} checked={this.state.comments_permitted}/>Allow comments?
+              </label>
+            </div>
           </div>
           <hr/>
           <div className="form-group">

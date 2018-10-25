@@ -62,7 +62,8 @@ class Chapter extends React.Component {
     var apiRoute = "/api/chapter/comment/";
     axios.post(apiRoute, {
       text: this.state.newCommentText,
-      chapter_id: this.props.chapter.id
+      chapter_id: this.props.chapter.id,
+      work_id: this.props.work_id
     }, {
       headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json',
       'CSRF-Token': this.props.csrf
@@ -115,47 +116,56 @@ class Chapter extends React.Component {
               </div>
             </div>
           : <div></div>}
-          
+
           <div className="row">
             <div className="col-xs-9 col-md-12">
               {this.props.chapter.image_url && <img src={this.props.chapter.image_url} alt='{this.props.chapter.image_alt_text}'/>}
             </div>
           </div>
           <br/>
+          {this.props.comments_permitted &&
+            <div>
 
-          <div className="row">
-            <div className="col-xs-6">
-                Leave a comment:
-            </div>
-          </div>
-          <div className="row">
-                <NewComment comment={null} user={this.props.user}
-            addComment={this.addComment} updateNewCommentText={this.updateNewCommentText}
-            newCommentText={this.state.newCommentText}/>
-          </div>
-          <br/>
-          <div className="row">
-            <div className="col-xs-9 col-md-12">
-              <button className="btn btn-link btn-lg" onClick={this.toggleComments}>{this.state.toggleCommentsText}</button>
-            </div>
-          </div>
-          <div className={this.state.showComments ? "viewer-creator" : "viewer"}>
-            <div className="row">
-              <div className="col-xs-4 col-md-12">
-                <h3>Comments</h3>
-              </div>
-            </div>
-            <div className="row">
-              <div className="col-xs-9 col-md-12">
-                {this.props.chapter.comments.map(comment =>
-                  <div key={comment.id} className="col-md-12" ref={"comment_"+comment.id}>
-                    <Comment comment={comment} user={this.props.user} chapterId={this.props.chapter.id} csrf={this.props.csrf}/>
+              {this.props.anon_comments_permitted || this.props.user != undefined ?
+                <div>
+                  <div className="row">
+                    <div className="col-xs-6">
+                        Leave a comment:
+                    </div>
+                  </div>
+                  <div className="row">
+                        <NewComment comment={null} user={this.props.user}
+                    addComment={this.addComment} updateNewCommentText={this.updateNewCommentText}
+                    newCommentText={this.state.newCommentText}/>
                   </div>
 
-                  )}
+                  <br/>
+              </div> : <div></div> }
+
+              <div className="row">
+                <div className="col-xs-9 col-md-12">
+                  <button className="btn btn-link btn-lg" onClick={this.toggleComments}>{this.state.toggleCommentsText}</button>
+                </div>
+              </div>
+              <div className={this.state.showComments ? "viewer-creator" : "viewer"}>
+                <div className="row">
+                  <div className="col-xs-4 col-md-12">
+                    <h3>Comments</h3>
+                  </div>
+                </div>
+                <div className="row">
+                  <div className="col-xs-9 col-md-12">
+                    {this.props.chapter.comments.map(comment =>
+                      <div key={comment.id} className="col-md-12" ref={"comment_"+comment.id}>
+                        <Comment comment={comment} user={this.props.user} chapterId={this.props.chapter.id} csrf={this.props.csrf}
+                        anon_comments_permitted={this.props.anon_comments_permitted}/>
+                      </div>
+                      )}
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
+          }
         </div>
       </div>
     );

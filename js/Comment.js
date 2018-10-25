@@ -16,7 +16,7 @@ class Comment extends React.Component {
     this.addComment = this.addComment.bind(this);
     this.updateNewCommentText = this.updateNewCommentText.bind(this);
   }
-  componentWillMount() { 
+  componentWillMount() {
     //do things
   }
   componentWillUpdate(nextProps, nextState)
@@ -30,11 +30,15 @@ class Comment extends React.Component {
     var commentUser = localStorage.getItem('friendly_name') != null && localStorage.getItem('friendly_name') != "" ? localStorage.getItem('friendly_name') : "Anonymous";
     var newComment = {text: this.state.newCommentText, userName: commentUser, comments: [],
       parentCommentId: this.state.comment.id};
-    var apiRoute = "/api/comment/reply/";    
-    axios.post(apiRoute, {
-      text: this.state.newCommentText,
-      parent_id: this.state.comment.id
-    }, {   
+    var apiRoute = "/api/comment/reply/";
+    var args = {text: this.state.newCommentText,  parent_id: this.state.comment.id}
+    if (this.props.chapterId != undefined) {
+      args.chapter_id = this.props.chapterId
+    }
+    else {
+      args.bookmark_id = this.props.bookmarkId
+    }
+    axios.post(apiRoute, args, {
       headers: {'Authorization': 'Bearer ' + localStorage.getItem('jwt'), 'Content-Type': 'application/json',
       'CSRF-Token': this.props.csrf
     }})
@@ -54,8 +58,8 @@ class Comment extends React.Component {
             type: 'error'
         })
     }.bind(this));
-    
-    
+
+
   }
   updateNewCommentText(event)
   {
@@ -81,25 +85,30 @@ class Comment extends React.Component {
         <div className="row comment-body">
           <div className="col-xs-8 col-md-12 render-linebreak">
             {this.state.comment.text}
-            <br/>
-            <div className="row pull-right">
-              <button className="btn btn-link" onClick={this.showReply}>Reply</button>
-            </div>
+
+            {this.props.anon_comments_permitted || this.props.user != undefined ?
+              <div>
+                <br/>
+                <div className="row pull-right">
+                  <button className="btn btn-link" onClick={this.showReply}>Reply</button>
+                </div>
+              </div> : <div></div>
+            }
           </div>
         </div>
-          
+
           <div className={this.state.showReply ? "viewer-creator" : "viewer"}>
             <div className="row comment-body">
-              <NewComment comment={this.state.comment} user={this.props.user} 
+              <NewComment comment={this.state.comment} user={this.props.user}
               addComment={this.addComment} updateNewCommentText={this.updateNewCommentText}
               newCommentText={this.state.newCommentText}/>
             </div>
           </div>
           <div className="row">
-            {this.state.comment.comments.map(comment => 
+            {this.state.comment.comments.map(comment =>
               <div key={comment.id} className="col-xs-10">
                 <Comment comment={comment} user={this.props.user}/>
-              </div>              
+              </div>
               )}
           </div>
       </div>
@@ -108,4 +117,3 @@ class Comment extends React.Component {
 }
 
 export default withAlert(Comment)
-
