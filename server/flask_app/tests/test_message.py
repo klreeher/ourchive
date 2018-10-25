@@ -24,8 +24,8 @@ class TestMessage(TestCase):
 
     def test_mark_read_message(self):
         data = self.build_data()
-        new_id = message.add_message(data)    
-        second_id = message.add_message(data)    
+        new_id = message.add_message(data)
+        second_id = message.add_message(data)
         message.update_read_status(new_id, True, 1)
         new_message = Message.query.filter_by(id=new_id).first()
         second_message = Message.query.filter_by(id=second_id).first()
@@ -34,8 +34,8 @@ class TestMessage(TestCase):
 
     def test_mark_all_read_message(self):
         data = self.build_data()
-        new_id = message.add_message(data)    
-        second_id = message.add_message(data)    
+        new_id = message.add_message(data)
+        second_id = message.add_message(data)
         message.mark_all_read(1)
         new_message = Message.query.filter_by(id=new_id).first()
         second_message = Message.query.filter_by(id=second_id).first()
@@ -44,9 +44,9 @@ class TestMessage(TestCase):
 
     def test_add_message_reply(self):
         data = self.build_data()
-        new_id = message.add_message(data)   
-        data["parent_id"] = new_id 
-        second_id = message.add_message(data)    
+        new_id = message.add_message(data)
+        data["parent_id"] = new_id
+        second_id = message.add_message(data)
         new_message = Message.query.filter_by(id=new_id).first()
         self.assertTrue(new_message.replies[0].id == second_id)
 
@@ -56,8 +56,8 @@ class TestMessage(TestCase):
         resp_login = auth.login(dict(email='test2@test.com',password='test',username='test2'))
         response = self.client.post(
             '/api/message/',
-            headers={'Authorization':'Bearer ' + 
-                resp_login.json['auth_token'], 'CSRF-Token':'2018-10-14 18:54:25.991752.DqUiYQ.dNTEDv7Ay6xxz9JMCmUUvBPYpf0'},
+            headers={'Authorization':'Bearer ' +
+                resp_login.json['auth_token'], 'CSRF-Token':auth.generate_csrf()},
             content_type='application/json',
             data=json.dumps(data)
         )
@@ -76,7 +76,7 @@ class TestMessage(TestCase):
         self.add_user()
 
         return built
-        
+
     def add_user(self):
         user = User(
             email='test@test.com',

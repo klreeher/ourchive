@@ -91,7 +91,7 @@ class TestUserModel(TestCase):
         response = self.client.get(
             '/api/admin/works/types',
             headers={'Authorization':'Bearer ' + 
-                response.json['auth_token'], 'CSRF-Token':'2018-10-14 18:54:25.991752.DqUiYQ.dNTEDv7Ay6xxz9JMCmUUvBPYpf0'},
+                response.json['auth_token'], 'CSRF-Token':auth.generate_csrf()},
             content_type='application/json',
             data=json.dumps(dict(
                 empty='empty'

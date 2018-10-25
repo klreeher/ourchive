@@ -8,7 +8,7 @@ from database import db
 
 
 class TestAuth(TestCase):
-	
+
 	def do_register(self, email, password, username='elena'):
 		return auth.register(dict(email=email, password=password, username=username))
 
@@ -70,8 +70,8 @@ class TestAuth(TestCase):
 		response = self.do_register('elena@gmail.com', '123456789')
 		response = self.client.post(
             '/api/user/authorize/',
-            headers={'Authorization':'Bearer ' + 
-				response.json['auth_token'], 'CSRF-Token':'2018-10-14 18:54:25.991752.DqUiYQ.dNTEDv7Ay6xxz9JMCmUUvBPYpf0'},
+            headers={'Authorization':'Bearer ' +
+				response.json['auth_token'], 'CSRF-Token':auth.generate_csrf()},
             content_type='application/json',
             data=json.dumps(dict(
                 empty='empty'
@@ -87,12 +87,13 @@ class TestAuth(TestCase):
 	def test_user_admin(self):
 		response = self.do_register('elena@gmail.com', '123456789')
 		user = User.query.first()
-		user.admin = True 
+		user.admin = True
+		db.session.add(user)
 		db.session.commit()
 		response = self.client.post(
             '/api/admin/works/types',
-            headers={'Authorization':'Bearer ' + 
-				response.json['auth_token'], 'CSRF-Token':'2018-10-14 18:54:25.991752.DqUiYQ.dNTEDv7Ay6xxz9JMCmUUvBPYpf0'},
+            headers={'Authorization':'Bearer ' +
+				response.json['auth_token'], 'CSRF-Token':auth.generate_csrf()},
             content_type='application/json',
             data=json.dumps(dict(
                 types={'id': 1, 'type_name': 'one'}
@@ -109,7 +110,7 @@ class TestAuth(TestCase):
 		data_login = resp_login.json
 		response = self.client.post(
             '/api/user/logout/',
-            headers=dict(Authorization='Bearer ' + 
+            headers=dict(Authorization='Bearer ' +
 				data_login['auth_token']),
             content_type='application/json',
             data=json.dumps(dict(
@@ -128,7 +129,7 @@ class TestAuth(TestCase):
 		data_login = resp_login.json
 		response = self.client.post(
             '/api/user/logout/',
-            headers=dict(Authorization='Bearer ' + 
+            headers=dict(Authorization='Bearer ' +
 				'sdflksjdflds'),
             content_type='application/json',
             data=json.dumps(dict(
@@ -153,7 +154,7 @@ class TestAuth(TestCase):
 		# blacklisted valid token logout
 		response = self.client.post(
             '/api/user/logout/',
-            headers=dict(Authorization='Bearer ' + 
+            headers=dict(Authorization='Bearer ' +
 				data_login['auth_token']),
             content_type='application/json',
             data=json.dumps(dict(
@@ -175,8 +176,8 @@ class TestAuth(TestCase):
 		db.session.commit()
 		response = self.client.post(
             '/api/user/logout/',
-            headers={'Authorization':'Bearer ' + 
-				data_register['auth_token'], 'CSRF-Token':'2018-10-14 18:54:25.991752.DqUiYQ.dNTEDv7Ay6xxz9JMCmUUvBPYpf0'},
+            headers={'Authorization':'Bearer ' +
+				data_register['auth_token'], 'CSRF-Token':auth.generate_csrf()},
             content_type='application/json',
             data=json.dumps(dict(
                 empty='empty'
@@ -191,7 +192,7 @@ class TestAuth(TestCase):
 		response = self.do_register('elena@gmail.com', '123456789')
 		response = self.client.post(
             '/api/user/authorize/',
-            headers=dict(Authorization='Bearer' + 
+            headers=dict(Authorization='Bearer' +
 				response.json['auth_token']),
             content_type='application/json',
             data=json.dumps(dict(
@@ -228,4 +229,3 @@ class TestAuth(TestCase):
             ))
         )
 		self.assertEqual(response.status_code, 401)
-

@@ -37,9 +37,9 @@ class TestBookmark(TestCase):
         bookmark.delete_bookmark(1, 1)
         bookmarks = Bookmark.query.all()
         self.assertTrue(len(bookmarks) == 0)
-    
-    def test_get_bookmark(self):  
-        data = self.build_data(True, False, False)      
+
+    def test_get_bookmark(self):
+        data = self.build_data(True, False, False)
         work_data = self.build_dummary_work_data(True, True)
         work_id = work.add_work(work_data)
         work_fetched = Work.query.filter_by(id=work_id).first()
@@ -48,7 +48,7 @@ class TestBookmark(TestCase):
         self.assertTrue(new_bookmark["curator_title"] == "A Fic I Read")
 
     def test_get_bookmarks_by_curator(self):
-        data = self.build_data(True, False, False)      
+        data = self.build_data(True, False, False)
         work_data = self.build_dummary_work_data(True, True)
         work_id = work.add_work(work_data)
         work_fetched = Work.query.filter_by(id=work_id).first()
@@ -61,7 +61,9 @@ class TestBookmark(TestCase):
         data = {}
 
         data["work_id"] = 1
-        
+        data['anon_comments_permitted'] = True
+        data['comments_permitted'] = True
+        data['delete_tags_list'] = []
         if build_tags == False:
             data["tags"] = []
         else:
@@ -111,6 +113,8 @@ class TestBookmark(TestCase):
         data["work_summary"] = "some stuff happens"
         data["work_notes"] = "a note here"
         data['user_id'] = 1
+        data['anon_comments_permitted'] = True
+        data['comments_permitted'] = True
         if build_tags == False:
             data["work_tags"] = []
         else:
@@ -133,9 +137,9 @@ class TestBookmark(TestCase):
             chapter['number'] = 1
             chapter['text'] = "Plot plot plot plot plot"
             chapter['audio_url'] = ""
-            chapter['image_url'] = ""   
-            chapter['summary'] = ""  
-            chapter['image_alt_text'] = ""          
+            chapter['image_url'] = ""
+            chapter['summary'] = ""
+            chapter['image_alt_text'] = ""
             data["chapters"] = [chapter]
 
         return data

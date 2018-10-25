@@ -28,11 +28,11 @@ class TestWorkView(TestCase):
 
     def test_add_chapters(self):
 
-        data = self.build_data(False, True)        
+        data = self.build_data(False, True)
         workObj = Work()
         db.session.add(workObj)
         db.session.commit()
-        work.add_chapters(workObj, data["chapters"])   
+        work.add_chapters(workObj, data["chapters"])
         new_id = Chapter.query.filter_by(work_id=1)
         self.assertTrue(new_id.first().title == "Chapter One Title")
         self.assertTrue(new_id.count() == 1)
@@ -50,20 +50,20 @@ class TestWorkView(TestCase):
         db.session.add(tagTypeTwo)
         db.session.commit()
 
-        new_id = work.add_tags(workObj, data["work_tags"])  
-        expected_len = [x for x in new_id if x.tag_type_id == 1] 
+        new_id = work.add_tags(workObj, data["work_tags"])
+        expected_len = [x for x in new_id if x.tag_type_id == 1]
         self.assertTrue(new_id[0].text == "one")
         self.assertTrue(len(expected_len) == 3)
 
     def test_count_words(self):
 
-        count = work.count_words("this is a chapter. blah blah blah. horses - and- dogs")  
+        count = work.count_words("this is a chapter. blah blah blah. horses - and- dogs")
         self.assertTrue(count == 10)
 
     def test_delete_work(self):
 
         self.build_data(False, False)
-        
+
         workObj = Work()
         workObj.user_id = 1
         db.session.add(workObj)
@@ -81,7 +81,7 @@ class TestWorkView(TestCase):
 
         tagType = TagType(label='two')
         db.session.add(tagType)
-        
+
 
         tag_one = Tag(tag_type_id=1, text='one')
         tag_two = Tag(tag_type_id=2, text='two')
@@ -99,13 +99,13 @@ class TestWorkView(TestCase):
 
     def test_add_comments(self):
         data = self.build_data(True, True)
-        
+
         workObj = Work()
         db.session.add(workObj)
         db.session.commit()
 
-        work.add_chapters(workObj, data["chapters"])   
-        
+        work.add_chapters(workObj, data["chapters"])
+
         comment = Comment(user_id=1, text='hello world', chapter_id=1)
         db.session.add(comment)
         db.session.commit()
@@ -122,7 +122,7 @@ class TestWorkView(TestCase):
 
         tagType = TagType(label='two')
         db.session.add(tagType)
-        
+
 
         tag_one = Tag(tag_type_id=1, text='one')
         tag_two = Tag(tag_type_id=2, text='two')
@@ -131,9 +131,9 @@ class TestWorkView(TestCase):
         workObj.title = "Beginning Title"
         workObj.user_id = 1
         db.session.add(workObj)
-        
 
-        work.add_chapters(workObj, data["chapters"])   
+
+        work.add_chapters(workObj, data["chapters"])
         db.session.commit()
 
         data['work_id'] = workObj.id
@@ -154,7 +154,7 @@ class TestWorkView(TestCase):
 
         db.session.commit()
         data['user_id'] = 1
-        work.add_work(data)   
+        work.add_work(data)
         selected_work = json.loads(work.get_by_user(1))
         self.assertTrue(selected_work['works'][0]['title'] == "A Tale of Two Poor Students")
 
@@ -167,6 +167,9 @@ class TestWorkView(TestCase):
         data["work_summary"] = "some stuff happens"
         data["work_notes"] = "a note here"
         data['user_id'] = 1
+        data['anon_comments_permitted'] = True
+        data['comments_permitted'] = True
+        data['delete_tags_list'] = []
         if build_tags == False:
             data["work_tags"] = []
         else:
@@ -189,9 +192,9 @@ class TestWorkView(TestCase):
             chapter['number'] = 1
             chapter['text'] = "Plot plot plot plot plot"
             chapter['audio_url'] = ""
-            chapter['image_url'] = app.config['TEST_FILE_LOC']+'test_image.jpg'   
-            chapter['summary'] = "sixteen tiny horses"  
-            chapter['image_alt_text'] = ""     
+            chapter['image_url'] = app.config['TEST_FILE_LOC']+'test_image.jpg'
+            chapter['summary'] = "sixteen tiny horses"
+            chapter['image_alt_text'] = ""
             data["chapters"] = [chapter]
 
         self.add_user()

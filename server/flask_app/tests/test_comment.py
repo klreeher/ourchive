@@ -48,6 +48,7 @@ class TestComment(TestCase):
 
     def build_data(self, build_parent, build_bookmark, build_chapter):
         built = {}
+        built["work_id"] = 1
         if build_parent:
         	built["parent_id"] = 1
         	built["text"] = "This is a reply..."
@@ -58,10 +59,10 @@ class TestComment(TestCase):
         	built["bookmark_id"] = 1
         if build_chapter:
         	built["chapter_id"] = 1
-        
+
         built["comments"] = []
         return built
-        
+
     def add_user(self):
         user = User(
             email='test@test.com',
@@ -77,15 +78,19 @@ class TestComment(TestCase):
         db.session.commit()
 
     def add_bookmark(self):
-    	bookmark = Bookmark(curator_title="a test")
-    	db.session.add(bookmark)
-    	db.session.commit()
+        bookmark = Bookmark(curator_title="a test")
+        bookmark.anon_comments_permitted = True
+        bookmark.comments_permitted = True
+        db.session.add(bookmark)
+        db.session.commit()
 
     def add_chapter(self):
-    	work = Work(title="test")
-    	db.session.add(work)
-    	work.chapters.append(Chapter(title="test chap"))
-    	db.session.commit()
+        work = Work(title="test")
+        work.anon_comments_permitted = True
+        work.comments_permitted = True
+        db.session.add(work)
+        work.chapters.append(Chapter(title="test chap"))
+        db.session.commit()
 
 if __name__ == '__main__':
     unittest.main()
