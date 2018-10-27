@@ -3,7 +3,7 @@ import re
 import json
 from . import work
 from flask import current_app as app
-import file_utils
+from . import file_utils
 from models import Work, Chapter, Tag, User, TagType
 from database import db
 import tag as tag_blueprint
@@ -143,16 +143,18 @@ def update_chapters(work, chapters, delete_list):
 	for chapter_item in chapters:
 		if 'id' not in chapter_item:
 			chapter = Chapter(title=chapter_item['title'], number=chapter_item['number'], text=chapter_item['text'], image_alt_text=chapter_item['image_alt_text'])
-			chapter = validate_files(chapter, chapter_item)
-			if chapter == -1:
-				raise ValueError('Chapter audio or image is corrupted or of the wrong type.')
+			valid = validate_files(chapter, chapter_item)
+			#todo log this
+			#if chapter == -1:
+				#raise ValueError('Chapter audio or image is corrupted or of the wrong type.')
 			work.chapters.append(chapter)
 			count = count + count_words(chapter_item['text'])
 		else:
 			chapter = Chapter.query.filter_by(id=chapter_item['id']).first()
-			chapter = validate_files(chapter, chapter_item)
-			if chapter == -1:
-				raise ValueError('Chapter audio or image is corrupted or of the wrong type.')
+			valid = validate_files(chapter, chapter_item)
+			#todo log this
+			#if chapter == -1:
+				#raise ValueError('Chapter audio or image is corrupted or of the wrong type.')
 			chapter.title = chapter_item['title']
 			chapter.summary = chapter_item['summary']
 			chapter.number = chapter_item['number']

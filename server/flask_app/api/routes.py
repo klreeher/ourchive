@@ -528,14 +528,12 @@ def add_chapter_comment():
   user_id = auth.auth_from_data(request)
   if user_id > 0:
     request.json['user_id'] = user_id
-    result = comment.add_comment_to_chapter(request.json)
-    if result is not None:
-      responseObject = {
-          'id': result
-        }
-      return make_response(jsonify(responseObject), 201)
-    else:
-      abort(400)
+  result = comment.add_comment_to_chapter(request.json)
+  if result is not None:
+    responseObject = {
+        'id': result
+      }
+    return make_response(jsonify(responseObject), 201)
   else:
     abort(400)
 
@@ -544,14 +542,12 @@ def add_bookmark_comment():
   user_id = auth.auth_from_data(request)
   if user_id > 0:
     request.json['user_id'] = user_id
-    result = comment.add_comment_to_bookmark(request.json)
-    if result is not None:
-      responseObject = {
-          'id': result
-        }
-      return make_response(jsonify(responseObject), 201)
-    else:
-      abort(400)
+  result = comment.add_comment_to_bookmark(request.json)
+  if result is not None:
+    responseObject = {
+        'id': result
+      }
+    return make_response(jsonify(responseObject), 201)
   else:
     abort(400)
 
@@ -560,14 +556,12 @@ def add_comment_reply():
   user_id = auth.auth_from_data(request)
   if user_id > 0:
     request.json['user_id'] = user_id
-    result = comment.add_reply(request.json)
-    if result is not None:
-      responseObject = {
-          'id': result
-        }
-      return make_response(jsonify(responseObject), 201)
-    else:
-      abort(400)
+  result = comment.add_reply(request.json)
+  if result is not None:
+    responseObject = {
+        'id': result
+      }
+    return make_response(jsonify(responseObject), 201)
   else:
     abort(400)
 
