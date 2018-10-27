@@ -119,7 +119,7 @@ class Chapter extends React.Component {
 
           <div className="row">
             <div className="col-xs-9 col-md-12">
-              {this.props.chapter.image_url && <img src={this.props.chapter.image_url} alt='{this.props.chapter.image_alt_text}'/>}
+              {this.props.chapter.image_url && <img src={this.props.chapter.image_url} alt='{this.props.chapter.image_alt_text}' class="img-fluid"/>}
             </div>
           </div>
           <br/>

@@ -6,11 +6,9 @@ import WorkStub from './WorkStub';
 import WorkTypeCheckbox from './WorkTypeCheckbox';
 import {Tabs, Tab, Row, Nav, Col, NavItem} from 'react-bootstrap';
 import { withAlert } from 'react-alert';
+import { withRouter } from "react-router-dom";
 
 class Search extends React.Component {
-
-	
-
 	constructor(props) {
 	    super(props);
 	    this.state = {user: this.props.user,  searchTerm: "", advancedText: "Show Advanced Search", searchBookmarks: true,
@@ -20,8 +18,6 @@ class Search extends React.Component {
       this.searchType = this.searchType.bind(this);
       this.toggleAdvanced = this.toggleAdvanced.bind(this);
       this.doAdvancedSearch = this.doAdvancedSearch.bind(this);
-      this.previousPage = this.previousPage.bind(this);
-      this.nextPage = this.nextPage.bind(this);
     }
 
   componentDidMount()
@@ -52,14 +48,20 @@ class Search extends React.Component {
       axios.post('/api/search/term/'+this.state.searchTerm, {"search_works": this.state.searchWorks,
         "search_bookmarks": this.state.searchBookmarks})
         .then(function (response) {
-          this.setState({           
-            works: response.data.works,
-            work_page: 1,
-            work_pages: response.data.work_pages,
-            bookmark_pages: response.data.bookmark_pages,
-            bookmark_page: 1,
-            results: true,
-            bookmarks: response.data.bookmarks
+           this.props.history.push({
+            pathname: '/search/results',
+            state: {
+              works: response.data.works,
+              work_page: 1,
+              work_pages: response.data.work_pages,
+              bookmark_pages: response.data.bookmark_pages,
+              bookmark_page: 1,
+              results: true,
+              bookmarks: response.data.bookmarks,
+              searchTerm: this.state.searchTerm,
+              searchWorks: this.state.searchWorks,
+              searchBookmarks: this.stateBookmarks
+            }
           });
         }.bind(this))
         .catch(function (error) {
@@ -79,14 +81,25 @@ class Search extends React.Component {
         "exclude_terms": this.state.searchNone, "curator_usernames": this.state.searchCurator,
         "creator_usernames": this.state.searchCreator, "work_types": this.state.search_types})
         .then(function (response) {
-          this.setState({           
-            works: response.data.works,
-            work_page: 1,
-            work_pages: response.data.work_pages,
-            bookmark_pages: response.data.bookmark_pages,
-            bookmark_page: 1,
-            results: true,
-            bookmarks: response.data.bookmarks
+          this.props.history.push({
+            pathname: '/search/results',
+            state: {
+              works: response.data.works,
+              work_page: 1,
+              work_pages: response.data.work_pages,
+              bookmark_pages: response.data.bookmark_pages,
+              bookmark_page: 1,
+              results: true,
+              bookmarks: response.data.bookmarks,
+              searchTerm: this.state.searchTerm,
+              searchWorks: this.state.searchWorks,
+              searchBookmarks: this.stateBookmarks,
+              searchAny: this.state.searchAny,
+              searchNone: this.state.searchNone,
+              searchCurator: this.state.searchCurator,
+              searchCreator: this.state.searchCreator,
+              search_types: this.state.search_types
+            }
           });
         }.bind(this))
         .catch(function (error) {
@@ -217,112 +230,7 @@ class Search extends React.Component {
     })
   }
 
-  previousPage(name) {
-    switch (name) {
-      case "work":
-        this.getWorkPage(this.state.work_page - 1)
-        break
-      case "bookmark":
-        this.getBookmarkPage(this.state.bookmark_page - 1)
-        break
-    }
-  }
-
-  nextPage(name) {
-    switch (name) {
-      case "work":
-        this.getWorkPage(this.state.work_page + 1)
-        break
-      case "bookmark":
-        this.getBookmarkPage(this.state.bookmark_page + 1)
-        break
-    }
-  }
-
-  getWorkPage(page) {
-    if (this.state.showAdvancedSearch)
-    {
-      axios.post('/api/search/advanced/page/'+ page, {"search_works": true,
-        "search_bookmarks": false, "include_terms": this.state.searchAny,
-        "exclude_terms": this.state.searchNone, "curator_usernames": this.state.searchCurator,
-        "creator_usernames": this.state.searchCreator})
-        .then(function (response) {
-          this.setState({           
-            works: response.data.works,
-            work_page: page,
-            work_pages: response.data.work_pages
-          });
-        }.bind(this))
-        .catch(function (error) {
-          this.props.alert.show('An error has occurred. Contact your administrator if this persists.', {
-            timeout: 6000,
-            type: 'error'
-          })
-      }.bind(this));
-    }
-    else
-    {
-      axios.post('/api/search/term/'+this.state.searchTerm+'/page/'+page, {"search_works": true,
-        "search_bookmarks": false})
-        .then(function (response) {
-          this.setState({           
-            works: response.data.works,
-            work_page: page,
-            work_pages: response.data.work_pages
-          });
-        }.bind(this))
-        .catch(function (error) {
-          this.props.alert.show('An error has occurred. Contact your administrator if this persists.', {
-            timeout: 6000,
-            type: 'error'
-          })
-        }.bind(this));
-    }
-    
-  }
-
-  getBookmarkPage(page) {
-    if (this.state.showAdvancedSearch) 
-    {
-      axios.post('/api/search/advanced/page/'+page, {"search_works": false,
-        "search_bookmarks": true, "include_terms": this.state.searchAny,
-        "exclude_terms": this.state.searchNone, "curator_usernames": this.state.searchCurator,
-        "creator_usernames": this.state.searchCreator})
-        .then(function (response) {
-          this.setState({           
-            bookmark_pages: response.data.bookmark_pages,
-            bookmark_page: 1,
-            bookmarks: response.data.bookmarks
-          });
-        }.bind(this))
-        .catch(function (error) {
-          this.props.alert.show('An error has occurred. Contact your administrator if this persists.', {
-            timeout: 6000,
-            type: 'error'
-          })
-        }.bind(this));
-    }
-    else
-    {
-      axios.post('/api/search/term/'+this.state.searchTerm+'/page/'+page, {"search_works": false,
-        "search_bookmarks": true})
-        .then(function (response) {
-          this.setState({           
-            bookmarks: response.data.bookmarks,
-            bookmark_page: page,
-            bookmark_pages: response.data.bookmark_pages
-          });
-        }.bind(this))
-        .catch(function (error) {
-          this.props.alert.show('An error has occurred. Contact your administrator if this persists.', {
-            timeout: 6000,
-            type: 'error'
-          })
-        }.bind(this));
-    }
-    
-  }
-
+  
   render() {
     return (
       <div>
@@ -442,4 +350,4 @@ class Search extends React.Component {
   }
 }
 
-export default withAlert(Search)
+export default withAlert(withRouter(Search))

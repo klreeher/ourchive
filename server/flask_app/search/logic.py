@@ -61,13 +61,14 @@ def do_advanced_search(include_terms, exclude_terms,
 def search_works_on_query(query, page_number):
 	if not app.config.get('USE_ES'):
 		return {}
+	page_var = app.config.get('RESULT_PAGES')
 	WorkSearch.init()
 	search = WorkSearch.search()
 	search = search.query(query)
-	search = search[(page_number-1) * 25:page_number*25]
+	search = search[(page_number-1) * page_var:page_number*page_var]
 	results = search.execute()
 	work_results = {}
-	work_results['pages'] = results['hits']['total']/25
+	work_results['pages'] = results['hits']['total']/page_var
 	results_json = []
 	for item in results:
 		results_json.append(build_work_search_results(item))
@@ -77,13 +78,14 @@ def search_works_on_query(query, page_number):
 def search_bookmarks_on_query(query, page_number):
 	if not app.config.get('USE_ES'):
 		return {}
+	page_var = app.config.get('RESULT_PAGES')
 	BookmarkSearch.init()
 	search = BookmarkSearch.search()
 	search = search.query(query)
-	search = search[(page_number-1) * 25:page_number*25]
+	search = search[(page_number-1) * page_var:page_number*page_var]
 	results = search.execute()
 	bookmark_results = {}
-	bookmark_results['pages'] = results['hits']['total']/25
+	bookmark_results['pages'] = results['hits']['total']/page_var
 	results_json = []
 	for item in results:
 		results_json.append(build_bookmark_search_results(item))
@@ -203,12 +205,13 @@ def get_bookmark_query(term):
 def search_text_on_term(term, page_number=1):
 	if not app.config.get('USE_ES'):
 		return {}
+	page_var = app.config.get('RESULT_PAGES')
 	WorkSearch.init()
 	search = WorkSearch.search()
 	query = get_work_query(term)
 	chapter_query = get_chapter_query(term)
 	combined = chapter_query | query
-	search = search[(page_number-1) * 25:page_number*25]
+	search = search[(page_number-1) * page_var:page_number*page_var]
 	search = search.query(combined)
 	results = search.execute()
 	results_json = {}
@@ -216,7 +219,7 @@ def search_text_on_term(term, page_number=1):
 	for item in results:
 		work_results.append(build_work_search_results(item))
 	results_json['work_results'] = work_results
-	results_json['count'] = results['hits']['total']/25
+	results_json['count'] = results['hits']['total']/page_var
 	return results_json
 
 def build_work_search_results(item):
@@ -259,17 +262,18 @@ def search_by_type_query(type):
 def search_bookmark_by_term(term, page_number=1):
 	if not app.config.get('USE_ES'):
 		return {}
+	page_var = app.config.get('RESULT_PAGES')
 	BookmarkSearch.init()
 	search = BookmarkSearch.search()
 	query = get_bookmark_query(term)
-	search = search[(page_number-1) * 25:page_number*25]
+	search = search[(page_number-1) * page_var:page_number*page_var]
 	search = search.query(query)
 	results = search.execute()
 	return_json = {}
 	results_json = []
 	for bookmark in results:
 		results_json.append(build_bookmark_search_results(bookmark))
-	return_json['count'] = results['hits']['total']/25
+	return_json['count'] = results['hits']['total']/page_var
 	return_json['bookmarks'] = results_json
 	return return_json
 

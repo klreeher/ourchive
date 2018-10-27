@@ -24,6 +24,7 @@ import MessageCenter from './MessageCenter';
 import Notifications from './Notifications';
 import TagResults from './TagResults';
 import Admin from './Admin';
+import SearchResults from './SearchResults';
 
 
 export default class RootApp extends React.Component {
@@ -85,6 +86,7 @@ export default class RootApp extends React.Component {
             <Route path="/user/messages" component={(props, state, params) => <MessageCenter user={user} csrf={csrf} {...props}/>}/>
             <Route path="/notifications" component={(props, state, params) => <Notifications user={user} csrf={csrf} {...props}/>}/>
             <Route path="/tag/:tagId/:tagText" component={(props, state, params) => <TagResults user={user} csrf={csrf} {...props}/>}/>
+            <Route path="/search/results" component={(props, state, params) => <SearchResults user={user} csrf={csrf} {...props}/>}/>
           </div>
         </Router>
     );
