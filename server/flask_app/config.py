@@ -29,6 +29,7 @@ class Dev(Config):
     TUS_ENDPOINT = 'http://127.0.0.1:1080/files/'
     REDIS_SERVERNAME = 'redis'
     REDIS_PORT=6379
+    RESULT_PAGES=15
     REDIS_PASSWORD='devpassword'
     ELASTICSEARCH_SERVERNAME='elasticsearch'
 

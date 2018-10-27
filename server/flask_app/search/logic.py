@@ -32,7 +32,8 @@ def do_advanced_search(include_terms, exclude_terms,
 					type_query = type_query | search_by_type_query(str(work_type['id']))
 				else:
 					type_query = search_by_type_query(str(work_type['id']))
-			final_query = final_query & type_query
+			if type_query is not None:
+				final_query = final_query & type_query
 		print(final_query)
 		work_results = search_works_on_query(final_query, page_number)
 		results["works"] = work_results['works']
@@ -51,9 +52,10 @@ def do_advanced_search(include_terms, exclude_terms,
 				final_query = final_query & search_by_curators_query(curator_usernames.split())
 			else:
 				final_query = search_by_curators_query(curator_usernames.split())
-		bookmark_results = search_bookmarks_on_query(final_query, page_number)
-		results["bookmarks"] = bookmark_results['bookmarks']
-		results['bookmark_pages'] = bookmark_results['pages']
+		if final_query is not None:
+			bookmark_results = search_bookmarks_on_query(final_query, page_number)
+			results["bookmarks"] = bookmark_results['bookmarks']
+			results['bookmark_pages'] = bookmark_results['pages']
 	return results
 
 def search_works_on_query(query, page_number):

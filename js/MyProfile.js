@@ -88,7 +88,7 @@ class MyProfile extends React.Component {
   }
 
   getWorkPage(page) {
-    axios.get('/api/work/creator/1/'+page)
+    axios.get('/api/work/creator/'+this.state.user.id+'/'+page)
         .then(function (response) {
           this.setState({
             works: response.data.works,

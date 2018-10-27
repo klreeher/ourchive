@@ -517,7 +517,8 @@ def get_bookmarks(curatorId, page=1):
 @api.route('/api/work/creator/<int:creatorId>')
 @api.route('/api/work/creator/<int:creatorId>/<int:page>')
 def get_works_by_creator(creatorId, page=1):
-  return work.get_by_user(creatorId, page)
+  result = work.get_by_user(creatorId, page)
+  return make_response(result, 201)
 
 @api.route('/api/tag/<int:type_id>/suggestions/<string:term>')
 def get_tag_suggestions(term, type_id):

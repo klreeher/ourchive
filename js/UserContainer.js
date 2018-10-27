@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import ReactDOM from 'react-dom';
 import Link from 'react-router-dom';
 import {Tabs, Tab} from 'react-bootstrap';
 import WorkStub from './WorkStub';
@@ -8,8 +9,10 @@ import PaginationControl from './PaginationControl';
 
 export default class UserContainer extends React.Component {
 	constructor(props) {    
-	  	super(props);	  	
-	    this.state = {user: this.props.user, works: this.props.works, 
+	  	super(props);	
+	  	var cleaned_bio = ""
+	  	
+	    this.state = {user: this.props.user, cleaned_bio: cleaned_bio, works: this.props.works, 
 	    	bookmarks: this.props.bookmarks, curator: this.props.curator};
     }
 
@@ -21,8 +24,12 @@ export default class UserContainer extends React.Component {
 	
 	}
 	componentWillReceiveProps(nextProps) {
-	  this.setState({ user: nextProps.user, works: nextProps.works,
-	  	bookmarks: nextProps.bookmarks, curator: nextProps.curator});  
+		var cleaned_bio = ""
+		if (this.props.user != undefined) {
+	  		cleaned_bio = DOMPurify.sanitize(this.props.user.bio);
+	  	}	
+	  	this.setState({ user: nextProps.user, works: nextProps.works,
+	  		bookmarks: nextProps.bookmarks, curator: nextProps.curator, cleaned_bio: cleaned_bio});  
 	}
 
     render() {
@@ -40,9 +47,7 @@ export default class UserContainer extends React.Component {
 			        		<div className="col-md-2">
 			        			About:
 			        		</div>
-			        		<div className="col-md-10">
-			        			{this.state.user.bio}
-			        		</div>
+			        		<div className="col-md-10 render-linebreak" dangerouslySetInnerHTML={{ __html: this.state.cleaned_bio }}></div>
 			        	</div>
 			        	<div className="row">
 			        		<div className="col-md-2">

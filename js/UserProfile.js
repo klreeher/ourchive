@@ -121,7 +121,7 @@ class UserProfile extends React.Component {
   }
 
   getWorkPage(page) {
-    axios.get('/api/work/creator/1/'+page)
+    axios.get('/api/work/creator/'+this.state.profile_user.id+'/'+page)
         .then(function (response) {
           this.setState({
             works: response.data.works,
@@ -203,17 +203,22 @@ class UserProfile extends React.Component {
     render() {
     return (
       <div>
-        {this.props.user != null && <div className="row">
-          <button className="btn btn-link" onClick={evt => this.showMessageModal(event)}>Send Message</button>
-        </div>
-
-        }
-
         <div className="row">
-          <UserContainer user={this.state.profile_user} works={this.state.works} bookmarks={this.state.bookmarks}
-          curator={this.state.curator} totalWorkPages={this.state.work_pages} totalBookmarkPages={this.state.bookmark_pages}
-            currentWorkPage={this.state.work_page} currentBookmarkPage={this.state.bookmark_page}
-            previousPage={this.previousPage} nextPage={this.nextPage}/>
+          <div class="col-xs-10">
+            <UserContainer user={this.state.profile_user} works={this.state.works} bookmarks={this.state.bookmarks}
+            curator={this.state.curator} totalWorkPages={this.state.work_pages} totalBookmarkPages={this.state.bookmark_pages}
+              currentWorkPage={this.state.work_page} currentBookmarkPage={this.state.bookmark_page}
+              previousPage={this.previousPage} nextPage={this.nextPage}/>
+          </div>
+          <div class="col-xs-2">
+              {this.props.user != null && 
+                <div>
+                  <button className="btn btn-info" 
+                    onClick={evt => this.showMessageModal(event)}>Send Message</button>
+                </div>
+
+              }
+          </div>
         </div>
         <Modal show={this.state.showMessageModal} onHide={evt => this.handleSendMessage(evt)}>
           <Modal.Header closeButton>
