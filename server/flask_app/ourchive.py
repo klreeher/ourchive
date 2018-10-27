@@ -53,9 +53,10 @@ class Ourchive(Flask):
         from tag import tag as tag_blueprint
         self.register_blueprint(tag_blueprint)
                 
-        @self.route('/<path:stuff>/files/<path:filename>', methods=['GET'])
+        @self.route('/<path:stuff>/data/<path:filename>', methods=['GET'])
         def download(stuff, filename):
           uploads = os.path.join(self.config.get('UPLOAD_FOLDER'))
+          filename = filename #+ self.config.get('UPLOAD_SUFFIX')
           return send_from_directory(directory=uploads, filename=filename)
 
         @self.route('/')

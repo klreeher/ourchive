@@ -11,7 +11,7 @@ from .search_wrapper import WorkSearch
 from tag.search_wrapper import TagSearch
 import elasticsearch
 from PIL import Image
-from pydub import AudioSegment
+import mutagen
 
 def get_tag_categories():
 	tags = []
@@ -174,9 +174,10 @@ def validate_files(chapter, chapter_item):
 		if not (file_utils.file_is_audio(audio_url)):
 			return -1
 		else:
-			audio = AudioSegment.from_file(audio_url)
-			chapter.audio_length = len(audio)
+			audio = mutagen.File(audio_url)
+			chapter.audio_length = audio.info.length
 			chapter.audio_url = audio_url
+			return chapter
 	if chapter_item['image_url']:
 		image_url = get_file_url(chapter_item['image_url'])
 		if not (file_utils.file_is_image(image_url)):
@@ -270,8 +271,11 @@ def build_work_chapters(work):
 		chapter_json['title'] = chapter.title
 		chapter_json['text'] = chapter.text
 		chapter_json['audio_url'] = chapter.audio_url
+		chapter_json['audio_length'] = chapter.audio_length
 		chapter_json['image_url'] = chapter.image_url
 		chapter_json['image_alt_text'] = chapter.image_alt_text
+		chapter_json['image_size'] = chapter.image_size
+		chapter_json['image_format'] = chapter.image_format
 		chapter_json['summary'] = chapter.summary
 		chapter_json['comments'] = build_chapter_comments(chapter.comments)
 		chapters.append(chapter_json)

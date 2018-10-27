@@ -37,4 +37,4 @@ ebooklib>=0.17
 pyyaml
 requests
 Pillow>=5.3.0
-pydub>=0.23.0
+mutagen

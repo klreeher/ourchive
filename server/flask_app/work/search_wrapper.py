@@ -21,7 +21,6 @@ class ChapterSearch(InnerDoc):
 		self.summary=chapter_json['summary']
 
 	def save_from_json(self, chapter_json):
-		ChapterSearch.init()
 		chapter = self.create_from_json(chapter_json)
 		chapter.save()
 
@@ -32,7 +31,6 @@ class WorkTagSearch(InnerDoc):
 		self.text=tag_text
 
 	def save_from_text(self, tag_text):
-		WorkTagSearch.init()
 		tag = self.create_from_text(tag_text)
 		tag.save()
 
@@ -62,6 +60,7 @@ class WorkSearch(DocType):
 	def add_chapters(self, chapter_json, work_id):
 		chapter_count = 1
 		for chapter in chapter_json:
+			chapter['audio_url'] = ''
 			chapter_search = ChapterSearch()
 			chapter_search.create_from_json(chapter)
 			self.chapters.append(
@@ -81,7 +80,7 @@ class WorkSearch(DocType):
 
 
 	def create_from_json(self, work_json):
-		WorkSearch.init()
+		print(work_json)
 		complete = work_json['is_complete'] == "True"
 		self.title=work_json['title']
 		self.work_summary=work_json['work_summary']
@@ -96,4 +95,6 @@ class WorkSearch(DocType):
 		self.add_chapters(work_json['chapters'], str(self.meta.id))
 		if 'tags' in work_json:
 			self.add_tags(work_json['tags'])
+		print(self)
+		print(self.chapters[0])
 		self.save()
