@@ -60,7 +60,8 @@ class Search extends React.Component {
               bookmarks: response.data.bookmarks,
               searchTerm: this.state.searchTerm,
               searchWorks: this.state.searchWorks,
-              searchBookmarks: this.stateBookmarks
+              searchBookmarks: this.stateBookmarks,
+              showAdvancedSearch: this.state.showAdvancedSearch
             }
           });
         }.bind(this))
@@ -98,7 +99,8 @@ class Search extends React.Component {
               searchNone: this.state.searchNone,
               searchCurator: this.state.searchCurator,
               searchCreator: this.state.searchCreator,
-              search_types: this.state.search_types
+              search_types: this.state.search_types,
+              showAdvancedSearch: this.state.showAdvancedSearch
             }
           });
         }.bind(this))

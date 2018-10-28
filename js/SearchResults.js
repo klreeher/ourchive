@@ -44,7 +44,7 @@ export default class SearchResults extends React.Component {
       axios.post('/api/search/advanced/page/'+ page, {"search_works": true,
         "search_bookmarks": false, "include_terms": this.state.searchAny,
         "exclude_terms": this.state.searchNone, "curator_usernames": this.state.searchCurator,
-        "creator_usernames": this.state.searchCreator})
+        "creator_usernames": this.state.searchCreator, "work_types": this.state.search_types})
         .then(function (response) {
           this.setState({           
             works: response.data.works,
