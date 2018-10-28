@@ -171,21 +171,23 @@ def update_chapters(work, chapters, delete_list):
 def validate_files(chapter, chapter_item):
 	if chapter_item['audio_url']:
 		audio_url = get_file_url(chapter_item['audio_url'])
-		if not (file_utils.file_is_audio(audio_url)):
-			return -1
-		else:
-			audio = mutagen.File(audio_url)
-			chapter.audio_length = audio.info.length
-			chapter.audio_url = audio_url
+		chapter.audio_url = audio_url
+		#if not (file_utils.file_is_audio(audio_url)):
+		#	return -1
+		#else:
+		#	audio = mutagen.File(audio_url)
+		#	chapter.audio_length = audio.info.length
+		#	chapter.audio_url = audio_url
 	if chapter_item['image_url']:
 		image_url = get_file_url(chapter_item['image_url'])
-		if not (file_utils.file_is_image(image_url)):
-			return -1
-		else:
-			image = Image.open(image_url)
-			chapter.image_format = image.format
-			chapter.image_size = image.size
-			chapter.image_url = image_url
+		#if not (file_utils.file_is_image(image_url)):
+		#	return -1
+		#else:
+		#	image = Image.open(image_url)
+		#	chapter.image_format = image.format
+		#	chapter.image_size = image.size
+		#	chapter.image_url = image_url
+		chapter.image_url = image_url
 	return chapter
 
 def add_tags(work, tags):
@@ -312,4 +314,6 @@ def get_file_url(url):
 		return url_root + identifier + app.config.get('UPLOAD_SUFFIX')
 	elif app.config.get('UPLOAD_TYPE') == 'aws':
 		identifier = url.rsplit('/', 1)[-1]
-		return app.config.get('BUCKET_URL')+identifier
+		match = re.match(r'(.)*\+',identifier)
+		sliced = match.group()[:-1]
+		return app.config.get('BUCKET_URL')+sliced

@@ -18,8 +18,8 @@ class Dev(Config):
     DEBUG = True
     BCRYPT_LOG_ROUNDS = 4
     SQLALCHEMY_DATABASE_URI = postgres_local_base + 'postgres/' + database_name
-    UPLOAD_ROOT = '/ourchive/tus-data/data/'
-    UPLOAD_FOLDER = '/ourchive/tus-data/data/'
+    UPLOAD_ROOT = ''
+    UPLOAD_FOLDER = ''
     UPLOAD_SUFFIX = '.bin'
     AWS_BUCKET = 'ourchive-test-bucket'
     APP_ROOT = 'http://127.0.0.1:5000'
@@ -30,9 +30,10 @@ class Dev(Config):
     REDIS_SERVERNAME = 'redis'
     REDIS_PORT=6379
     RESULT_PAGES=15
+    UPLOAD_TYPE = 'aws'
     REDIS_PASSWORD='devpassword'
     ELASTICSEARCH_SERVERNAME='elasticsearch'
-    BUCKET_URL='https://s3.us-east-2.amazonaws.com/ourchive-test-bucket/'
+    BUCKET_URL='https://ourchive-test-bucket.s3.amazonaws.com/'
 
 # config class used during tests
 class Test(Config):

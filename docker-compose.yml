@@ -52,6 +52,11 @@ services:
 
   tusd:
     image: 'tusproject/tusd'
+    entrypoint: ['tusd', '-s3-bucket', 'CHANGEME']
+    environment:
+      AWS_ACCESS_KEY_ID: 'CHANGEME'
+      AWS_SECRET_ACCESS_KEY: 'CHANGEME'
+      AWS_REGION: 'us-east-2'
     volumes:
       - './tus-data:/srv/tusd-data'
     ports:
