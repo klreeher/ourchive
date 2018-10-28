@@ -177,7 +177,6 @@ def validate_files(chapter, chapter_item):
 			audio = mutagen.File(audio_url)
 			chapter.audio_length = audio.info.length
 			chapter.audio_url = audio_url
-			return chapter
 	if chapter_item['image_url']:
 		image_url = get_file_url(chapter_item['image_url'])
 		if not (file_utils.file_is_image(image_url)):

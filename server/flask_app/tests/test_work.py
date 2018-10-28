@@ -23,11 +23,11 @@ class TestWorkView(TestCase):
         data = self.build_data(False, True)
         data['user_id'] = 1
         new_id = work.add_work(data)
-        selected_work = Work.query.filter_by(id=1).first()
+        selected_work = Work.query.filter_by(id=new_id).first()
+        user = User.query.filter_by(id=1).first()
         work_export.create_epub(selected_work)
 
     def test_add_chapters(self):
-
         data = self.build_data(False, True)
         workObj = Work()
         db.session.add(workObj)
@@ -191,7 +191,7 @@ class TestWorkView(TestCase):
             chapter['title'] = "Chapter One Title"
             chapter['number'] = 1
             chapter['text'] = "Plot plot plot plot plot"
-            chapter['audio_url'] = ""
+            chapter['audio_url'] = app.config['TEST_FILE_LOC']+'test_audio.mp3'
             chapter['image_url'] = app.config['TEST_FILE_LOC']+'test_image.jpg'
             chapter['summary'] = "sixteen tiny horses"
             chapter['image_alt_text'] = ""

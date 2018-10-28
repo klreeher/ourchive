@@ -3,12 +3,41 @@ import requests
 import urllib
 from io import BytesIO
 import ebooklib
+import pathlib
+from zipfile import ZipFile
+from PIL import Image
+from pydub import AudioSegment
+import shutil
 
-def create_image_zip(work):
-	return
+def create_work_zip(work, creator_name):
+	with ZipFile('test.zip', 'w') as test:
+		for chapter in work.chapters:
+			pathlib.Path('Chapter ' + str(chapter.number)).mkdir(parents=True, exist_ok=True)
+			with open('Chapter '+str(chapter.number)+'/'+chapter.title+'.html', 'w') as text:
+				text.write('<h2>'+chapter.title+'</h2> <h3>by '+creator_name+'</h3>')
+				text.write('<br/><br/>')
+				text.write(chapter.summary)
+				text.write('<br/><br/><hr><br/></br>')
+				text.write(chapter.text)
+			test.write('Chapter '+str(chapter.number)+'/'+chapter.title+'.html')
+			if chapter.image_url is not None:
+				if 'http' in chapter.image_url:
+					image = requests.get(chapter.image_url).content
+				else:
+					image = open(chapter.image_url, 'rb').read()
+				pil_image = Image.open(BytesIO(image))
+				pil_image.save('Chapter '+str(chapter.number)+'/'+chapter.title+'.jpg')
+				test.write('Chapter '+str(chapter.number)+'/'+chapter.title+'.jpg')
+			if chapter.audio_url is not None:
+				if 'http' in chapter.audio_url:
+					audio = requests.get(chapter.audio_url).content
+				else:
+					audio = open(chapter.audio_url, 'rb').read()
+				audio_segment = AudioSegment.from_file(BytesIO(audio), format="mp3")
+				audio_segment.export('Chapter '+str(chapter.number)+'/'+chapter.title+'.mp3', format="mp3")
+				test.write('Chapter '+str(chapter.number)+'/'+chapter.title+'.mp3')
+			shutil.rmtree('Chapter ' + str(chapter.number))
 
-def create_audio_zip(work):
-	return
 
 def create_epub(work):
 

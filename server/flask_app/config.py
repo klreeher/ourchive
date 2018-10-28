@@ -43,7 +43,7 @@ class Test(Config):
     SQLALCHEMY_DATABASE_URI = postgres_local_base + 'postgres-test/' +database_name + '_test'
     PRESERVE_CONTEXT_ON_EXCEPTION = False
     USE_ES = False
-    UPLOAD_SUFFIX = '.bin'
+    UPLOAD_SUFFIX = ''
     TEST_FILE_LOC = 'server/flask_app/tests/'
     REDIS_SERVERNAME = 'redis-test'
     REDIS_PASSWORD='devpassword'

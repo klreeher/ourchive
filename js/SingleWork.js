@@ -174,7 +174,7 @@ class SingleWork extends React.Component {
       {this.state.work.id != undefined &&
         <div>
         {loggedIn && <div className="row">
-          <div className="col-xs-3 col-xs-offset-9 float-right">
+          <div className="col-xs-3 col-xs-offset-9 float-right text-right">
               <EditDeleteButtons dropdownLabel="Actions" actions={actions}/>
           </div>
         </div>}
