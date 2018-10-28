@@ -12,6 +12,7 @@ def file_is_audio(file):
 def file_is_image(file):
 	try:
 		file_type = magic.from_file(file)
+		print(file_type)
 		return ('image data' in file_type)
 	except FileNotFoundError:
 		return False

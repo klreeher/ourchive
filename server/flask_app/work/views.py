@@ -12,6 +12,11 @@ from tag.search_wrapper import TagSearch
 import elasticsearch
 from PIL import Image
 import mutagen
+import requests
+from io import BytesIO
+from PIL import Image
+from pydub import AudioSegment
+import shutil
 
 def get_tag_categories():
 	tags = []
@@ -171,22 +176,34 @@ def update_chapters(work, chapters, delete_list):
 def validate_files(chapter, chapter_item):
 	if chapter_item['audio_url']:
 		audio_url = get_file_url(chapter_item['audio_url'])
+	#	trimmed_url = audio_url.rsplit('/', 1)[-1]
+	#	if 'http' in audio_url:
+	#		audio = requests.get(audio_url).content
+	#	else:
+	#		audio = open(chapter.audio_url, 'rb').read()
+	#	audio_segment = AudioSegment.from_file(BytesIO(audio), format="mp3")
+	#	audio_segment.export(trimmed_url, format="mp3")
+	#	if not (file_utils.file_is_audio(trimmed_url)):
+	#		return -1
+	#	else:
+	#		audio = mutagen.File(trimmed_url)
+	#		chapter.audio_length = audio.info.length
 		chapter.audio_url = audio_url
-		#if not (file_utils.file_is_audio(audio_url)):
-		#	return -1
-		#else:
-		#	audio = mutagen.File(audio_url)
-		#	chapter.audio_length = audio.info.length
-		#	chapter.audio_url = audio_url
 	if chapter_item['image_url']:
 		image_url = get_file_url(chapter_item['image_url'])
-		#if not (file_utils.file_is_image(image_url)):
-		#	return -1
-		#else:
-		#	image = Image.open(image_url)
-		#	chapter.image_format = image.format
-		#	chapter.image_size = image.size
-		#	chapter.image_url = image_url
+	#	trimmed_url = image_url.rsplit('/', 1)[-1]
+	#	if 'http' in image_url:
+	#		image = requests.get(image_url).content
+	#	else:
+	#		image = open(image_url, 'rb').read()
+	#	pil_image = Image.open(BytesIO(image))
+	#	pil_image.save(trimmed_url+'.'+pil_image.format)
+	#	if not (file_utils.file_is_image(trimmed_url+'.'+pil_image.format)):
+	#		return -1
+	#	else:
+	#		chapter.image_format = pil_image.format
+	#		chapter.image_size = pil_image.size
+	#		chapter.image_url = image_url
 		chapter.image_url = image_url
 	return chapter
 
