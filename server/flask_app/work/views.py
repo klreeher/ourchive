@@ -306,6 +306,10 @@ def build_work_tags(work):
 def get_file_url(url):
 	if url == '':
 		return ''
-	url_root = app.config.get('UPLOAD_ROOT')
-	identifier = url.rsplit('/', 1)[-1]
-	return url_root + identifier + app.config.get('UPLOAD_SUFFIX')
+	if app.config.get('UPLOAD_TYPE') == 'file':
+		url_root = app.config.get('UPLOAD_ROOT')
+		identifier = url.rsplit('/', 1)[-1]
+		return url_root + identifier + app.config.get('UPLOAD_SUFFIX')
+	else if app.config.get('UPLOAD_TYPE') == 'aws':
+		identifier = url.rsplit('/', 1)[-1]
+		return app.config.get('BUCKET_URL')+identifier

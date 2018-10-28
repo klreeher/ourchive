@@ -32,6 +32,7 @@ class Dev(Config):
     RESULT_PAGES=15
     REDIS_PASSWORD='devpassword'
     ELASTICSEARCH_SERVERNAME='elasticsearch'
+    BUCKET_URL='https://s3.us-east-2.amazonaws.com/ourchive-test-bucket/'
 
 # config class used during tests
 class Test(Config):
