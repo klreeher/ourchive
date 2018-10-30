@@ -42,3 +42,16 @@ Please see the [wiki](https://github.com/c-e-p/ourchive/wiki) for more on techni
 ## code of conduct
 
 Please see [the code of conduct and diversity statement](codeofconduct.md).
+
+## thanks
+
+This app was instantiated in part from the [flask boilerplate](https://github.com/italomaia/flask-empty) project, as well as [react-flask](https://github.com/bonniee/react-flask). Additionally, all the frameworks and tools we are using are open source, including:
+
+- tusd
+- React
+- flask
+- postgres
+- docker
+- redis
+- elasticsearch
+- pytest

@@ -1,6 +1,5 @@
 from flask import Flask, render_template, send_file, send_from_directory, request
 import json
-from flask_tus import tus_manager
 from flask_cors import CORS
 import bcrypt
 from flask_sqlalchemy import SQLAlchemy
@@ -14,17 +13,12 @@ from elasticsearch_dsl import connections
 from pathlib import Path
 import yaml
 from flask_migrate import Migrate
+from celery import Celery
 
 class Ourchive(Flask):
 
     def configure(self, config):
-        """
-        Loads configuration class into flask app.
-        If environment variable available, overwrites class config.
-
-        """
         self.config.from_object(config)
-        # could/should be available in server environment
         self.config.from_envvar("APP_CONFIG", silent=True)
 
     def configure_database(self):
@@ -32,6 +26,11 @@ class Ourchive(Flask):
         db.app = self
         db.init_app(self)
         self.migrate = Migrate(self, db)
+
+    def setup_celery(self):
+        self.celery = Celery(self.name, broker=self.config['CELERY_BROKER_URL'], include='tasks.celery_tasks')
+        self.celery.conf.update(self.config)
+
 
     def setup(self):
         self.redis_db = redis.StrictRedis(host=self.config.get('REDIS_SERVERNAME'), port=6379, db=0, password=self.config.get('REDIS_PASSWORD'))
@@ -52,6 +51,8 @@ class Ourchive(Flask):
 
         from tag import tag as tag_blueprint
         self.register_blueprint(tag_blueprint)
+
+        self.setup_celery()
                 
         @self.route('/<path:stuff>/data/<path:filename>', methods=['GET'])
         def download(stuff, filename):
@@ -70,6 +71,8 @@ class Ourchive(Flask):
 
         @self.before_first_request
         def do_init():
+            from tasks import celery_tasks
+            celery_tasks.sample_task.apply_async(args=['YEET YEET YEET YOU FOOL'], countdown=10)
             from user import logic as user_logic
             path = os.path.dirname(os.path.abspath(__file__))+"/seed.yml"
             my_file = Path(path)

@@ -50,6 +50,14 @@ services:
       - '/ourchive/node_modules'
       - './js'
 
+  celery:
+    build:
+      context: .
+      dockerfile: docker.celery
+    volumes:
+      - '.:/ourchive'
+    command: celery worker -A celery_app.celery --loglevel=info
+
   tusd:
     image: 'tusproject/tusd'
     entrypoint: ['tusd', '-s3-bucket', 'CHANGEME']

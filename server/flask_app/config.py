@@ -34,6 +34,7 @@ class Dev(Config):
     REDIS_PASSWORD='devpassword'
     ELASTICSEARCH_SERVERNAME='elasticsearch'
     BUCKET_URL='https://ourchive-test-bucket.s3.amazonaws.com/'
+    CELERY_BROKER_URL='redis://:devpassword@redis:6379/0'
 
 # config class used during tests
 class Test(Config):
