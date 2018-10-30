@@ -14,5 +14,6 @@ def config_str_to_obj(cfg):
 app = Ourchive('ourchive')
 config = config_str_to_obj('Dev')
 app.configure(config)
+app.configure_database()
 app.setup_celery()
 celery = app.celery

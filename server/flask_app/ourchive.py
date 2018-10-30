@@ -53,7 +53,7 @@ class Ourchive(Flask):
         self.register_blueprint(tag_blueprint)
 
         self.setup_celery()
-                
+
         @self.route('/<path:stuff>/data/<path:filename>', methods=['GET'])
         def download(stuff, filename):
           uploads = os.path.join(self.config.get('UPLOAD_FOLDER'))
@@ -72,7 +72,7 @@ class Ourchive(Flask):
         @self.before_first_request
         def do_init():
             from tasks import celery_tasks
-            celery_tasks.sample_task.apply_async(args=['YEET YEET YEET YOU FOOL'], countdown=10)
+            celery_tasks.process_work.delay(2)
             from user import logic as user_logic
             path = os.path.dirname(os.path.abspath(__file__))+"/seed.yml"
             my_file = Path(path)

@@ -15,7 +15,6 @@ import mutagen
 import requests
 from io import BytesIO
 from PIL import Image
-from pydub import AudioSegment
 import shutil
 
 def get_tag_categories():
@@ -176,18 +175,7 @@ def update_chapters(work, chapters, delete_list):
 def validate_files(chapter, chapter_item):
 	if chapter_item['audio_url']:
 		audio_url = get_file_url(chapter_item['audio_url'])
-	#	trimmed_url = audio_url.rsplit('/', 1)[-1]
-	#	if 'http' in audio_url:
-	#		audio = requests.get(audio_url).content
-	#	else:
-	#		audio = open(chapter.audio_url, 'rb').read()
-	#	audio_segment = AudioSegment.from_file(BytesIO(audio), format="mp3")
-	#	audio_segment.export(trimmed_url, format="mp3")
-	#	if not (file_utils.file_is_audio(trimmed_url)):
-	#		return -1
-	#	else:
-	#		audio = mutagen.File(trimmed_url)
-	#		chapter.audio_length = audio.info.length
+
 		chapter.audio_url = audio_url
 	if chapter_item['image_url']:
 		image_url = get_file_url(chapter_item['image_url'])
