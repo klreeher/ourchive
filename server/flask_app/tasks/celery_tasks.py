@@ -38,10 +38,12 @@ def process_work(work_id):
         else:
             work.process_status = 1
             return False
-        
+
 
 def process_audio(chapter, work):
     audio_url = chapter.audio_url
+    if audio_url is None:
+        return chapter
     trimmed_url = audio_url.rsplit('/', 1)[-1]
     if 'http' in audio_url:
         audio = requests.get(audio_url).content
@@ -58,6 +60,8 @@ def process_audio(chapter, work):
 
 def process_image(chapter, work):
     image_url = chapter.image_url
+    if image_url is None:
+        return chapter
     trimmed_url = image_url.rsplit('/', 1)[-1]
     if 'http' in image_url:
        image = requests.get(image_url).content
