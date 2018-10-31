@@ -442,7 +442,7 @@ def get_tag_categories():
 @api.route('/api/work/<int:workId>', methods=['GET'])
 def get_work(workId):
   #todo error handling
-  val = work.get_work(workId)
+  val = work.get_single_work(workId)
   if val is not None:
     return val
   else:

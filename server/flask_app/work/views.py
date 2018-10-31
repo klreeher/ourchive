@@ -36,7 +36,7 @@ def get_tag_categories():
 		tags.append(tag)
 	return tags
 
-def get_work(work_id):
+def get_single_work(work_id):
 	work = get_work(work_id)
 	if work is not None:
 		return json.dumps(build_work(work))
