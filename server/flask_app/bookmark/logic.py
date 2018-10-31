@@ -8,7 +8,7 @@ from models import Work, Chapter, Tag, User, TagType, Bookmark, BookmarkLink
 from .search_wrapper import BookmarkSearch
 
 def get_work_from_bookmark(data):
-	work = Work.query.filter_by(id=data['work_id']).first()
+	work = views.get_work(data['work_id'])
 	data['work'] = {}
 	data['work']['title'] = work.title
 	data['work']['username'] = work.user.username

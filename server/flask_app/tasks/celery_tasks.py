@@ -32,12 +32,12 @@ def process_work(work_id):
         success = True
         if success:
             # create notification that work is processed/failed
-            # if success, toggle work flag to 'view'
-            
             work.process_status = 1
             db.session.commit()
             return True
-        return False
+        else:
+            work.process_status = 1
+            return False
         
 
 def process_audio(chapter, work):
@@ -75,5 +75,5 @@ def process_image(chapter, work):
 def do_export(work):
     user = User.query.filter_by(id=work.user_id).first()
     work_export.create_work_zip(work, user.username)
-    #work_export.create_epub(work)
+    work_export.create_epub(work)
     return True

@@ -63,14 +63,11 @@ def create_epub(work):
 	for chapter in work.chapters:
 		new_chapter = epub.EpubHtml(title=chapter.title, file_name=chapter.title+'.xhtml', lang='en')
 		if (chapter.image_url is not None and chapter.image_url != ""):
-			if 'http' in chapter.image_url:
-				image = requests.get(chapter.image_url).content
-			else:
-				image = open(chapter.image_url, 'rb').read()
-			image_string = "chapter_"+str(chapter.number)+".jpg"
+			image = open(get_chapter_concat(work.uid, chapter.number, chapter.title, '.'+chapter.image_format), 'rb').read()
+			image_string = "chapter_"+str(chapter.number)+"."+ chapter.image_format
 			image_item = epub.EpubItem(uid="img_1",
 	                        file_name=image_string,
-	                        media_type="image/jpeg",
+	                        media_type="image/"+chapter.image_format,
 	                        content=image)
 			book.add_item(image_item)
 			if image is not None:
@@ -96,4 +93,4 @@ def create_epub(work):
 	#book.spine = ['nav', c1]
 
 	# write to the file
-	epub.write_epub(work.title+'.epub', book, {})
+	epub.write_epub(get_temp_directory(work.uid)+work.title+'.epub', book, {})

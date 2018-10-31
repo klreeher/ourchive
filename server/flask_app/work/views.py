@@ -18,6 +18,14 @@ from PIL import Image
 import shutil
 from tasks import celery_tasks
 
+'''
+Util function so that we don't return unprocessed works (which can contain
+unverified data).
+
+'''
+def get_work(id):
+	return Work.query.filter_by(id=id, process_status=1).first()
+
 def get_tag_categories():
 	tags = []
 	for tag_type in TagType.query.all():
@@ -29,7 +37,7 @@ def get_tag_categories():
 	return tags
 
 def get_work(work_id):
-	work = Work.query.filter_by(id=work_id).first()
+	work = get_work(work_id)
 	if work is not None:
 		return json.dumps(build_work(work))
 	else:
@@ -61,7 +69,7 @@ def delete_work(work_id, user_id, admin_override=False):
 			return work_id
 
 def update_work(json):
-	work = Work.query.filter_by(id = json['work_id']).first()
+	work = get_work(json['work_id'])
 	if (work.user.id != json['user_id']):
 		return None
 	work.title = json['title']

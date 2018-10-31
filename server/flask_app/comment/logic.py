@@ -42,7 +42,7 @@ def add_comment_to_bookmark(json):
 	return add_comment(json, comment)
 
 def add_comment_to_chapter(json):
-	work = Work.query.filter_by(id=json['work_id']).first()
+	work = views.get_work(json['work_id'])
 	comment_allowed = work.comments_permitted and (work.anon_comments_permitted or json['user_id'])
 	if not comment_allowed:
 		return -1
