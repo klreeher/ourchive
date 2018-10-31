@@ -4,6 +4,8 @@ import bcrypt
 from database import db
 from sqlalchemy.ext.declarative import declarative_base
 from flask import current_app as app
+from sqlalchemy.dialects.postgresql import UUID
+from uuid import uuid4
 
 Base = declarative_base()
 
@@ -124,10 +126,12 @@ class Work(db.Model):
     __tablename__ = 'works'
 
     id = db.Column(db.Integer, primary_key=True)
+    uid = db.Column(UUID(as_uuid=True), default=uuid4)
     title = db.Column(db.String(200))
     work_summary = db.Column(db.String)
     work_notes = db.Column(db.String)
     is_complete = db.Column(db.Integer)
+    process_status = db.Column(db.Integer)
     word_count = db.Column(db.Integer)
     cover_url = db.Column(db.String)
     cover_alt_text = db.Column(db.String)

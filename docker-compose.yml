@@ -56,6 +56,9 @@ services:
       dockerfile: docker.celery
     volumes:
       - '.:/ourchive'
+      - './tmp:/tmp'
+    env_file:
+      - '.env'
     command: celery worker -A celery_app.celery --loglevel=info
 
   tusd:
@@ -76,3 +79,4 @@ volumes:
   redis:
   elasticseach:
   tus-data:
+  tmp:

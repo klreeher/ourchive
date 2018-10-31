@@ -8,35 +8,34 @@ from zipfile import ZipFile
 from PIL import Image
 from pydub import AudioSegment
 import shutil
+from celery_app import app
+
+def get_filename(chapter_number, chapter_title, extension):
+	if chapter_title is None or chapter_title == "":
+		chapter_title = 'Chapter ' + str(chapter_number)
+	return 'Chapter '+str(chapter_number)+'/'+chapter_title+extension
+
+def get_temp_directory(work_uid):
+	return app.config.get('TMP_ROOT') + '/' + str(work_uid) + '/'
+
+def get_chapter_concat(work_uid, chapter_number, chapter_title, extension):
+	return get_temp_directory(work_uid) + get_filename(chapter_number, chapter_title, extension)
 
 def create_work_zip(work, creator_name):
-	with ZipFile('test.zip', 'w') as test:
+	with ZipFile(get_temp_directory(work.uid)+work.title+'.zip', 'w') as test:
 		for chapter in work.chapters:
-			pathlib.Path('Chapter ' + str(chapter.number)).mkdir(parents=True, exist_ok=True)
-			with open('Chapter '+str(chapter.number)+'/'+chapter.title+'.html', 'w') as text:
+			with open(get_chapter_concat(work.uid, chapter.number, chapter.title, '.html'), 'w') as text:
 				text.write('<h2>'+chapter.title+'</h2> <h3>by '+creator_name+'</h3>')
 				text.write('<br/><br/>')
 				text.write(chapter.summary)
 				text.write('<br/><br/><hr><br/></br>')
 				text.write(chapter.text)
-			test.write('Chapter '+str(chapter.number)+'/'+chapter.title+'.html')
+			test.write(get_chapter_concat(work.uid, chapter.number, chapter.title, '.html'), get_filename(chapter.number, chapter.title, '.html'))
 			if chapter.image_url is not None:
-				if 'http' in chapter.image_url:
-					image = requests.get(chapter.image_url).content
-				else:
-					image = open(chapter.image_url, 'rb').read()
-				pil_image = Image.open(BytesIO(image))
-				pil_image.save('Chapter '+str(chapter.number)+'/'+chapter.title+'.jpg')
-				test.write('Chapter '+str(chapter.number)+'/'+chapter.title+'.jpg')
+				test.write(get_chapter_concat(work.uid, chapter.number, chapter.title, '.'+chapter.image_format),  get_filename(chapter.number, chapter.title, '.'+chapter.image_format))
 			if chapter.audio_url is not None:
-				if 'http' in chapter.audio_url:
-					audio = requests.get(chapter.audio_url).content
-				else:
-					audio = open(chapter.audio_url, 'rb').read()
-				audio_segment = AudioSegment.from_file(BytesIO(audio), format="mp3")
-				audio_segment.export('Chapter '+str(chapter.number)+'/'+chapter.title+'.mp3', format="mp3")
-				test.write('Chapter '+str(chapter.number)+'/'+chapter.title+'.mp3')
-			shutil.rmtree('Chapter ' + str(chapter.number))
+				test.write(get_chapter_concat(work.uid, chapter.number, chapter.title,".mp3"), get_filename(chapter.number, chapter.title, '.mp3'))
+			# shutil.rmtree('Chapter ' + str(chapter.number))
 
 
 def create_epub(work):

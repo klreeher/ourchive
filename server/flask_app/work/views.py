@@ -16,6 +16,7 @@ import requests
 from io import BytesIO
 from PIL import Image
 import shutil
+from tasks import celery_tasks
 
 def get_tag_categories():
 	tags = []
@@ -82,6 +83,7 @@ def update_work(json):
 	db.session.add(work)
 	word_count = update_chapters(work, chapters, json['delete_list'])
 	work.word_count = word_count
+	work.process_status = 0
 	add_tags(work, work_tags)
 	remove_tags(work, json['delete_tags_list'])
 	db.session.commit()
@@ -96,6 +98,7 @@ def update_work(json):
 		json['id'] = work.id
 		search_obj = WorkSearch()
 		search_obj.create_from_json(json)
+	celery_tasks.process_work.delay(work.id)
 	return work.id
 
 def add_work(json):
@@ -122,12 +125,14 @@ def add_work(json):
 	db.session.add(work)
 	word_count = add_chapters(work, chapters)
 	work.word_count = word_count
+	work.process_status = 0
 	add_tags(work, work_tags)
 	db.session.commit()
 	if app.config.get('USE_ES'):
 		json['id'] = work.id
 		search_obj = WorkSearch()
 		search_obj.create_from_json(json)
+	celery_tasks.process_work.delay(work.id)
 	return work.id
 
 def add_chapters(work, chapters):
@@ -175,23 +180,9 @@ def update_chapters(work, chapters, delete_list):
 def validate_files(chapter, chapter_item):
 	if chapter_item['audio_url']:
 		audio_url = get_file_url(chapter_item['audio_url'])
-
 		chapter.audio_url = audio_url
 	if chapter_item['image_url']:
 		image_url = get_file_url(chapter_item['image_url'])
-	#	trimmed_url = image_url.rsplit('/', 1)[-1]
-	#	if 'http' in image_url:
-	#		image = requests.get(image_url).content
-	#	else:
-	#		image = open(image_url, 'rb').read()
-	#	pil_image = Image.open(BytesIO(image))
-	#	pil_image.save(trimmed_url+'.'+pil_image.format)
-	#	if not (file_utils.file_is_image(trimmed_url+'.'+pil_image.format)):
-	#		return -1
-	#	else:
-	#		chapter.image_format = pil_image.format
-	#		chapter.image_size = pil_image.size
-	#		chapter.image_url = image_url
 		chapter.image_url = image_url
 	return chapter
 
