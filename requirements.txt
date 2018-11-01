@@ -14,7 +14,6 @@ Flask-Migrate>=2.1.1
 Flask-Script>=2.0.6
 Flask-SQLAlchemy>=2.3.2
 Flask-Testing>=0.7.1
--e git+https://github.com/c-e-p/Flask-Tus.git#egg=flask-tus-fork
 idna>=2.6
 itsdangerous>=0.24
 Jinja2>=2.10
