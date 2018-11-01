@@ -6,8 +6,6 @@ from flask_sqlalchemy import SQLAlchemy
 import os
 from os import listdir
 import redis
-from file_storage import FileStorage
-from s3_storage import S3Storage
 from elasticsearch import Elasticsearch
 from elasticsearch_dsl import connections
 from pathlib import Path
