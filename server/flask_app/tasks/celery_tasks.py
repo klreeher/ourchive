@@ -9,6 +9,7 @@ from io import BytesIO
 import shutil
 import pathlib
 from work import file_utils
+import os
 
 @celery.task
 def process_work(work_id):
@@ -49,8 +50,8 @@ def process_audio(chapter, work):
         audio = requests.get(audio_url).content
     else:
         audio = open(audio_url, 'rb').read()
-    audio_segment = AudioSegment.from_file(BytesIO(audio), format="mp3")
-    audio_segment.export(work_export.get_temp_directory(work.uid) + work_export.get_filename(chapter.number, chapter.title, ".mp3"))
+    with open(work_export.get_temp_directory(work.uid) + work_export.get_filename(chapter.number, chapter.title, ".mp3"), 'wb') as output:
+        output.write(audio)
     if not (file_utils.file_is_audio(work_export.get_temp_directory(work.uid) + work_export.get_filename(chapter.number, chapter.title, ".mp3"))):
         return -1
     else:
@@ -80,4 +81,30 @@ def do_export(work):
     user = User.query.filter_by(id=work.user_id).first()
     work_export.create_work_zip(work, user.username)
     work_export.create_epub(work)
+    epub_filename = send_epub(work)
+    zip_filename = send_zip(work)
+    shutil.rmtree(work_export.get_temp_directory(work.uid))
     return True
+
+def send_zip(work):
+    import tus
+    with open(work_export.get_temp_zip(work), 'rb') as g:
+        file_endpoint = tus.create(
+            app.config.get('TUS_DOCKER'),
+            work_export.get_temp_zip(work),
+            os.path.getsize(work_export.get_temp_zip(work)))
+
+        tus.resume(
+            g,
+            file_endpoint,
+            chunk_size=5 * 1024 * 1024)
+        #todo process
+        return file_endpoint
+
+def send_epub(work):
+    import tus
+    with open(work_export.get_temp_epub(work), 'rb') as f:
+        response_epub = tus.upload(f,
+            app.config.get('TUS_DOCKER')
+           )
+        #todo process file endpoint

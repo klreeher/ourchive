@@ -59,6 +59,8 @@ services:
       - './tmp:/tmp'
     env_file:
       - '.env'
+    links:
+      - tusd:tusd
     command: celery worker -A celery_app.celery --loglevel=info
 
   tusd:
@@ -70,6 +72,8 @@ services:
       AWS_REGION: 'us-east-2'
     volumes:
       - './tus-data:/srv/tusd-data'
+      - '.:/ourchive'
+      - './tmp:/tmp'
     ports:
       - '1080:1080'
 

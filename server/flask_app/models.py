@@ -135,6 +135,8 @@ class Work(db.Model):
     word_count = db.Column(db.Integer)
     cover_url = db.Column(db.String)
     cover_alt_text = db.Column(db.String)
+    epub_id = db.Column(db.String)
+    zip_id = db.Column(db.String)
     created_on = db.Column(db.DateTime, server_default=db.func.now())
     updated_on = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now())
     anon_comments_permitted = db.Column(db.Boolean, nullable=True, default=False)

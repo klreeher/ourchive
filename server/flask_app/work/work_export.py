@@ -21,8 +21,14 @@ def get_temp_directory(work_uid):
 def get_chapter_concat(work_uid, chapter_number, chapter_title, extension):
 	return get_temp_directory(work_uid) + get_filename(chapter_number, chapter_title, extension)
 
+def get_temp_zip(work):
+	return get_temp_directory(work.uid)+work.title+'.zip'
+
+def get_temp_epub(work):
+	return get_temp_directory(work.uid)+work.title+'.epub'
+
 def create_work_zip(work, creator_name):
-	with ZipFile(get_temp_directory(work.uid)+work.title+'.zip', 'w') as test:
+	with ZipFile(get_temp_zip(work), 'w') as test:
 		for chapter in work.chapters:
 			with open(get_chapter_concat(work.uid, chapter.number, chapter.title, '.html'), 'w') as text:
 				text.write('<h2>'+chapter.title+'</h2> <h3>by '+creator_name+'</h3>')
@@ -35,7 +41,6 @@ def create_work_zip(work, creator_name):
 				test.write(get_chapter_concat(work.uid, chapter.number, chapter.title, '.'+chapter.image_format),  get_filename(chapter.number, chapter.title, '.'+chapter.image_format))
 			if chapter.audio_url is not None:
 				test.write(get_chapter_concat(work.uid, chapter.number, chapter.title,".mp3"), get_filename(chapter.number, chapter.title, '.mp3'))
-			# shutil.rmtree('Chapter ' + str(chapter.number))
 
 
 def create_epub(work):
@@ -93,4 +98,4 @@ def create_epub(work):
 	#book.spine = ['nav', c1]
 
 	# write to the file
-	epub.write_epub(get_temp_directory(work.uid)+work.title+'.epub', book, {})
+	epub.write_epub(get_temp_epub(work), book, {})

@@ -39,3 +39,4 @@ Pillow>=5.3.0
 mutagen
 pydub
 Celery
+tus.py
