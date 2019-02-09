@@ -4,6 +4,7 @@ import urllib
 from io import BytesIO
 import ebooklib
 import pathlib
+import re
 from zipfile import ZipFile
 from PIL import Image
 from pydub import AudioSegment
@@ -26,6 +27,19 @@ def get_temp_zip(work):
 
 def get_temp_epub(work):
 	return get_temp_directory(work.uid)+work.title+'.epub'
+
+def get_file_url(url):
+	if url == '':
+		return ''
+	if app.config.get('UPLOAD_TYPE') == 'file':
+		url_root = app.config.get('UPLOAD_ROOT')
+		identifier = url.rsplit('/', 1)[-1]
+		return url_root + identifier + app.config.get('UPLOAD_SUFFIX')
+	elif app.config.get('UPLOAD_TYPE') == 'aws':
+		identifier = url.rsplit('/', 1)[-1]
+		match = re.match(r'(.)*\+',identifier)
+		sliced = match.group()[:-1]
+		return app.config.get('BUCKET_URL')+sliced
 
 def create_work_zip(work, creator_name):
 	with ZipFile(get_temp_zip(work), 'w') as test:

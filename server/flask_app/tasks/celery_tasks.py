@@ -2,13 +2,12 @@ from celery_app import celery, app
 from pydub import AudioSegment
 from models import Work, User
 import mutagen
-from work import work_export
+from work import work_export, file_utils
 from PIL import Image
 import requests
 from io import BytesIO
 import shutil
 import pathlib
-from work import file_utils
 import os
 
 @celery.task
@@ -29,15 +28,13 @@ def process_work(work_id):
                 print('video is not valid')
             else:
                 db.session.add(valid)
-        success = do_export(work)
-        success = True
-        if success:
-            # create notification that work is processed/failed
+        work = do_export(work)
+        if work is not None:
             work.process_status = 1
             db.session.commit()
             return True
         else:
-            work.process_status = 1
+            work.process_status = 2
             return False
 
 
@@ -83,8 +80,10 @@ def do_export(work):
     work_export.create_epub(work)
     epub_filename = send_epub(work)
     zip_filename = send_zip(work)
+    work.epub_id = epub_filename
+    work.zip_id = zip_filename
     shutil.rmtree(work_export.get_temp_directory(work.uid))
-    return True
+    return work
 
 def send_zip(work):
     import tus
@@ -98,13 +97,20 @@ def send_zip(work):
             g,
             file_endpoint,
             chunk_size=5 * 1024 * 1024)
-        #todo process
-        return file_endpoint
+        url = work_export.get_file_url(file_endpoint)
+        return url
 
 def send_epub(work):
     import tus
     with open(work_export.get_temp_epub(work), 'rb') as f:
-        response_epub = tus.upload(f,
-            app.config.get('TUS_DOCKER')
-           )
-        #todo process file endpoint
+        file_endpoint = tus.create(
+            app.config.get('TUS_DOCKER'),
+            work_export.get_temp_epub(work),
+            os.path.getsize(work_export.get_temp_epub(work)))
+
+        tus.resume(
+            f,
+            file_endpoint,
+            chunk_size=5 * 1024 * 1024)
+        url = work_export.get_file_url(file_endpoint)
+        return url

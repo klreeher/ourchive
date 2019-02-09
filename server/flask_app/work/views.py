@@ -3,7 +3,7 @@ import re
 import json
 from . import work
 from flask import current_app as app
-from . import file_utils
+from . import file_utils, work_export
 from models import Work, Chapter, Tag, User, TagType
 from database import db
 import tag as tag_blueprint
@@ -86,7 +86,7 @@ def update_work(json):
 	if 'work_type' in json:
 		work.type_id = json['work_type']
 	if 'cover_url' in json:
-		work.cover_url = get_file_url(json['cover_url'])
+		work.cover_url = work_export.get_file_url(json['cover_url'])
 		work.cover_alt_text = json['cover_alt_text']
 	db.session.add(work)
 	word_count = update_chapters(work, chapters, json['delete_list'])
@@ -126,7 +126,7 @@ def add_work(json):
 	else:
 		type_id = None
 	if 'cover_url' in json:
-		work.cover_url = get_file_url(json['cover_url'])
+		work.cover_url = work_export.get_file_url(json['cover_url'])
 		work.cover_alt_text = json['cover_alt_text']
 	work = Work(title=title,work_summary=work_summary,is_complete=is_complete,word_count=0,user_id=json['user_id'],work_notes=work_notes,
 		type_id=type_id, anon_comments_permitted = anon_comments_permitted, comments_permitted = comments_permitted)
@@ -187,10 +187,10 @@ def update_chapters(work, chapters, delete_list):
 
 def validate_files(chapter, chapter_item):
 	if chapter_item['audio_url']:
-		audio_url = get_file_url(chapter_item['audio_url'])
+		audio_url = work_export.get_file_url(chapter_item['audio_url'])
 		chapter.audio_url = audio_url
 	if chapter_item['image_url']:
-		image_url = get_file_url(chapter_item['image_url'])
+		image_url = work_export.get_file_url(chapter_item['image_url'])
 		chapter.image_url = image_url
 	return chapter
 
@@ -239,6 +239,8 @@ def build_work(work):
 	work_json['cover_alt_text'] = work.cover_alt_text
 	work_json['anon_comments_permitted'] = work.anon_comments_permitted
 	work_json['comments_permitted'] = work.comments_permitted
+	work_json['epub_id'] = work.epub_id
+	work_json['zip_id'] = work.zip_id
 	#todo i am sure there is a more elegant way to do all this de/serialization
 	work_json['chapters'] = list(build_work_chapters(work))
 	work_json['tags'] = build_work_tags(work)
@@ -308,16 +310,3 @@ def build_work_tags(work):
 		tag['tags'] = list([x.text for x in work.tags if x.tag_type_id == tag_type.id])
 		tags.append(tag)
 	return tags
-
-def get_file_url(url):
-	if url == '':
-		return ''
-	if app.config.get('UPLOAD_TYPE') == 'file':
-		url_root = app.config.get('UPLOAD_ROOT')
-		identifier = url.rsplit('/', 1)[-1]
-		return url_root + identifier + app.config.get('UPLOAD_SUFFIX')
-	elif app.config.get('UPLOAD_TYPE') == 'aws':
-		identifier = url.rsplit('/', 1)[-1]
-		match = re.match(r'(.)*\+',identifier)
-		sliced = match.group()[:-1]
-		return app.config.get('BUCKET_URL')+sliced
