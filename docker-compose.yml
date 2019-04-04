@@ -67,8 +67,8 @@ services:
     image: 'tusproject/tusd'
     entrypoint: ['tusd', '-s3-bucket', 'ourchive-test-bucket']
     environment:
-      AWS_ACCESS_KEY_ID: 'AKIAJD7BH4QDSBCMJU6A'
-      AWS_SECRET_ACCESS_KEY: '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'
+      AWS_ACCESS_KEY_ID: 'CHANGEME'
+      AWS_SECRET_ACCESS_KEY: 'CHANGEME'
       AWS_REGION: 'us-east-2'
     volumes:
       - './tus-data:/srv/tusd-data'
